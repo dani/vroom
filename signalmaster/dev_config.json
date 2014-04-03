@@ -1,0 +1,12 @@
+{
+    "isDev": false,
+    "server": {
+        "port": 8888
+    },
+    "mysql": {
+        "server": "localhost",
+        "database": "vroom",
+        "user": "vroom",
+        "password": "vroom"
+    }
+}

@@ -1,0 +1,30 @@
+//* auth turn sur MySQL et génération secret par room
+//* enreg participants via session (dans base SQL) et autoriser à joindre si verrouiller
+//* gérer déconnexion
+//* rewrite index.pl => /
+//* header/footer pour les templates
+//* gérer mute/unmute
+//* gérer pause cam
+//* emplacement notif moins intrusif + stack notif
+//* preview local plus petit
+//* notif participants (ajout/retrait) => son + notify
+//* animation preview agrandit sur simple click
+//* ajout champs timestamp dernière activité
+//* gestion expiration des room
+* gestion room persistante ?
+* page admin (liste room + lien verrou/suppr/rejoindre)
+//* corriger uncheck partage d'écran
+//* template accueil, err, goodby, help et about
+//* améliorer notif partage d'écran impossible
+//* ajout chat
+* partage de fichiers
+//* Internationalisation (en/fr)
+//* dialog pseudo (modal ?)
+* alerte navigateur non supporté (modal)
+//* auth token dans signalmaster
+//* Compat FF <-> Chrome
+//* notif pause/resume/mute/unmute
+//* Changer de couleur
+
+Icons:
+* https://www.iconfinder.com/search/?q=iconset%3Awpzoom-developer-icon-set

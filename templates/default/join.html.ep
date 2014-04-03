@@ -1,0 +1,144 @@
+% title sprintf l('ROOM_s'), $room;
+%= include 'header'
+  <div id="wrap" class="container-fluid">
+    <nav id="toolbar" class="navbar navbar-default" role="toolbar">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#toolBar">
+          <span class="sr-only"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <input id="roomName" name="roomName" type="hidden" value="<%= $room %>"/>
+      <div id="toolBar" class="collapse navbar-collapse">
+        <form class="navbar-form navbar-left input-group" id="inviteEmail" action="" method="post">
+          <div class="input-group">
+            <input type="email" id="recipient" class="form-control help" placeholder="<%=l 'EMAIL_INVITE' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>"/>
+            <span class="input-group-btn">
+              <button id="inviteEmailButton" type="submit" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>">
+                <span class="glyphicon glyphicon-send">
+                </span>
+              </button>
+            </span>
+          </div>
+        </form>
+        <div class="btn-group navbar-form navbar-left">
+          <input type="text" id="displayName" class="form-control help" placeholder="<%=l 'YOUR_NAME' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'NAME_SENT_TO_OTHERS' %>"/>
+        </div>
+        <div class="btn-group navbar-form navbar-left">
+          <button id="changeColorButton" class="form-control collapsed help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CHANGE_COLOR' %>">
+            <span class="glyphicon glyphicon-tag">
+            </span>
+          </button>
+        </div>
+        <div class="btn-group navbar-form navbar-left">
+          <button id="chatDropdown" class="form-control collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
+            <span class="glyphicon glyphicon-envelope">
+            </span>
+          </button>
+        </div>
+        <div class="btn-group navbar-form navbar-left" data-toggle="buttons">
+          <label class="btn btn-default<%= $locked eq 'checked' ? ' btn-danger active':'' %> help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
+            <input type="checkbox" id="lockButton" <%= $locked %>>
+            <span class="glyphicon glyphicon-lock">
+            </span>
+          </label>
+        </div>
+        <div class="btn-group navbar-form navbar-left" data-toggle="buttons" >
+          <label class="btn btn-default help" id="muteMicLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_MIC' %>">
+            <input type="checkbox" id="muteMicButton">
+            <span class="glyphicon glyphicon-volume-off">
+            </span>
+          </label>
+          <label class="btn btn-default help" id="suspendCamLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUSPEND_CAM' %>">
+            <input type="checkbox" id="suspendCamButton">
+            <span class="glyphicon glyphicon-facetime-video">
+            </span>
+          </label>
+          <label class="btn btn-default help" id="shareScreenLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SHARE_YOUR_SCREEN' %>">
+            <input type="checkbox" id="shareScreenButton">
+            <span class="glyphicon glyphicon-share">
+            </span>
+          </label>
+        </div>
+        <div class="btn-group navbar-form navbar-right" data-toggle="buttons" >
+          <button class="btn btn-default help" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
+            <span class="glyphicon glyphicon-log-out">
+            </span>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div class="frame">
+      <div id="chatMenu" class="nav-collapse collapse">
+        <div id="chatHistory" class="form-control">
+        </div>
+        <form role="form" id="chatForm">
+          <div class="input-group">
+            <textarea class="form-control" id="chatBox" form_id="chatForm" placeholder="<%=l 'SET_YOUR_NAME_TO_CHAT' %>" rows=1 disabled></textarea>
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-default">
+                <span class="glyphicon glyphicon-share-alt">
+                </span>
+              </button>
+            </span>
+          </div>
+        </form>
+      </div>
+      <div id="view" class="view row-fluid">
+        <div id="webRTCVideo" class="col-xs-4">
+          <div class="col-md-6 previewContainer">
+            <video id="webRTCVideoLocal" class="webRTCVideo" muted oncontextmenu="return false;">
+            </video>
+            <div id="localVolume" class="volumeBar">
+            </div>
+            <div id="name_local" class="displayName">
+            </div>
+          </div>
+        </div>
+        <div id="mainVideo" class="col-xs-8">
+        <div>
+      </div>
+    </div>
+    <script type="text/javascript" src="/js/simplewebrtc.bundle.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/notify-combined.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.browser.min.js"></script>
+    <script type="text/javascript" src="/js/sprintf.js"></script>
+    <script type="text/javascript" src="/js/vroom.js"></script>
+    <script>
+      var actionUrl = '<%= $self->url_for('/action') %>';
+      var goodbyUrl = '<%= $self->url_for('/goodby') %>';
+      var roomName = '<%= $room %>';
+      $( document ).ready(function() {
+        webrtc = new SimpleWebRTC({
+                   url: "<%= $config->{signalingServer} %>",
+                   peerConnectionConfig: {
+                     iceServers: [
+                       {"url":"stun:<%= $config->{stunServer} %>"},
+                       <%== ($config->{turnServer} && $config->{turnServer} ne '') ? "{\"url\":\"turn:$config->{turnServer}\", \"username\":\"$room\", \"credential\":\"$turnPassword\"}":'' %>
+                     ]
+                   },
+                   localVideoEl: 'webRTCVideoLocal',
+                   autoRequestMedia: true,
+                   enableDataChannels: true,
+                   debug: true,
+                   detectSpeakingEvents: false,
+                   adjustPeerVolume: false,
+                   autoAdjustMic: false,
+                   media: {
+                     video: {
+                       mandatory: {
+                         maxFrameRate: 15,
+                       }
+                     },
+                     audio: true
+                   }
+                 });
+        initVroom(roomName);
+      });
+    </script>
+  </div>
+%= include 'footer'

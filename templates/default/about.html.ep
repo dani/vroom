@@ -1,0 +1,41 @@
+% title $self->l('About');
+%= include 'header'
+%= include 'public_toolbar'
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 column">
+      <h3>
+        <%=l 'ABOUT' %>
+      </h3>
+      <p>
+        <%==l 'ABOUT_VROOM' %>
+      </p>
+      <h3>
+        <%=l 'HOW_IT_WORKS' %>
+      </h3>
+      <p>
+        <%==l 'ABOUT_HOW_IT_WORKS' %>
+      </p>
+      <h3>
+        <%=l 'SERVERLESS' %>
+      </h3>
+      <p>
+        <%==l 'ABOUT_SERVERLESS' %>
+      </p>
+      <h3>
+        <%=l 'THANKS' %>
+      </h3>
+      <p>
+        <%==l 'ABOUT_THANKS' %>
+        <ul>
+          <% foreach my $component (sort keys %{$components}) { %>
+            <li>
+              <a href="<%= $components->{$component}->{url} %>"><%= $component %></a>
+            </li>
+          <% } %>
+        </ul>
+      </p>
+    </div>
+  </div>
+</div>
+%= include 'footer'

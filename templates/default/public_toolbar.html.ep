@@ -1,0 +1,24 @@
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#toolBar">
+          <span class="sr-only"></span>
+          <span class="glyphicon glyphicon-th"></span>
+        </button>
+        <a class="navbar-brand" href="#">VROOM! Alpha</a>
+      </div>
+      <div class="collapse navbar-collapse" id="toolBar">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="<%= $self->url_for('/') %>"><%=l 'HOME' %></a>
+          </li>
+          <li>
+            <a href="<%= $self->url_for('/help') %>"><%=l 'HELP' %></a>
+          </li>
+          <li>
+            <a href="<%= $self->url_for('/about') %>"><%=l 'ABOUT' %></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>

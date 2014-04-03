@@ -1,0 +1,10 @@
+[Service]
+ExecStart=/usr/bin/node /opt/vroom/signalmaster/server.js
+Restart=always
+StandardOutput=syslog
+SyslogIdentifier=SignalMaster
+User=signalmaster
+Group=signalmaster
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+<html>
+  <p>
+    <%== sprintf($self->l('TO_JOIN_s_CLICK_s'), $room, $self->url_for('/')->to_abs.$room) %>
+  </p>
+  <br>
+  <p>
+  <%=l 'HAVE_A_NICE_MEETING' %>
+  </p>
+  <p style="font-size:small;-webkit-text-size-adjust:none;color:#666;">
+    &mdash;
+    <br>
+    <%=l 'EMAIL_SIGN' %>
+  </p>
+</html>

@@ -1,0 +1,12 @@
+% title $self->l('GOODBY');
+%= include 'header'
+%= include 'public_toolbar'
+<div class="container-fluid">
+  <br/>
+  <div class="jumbotron">
+    <h1><%=l 'THANKS_SEE_YOU_SOON' %></h1>
+    <p><%=l 'THANKS_FOR_USING' %></p>
+    <p><a class="btn btn-primary btn-lg" role="button" href="<%= $self->url_for('/') %>"><%=l 'BACK_TO_MAIN_MENU' %></a></p>
+  </div>
+</div>
+%=include 'footer'

@@ -1,0 +1,21 @@
+% title $self->l('Help');
+%= include 'header'
+%= include 'public_toolbar'
+<div class="container-fluid">
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+      <h3>
+        <%=l 'SUPPORTED_BROWSERS' %>
+      </h3>
+      <p>
+        <%=l 'HELP_BROWSERS_SUPPORTED' %>
+      </p>
+      <h3>
+        <%=l 'SREEN_SHARING' %>
+      </h3>
+      <p>
+        <%==l 'HELP_SCREEN_SHARING' %>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+{
+
+# Database
+dbi => 'DBI:mysql:database=vroom;host=localhost',
+dbUser => 'vroom',
+dbPassword => 'vroom',
+
+# Media & signaling
+signalingServer => 'https://signal.example.com',
+stunServer => 'stun.example.com:3478',
+turnServer => 'turn.example.com',
+realm => 'example.com',
+
+# Web & contact
+baseUrl => 'https://vroom.example.com/',
+emailFrom => 'vroom@example.com',
+# Templates to use for web pages
+template => 'default',
+# Used to sign cookies
+secret => 'ChangeMe!',
+
+# App
+# Rooms without any activity for that long will be destroyed
+inactivityTimeout => 3600,
+logLevel => 'info',
+
+# Various
+sendmail => '/sbin/sendmail'
+};

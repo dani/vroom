@@ -1,0 +1,46 @@
+DROP TABLE IF EXISTS `rooms`;
+CREATE TABLE `rooms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(120) DEFAULT NULL,
+  `owner` varchar(60) DEFAULT NULL,
+  `create_timestamp` int(20) DEFAULT NULL,
+  `activity_timestamp` int(20) DEFAULT NULL,
+  `locked` tinyint(1) DEFAULT '0',
+  `join_password` varchar(160) DEFAULT NULL,
+  `token` varchar(160) DEFAULT NULL,
+  `realm` varchar(160) DEFAULT NULL,
+  `persistent` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE (`name`)
+);
+DROP VIEW IF EXISTS `turnusers_lt`;
+CREATE VIEW `turnusers_lt` AS SELECT `name` AS `name`, MD5(CONCAT(CONCAT(CONCAT(CONCAT(`name`,':'),`realm`),':'),`token`)) AS `hmackey` FROM `rooms`;
+DROP TABLE IF EXISTS `participants`;
+CREATE TABLE `participants` (
+  `id` int(11) NOT NULL,
+  `participant` varchar(60) NOT NULL,
+  PRIMARY KEY (`id`,`participant`)
+);
+#DROP TABLE IF EXISTS `turnusers_lt`;
+#CREATE TABLE `turnusers_lt` (
+#  name varchar(512) PRIMARY KEY,
+#  hmackey char(32)
+#);
+DROP TABLE IF EXISTS `turnusers_st`;
+CREATE TABLE `turnusers_st` (
+  name varchar(512) PRIMARY KEY,
+  password varchar(512)
+);
+DROP TABLE IF EXISTS `turn_secret`;
+CREATE TABLE `turn_secret` (
+  value varchar(512)
+);
+DROP TABLE IF EXISTS `allowed_peer_ip`;
+CREATE TABLE `allowed_peer_ip` (
+  ip_range varchar(256)
+);
+DROP TABLE IF EXISTS `denied_peer_ip`;
+CREATE TABLE `denied_peer_ip` (
+  ip_range varchar(256)
+);
+
