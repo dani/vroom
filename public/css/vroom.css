@@ -1,13 +1,9 @@
-a {
-  color: black;
-}
 #webRTCVideo {
   overflow-y: auto;
 }
 #webRTCVideo video {
   width: 100%;
   height: auto;
-  //border-radius: 5px;
 }
 #webRTCVideo .selected {
   box-shadow: 0px 0px 2pt 2pt red;
@@ -21,8 +17,6 @@ a {
   max-width: 100%;
   min-width: 75%;
   height: auto;
-  //border:5px solid grey;
-  //border-radius: 15px;
 }
 .previewContainer{
   margin-top: 5px;
@@ -94,6 +88,9 @@ a {
   padding-top: 2px;
   padding-bottom: 2px;
   white-space: pre;
+}
+.chatMsg a {
+  color: black;
 }
 .chatMsgSelf {
   float: right;
