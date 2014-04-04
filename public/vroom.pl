@@ -53,7 +53,24 @@ our $components = {
 };
 
 app->log->level('info');
-our $config = plugin Config => {file => '../conf/vroom.conf'};
+our $config = plugin Config => {
+  file     => '../conf/vroom.conf',
+  default  => {
+    dbi                 => 'DBI:mysql:database=devroom;host=localhost',
+    dbUser              => 'vroom',
+    dbPassword          => 'vroom',
+    signalingServer     => 'https://vroom.example.com/',
+    stunServer          => 'stun.l.google.com:19302',
+    realm               => 'vroom',
+    baseUrl             => 'https://vroom.example.com/',
+    emailFrom           => 'vroom@example.com',
+    template            => 'default',
+    inactivityTimeout   => 3600,
+    logLevel            => 'info',
+    sendmail            => '/sbin/sendmail'
+  }
+};
+
 app->log->level($config->{logLevel});
 
 plugin I18N => {
