@@ -118,7 +118,7 @@
                    localVideoEl: 'webRTCVideoLocal',
                    autoRequestMedia: true,
                    enableDataChannels: true,
-                   debug: true,
+                   debug: false,
                    detectSpeakingEvents: false,
                    adjustPeerVolume: false,
                    autoAdjustMic: false,
