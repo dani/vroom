@@ -93,6 +93,16 @@ function initVroom(room) {
     audio.play();
   }
 
+  // Request full screen
+  function fullScreen(el){
+    if (el.requestFullScreen)
+      el.requestFullScreen();
+    else if (el.webkitRequestFullScreen)
+      el.webkitRequestFullScreen();
+    else if (el.mozRequestFullScreen)
+      el.mozRequestFullScreen();
+  }
+
   // Logout
   function hangupCall(){
     webrtc.connection.disconnect();
@@ -154,8 +164,7 @@ function initVroom(room) {
     // And go full screen on double click
     // TODO: also handle double tap
     $(video).dblclick(function() {
-      this.requestFullScreen = this.webkitRequestFullScreen || this.mozRequestFullScreen;
-      this.requestFullScreen();
+      fullScreen(this);
     });
     // Simple click put this preview in the mainVideo div
     $(video).click(function() {
@@ -165,8 +174,7 @@ function initVroom(room) {
       }
       else {
         $('#mainVideo').html($(video).clone().dblclick(function() {
-          this.requestFullScreen = this.webkitRequestFullScreen || this.mozRequestFullScreen;
-          this.requestFullScreen();
+          fullScreen(this);
           }).css('max-height', $(window).height()-$('#toolbar').height()-25)).bind("contextmenu", function(){ return false; });
         $('.selected').removeClass('selected');
         $(this).addClass('selected');
@@ -509,8 +517,7 @@ function initVroom(room) {
 
   // Go fullscreen on double click
   $("#webRTCVideoLocal").dblclick(function() {
-    this.requestFullScreen = this.webkitRequestFullScreen || this.mozRequestFullScreen;
-    this.requestFullScreen();
+    fullScreen(this);
   });
   $("#webRTCVideoLocal").click(function() {
     // If this video is already the main one, remove the main
@@ -522,8 +529,7 @@ function initVroom(room) {
     // Else, update the main video to use this one
     else{
       $('#mainVideo').html($(this).clone().dblclick(function() {
-        this.requestFullScreen = this.webkitRequestFullScreen || this.mozRequestFullScreen;
-        this.requestFullScreen();
+        fullScreen(this);
       }).css('max-height', $(window).height()-$('#toolbar').height()-25));
       $('.selected').removeClass('selected');
       $(this).addClass('selected');
