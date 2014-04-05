@@ -103,6 +103,12 @@ function initVroom(room) {
       el.mozRequestFullScreen();
   }
 
+  // get max height for the main video and the preview div
+  function maxHeight(){
+    // Which is the window height, minus toolbar, and a margin of 25px
+    return $(window).height()-$('#toolbar').height()-25;
+  }
+
   // Logout
   function hangupCall(){
     webrtc.connection.disconnect();
@@ -175,7 +181,7 @@ function initVroom(room) {
       else {
         $('#mainVideo').html($(video).clone().dblclick(function() {
           fullScreen(this);
-          }).css('max-height', $(window).height()-$('#toolbar').height()-25)).bind("contextmenu", function(){ return false; });
+          }).css('max-height', maxHeight()).bind("contextmenu", function(){ return false; }));
         $('.selected').removeClass('selected');
         $(this).addClass('selected');
         mainVid = id;
@@ -530,7 +536,7 @@ function initVroom(room) {
     else{
       $('#mainVideo').html($(this).clone().dblclick(function() {
         fullScreen(this);
-      }).css('max-height', $(window).height()-$('#toolbar').height()-25));
+      }).css('max-height', maxHeight()));
       $('.selected').removeClass('selected');
       $(this).addClass('selected');
       mainVid = 'self';
@@ -610,10 +616,10 @@ function initVroom(room) {
 
   // Preview heigh is limited to the windows heigh, minus the navbar, minus 25px
   window.onresize = function (){
-    $('#webRTCVideo').css('max-height', $(window).height()-$('#toolbar').height()-25);
-    $('#mainVideo>video').css('max-height', $(window).height()-$('#toolbar').height()-25);
+    $('#webRTCVideo').css('max-height', maxHeight());
+    $('#mainVideo>video').css('max-height', maxHeight());
   };
-  $('#webRTCVideo').css('max-height', $(window).height()-$('#toolbar').height()-25);
+  $('#webRTCVideo').css('max-height', maxHeight());
 
 };
 
