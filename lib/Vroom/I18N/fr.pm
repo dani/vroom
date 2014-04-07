@@ -121,7 +121,7 @@ our %Lexicon = (
                                                    "      JavaScript)</li>" .
                                                    "  <li>Le signalement: certaines données sans caractère confidentiel transitent " .
                                                    "      par ce qu'on appel le canal de signalement. Ce canal passe par un serveur. " .
-                                                   "      Cependant, ce canal ne transmet aucune information personnel ou sensible. Il " .
+                                                   "      Cependant, ce canal ne transmet aucune information personnelle ou sensible. Il " .
                                                    "      est par exemple utilisé pour synchroniser les couleurs associées à chaque " .
                                                    "      participant, quand un nouveau participant arrive, quelqu'un coupe son micro " .
                                                    "      ou encore verrouille le salon</li>" .
