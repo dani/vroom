@@ -152,7 +152,7 @@ function initVroom(room) {
         dc: peer.getDataChannel('vroom'),
         obj: peer
       };
-      // Send our state to this peer (mute/paused/displayName)
+      // Send our info to this peer (displayName/color)
       // but wait a bit so channels are fully setup (or have more chances to be) before we send
       setTimeout(function(){
         if ($('#displayName').val() !== '') {
