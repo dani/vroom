@@ -46,8 +46,6 @@
             <span class="glyphicon glyphicon-lock">
             </span>
           </label>
-        </div>
-        <div class="btn-group navbar-form navbar-left" data-toggle="buttons" >
           <label class="btn btn-default help" id="muteMicLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_MIC' %>">
             <input type="checkbox" id="muteMicButton">
             <span class="glyphicon glyphicon-volume-off">
