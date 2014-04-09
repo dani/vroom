@@ -23,14 +23,16 @@
             </span>
           </div>
         </form>
-        <div class="btn-group navbar-form navbar-left">
-          <input type="text" id="displayName" class="form-control help" placeholder="<%=l 'YOUR_NAME' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'NAME_SENT_TO_OTHERS' %>"/>
-        </div>
-        <div class="btn-group navbar-form navbar-left">
-          <button id="changeColorButton" class="form-control collapsed help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CHANGE_COLOR' %>">
-            <span class="glyphicon glyphicon-tag">
+        <div class="navbar-form navbar-left input-group">
+          <div class="input-group">
+            <input type="text" id="displayName" class="form-control help" placeholder="<%=l 'YOUR_NAME' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'NAME_SENT_TO_OTHERS' %>"/>
+            <span class="input-group-btn">
+              <button id="changeColorButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CHANGE_COLOR' %>">
+                <span class="glyphicon glyphicon-tag">
+                </span>
+              </button>
             </span>
-          </button>
+          </div>
         </div>
         <div class="btn-group navbar-form navbar-left">
           <button id="chatDropdown" class="form-control collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
