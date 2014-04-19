@@ -19,6 +19,7 @@ our %Lexicon = (
   "EMAIL_SIGN"                           => "VROOM! And video conferencing becomes free, simple and safe",
   "ROOM_LOCKED"                          => "This room is now locked",
   "ROOM_UNLOCKED"                        => "This room is now unlocked",
+  "ONE_OF_THE_PEERS"                     => "one of the peers",
   "ROOM_LOCKED_BY_s"                     => "%s locked the room",
   "ROOM_UNLOCKED_BY_s"                   => "%s unlocked the room",
   "OOOPS"                                => "Ooops",

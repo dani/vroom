@@ -22,6 +22,7 @@ var locale = {
   CAM_SUSPENDED: '',
   CAM_RESUMED: '',
   SET_YOUR_NAME_TO_CHAT: '',
+  ONE_OF_THE_PEERS: '',
   ROOM_LOCKED_BY_s: '',
   ROOM_UNLOCKED_BY_s: '',
   CANT_SEND_TO_s: '',
@@ -367,7 +368,7 @@ function initVroom(room) {
   // Error sending something through dataChannel
   webrtc.on('cantsend', function (peer, message){
     if (message.type == 'textChat') {
-      var who = (peers[peer.id].hasName) ? peers[peer.id].displayName : 'one of the peers';
+      var who = (peers[peer.id].hasName) ? peers[peer.id].displayName : locale.ONE_OF_THE_PEERS;
       $.notify(sprintf(locale.CANT_SEND_TO_s, who), 'error');
     }
   });

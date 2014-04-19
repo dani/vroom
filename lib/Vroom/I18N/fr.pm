@@ -21,6 +21,7 @@ our %Lexicon = (
     "INVITE_SENT_TO_s"                          => "Une invitation a été envoyée à %s",
     "ROOM_LOCKED"                               => "Ce salon est maintenant verrouillé",
     "ROOM_UNLOCKED"                             => "Ce salon est maintenant déverrouillé",
+    "ONE_OF_THE_PEERS"                          => "un des participants",
     "ROOM_LOCKED_BY_s"                          => "%s a verrouillé le salon",  
     "ROOM_UNLOCKED_BY_s"                        => "%s a déverrouillé le salon",
     "OOOPS"                                     => "Oups",
