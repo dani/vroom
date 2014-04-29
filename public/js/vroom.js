@@ -323,7 +323,6 @@ function initVroom(room) {
     else { // if (data.name === 'video')
       var el = "#pause_" + data.id;
     }
-    console.log('Removing el: ' + el);
     $(el).remove();
   });
 
