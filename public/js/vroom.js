@@ -157,10 +157,9 @@ function initVroom(room) {
       // but wait a bit so channels are fully setup (or have more chances to be) before we send
       setTimeout(function(){
         if ($('#displayName').val() !== '') {
-          // TODO: would be better to unicast that
-          webrtc.sendDirectlyToAll('vroom','setDisplayName', $('#displayName').val());
+          peer.sendDirectly('vroom','setDisplayName', $('#displayName').val());
         }
-        webrtc.sendToAll('peer_color', {color: peers.local.color});
+        peer.send('peer_color', {color: peers.local.color});
       }, 3500);
     }
     $(div).attr('id', 'peer_' + id);
