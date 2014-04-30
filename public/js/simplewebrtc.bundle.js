@@ -4546,7 +4546,10 @@ module.exports = function (constraints, cb) {
 
     if (window.navigator.userAgent.match('Chrome')) { 
         var chromever = parseInt(window.navigator.userAgent.match(/Chrome\/(.*) /)[1], 10);
-        if (chromever >= 26 && chromever <= 35) {
+        var maxver = 33;
+        // "known‶ bug in chrome 34 on linux
+        if (window.navigator.userAgent.match('Linux')) maxver = 34;
+        if (chromever >= 26 && chromever <= maxver) {
             // chrome 26 - chrome 33 way to do it -- requires bad chrome://flags
             constraints = (hasConstraints && constraints) || { 
                 video: {
