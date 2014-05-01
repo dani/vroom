@@ -15,6 +15,8 @@ var locale = {
   ERROR_MAIL_INVALID: '',
   ERROR_OCCURED: '',
   CANT_SHARE_SCREEN: '',
+  SCREEN_SHARING_ONLY_FOR_CHROME: '',
+  SCREEN_SHARING_CANCELLED: '',
   EVERYONE_CAN_SEE_YOUR_SCREEN: '',
   SCREEN_UNSHARED: '',
   MIC_MUTED: '',
@@ -63,7 +65,7 @@ function initVroom(room) {
     dataType: 'json',    
   });
 
-  // Screen sharing is onl suported on chrome > 26
+  // Screen sharing is only suported on chrome > 26
   if ( !$.browser.webkit || $.browser.versionNumber < 26 ) {
     $("#shareScreenLabel").addClass('disabled');
   }
@@ -445,15 +447,27 @@ function initVroom(room) {
   // ScreenSharing
   $('#shareScreenButton').change(function() {
     var action = ($(this).is(":checked")) ? 'share':'unshare';
-    function cantShare(){
-      $.notify(locale.CANT_SHARE_SCREEN, 'error');
-      $('#shareScreenLabel').removeClass('active');
+    function cantShare(err){
+      $.notify(err, 'error');
       return;
     }
     if (!peers.local.screenShared && action === 'share'){
       webrtc.shareScreen(function(err){
         if(err){
-          cantShare();
+          if (err.name == 'EXTENSION_UNAVAILABLE'){
+            var ver = 34;
+            if ($.browser.linux) ver = 35;
+            if ($.browser.webkit && $.browser.versionNumber >= ver)
+              $('#chromeExtMessage').modal('show');
+            else
+              cantShare(locale.SCREEN_SHARING_ONLY_FOR_CHROME);
+          }
+          else if (err.name == 'PERMISSION_DENIED' || err.name == 'PermissionDeniedError'){
+            cantShare(locale.SCREEN_SHARING_CANCELLED);
+          }
+          else
+            cantShare(locale.CANT_SHARE_SCREEN + ' ' + err.name);
+          $('#shareScreenLabel').removeClass('active');
           return;
         }
         else{

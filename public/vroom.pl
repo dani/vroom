@@ -67,6 +67,7 @@ our $config = plugin Config => {
     template            => 'default',
     inactivityTimeout   => 3600,
     logLevel            => 'info',
+    chromeExtensionId   => 'ecicdpoejfllflombfanbhfpgcimjddn',
     sendmail            => '/sbin/sendmail'
   }
 };

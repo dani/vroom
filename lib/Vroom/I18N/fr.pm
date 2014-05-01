@@ -54,6 +54,10 @@ our %Lexicon = (
     "CAM_RESUMED"                               => "Votre webcam est à nouveau active",
     "SHARE_YOUR_SCREEN"                         => "Partagez votre écran avec les autres membres du salon",
     "CANT_SHARE_SCREEN"                         => "Désolé, mais votre configuration ne vous permet pas de partager votre écran",
+    "SCREEN_SHARING_ONLY_FOR_CHROME"            => "Désolé, mais vous ne pouvez pas partager votre écran. Seul le navigateur Google Chrome " .
+                                                   "supporte cette fonction pour l'instant",
+    "SCREEN_SHARING_CANCELLED"                  => "Le partage d'écran a été annulé",
+    "VROOM_CHROME_EXTENSION"                    => "Pour activer le partage d'écran, vous devez installer une extension, cliquez sur le lien ci-dessous, puis raffraîchissez cette page",
     "EVERYONE_CAN_SEE_YOUR_SCREEN"              => "Tous les autres participants peuvent voir votre écran",
     "SCREEN_UNSHARED"                           => "Vous ne partagez plus votre écran",
     "ERROR_MAIL_INVALID"                        => "Veuillez saisir une adresse email valide",
@@ -85,7 +89,8 @@ our %Lexicon = (
     "SREEN_SHARING"                             => "Partage d'écran",
     "HELP_SCREEN_SHARING"                       => "VROOM vous permet de partager votre écran avec tous les autres participants d'une conférence. " .
                                                    "Pour l'instant, le partage d'écran ne fonctionne qu'avec le navigateur Google Chrome, " .
-                                                   "et nécessite d'effectuer le réglage suivant:" . 
+                                                   "et nécessite d'effectuer le réglage suivant (à partir de la version 34, ce réglage n'est " .
+                                                   "plus nécessaire)" . 
                                                    "<ul>" . 
                                                    "  <li>Tapez chrome://flags/ dans la barre d'adresse</li>" .
                                                    "  <li>Recherchez \"Activer la fonctionnalité de capture d'écran dans getUserMedia()\" et cliquez sur " .

@@ -24,6 +24,9 @@ secret => 'ChangeMe!',
 inactivityTimeout => 3600,
 logLevel => 'info',
 
+# ID of the Chrome extension for screen sharing
+chromeExtensionId => 'ecicdpoejfllflombfanbhfpgcimjddn',
+
 # Various
 sendmail => '/sbin/sendmail'
 };

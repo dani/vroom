@@ -49,6 +49,9 @@ our %Lexicon = (
   "CAM_RESUMED"                          => "Your webcam is on again",
   "SHARE_YOUR_SCREEN"                    => "Share your screen with the other members of this room",
   "CANT_SHARE_SCREEN"                    => "Sorry, your configuration does not allow screen sharing",
+  "SCREEN_SHARING_ONLY_FOR_CHROME"       => "Sorry, but you can't share your screen. Only Google Chrome supports this feature for now",
+  "SCREEN_SHARING_CANCELLED"             => "Screen sharing has been cancelled",
+  "VROOM_CHROME_EXTENSION"               => "To enable screen sharing, you need to install an extension. Click on the following link and refresh this page",
   "EVERYONE_CAN_SEE_YOUR_SCREEN"         => "All other participants can see your screen now",
   "SCREEN_UNSHARED"                      => "You do no longer share your screen",
   "ERROR_MAIL_INVALID"                   => "Please enter a valid email address",
@@ -79,6 +82,7 @@ our %Lexicon = (
   "SCREEN_SHARING"                       => "Screen Sharing",
   "HELP_SCREEN_SHARING"                  => "VROOM lets you share your screen with the other members of the room. For now " .
                                             "this feature is only available in Google Chrome, and you need to change the following setting " .
+                                            "(since version 34, this setting isn't needed anymore)" .
                                             "<ul>" .
                                             "  <li>Type chrome://flags in the address bar" .
                                             "  <li>Look for the option \"Enable screen sharing in getUserMedia()\" and click on " .

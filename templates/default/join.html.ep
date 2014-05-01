@@ -70,6 +70,17 @@
         </div>
       </div>
     </nav>
+    <div class="modal fade" role="dialog" id="chromeExtMessage" aria-labelledby="chromeExtMessage" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content well">
+          <p><%=l 'VROOM_CHROME_EXTENSION' %></p>
+          <a href="https://chrome.google.com/webstore/detail/<%= $config->{chromeExtensionId} %>" target="_blank">
+            <span class="glyphicon glyphicon-download-alt">
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
     <div class="frame">
       <div id="chatMenu" class="nav-collapse collapse">
         <div id="chatHistory" class="form-control">
