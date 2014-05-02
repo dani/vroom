@@ -88,7 +88,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="noWebrtcSupportTitle"><%=l 'BROWSER_NOT_SUPPORTED' %></h4>
           </div>
-          <div class="modal-content modal-body">
+          <div class="modal-body">
             <p><%=l 'NO_WEBRTC_SUPPORT' %></p>
             <div class="row">
               <div class="col-sm-4">
