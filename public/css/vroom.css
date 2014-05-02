@@ -103,10 +103,19 @@
   text-align: center;
 }
 #navBarLogo {
-  padding-top: 5px;
+  padding-top: 2px;
 }
 #toolBar {
   padding-top: 35px;
+  margin-right: 90px;
+}
+#forkMeRibbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0;
+  width: 149px;
+  height: 149px;
 }
 @media screen and (max-width: 480px) {
   body {

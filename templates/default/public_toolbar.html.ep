@@ -1,4 +1,7 @@
   <nav class="navbar navbar-default" role="navigation">
+    <a href="https://github.com/dani/vroom">
+      <img id="forkMeRibbon" src="/img/fork_me_on_gh.png" alt="Fork me on GitHub">
+    </a>
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#toolBar">
