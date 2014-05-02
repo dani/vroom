@@ -57,9 +57,7 @@
 }
 #createRoomContainer {
   max-width: 500px;
-  margin-top: 50px;
-  margin-right: auto;
-  margin-left: auto;
+  margin: auto;
 }
 #chatBox {
   max-height:300px;
@@ -106,6 +104,9 @@
 }
 #navBarLogo {
   padding-top: 5px;
+}
+#toolBar {
+  padding-top: 35px;
 }
 @media screen and (max-width: 480px) {
   body {
