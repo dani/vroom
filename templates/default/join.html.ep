@@ -3,7 +3,7 @@
   <div id="wrap" class="container-fluid">
     <nav id="toolbar" class="navbar navbar-default" role="toolbar">
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#toolBar">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#roomToolBar">
           <span class="sr-only"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -11,7 +11,7 @@
         </button>
       </div>
       <input id="roomName" name="roomName" type="hidden" value="<%= $room %>"/>
-      <div id="toolBar" class="collapse navbar-collapse">
+      <div id="roomToolBar" class="collapse navbar-collapse">
         <form class="navbar-form navbar-left input-group" id="inviteEmail" action="" method="post">
           <div class="input-group">
             <input type="email" id="recipient" class="form-control help" placeholder="<%=l 'EMAIL_INVITE' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>"/>
