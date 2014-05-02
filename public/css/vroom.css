@@ -104,6 +104,9 @@
 #chromeExtMessage {
   text-align: center;
 }
+#navBarLogo {
+  padding-top: 5px;
+}
 @media screen and (max-width: 480px) {
   body {
     font-size: 0.8em;
