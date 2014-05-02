@@ -14,6 +14,7 @@ use Data::GUID qw(guid_string);
 use Digest::MD5 qw(md5_hex);
 use MIME::Base64;
 use Email::Sender::Transport::Sendmail;
+use Encode;
 
 # Used to generate thanks on the about template
 our $components = {
@@ -318,7 +319,7 @@ post '/action' => sub {
     my $rcpt = $self->param('recipient');
     $self->email(
       header => [
-        Subject => sprintf ($self->l("JOIN_US_ON_s"), $room),
+        Subject => encode("MIME-Header", sprintf ($self->l("JOIN_US_ON_s"), $room)),
         To => $rcpt
       ],
       data => [

@@ -12,7 +12,7 @@ our %Lexicon = (
     "ERROR_ROOM_s_LOCKED"                       => "Le salon %s est verrouillé, vous ne pouvez pas le rejoindre",
     "ERROR_OCCURED"                             => "Une erreur est survenue",
     "ERROR_NOT_LOGGED_IN"                       => "Désolé, vous n'êtes pas identifié",
-    "JOIN_US_ON_s"                              => "Rejoignez nous sur le salon %s",
+    "JOIN_US_ON_s"                              => "Vidéo conférence %s",
     "TO_JOIN_s_CLICK_s"                         => "Vous êtes invité à rejoindre le salon de vidéo conférence %s. " .
                                                    "Tout ce dont vous avez besoin est un navigateur web récent et " .
                                                    "une webcam. Quand vous êtes prêt, cliquez sur <a href='%s'>ce lien</a>",

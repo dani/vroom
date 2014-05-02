@@ -10,7 +10,7 @@ our %Lexicon = (
   "ERROR_ROOM_s_LOCKED"                  => "The room %s is locked, you cannot join it",
   "ERROR_OCCURED"                        => "An error occured",
   "ERROR_NOT_LOGGED_IN"                  => "Sorry, your not logged in",
-  "JOIN_US_ON_s"                         => "Join us on room %s",
+  "JOIN_US_ON_s"                         => "Video conference %s",
   "INVITE_SENT_TO_s"                     => "An invitation was sent to %s",
   "TO_JOIN_s_CLICK_s"                    => "You're invited to join the video conference %s. " .
                                             "All you need is a modern web browser and a webcam. When you're ready " .
