@@ -63,6 +63,11 @@ our %Lexicon = (
     "ERROR_MAIL_INVALID"                        => "Veuillez saisir une adresse email valide",
     "CANT_SEND_TO_s"                            => "Le message n'a pas pu être envoyé à %s",
     "SCREEN_s"                                  => "Écran de %s",
+    "BROWSER_NOT_SUPPORTED"                     => "Navigateur non supporté",
+    "NO_WEBRTC_SUPPORT"                         => "Désolé, la vidéo conférence ne fonctionnera pas car votre navigateur " .
+                                                   "ne dispose pas des fonctions nécessaires. Nous recommandons de télécharger " .
+                                                   "un des navigateurs suivants, qui supportent les dernières technologies nécessaires " .
+                                                   "à l'utilisation de VROOM",
     "HOME"                                      => "Accueil",
     "HELP"                                      => "Aide",
     "ABOUT"                                     => "À propos",

@@ -81,6 +81,42 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" role="dialog" id="noWebrtcSupport" aria-labelledby="noWebrtcSupport" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="noWebrtcSupportTitle"><%=l 'BROWSER_NOT_SUPPORTED' %></h4>
+          </div>
+          <div class="modal-content modal-body">
+            <p><%=l 'NO_WEBRTC_SUPPORT' %></p>
+            <div class="row">
+              <div class="col-sm-4">
+                <a href="http://www.mozilla.org/firefox/" target="_blank">
+                  <center>
+                    <img src="/img/firefox.png" alt="Mozilla Firefox"/>
+                  </center>
+                </a>
+              </div>
+              <div class="col-sm-4">
+                <a href="http://www.google.com/chrome/" target="_blank">
+                  <center>
+                    <img src="/img/chrome.png" alt="Google Chrome"/>
+                  </center>
+                </a>
+              </div>
+              <div class="col-sm-4">
+                <a href="http://www.opera.com" target="_blank">
+                  <center>
+                    <img src="/img/opera.png" alt="Opera"/>
+                  </center>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="frame">
       <div id="chatMenu" class="nav-collapse collapse">
         <div id="chatHistory" class="form-control">

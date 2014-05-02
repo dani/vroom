@@ -70,6 +70,11 @@ function initVroom(room) {
     $("#shareScreenLabel").addClass('disabled');
   }
 
+  // If browser doesn't support webRTC or dataChannels
+  if (!webrtc.capabilities.support || !webrtc.capabilities.dataChannel){
+    $('#noWebrtcSupport').modal('show');
+  }
+
   // Escape entities
   function stringEscape(string){
     string = string.replace(/[\u00A0-\u99999<>\&]/gim, function(i) {

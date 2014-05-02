@@ -57,6 +57,10 @@ our %Lexicon = (
   "ERROR_MAIL_INVALID"                   => "Please enter a valid email address",
   "CANT_SEND_TO_s"                       => "Couldn't send message to %s",
   "SCREEN_s"                             => "%s's screen",
+  "BROWSER_NOT_SUPPORTED"                => "Browser not supported",
+  "NO_WEBRTC_SUPPORT"                    => "Sorry, but the video conference will not workd because your web browser doesn't have the " .
+                                            "required functionnalities. We recommand you download one of the following browsers " .
+                                            "which support the latest web technologies required to use VROOM",
   "HOME"                                 => "Home",
   "HELP"                                 => "Help",
   "ABOUT"                                => "About",
