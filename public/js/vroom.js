@@ -466,7 +466,7 @@ function initVroom(room) {
             cantShare(locale.SCREEN_SHARING_CANCELLED);
           }
           else
-            cantShare(locale.CANT_SHARE_SCREEN + ' ' + err.name);
+            cantShare(locale.CANT_SHARE_SCREEN);
           $('#shareScreenLabel').removeClass('active');
           return;
         }
