@@ -9,6 +9,8 @@ Copyright 2014 Firewall Services
 $.notify.defaults( { globalPosition: "bottom left" } );
 // Enable tooltip on required elements
 $('.help').tooltip({container: 'body'});
+// set the height of the thumbnails so they are always equals
+$(".thumbnail").height(Math.max.apply(null, $(".thumbnail").map(function() { return $(this).height(); })));
 
 // Strings we need translated
 var locale = {
