@@ -117,6 +117,14 @@
   width: 149px;
   height: 149px;
 }
+.thumbnail {
+  text-align: justify;
+  text-justify:inter-word;
+}
+.modal-body {
+  text-align: justify;
+  text-justify:inter-word;
+}
 @media screen and (max-width: 480px) {
   body {
     font-size: 0.8em;
