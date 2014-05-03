@@ -42,7 +42,7 @@ our %Lexicon = (
                                                    "Vous devez en saisir un avant de pouvoir utiliser le tchat",
     "CHANGE_COLOR"                              => "Changez de couleur",
     "CLICK_TO_CHAT"                             => "Cliquez ici pour accéder au tchat",
-    "PREVENT_TO_JOIN"                           => "Empêchez d'autres participants de rejoindre à ce salon",
+    "PREVENT_TO_JOIN"                           => "Empêchez d'autres participants de rejoindre ce salon",
     "MUTE_MIC"                                  => "Coupez votre micro",
     "SUSPEND_CAM"                               => "Stoppez la webcam, les autres verront un écran noir à la place, " .
                                                    "mais pourront toujours vous entendre",
@@ -65,7 +65,7 @@ our %Lexicon = (
     "CANT_SEND_TO_s"                            => "Le message n'a pas pu être envoyé à %s",
     "SCREEN_s"                                  => "Écran de %s",
     "BROWSER_NOT_SUPPORTED"                     => "Navigateur non supporté",
-    "NO_WEBRTC_SUPPORT"                         => "Désolé, la vidéo conférence ne fonctionnera pas car votre navigateur " .
+    "NO_WEBRTC_SUPPORT"                         => "Désolé, la vidéo conférence ne fonctionnera pas (ou pas correctement) car votre navigateur " .
                                                    "ne dispose pas des fonctions nécessaires. Nous recommandons de télécharger " .
                                                    "un des navigateurs suivants, qui supportent les dernières technologies nécessaires " .
                                                    "à l'utilisation de VROOM",
@@ -73,15 +73,16 @@ our %Lexicon = (
     "HELP"                                      => "Aide",
     "ABOUT"                                     => "À propos",
     "SECURE"                                    => "Sécurisé",
-    "P2P_COMMUNICATION"                         => "Avec VROOM, vos communications se font de pair à pair, et sont sécurisées. " .
+    "P2P_COMMUNICATION"                         => "Avec VROOM, vos communications se font de pair à pair (directement enre utilisateurs), " .
+                                                   "et sont sécurisées. " .
                                                    "Nos serveurs ne servent qu'au signalement, pour que chacun puisse se connecter aux autres " .
-                                                   "(comme un point de rendez-vous virtuel) .Seulement si certains d'entre vous se trouvent " .
-                                                   "derrière des par feu stricts, les flux seront relayés à travers notre serveur, en dernier " .
+                                                   "(comme un point de rendez-vous virtuel). Seulement si certains d'entre vous se trouvent " .
+                                                   "derrière des pare feu stricts, les flux seront relayés à travers nos serveurs, en dernier " .
                                                    "recours, mais même dans ce cas, nous ne relayons que des flux chiffrés, inintelligibles",
     "WORKS_EVERYWHERE"                          => "Fonctionne partout",
-    "MODERN_BROWSERS"                           => "VROOM marche avec les navigateurs modernes (Chrome, Mozilla Firefox, Opera), " .
+    "MODERN_BROWSERS"                           => "VROOM fonctionne avec les navigateurs modernes (Google Chrome, Mozilla Firefox, Opera), " .
                                                    "vous n'avez aucun plugin à installer, ni codec, ni client logiciel, ni à " .
-                                                   "envoyer la doc technique aux autres participants. Vous n'avez qu'à cliquer, et dicuter",
+                                                   "envoyer la doc technique aux autres participants. Vous n'avez qu'à cliquer, et discuter",
     "MULTI_USER"                                => "Multi utilisateurs",
     "THE_LIMIT_IS_YOUR_PIPE"                    => "VROOM n'impose pas de limite sur le nombre de participants, vous pouvez discuter à " .
                                                    "plusieurs en même temps. La seule limite est la capacité de votre connexion Internet. " .
@@ -91,7 +92,7 @@ our %Lexicon = (
                                                    "Les technologies employées (WebRTC) étant très récentes, seules les versions " .
                                                    "récentes de Mozilla Firefox, Google Chrome et Opéra fonctionnent pour l'instant. " .
                                                    "Les autres navigateurs (principalement Internet Explorer et Safari) devraient " .
-                                                   "suivrent un jour, mais ne fonctionneront pas pour l'instant",
+                                                   "suivrent un jour, mais ne fonctionneront pas actuellement",
     "SREEN_SHARING"                             => "Partage d'écran",
     "HELP_SCREEN_SHARING"                       => "VROOM vous permet de partager votre écran avec tous les autres participants d'une conférence. " .
                                                    "Pour l'instant, le partage d'écran ne fonctionne qu'avec le navigateur Google Chrome, " .
@@ -112,12 +113,12 @@ our %Lexicon = (
                                                    "<ul>" .
                                                    "  <li>Un poste (PC, MAC, tablette, peu importe)</li>" .
                                                    "  <li>Une webcam et un micro</li>" .
-                                                   "  <li>Un navigateur web</li>" .
+                                                   "  <li>Un navigateur web moderne</li>" .
                                                    "</ul>",
     "HOW_IT_WORKS"                              => "Comment ça marche ?",
     "ABOUT_HOW_IT_WORKS"                        => "WebRTC permet d'établir des connexions directement entre les navigateurs " .
                                                    "des participants. Cela permet d'une part d'offrir la meilleur latence possible ".
-                                                   "en évitant les allez-retours avec un serveur, ce qui est toujours important " .
+                                                   "en évitant les allés-retours avec un serveur, ce qui est toujours important " .
                                                    "lors de communications en temps réel. D'autre part, cela permet aussi de " .
                                                    "garantir la confidentialité de vos communications.",
     "SERVERLESS"                                => "Aucun serveur, vraiment ?",
@@ -145,12 +146,12 @@ our %Lexicon = (
                                                    "      situations, celà n'est pas possible. Un serveur " .
                                                    "<a href='http://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT'>TURN</a> " .
                                                    "      est utilisé pour relayer les données. Même dans ces situations, le serveur " .
-                                                   "      n'a pas accès aux données en clair, il ne fait que relayer des trames " .
+                                                   "      n'a pas accès aux données, il ne fait que relayer des trames " .
                                                    "      chiffrées parfaitement inintelligibles, la confidentialité des communications " .
                                                    "      n'est donc pas compromise (la latence sera par contre affectée)</li>".
                                                    "</ol>",
     "THANKS"                                    => "Remerciements",
-    "ABOUT_THANKS"                              => "VROOM utilise les composnts suivants, merci donc aux auteurs respectifs :-)",
+    "ABOUT_THANKS"                              => "VROOM utilise les composants suivants, merci donc aux auteurs respectifs :-)",
 
 );
 
