@@ -1,6 +1,12 @@
 <html>
   <p>
-    <%== sprintf($self->l('TO_JOIN_s_CLICK_s'), $room, $self->url_for('/')->to_abs.$room) %>
+    <%
+      my $url = $self->url_for('/')->to_abs;
+      $url .= ($url =~ m/\/$/) ? '' : '/';
+    %>
+    <%==
+      sprintf($self->l('TO_JOIN_s_CLICK_s'), $room, $url.$room);
+    %>
   </p>
   <br>
   <p>
