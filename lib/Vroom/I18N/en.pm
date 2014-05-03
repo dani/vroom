@@ -51,6 +51,7 @@ our %Lexicon = (
   "CANT_SHARE_SCREEN"                    => "Sorry, your configuration does not allow screen sharing",
   "SCREEN_SHARING_ONLY_FOR_CHROME"       => "Sorry, but you can't share your screen. Only Google Chrome supports this feature for now",
   "SCREEN_SHARING_CANCELLED"             => "Screen sharing has been cancelled",
+  "EXTENSION_REQUIRED"                   => "An extension is required",
   "VROOM_CHROME_EXTENSION"               => "To enable screen sharing, you need to install an extension. Click on the following link and refresh this page",
   "EVERYONE_CAN_SEE_YOUR_SCREEN"         => "All other participants can see your screen now",
   "SCREEN_UNSHARED"                      => "You do no longer share your screen",

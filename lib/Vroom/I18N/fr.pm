@@ -57,6 +57,7 @@ our %Lexicon = (
     "SCREEN_SHARING_ONLY_FOR_CHROME"            => "Désolé, mais vous ne pouvez pas partager votre écran. Seul le navigateur Google Chrome " .
                                                    "supporte cette fonction pour l'instant",
     "SCREEN_SHARING_CANCELLED"                  => "Le partage d'écran a été annulé",
+    "EXTENSION_REQUIRED"                        => "Une extension est nécessaire",
     "VROOM_CHROME_EXTENSION"                    => "Pour activer le partage d'écran, vous devez installer une extension, cliquez sur le lien ci-dessous, puis raffraîchissez cette page",
     "EVERYONE_CAN_SEE_YOUR_SCREEN"              => "Tous les autres participants peuvent voir votre écran",
     "SCREEN_UNSHARED"                           => "Vous ne partagez plus votre écran",
