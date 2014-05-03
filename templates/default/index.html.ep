@@ -38,9 +38,7 @@
       <div class="thumbnail">
         <div>
           <center>
-            <img src="/img/firefox.png" alt="Firefox">
-            <img src="/img/chrome.png" alt="Chrome">
-            <img src="/img/opera.png" alt="Opera">
+            <img src="/img/universal.png" alt="Universal">
           </center>
         </div>
         <div class="caption">
