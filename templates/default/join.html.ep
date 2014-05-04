@@ -137,6 +137,10 @@
                 <span class="glyphicon glyphicon-share-alt">
                 </span>
               </button>
+              <button type="button" id="saveChat" class="btn btn-default">
+                <span class="glyphicon glyphicon-floppy-save">
+                </span>
+              </button>
             </span>
           </div>
         </form>

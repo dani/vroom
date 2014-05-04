@@ -4,4 +4,5 @@
     <script type="text/javascript" src="/js/notify-combined.min.js"></script>
     <script type="text/javascript" src="/js/jquery.browser.min.js"></script>
     <script type="text/javascript" src="/js/sprintf.js"></script>
+    <script type="text/javascript" src="/js/FileSaver.js"></script>
     <script type="text/javascript" src="/js/vroom.js"></script>

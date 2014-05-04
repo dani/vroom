@@ -50,6 +50,9 @@ our $components = {
   },
   "rfc5766-turn-server" => {
     url => 'https://code.google.com/p/rfc5766-turn-server/'
+  },
+  "FileSaver" => {
+    url => 'https://github.com/eligrey/FileSaver.js'
   }
 };
 

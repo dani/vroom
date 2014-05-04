@@ -265,6 +265,12 @@ function initVroom(room) {
     $('#name_' + id + '_screen').html(screenName).css('background-color', color);
   }
 
+  // Save content to a file
+  function downloadContent(filename, content){
+    var blob = new Blob([content], {type: "text/html;charset=utf-8"});
+    saveAs(blob, 'VROOM tchat ' + room + '.html');
+  }
+
   // Handle volume changes from our own mic
   webrtc.on('volumeChange', function (volume, treshold) {
     showVolume($('#localVolume'), volume);
@@ -532,6 +538,10 @@ function initVroom(room) {
     peers.local.color = chooseColor();
     webrtc.sendToAll('peer_color', {color: peers.local.color});
     updateDisplayName('local');
+  });
+
+  $('#saveChat').click(function(){
+    downloadContent('vroom_chat.html', $('#chatHistory').html());
   });
 
   // Handle hangup/close window
