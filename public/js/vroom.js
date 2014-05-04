@@ -268,7 +268,7 @@ function initVroom(room) {
   // Save content to a file
   function downloadContent(filename, content){
     var blob = new Blob([content], {type: "text/html;charset=utf-8"});
-    saveAs(blob, 'VROOM tchat ' + room + '.html');
+    saveAs(blob, filename);
   }
 
   // Handle volume changes from our own mic
@@ -541,7 +541,7 @@ function initVroom(room) {
   });
 
   $('#saveChat').click(function(){
-    downloadContent('vroom_chat.html', $('#chatHistory').html());
+    downloadContent('VROOM Tchat (' + room + ').html', $('#chatHistory').html());
   });
 
   // Handle hangup/close window
