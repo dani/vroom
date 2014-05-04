@@ -133,11 +133,11 @@
           <div class="input-group">
             <textarea class="form-control" id="chatBox" form_id="chatForm" placeholder="<%=l 'SET_YOUR_NAME_TO_CHAT' %>" rows=1 disabled></textarea>
             <span class="input-group-btn">
-              <button type="submit" class="btn btn-default">
+              <button type="submit" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_MESSAGE' %>">
                 <span class="glyphicon glyphicon-share-alt">
                 </span>
               </button>
-              <button type="button" id="saveChat" class="btn btn-default">
+              <button type="button" id="saveChat" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SAVE_HISTORY' %>">
                 <span class="glyphicon glyphicon-floppy-save">
                 </span>
               </button>

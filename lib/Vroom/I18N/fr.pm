@@ -48,6 +48,8 @@ our %Lexicon = (
                                                    "mais pourront toujours vous entendre",
     "LOGOUT"                                    => "Quitter le salon",
     "SET_YOUR_NAME_TO_CHAT"                     => "Vous devez saisir votre nom avant de pouvoir tchater",
+    "SEND_MESSAGE"                              => "Envoyer le message",
+    "SAVE_HISTORY"                              => "Sauvegarder l'historique dans un fichier",
     "MIC_MUTED"                                 => "Votre micro est coupé",
     "MIC_UNMUTED"                               => "Votre micro est à nouveau actif",
     "CAM_SUSPENDED"                             => "Votre webcam est en pause",
