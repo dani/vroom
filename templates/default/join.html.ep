@@ -36,7 +36,7 @@
         </div>
         <div class="btn-group navbar-form navbar-left">
           <button id="chatDropdown" class="form-control collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
-            <span class="glyphicon glyphicon-envelope">
+            <span class="glyphicon glyphicon-comment">
             </span>
           </button>
         </div>
