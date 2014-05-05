@@ -89,10 +89,10 @@ function initVroom(room) {
   function chooseColor(){
     // Shamelessly taken from http://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
     var colors = [
-      '#F37E79', '#7998F3', '#BBF379', '#F379DF', '#79F3E3', '#F3BF79', '#F3BF79', '#9C79F3',
-      '#7AF379', '#F3799D', '#79C1F3', '#E4F379', '#DE79F3', '#79F3BA', '#F39779', '#797FF3',
-      '#A2F379', '#F379C6', '#79E9F3', '#F3D979', '#B579F3', '#79F392', '#F37984', '#79A8F3',
-      '#CBF379', '#F379EE', '#79F3D3'
+      '#B1C7FD', '#DDFDB1', '#FDB1F3', '#B1FDF0', '#FDDAB1', '#C4B1FD', '#B4FDB1', '#FDB1CA',
+      '#B1E1FD', '#F7FDB1', '#EDB1FD', '#B1FDD7', '#FDC1B1', '#B1B7FD', '#CEFDB1', '#FDB1E4',
+      '#B1FAFD', '#FDEAB1', '#D4B1FD', '#B1FDBD', '#FDB1BB', '#B1D1FD', '#E7FDB1', '#FDB1FD',
+      '#B1FDE7', '#B1FDE7'
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   }
