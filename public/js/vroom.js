@@ -304,12 +304,12 @@ function initVroom(room) {
   });
 
   webrtc.on('channelMessage', function (peer, label, data) {
-    // We only want to act on data receive from the vroom channel
-    if (label !== 'vroom') return;
     // Handle volume changes from remote peers
     if (data.type == 'volume') {
       showVolume($('#volume_' + peer.id), data.volume);
     }
+    // We only want to act on data receive from the vroom channel
+    if (label !== 'vroom') return;
     // The peer sets a displayName, record this in our peers struct
     else if (data.type == 'setDisplayName') {
       var name = stringEscape(data.payload);
