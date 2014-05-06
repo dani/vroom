@@ -246,9 +246,9 @@ function initVroom(room) {
 
   // Add a new message to the chat history
   function newChatMessage(from,message){
-    // displayName and message have already been escaped
+    // displayName has already been escaped
     var cl = (from === 'local') ? 'chatMsgSelf':'chatMsgOthers';
-    var newmsg = $('<div class="chatMsg ' + cl + '">' + getTime() + ' ' + peers[from].displayName + '<p>' + linkify(message) + '</p></div>').css('background-color', peers[from].color);
+    var newmsg = $('<div class="chatMsg ' + cl + '">' + getTime() + ' ' + peers[from].displayName + '<p>' + linkify(stringEscape(message)) + '</p></div>').css('background-color', peers[from].color);
     $('<div class="row chatMsgContainer"></div>').append(newmsg).appendTo('#chatHistory');
     $('#chatHistory').scrollTop($('#chatHistory').prop('scrollHeight'));
   }
@@ -299,7 +299,7 @@ function initVroom(room) {
         $('#chatDropdown').addClass('btn-danger');
         playSound('newmsg.mp3');
       }
-      newChatMessage(peer.id,stringEscape(data.payload));
+      newChatMessage(peer.id,data.payload);
     }
   });
 
@@ -618,7 +618,7 @@ function initVroom(room) {
     if ($('#chatBox').val()) {
       webrtc.sendDirectlyToAll('vroom', 'textChat', $('#chatBox').val());
       // Local echo of our own message
-      newChatMessage('local',stringEscape($('#chatBox').val()));
+      newChatMessage('local',$('#chatBox').val());
       // reset the input box
       $('#chatBox').val('').prop('rows', 1);
     }
