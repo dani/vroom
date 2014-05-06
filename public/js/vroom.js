@@ -300,6 +300,7 @@ function initVroom(room) {
 
   // Handle volume changes from our own mic
   webrtc.on('volumeChange', function (volume, treshold) {
+    if (peers.local.micMuted) return;
     showVolume($('#localVolume'), volume);
   });
 
