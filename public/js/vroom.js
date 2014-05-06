@@ -57,7 +57,9 @@ function initVroom(room) {
       color: chooseColor()
     }
   };
-  var mainVid = false;
+  var mainVid = false,
+      chatHistory = {},
+      chatIndex = 0;
 
   $('#name_local').css('background-color', peers.local.color);
 
@@ -169,6 +171,10 @@ function initVroom(room) {
           peer.sendDirectly('vroom','setDisplayName', $('#displayName').val());
         }
         peer.send('peer_color', {color: peers.local.color});
+        // We don't have chat history yet ? Lets ask to this new peer
+        if(!peers.local.hasHistory){
+          peer.sendDirectly('vroom', 'getHistory', '');
+        }
       }, 3500);
     }
     $(div).attr('id', 'peer_' + id);
@@ -245,12 +251,33 @@ function initVroom(room) {
   }
 
   // Add a new message to the chat history
-  function newChatMessage(from,message){
+  function newChatMessage(from,message,time,color){
     // displayName has already been escaped
     var cl = (from === 'local') ? 'chatMsgSelf':'chatMsgOthers';
-    var newmsg = $('<div class="chatMsg ' + cl + '">' + getTime() + ' ' + peers[from].displayName + '<p>' + linkify(stringEscape(message)) + '</p></div>').css('background-color', peers[from].color);
+    if (!time)
+      time = getTime();
+    if (peers[from] && peers[from].color){
+      var color = peers[from].color;
+      var displayName = peers[from].displayName;
+    }
+    // this peer might not be defined if we're importing chat history
+    // So just use the from as the displayName and the provided color
+    else{
+      var color = (color) ? color:chooseColor();
+      var displayName = from;
+    }
+    var newmsg = $('<div class="chatMsg ' + cl + '">' + time + ' ' + displayName + '<p>' + linkify(stringEscape(message)) + '</p></div>').css('background-color', color);
     $('<div class="row chatMsgContainer"></div>').append(newmsg).appendTo('#chatHistory');
     $('#chatHistory').scrollTop($('#chatHistory').prop('scrollHeight'));
+    // Record this message in the history object
+    // so we can send it to other peers asking for it
+    chatHistory[chatIndex] = {
+      time: time,
+      from: displayName,
+      color: color,
+      message: message
+    }
+    chatIndex++;
   }
 
   // Update the displayName of the peer
@@ -292,6 +319,18 @@ function initVroom(room) {
       if (name !== '') peers[peer.id].hasName = true;
       else peers[peer.id].hasName = false;
       updateDisplayName(peer.id);
+    }
+    // This peer asked for our chat history, lets send him
+    else if (data.type == 'getHistory'){
+      peer.sendDirectly('vroom', 'chatHistory', JSON.stringify(chatHistory));
+    }
+    // This peer is sending our chat history (and we don't have it yet)
+    else if (data.type == 'chatHistory' && !peers.local.hasHistory){
+      peers.local.hasHistory = true;
+      var history = JSON.parse(data.payload);
+      for (var i = 0; i < Object.keys(history).length; i++){
+        newChatMessage(history[i].from,history[i].message,history[i].time,history[i].color);
+      }
     }
     // One peer just sent a text chat message
     else if (data.type == 'textChat') {
