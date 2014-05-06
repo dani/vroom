@@ -58,7 +58,7 @@
           </label>
           <label class="btn btn-default help" id="shareScreenLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SHARE_YOUR_SCREEN' %>">
             <input type="checkbox" id="shareScreenButton">
-            <span class="glyphicon glyphicon-share">
+            <span class="glyphicon glyphicon-expand">
             </span>
           </label>
         </div>
