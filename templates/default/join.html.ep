@@ -53,7 +53,7 @@
           </label>
           <label class="btn btn-default help" id="suspendCamLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUSPEND_CAM' %>">
             <input type="checkbox" id="suspendCamButton">
-            <span class="glyphicon glyphicon-facetime-video">
+            <span class="glyphicon glyphicon-eye-close">
             </span>
           </label>
           <label class="btn btn-default help" id="shareScreenLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SHARE_YOUR_SCREEN' %>">
