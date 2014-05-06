@@ -34,16 +34,26 @@
   background-color: #12acef;
 }
 .muted {
-  content:url(/img/mute.png) no-repeat;
   position: absolute;
   right: 20px;
-  top: 10px;
+  top: 0px;
+}
+.muted:before{
+  font-family: 'Glyphicons Halflings';
+  font-size: 2em;
+  color: red;
+  content: "\e036";
 }
 .paused{
-  content:url(/img/pause.png);
   position: absolute;
   right: 56px;
-  top: 10px;
+  top: 0px;
+}
+.paused:before{
+  font-family: 'Glyphicons Halflings';
+  color: red;
+  font-size: 2em;
+  content: "\e106";;
 }
 .displayName {
   text-align: center;
