@@ -243,6 +243,7 @@ post '/create' => sub {
     $self->stash(msg => $self->l('ERROR_NAME_INVALID'));
     return $self->render('error');
   }
+  $self->delete_rooms;
   if ($self->create_room($name,$self->session('name'))){
     $self->redirect_to('/'.$name);
   }
