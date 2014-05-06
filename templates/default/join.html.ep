@@ -162,8 +162,11 @@
     </div>
 %= include 'js_include'
     <script>
-      var actionUrl = '<%= $self->url_for('/action') %>';
-      var goodbyUrl = '<%= $self->url_for('/goodby') %>';
+      <%
+        my $url = $self->url_for('/');
+        $url .= ($url =~ m/\/$/) ? '' : '/';
+      %>
+      var rootUrl = '<%= $url %>';
       var roomName = '<%= $room %>';
       $( document ).ready(function() {
         webrtc = new SimpleWebRTC({

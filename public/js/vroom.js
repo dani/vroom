@@ -64,7 +64,7 @@ function initVroom(room) {
   $('#name_local').css('background-color', peers.local.color);
 
   $.ajaxSetup({
-    url: actionUrl,
+    url: rootUrl + 'action',
     type: 'POST',
     dataType: 'json',    
   });
@@ -156,7 +156,7 @@ function initVroom(room) {
       $('<div></div>').addClass('displayName').attr('id', 'name_' + id).appendTo(div);
       $('<div></div>').attr('id', 'overlay_' + id).appendTo(div);
       // Create a new dataChannel
-      // will be used for text chat
+      // will be used for text chat and displayName
       var color = chooseColor();
       peers[peer.id] = {
         displayName: peer.id,
@@ -165,7 +165,8 @@ function initVroom(room) {
         obj: peer
       };
       // Send our info to this peer (displayName/color)
-      // but wait a bit so channels are fully setup (or have more chances to be) before we send
+      // but wait a bit so the "vroom" dataChannel acreated earlier is fully setup (or have more chances to be)
+      // before we send
       setTimeout(function(){
         if ($('#displayName').val() !== '') {
           peer.sendDirectly('vroom','setDisplayName', $('#displayName').val());
@@ -189,6 +190,7 @@ function initVroom(room) {
     });
     // Simple click put this preview in the mainVideo div
     $(video).click(function() {
+      // This video was in the mainVideo div ? lets remove it
       if ($(this).hasClass('selected')){
         $(this).removeClass('selected');
         $('#mainVideo').html('');
@@ -283,8 +285,8 @@ function initVroom(room) {
   // Update the displayName of the peer
   // and its screen if any
   function updateDisplayName(id){
-    // We might receive the screen before the screen itself
-    // so check if the object exist before using it, or fallback with empty values
+    // We might receive the screen before the peer itself
+    // so check if the object exists before using it, or fallback with empty values
     var display = (peers[id] && peers[id].hasName) ? peers[id].displayName : '';
     var color = (peers[id] && peers[id].color) ? peers[id].color : chooseColor();
     var screenName = (peers[id] && peers[id].hasName) ? sprintf(locale.SCREEN_s, peers[id].displayName) : '';
@@ -300,25 +302,34 @@ function initVroom(room) {
 
   // Handle volume changes from our own mic
   webrtc.on('volumeChange', function (volume, treshold) {
-    if (peers.local.micMuted) return;
+    if (peers.local.micMuted) {
+      return;
+    }
     showVolume($('#localVolume'), volume);
   });
 
-  webrtc.on('channelMessage', function (peer, label, data) {
+  // Handle dataChannel messages (incoming)
+  webrtc.on('channelMessage', function (peer, label, data){
     // Handle volume changes from remote peers
-    if (data.type == 'volume') {
+    if (data.type == 'volume'){
       showVolume($('#volume_' + peer.id), data.volume);
     }
     // We only want to act on data receive from the vroom channel
-    if (label !== 'vroom') return;
+    if (label !== 'vroom'){
+      return;
+    }
     // The peer sets a displayName, record this in our peers struct
-    else if (data.type == 'setDisplayName') {
+    else if (data.type == 'setDisplayName'){
       var name = stringEscape(data.payload);
       peer.logger.log('Received displayName ' + name + ' from peer ' + peer.id);
       // Set display name under the video
       peers[peer.id].displayName = name;
-      if (name !== '') peers[peer.id].hasName = true;
-      else peers[peer.id].hasName = false;
+      if (name !== ''){
+        peers[peer.id].hasName = true;
+      }
+      else {
+        peers[peer.id].hasName = false;
+      }
       updateDisplayName(peer.id);
     }
     // This peer asked for our chat history, lets send him
@@ -334,7 +345,7 @@ function initVroom(room) {
       }
     }
     // One peer just sent a text chat message
-    else if (data.type == 'textChat') {
+    else if (data.type == 'textChat'){
       if ($('#chatDropdown').hasClass('collapsed')){
         $('#chatDropdown').addClass('btn-danger');
         playSound('newmsg.mp3');
@@ -345,7 +356,9 @@ function initVroom(room) {
 
   webrtc.on('peer_color', function(data){
     var color = data.payload.color;
-    if (!color.match(/#[\da-f]{6}/i)) return;
+    if (!color.match(/#[\da-f]{6}/i)){
+      return;
+    }
     peers[data.id].color = color;
     $('#name_' + data.id).css('background-color', color);
     $('#name_' + data.id + '_screen').css('background-color', color);
@@ -366,7 +379,9 @@ function initVroom(room) {
       var div = 'pause_' + data.id,
           cl = 'paused';
     }
-    else return;
+    else{
+      return;
+    }
     $("#overlay_" + data.id).append('<div id="' + div + '" class="' + cl + '"></div>');
   });
 
@@ -420,7 +435,7 @@ function initVroom(room) {
 
   // Error sending something through dataChannel
   webrtc.on('cantsend', function (peer, message){
-    if (message.type == 'textChat') {
+    if (message.type == 'textChat'){
       var who = (peers[peer.id].hasName) ? peers[peer.id].displayName : locale.ONE_OF_THE_PEERS;
       $.notify(sprintf(locale.CANT_SEND_TO_s, who), 'error');
     }
@@ -518,8 +533,9 @@ function initVroom(room) {
           else if (err.name == 'PERMISSION_DENIED' || err.name == 'PermissionDeniedError'){
             cantShare(locale.SCREEN_SHARING_CANCELLED);
           }
-          else
+          else{
             cantShare(locale.CANT_SHARE_SCREEN);
+          }
           $('#shareScreenLabel').removeClass('active');
           return;
         }
@@ -530,7 +546,7 @@ function initVroom(room) {
         }
       });
     }
-    else {
+    else{
       webrtc.stopScreenShare();
       $("#shareScreenLabel").removeClass('btn-danger');
       $.notify(locale.SCREEN_UNSHARED, 'success');
@@ -587,7 +603,7 @@ function initVroom(room) {
   // Handle hangup/close window
   $('#logoutButton').click(function() {
     hangupCall;
-    window.location.assign(goodbyUrl + '/' + roomName);
+    window.location.assign(rootUrl + 'goodby/' + roomName);
   });
   window.onunload = window.onbeforeunload = hangupCall;
 
@@ -646,7 +662,7 @@ function initVroom(room) {
       lines = $('#chatBox').val().split(/\r?\n/);
       for(var i=0; i<lines.length && $(this).prop('rows')>1; i++) {
         var val = lines[i].replace(/^\s+|\s+$/, '');
-        if (val.length == 0) {
+        if (val.length == 0){
           $(this).prop('rows', $(this).prop('rows')-1);
         }
       }
@@ -655,7 +671,7 @@ function initVroom(room) {
   // Chat: send to other peers
   $('#chatForm').submit(function (e){
     e.preventDefault();
-    if ($('#chatBox').val()) {
+    if ($('#chatBox').val()){
       webrtc.sendDirectlyToAll('vroom', 'textChat', $('#chatBox').val());
       // Local echo of our own message
       newChatMessage('local',$('#chatBox').val());
@@ -678,8 +694,9 @@ function initVroom(room) {
       },
       success: function(data) {
         // In case of success, only notify if the server replied something
-        if (data.msg !== '')
+        if (data.msg !== ''){
           $.notify(data.msg, 'success');
+        }
       }
     });
   }, 60000);
