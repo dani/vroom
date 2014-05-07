@@ -35,7 +35,7 @@ var locale = {
 
 // Localize the strings we need
 $.ajax({
-  url: '/localize',
+  url: rootUrl + 'localize',
   type: 'POST',
   dataType: 'json',
   data: {

@@ -1,3 +1,10 @@
+    <script type="text/javascript">
+      <%
+        my $url = $self->url_for('/');
+        $url .= ($url =~ m/\/$/) ? '' : '/';
+      %>
+      var rootUrl = '<%= $url %>';
+    </script>
     <script type="text/javascript" src="/js/simplewebrtc.bundle.js"></script>
     <script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>

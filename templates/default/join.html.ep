@@ -162,11 +162,6 @@
     </div>
 %= include 'js_include'
     <script>
-      <%
-        my $url = $self->url_for('/');
-        $url .= ($url =~ m/\/$/) ? '' : '/';
-      %>
-      var rootUrl = '<%= $url %>';
       var roomName = '<%= $room %>';
       $( document ).ready(function() {
         webrtc = new SimpleWebRTC({
