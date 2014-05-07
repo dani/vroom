@@ -5,4 +5,4 @@ Video conf based on [SimpleWebRTC.js](https://github.com/HenrikJoreteg/SimpleWeb
 
 Check documentation here: https://wikit.firewall-services.com/doku.php/projets/vroom
 
-You can also check the demo here: https://vroom.firewall-services.com
+You can also check the demo here: https://vroom.im
