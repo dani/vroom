@@ -68,6 +68,7 @@ our $config = plugin Config => {
     realm               => 'vroom',
     baseUrl             => 'https://vroom.example.com/',
     emailFrom           => 'vroom@example.com',
+    feedbackRecipient   => 'admin@example.com',
     template            => 'default',
     inactivityTimeout   => 3600,
     logLevel            => 'info',
@@ -225,6 +226,25 @@ get '/about' => sub {
 } => 'about';
 
 get '/help' => 'help';
+
+get '/feedback' => 'feedback';
+post '/feedback' => sub {
+  my $self = shift;
+  my $email = $self->param('email') || '';
+  my $comment = $self->param('comment');
+  $self->email(
+    header => [
+      Subject => encode("MIME-Header", $self->l("FEEDBACK_FROM_VROOM")),
+      To => $config->{feedbackRecipient}
+    ],
+    data => [
+      template => 'feedback',
+      email    => $email,
+      comment  => $comment
+    ],
+  );
+  $self->redirect_to($self->url_for('/'));
+};
 
 get '/goodby/(:room)' => sub {
   my $self = shift;

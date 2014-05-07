@@ -1,0 +1,23 @@
+% title $self->l('FEEDBACK');
+%= include 'header'
+%= include 'public_toolbar'
+<div class="container-fluid">
+  <div id="feedbackFormContainer" class="well">
+  
+  <form role="form" action="<%=url_for('/feedback')%>" method="post">
+    <legend><center><%=l 'GIVE_US_YOUR_FEEDBACK' %></center></legend>
+    <center><%=l 'YOUR_FEEDBACK_HELPS_US' %></center>
+    <br>
+    <div class="form-group">
+      <label for="email"><%=l 'YOUR_MAIL_OPTIONAL' %></label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="me@example.com">
+    </div>
+    <div class="form-group">
+      <label for="comment"><%=l 'COMMENT' %></label>
+      <textarea id="comment" name="comment" class="form-control" rows="10"></textarea>
+    </div>
+    <button type="submit" class="btn btn-default"><%=l 'SUBMIT' %></button>
+  </form>
+  </div>
+</div>
+%= include 'footer'

@@ -21,6 +21,9 @@
           <li>
             <a href="<%= $self->url_for('/about') %>"><%=l 'ABOUT' %></a>
           </li>
+          <li>
+            <a href="<%= $self->url_for('/feedback') %>"><%=l 'FEEDBACK' %></a>
+          </li>
         </ul>
       </div>
     </div>
