@@ -4,8 +4,13 @@
 <div class="container-fluid">
   <div class="jumbotron alert-danger">
     <h1><%=l 'ERROR_OCCURED' %></h1>
-    <p><%=l "$msg" %></p>
-    <p><a class="btn btn-primary btn-lg" role="button" href="<%= $self->url_for('/') %>"><%=l 'BACK_TO_MAIN_MENU' %></a></p>
+    <p><%= $msg %></p>
+    <div class="btn-group">
+      <a class="btn btn-primary btn-lg" role="button" href="<%= $self->url_for('/') %>"><%=l 'BACK_TO_MAIN_MENU' %></a>
+      <% if ($err eq 'ERROR_NAME_CONFLICT'){ %>
+      <a class="btn btn-default btn-lg" role="button" href="<%= $self->url_for('/') . $room %>"><%=l 'JOIN_THIS_ROOM' %></a>
+      <% } %>
+    </div>
   </div>
 </div>
 %= include 'footer'

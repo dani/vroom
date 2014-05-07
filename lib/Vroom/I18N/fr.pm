@@ -30,6 +30,7 @@ our %Lexicon = (
     "THANKS_FOR_USING"                          => "Nous vous remmercions de votre confiance, et espérons que " .
                                                    "vous avez passé une agréable réunion.",
     "BACK_TO_MAIN_MENU"                         => "Retour au menu principal",
+    "JOIN_THIS_ROOM"                            => "Rejoindre ce salon",
     "CREATE_ROOM"                               => "Créer un salon",
     "ROOM_NAME"                                 => "Nom du salon",
     "RANDOM_IF_EMPTY"                           => "Si vous laissez ce champs vide, un nom aléatoire sera donné au salon",

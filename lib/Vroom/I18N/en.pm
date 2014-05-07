@@ -27,6 +27,7 @@ our %Lexicon = (
   "THANKS_SEE_YOU_SOON"                  => "Thanks and see you soon",
   "THANKS_FOR_USING"                     => "Thank you for using VROOM, we hope you enjoyed your meeting",
   "BACK_TO_MAIN_MENU"                    => "Back to main menu",
+  "JOIN_THIS_ROOM"                       => "Join this room",
   "CREATE_ROOM"                          => "Create a new room",
   "ROOM_NAME"                            => "Room name",
   "RANDOM_IF_EMPTY"                      => "If you let this field empty, a random name will be given to the room",

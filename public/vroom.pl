@@ -240,16 +240,22 @@ post '/create' => sub {
   my $name = $self->param('roomName') || lc guid_string();
   $self->login;
   unless ($self->valid_room_name($name)){
-    $self->stash(msg => $self->l('ERROR_NAME_INVALID'));
-    return $self->render('error');
+    return $self->render('error',
+      room => $name,
+      msg  => $self->l('ERROR_NAME_INVALID'),
+      err  => 'ERROR_NAME_INVALID'
+    );
   }
   $self->delete_rooms;
-  if ($self->create_room($name,$self->session('name'))){
-    $self->redirect_to('/'.$name);
+  unless ($self->create_room($name,$self->session('name'))){
+    return $self->render('error',
+      room => $name,
+      msg  => $self->l('ERROR_NAME_CONFLICT'),
+      err  => 'ERROR_NAME_CONFLICT'
+    );
   }
   else{
-    $self->stash(msg => $self->l('ERROR_NAME_CONFLICT'));
-    $self->render('error');
+    $self->redirect_to('/'.$name);
   }
 };
 
@@ -273,26 +279,38 @@ get '/(*room)' => sub {
   # Not auth yet, probably a guest
   $self->login;
   unless ($self->valid_room_name($room)){
-    $self->stash(msg => 'ERROR_NAME_INVALID');
-    return $self->render('error');
+    return $self->render('error',
+      msg  => $self->l('ERROR_NAME_INVALID'),
+      err  => 'ERROR_NAME_INVALID',
+      room => $room
+    );
   }
   my $data = $self->get_room($room);
   unless ($data){
-    $self->stash(msg => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room));
-    return $self->render('error');
+    return $self->render('error',
+      err  => 'ERROR_ROOM_s_DOESNT_EXIST',
+      msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
+      room => $room
+    );
   }
   $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60});
   my @participants = $self->get_participants($room);
   if ($data->{'locked'}){
     unless (($self->session('name') eq $data->{'owner'}) || (grep { $_ eq $self->session('name') } @participants )){
-      $self->stash(msg => sprintf($self->l("ERROR_ROOM_s_LOCKED"), $room));
-      return $self->render('error');
+      return $self->render('error',
+        msg => sprintf($self->l("ERROR_ROOM_s_LOCKED"), $room),
+        err => 'ERROR_ROOM_s_LOCKED',
+        room => $room
+      );
     }
   }
   # Add this user to the participants table
   unless($self->add_participant($room,$self->session('name'))){
-    $self->stash(msg => $self->l('ERROR_OCCURED'));
-    return $self->render('error');
+    return $self->render('error',
+      msg  => $self->l('ERROR_OCCURED'),
+      err  => 'ERROR_OCCURED',
+      room => $room
+    );
   }
   $self->stash(locked       => $data->{locked} ? 'checked':'',
                turnPassword => $data->{token});
