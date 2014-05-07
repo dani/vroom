@@ -255,7 +255,7 @@ post '/create' => sub {
     );
   }
   else{
-    $self->redirect_to('/'.$name);
+    $self->redirect_to($self->url_for('/') . $name);
   }
 };
 
@@ -275,6 +275,10 @@ post '/localize' => sub {
 get '/(*room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
+  # Redirect to lower case
+  if ($room ne lc $room){
+    $self->redirect_to($self->url_for('/') . lc $room);
+  }
   $self->delete_rooms;
   # Not auth yet, probably a guest
   $self->login;
