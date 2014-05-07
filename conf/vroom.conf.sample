@@ -12,7 +12,6 @@ turnServer => 'turn.example.com',
 realm => 'example.com',
 
 # Web & contact
-baseUrl => 'https://vroom.example.com/',
 emailFrom => 'vroom@example.com',
 feedbackRecipient => 'admin@example.com',
 # Templates to use for web pages

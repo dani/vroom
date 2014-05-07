@@ -66,7 +66,6 @@ our $config = plugin Config => {
     signalingServer     => 'https://vroom.example.com/',
     stunServer          => 'stun.l.google.com:19302',
     realm               => 'vroom',
-    baseUrl             => 'https://vroom.example.com/',
     emailFrom           => 'vroom@example.com',
     feedbackRecipient   => 'admin@example.com',
     template            => 'default',
