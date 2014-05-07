@@ -173,7 +173,7 @@ function initVroom(room) {
         }
         peer.send('peer_color', {color: peers.local.color});
         // We don't have chat history yet ? Lets ask to this new peer
-        if(!peers.local.hasHistory){
+        if(!peers.local.hasHistory && chatIndex == 0){
           peer.sendDirectly('vroom', 'getHistory', '');
         }
       }, 3500);
@@ -256,8 +256,9 @@ function initVroom(room) {
   function newChatMessage(from,message,time,color){
     // displayName has already been escaped
     var cl = (from === 'local') ? 'chatMsgSelf':'chatMsgOthers';
-    if (!time)
+    if (!time || !time.match(/^\d{1,2}:\d{1,2}:\d{1,2}$/)){
       time = getTime();
+    }
     if (peers[from] && peers[from].color){
       var color = peers[from].color;
       var displayName = peers[from].displayName;
@@ -265,10 +266,10 @@ function initVroom(room) {
     // this peer might not be defined if we're importing chat history
     // So just use the from as the displayName and the provided color
     else{
-      var color = (color) ? color:chooseColor();
+      var color = (color && color.match(/#[\da-f]{6}/i)) ? color:chooseColor();
       var displayName = from;
     }
-    var newmsg = $('<div class="chatMsg ' + cl + '">' + time + ' ' + displayName + '<p>' + linkify(stringEscape(message)) + '</p></div>').css('background-color', color);
+    var newmsg = $('<div class="chatMsg ' + cl + '">' + time + ' ' + stringEscape(displayName) + '<p>' + linkify(stringEscape(message)) + '</p></div>').css('background-color', color);
     $('<div class="row chatMsgContainer"></div>').append(newmsg).appendTo('#chatHistory');
     $('#chatHistory').scrollTop($('#chatHistory').prop('scrollHeight'));
     // Record this message in the history object
@@ -287,9 +288,9 @@ function initVroom(room) {
   function updateDisplayName(id){
     // We might receive the screen before the peer itself
     // so check if the object exists before using it, or fallback with empty values
-    var display = (peers[id] && peers[id].hasName) ? peers[id].displayName : '';
+    var display = (peers[id] && peers[id].hasName) ? stringEscape(peers[id].displayName) : '';
     var color = (peers[id] && peers[id].color) ? peers[id].color : chooseColor();
-    var screenName = (peers[id] && peers[id].hasName) ? sprintf(locale.SCREEN_s, peers[id].displayName) : '';
+    var screenName = (peers[id] && peers[id].hasName) ? sprintf(locale.SCREEN_s, stringEscape(peers[id].displayName)) : '';
     $('#name_' + id).html(display).css('background-color', color);
     $('#name_' + id + '_screen').html(screenName).css('background-color', color);
   }
@@ -320,8 +321,8 @@ function initVroom(room) {
     }
     // The peer sets a displayName, record this in our peers struct
     else if (data.type == 'setDisplayName'){
-      var name = stringEscape(data.payload);
-      peer.logger.log('Received displayName ' + name + ' from peer ' + peer.id);
+      var name = data.payload;
+      peer.logger.log('Received displayName ' + stringEscape(name) + ' from peer ' + peer.id);
       // Set display name under the video
       peers[peer.id].displayName = name;
       if (name !== ''){
@@ -398,12 +399,12 @@ function initVroom(room) {
 
   webrtc.on('room_locked', function(data){
     $('#lockLabel').addClass('btn-danger active');
-    $.notify(sprintf(locale.ROOM_LOCKED_BY_s, peers[data.id].displayName), 'info');
+    $.notify(sprintf(locale.ROOM_LOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
   });
 
   webrtc.on('room_unlocked', function(data){
     $('#lockLabel').removeClass('btn-danger active');
-    $.notify(sprintf(locale.ROOM_UNLOCKED_BY_s, peers[data.id].displayName), 'info');
+    $.notify(sprintf(locale.ROOM_UNLOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
   });
 
   // Handle the readyToCall event: join the room
@@ -436,7 +437,7 @@ function initVroom(room) {
   // Error sending something through dataChannel
   webrtc.on('cantsend', function (peer, message){
     if (message.type == 'textChat'){
-      var who = (peers[peer.id].hasName) ? peers[peer.id].displayName : locale.ONE_OF_THE_PEERS;
+      var who = (peers[peer.id].hasName) ? stringEscape(peers[peer.id].displayName) : locale.ONE_OF_THE_PEERS;
       $.notify(sprintf(locale.CANT_SEND_TO_s, who), 'error');
     }
   });
@@ -481,7 +482,7 @@ function initVroom(room) {
       $('#chatBox').attr('placeholder', locale.SET_YOUR_NAME_TO_CHAT);
       peers.local.hasName = false;
     }
-    peers.local.displayName = stringEscape($('#displayName').val());
+    peers.local.displayName = $('#displayName').val();
     updateDisplayName('local');
     webrtc.sendDirectlyToAll('vroom', 'setDisplayName', $('#displayName').val());
   });
