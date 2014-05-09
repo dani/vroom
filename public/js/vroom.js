@@ -9,8 +9,6 @@ Copyright 2014 Firewall Services
 $.notify.defaults( { globalPosition: "bottom left" } );
 // Enable tooltip on required elements
 $('.help').tooltip({container: 'body'});
-// set the height of the thumbnails so they are always equals
-$(".thumbnail").height(Math.max.apply(null, $(".thumbnail").map(function() { return $(this).height(); })));
 
 // Strings we need translated
 var locale = {
@@ -52,6 +50,22 @@ function inviteUrlPopup(){
   window.prompt(locale.TO_INVITE_SHARE_THIS_URL, window.location.href);
   return false;
 }
+
+// set the height of the thumbnails so they are always equals
+function setPanelHeight() {
+  $(".panel").height(Math.max.apply(null, $(".panel").map(function() { return $(this).height(); })));
+}
+
+setTimeout(function(){
+  setPanelHeight();
+}, 50);
+
+// Resize a few element on window resize
+window.onresize = function (){
+  $('#webRTCVideo').css('max-height', maxHeight());
+  $('#mainVideo>video').css('max-height', maxHeight());
+  setPanelHeight();
+};
 
 function initVroom(room) {
 
@@ -714,10 +728,6 @@ function initVroom(room) {
   }, 60000);
 
   // Preview heigh is limited to the windows heigh, minus the navbar, minus 25px
-  window.onresize = function (){
-    $('#webRTCVideo').css('max-height', maxHeight());
-    $('#mainVideo>video').css('max-height', maxHeight());
-  };
   $('#webRTCVideo').css('max-height', maxHeight());
 
 };

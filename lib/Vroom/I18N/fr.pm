@@ -93,7 +93,7 @@ our %Lexicon = (
                                                    "(comme un point de rendez-vous virtuel). Seulement si certains d'entre vous se trouvent " .
                                                    "derrière des pare feu stricts, les flux seront relayés à travers nos serveurs, en dernier " .
                                                    "recours, mais même dans ce cas, nous ne relayons que des flux chiffrés, inintelligibles",
-    "WORKS_EVERYWHERE"                          => "Fonctionne partout",
+    "WORKS_EVERYWHERE"                          => "Universel",
     "MODERN_BROWSERS"                           => "VROOM fonctionne avec les navigateurs modernes (Google Chrome, Mozilla Firefox, Opera), " .
                                                    "vous n'avez aucun plugin à installer, ni codec, ni client logiciel, ni à " .
                                                    "envoyer la doc technique aux autres participants. Vous n'avez qu'à cliquer, et discuter",

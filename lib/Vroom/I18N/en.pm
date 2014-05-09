@@ -86,7 +86,7 @@ our %Lexicon = (
                                             "important data is sent directly. Only if you are behind a strict firewall, " .
                                             "streams will be relayed by our servers, as a last resort, but even in this case, " .
                                             "we will just relay encrypted blobs.",
-  "WORKS_EVERYWHERE"                     => "Works everywhere",
+  "WORKS_EVERYWHERE"                     => "Universal",
   "MODERN_BROWSERS"                      => "VROOM works with modern browsers (Chrome, Mozilla Firefox or Opera), " .
                                             "you don't have to install plugins, codecs, client software, then " .
                                             "send the tech documentation to all other parties. Just click, " .
