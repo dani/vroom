@@ -205,13 +205,14 @@ helper ping_room => sub {
 };
 
 # Check if this name is a valid room name
-# TODO: reject if the name is the same as an existing route
 helper valid_room_name => sub {
   my $self = shift;
   my ($name) = @_;
   my $ret = undef;
   my $len = length $name;
-  if ($len > 0 && $len < 50 && $name =~ m/^[\w\-]+$/){
+  # A few names are reserved
+  my @reserved = qw(about help feedback goodbye admin create localize action missing dies);
+  if ($len > 0 && $len < 50 && $name =~ m/^[\w\-]+$/ && !grep { $name eq $_ }  @reserved){
     $ret = 1;
   }
   return $ret;
