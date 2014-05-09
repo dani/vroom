@@ -1,0 +1,15 @@
+% title $self->l('FEEDBACK');
+%= include 'header'
+%= include 'public_toolbar'
+<div class="container-fluid">
+  <br/>
+  <div class="jumbotron">
+    <h1><%=l 'THANK_YOU' %></h1>
+    <p><%=l 'THANKS_FOR_YOUR_FEEDBACK' %></p>
+    <div class='btn-group'>
+      <a class="btn btn-primary btn-lg" role="button" href="<%= $self->url_for('/') %>"><%=l 'BACK_TO_MAIN_MENU' %></a>
+    </div>
+  </div>
+</div>
+%=include 'footer'
+

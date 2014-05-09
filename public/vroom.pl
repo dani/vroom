@@ -254,8 +254,10 @@ post '/feedback' => sub {
       comment  => $comment
     ],
   );
-  $self->redirect_to($self->url_for('/'));
+  $self->redirect_to($self->url_for('feedback_thanks'));
 };
+
+get 'feedback_thanks' => 'feedback_thanks';
 
 get '/goodby/(:room)' => sub {
   my $self = shift;
