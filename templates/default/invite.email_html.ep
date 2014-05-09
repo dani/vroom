@@ -4,10 +4,19 @@
       my $url = $self->url_for('/')->to_abs;
       $url .= ($url =~ m/\/$/) ? '' : '/';
     %>
-    <%==
-      sprintf($self->l('TO_JOIN_s_CLICK_s'), $room, $url.$room);
+    <%=
+      $self->l('TO_JOIN_CLICK_THIS_LINK');
     %>
-  </p>
+    <br/>
+    <p>
+      <center>
+        <h1>
+          <a href="<%= $url . $room %>">
+            <%= $url . $room %>
+          </a>
+        </h1>
+      </center>
+    </p>
   <br>
   <p>
   <%=l 'HAVE_A_NICE_MEETING' %>

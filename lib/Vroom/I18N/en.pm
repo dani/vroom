@@ -10,11 +10,11 @@ our %Lexicon = (
   "ERROR_ROOM_s_LOCKED"                  => "The room %s is locked, you cannot join it",
   "ERROR_OCCURED"                        => "An error occured",
   "ERROR_NOT_LOGGED_IN"                  => "Sorry, your not logged in",
-  "JOIN_US_ON_s"                         => "Video conference %s",
+  "EMAIL_INVITATION"                     => "Video conference invitation",
   "INVITE_SENT_TO_s"                     => "An invitation was sent to %s",
-  "TO_JOIN_s_CLICK_s"                    => "You're invited to join the video conference %s. " .
-                                            "All you need is a modern web browser and a webcam. When you're ready " .
-                                            "click on <a href='%s'>this link</a>",
+  "TO_JOIN_CLICK_THIS_LINK"              => "You're invited to join a video conference. " .
+                                            "All you need is a modern web browser and a webcam. When you're ready, " .
+                                            "just go to this address",
   "HAVE_A_NICE_MEETING"                  => "Have a nice meeting :-)",
   "EMAIL_SIGN"                           => "VROOM! And video conferencing becomes free, simple and safe",
   "FEEDBACK"                             => "Feedback",

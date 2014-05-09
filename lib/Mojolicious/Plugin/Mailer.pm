@@ -24,15 +24,30 @@ sub register {
 
       my @data  = @{ $args->{data} };
 
-      my @parts = Email::MIME->create(
-                    body => Encode::encode('UTF-8', $self->render(
-                                        @data,
-                                        format => $args->{format}
-                                                ? $args->{format}
-                                                : 'email',
-                                        partial => 1
-                                  ))
-                  );
+      my @parts = (
+        Email::MIME->create(
+          body => Encode::encode('UTF-8', $self->render(
+            @data,
+            format => $args->{format} ? $args->{format} : 'email_html',
+            partial => 1
+          )),
+          attributes => {
+            charset      => 'utf-8',
+            content_type => 'text/html',
+          }
+        ),
+        Email::MIME->create(
+          body => Encode::encode('UTF-8', $self->render(
+            @data,
+            format => $args->{format} ? $args->{format} : 'email_text',
+            partial => 1
+          )),
+          attributes => {
+            charset      => 'utf-8',
+            content_type => 'text/plain',
+          }
+        ),
+      );
 
       my $transport = defined $args->{transport} || $conf->{transport}
                             ? $args->{transport} || $conf->{transport}
@@ -44,12 +59,11 @@ sub register {
       $header->{Subject} ||= $self->stash('title');
 
       my $email = Email::MIME->create(
-                                  header => [ %{$header} ],
-                                  parts  => [ @parts ],
-                              );
+        header => [ %{$header} ],
+        parts  => [ @parts ]
+      );
 
       $email->charset_set     ( $args->{charset}      ? $args->{charset}      : 'utf-8'     );
-      $email->encoding_set    ( $args->{encoding}     ? $args->{encoding}     : 'base64'    );
       $email->content_type_set( $args->{content_type} ? $args->{content_type} : 'text/html' );
 
       return Email::Sender::Simple->try_to_send( $email, { transport => $transport } ) if $transport;
