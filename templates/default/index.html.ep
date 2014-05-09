@@ -23,7 +23,7 @@
                 <%= $url %>
               </strong>
             </span>
-            <input id="roomName" name="roomName" type="text" placeholder="<%=l 'ROOM_NAME' %>" class="form-control help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'RANDOM_IF_EMPTY' %>" autofocus>
+            <input id="roomName" name="roomName" type="text" pattern="[\w\-]{0,49}" placeholder="<%=l 'ROOM_NAME' %>" class="form-control help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'RANDOM_IF_EMPTY' %>" autofocus>
             <span class="input-group-btn">
               <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span></button>
             </span>
