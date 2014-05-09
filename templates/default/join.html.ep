@@ -12,17 +12,40 @@
       </div>
       <input id="roomName" name="roomName" type="hidden" value="<%= $room %>"/>
       <div id="roomToolBar" class="collapse navbar-collapse">
-        <form class="navbar-form navbar-left input-group" id="inviteEmail" action="" method="post">
-          <div class="input-group">
-            <input type="email" id="recipient" class="form-control help" placeholder="<%=l 'EMAIL_INVITE' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>"/>
-            <span class="input-group-btn">
-              <button id="inviteEmailButton" type="submit" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>">
-                <span class="glyphicon glyphicon-send">
-                </span>
-              </button>
-            </span>
-          </div>
-        </form>
+        <div id="inviteDropdownContainer" class="navbar-form navbar-left input-group">
+          <button class="btn btn-default dropdown-toggle help" type="button" id="inviteMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'INVITE_PEOPLE' %>">
+            <span class="glyphicon glyphicon-user"></span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="inviteMenuButton" id="inviteMenu">
+            <li>
+              <center>
+                <p><%=l 'TO_INVITE_SHARE_THIS_URL' %></p>
+                <% my $url = $self->url_for('/')->to_abs;
+                   $url .= ($url =~ m/\/$/) ? '':'/';
+                %>
+                <h4><a href="javascript:void(0)" onclick="inviteUrlPopup();"><%= $url . $room %></a></h4>
+              </center>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <form class="navbar-form" id="inviteEmail" action="" method="post">
+                <center>
+                  <p><%=l 'YOU_CAN_INVITE_BY_MAIL' %></p>
+                </center>
+                <div class="input-group">
+                  <input type="email" id="recipient" class="form-control help" placeholder="<%=l 'EMAIL_INVITE' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>"/>
+                  <span class="input-group-btn">
+                    <button id="inviteEmailButton" type="submit" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>">
+                      <span class="glyphicon glyphicon-send">
+                      </span>
+                    </button>
+                  </span>
+                </div>
+              </form>
+            </li>
+          </ul>
+        </div>
         <div class="navbar-form navbar-left input-group">
           <div class="input-group">
             <input type="text" id="displayName" class="form-control help" placeholder="<%=l 'YOUR_NAME' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'NAME_SENT_TO_OTHERS' %>"/>

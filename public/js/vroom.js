@@ -30,7 +30,8 @@ var locale = {
   ROOM_LOCKED_BY_s: '',
   ROOM_UNLOCKED_BY_s: '',
   CANT_SEND_TO_s: '',
-  SCREEN_s: ''
+  SCREEN_s: '',
+  TO_INVITE_SHARE_THIS_URL: ''
 };
 
 // Localize the strings we need
@@ -45,6 +46,12 @@ $.ajax({
     locale = data;
   }
 });
+
+// Popup with the URL to share
+function inviteUrlPopup(){
+  window.prompt(locale.TO_INVITE_SHARE_THIS_URL, window.location.href);
+  return false;
+}
 
 function initVroom(room) {
 
@@ -442,6 +449,10 @@ function initVroom(room) {
     }
   });
 
+  // Do not close the dropdown menu when filling the email recipient
+  $("#inviteDropdownContainer").on("click", "li", function(e){
+    e.stopPropagation();
+  });
   // Handle Email Invitation
   $('#inviteEmail').submit(function(event) {
     event.preventDefault();
