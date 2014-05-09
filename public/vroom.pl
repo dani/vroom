@@ -218,6 +218,17 @@ helper valid_room_name => sub {
   return $ret;
 };
 
+# Generate a random name
+helper get_random_name => sub {
+  my $self = shift;
+  my $name = join '' => map{('a'..'z','0'..'9')[rand 36]} 0..9;
+  # Get another one if already taken
+  while ($self->get_room($name)){
+    $name = $self->get_random_name();
+  }
+  return $name;
+};
+
 any '/' => 'index';
 
 get '/about' => sub {
@@ -257,7 +268,7 @@ get '/goodby/(:room)' => sub {
 post '/create' => sub {
   my $self = shift;
   $self->res->headers->cache_control('max-age=1, no-cache');
-  my $name = $self->param('roomName') || lc guid_string();
+  my $name = $self->param('roomName') || $self->get_random_name();
   $self->login;
   unless ($self->valid_room_name($name)){
     return $self->render('error',
