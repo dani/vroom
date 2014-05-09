@@ -36,7 +36,7 @@
   <div class="row">
     <div class="col-md-4">
       <div class="panel panel-default">
-        <div class="panel-body">
+        <div class="panel-body panelIndex">
           <center>
             <img src="/img/lock.png" alt="Secure">
             <h1><%=l 'SECURE' %></h1>
@@ -47,7 +47,7 @@
     </div>
     <div class="col-md-4">
       <div class="panel panel-default">
-        <div class="panel-body">
+        <div class="panel-body panelIndex">
           <center>
             <img src="/img/universal.png" alt="Universal">
             <h1><%=l 'WORKS_EVERYWHERE' %></h1>
@@ -58,7 +58,7 @@
     </div>
     <div class="col-md-4">
       <div class="panel panel-default">
-        <div class="panel-body">
+        <div class="panel-body panelIndex">
           <center>
             <img src="/img/share.png" alt="Peer to peer">
             <h1><%=l 'MULTI_USER' %></h1>
