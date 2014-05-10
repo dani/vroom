@@ -3,8 +3,11 @@
 <head>
   <title><%= $title %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-  <link href="/css/vroom.css" rel="stylesheet" type="text/css">
+  <%
+    foreach my $css (qw(bootstrap.min.css vroom.css)){
+  %>
+  <link href="/css/<%= $css %>?<%= $self->get_mtime("css/$css") %>" rel="stylesheet" type="text/css">
+  <% } %>
   <link rel="icon" type="image/png" href="/img/favicon.png" />
 </head>
 <body>

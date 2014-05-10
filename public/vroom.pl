@@ -15,6 +15,7 @@ use Digest::MD5 qw(md5_hex);
 use MIME::Base64;
 use Email::Sender::Transport::Sendmail;
 use Encode;
+use File::stat;
 
 # Used to generate thanks on the about template
 our $components = {
@@ -227,6 +228,13 @@ helper get_random_name => sub {
     $name = $self->get_random_name();
   }
   return $name;
+};
+
+# return the mtime of a file
+helper get_mtime => sub {
+  my $self = shift;
+  my ($file) = @_;
+  return stat($file)->mtime;
 };
 
 any '/' => 'index';

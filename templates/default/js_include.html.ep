@@ -5,11 +5,9 @@
       %>
       var rootUrl = '<%= $url %>';
     </script>
-    <script type="text/javascript" src="/js/simplewebrtc.bundle.js"></script>
-    <script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/notify-combined.min.js"></script>
-    <script type="text/javascript" src="/js/jquery.browser.min.js"></script>
-    <script type="text/javascript" src="/js/sprintf.js"></script>
-    <script type="text/javascript" src="/js/FileSaver.js"></script>
-    <script type="text/javascript" src="/js/vroom.js"></script>
+    <% foreach my $js (qw(simplewebrtc.bundle.js jquery-1.11.1.min.js bootstrap.min.js
+                          notify-combined.min.js jquery.browser.min.js sprintf.js
+                          FileSaver.js vroom.js)){
+    %>
+    <script type="text/javascript" src="/js/<%= $js %>?<%= $self->get_mtime("js/$js") %>"></script>
+    <% } %>
