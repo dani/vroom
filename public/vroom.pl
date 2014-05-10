@@ -60,7 +60,7 @@ app->log->level('info');
 our $config = plugin Config => {
   file     => '../conf/vroom.conf',
   default  => {
-    dbi                 => 'DBI:mysql:database=devroom;host=localhost',
+    dbi                 => 'DBI:mysql:database=vroom;host=localhost',
     dbUser              => 'vroom',
     dbPassword          => 'vroom',
     signalingServer     => 'https://vroom.example.com/',
