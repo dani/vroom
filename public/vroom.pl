@@ -381,7 +381,6 @@ post '/action' => sub {
         Subject => encode("MIME-Header", $self->l("EMAIL_INVITATION")),
         To => $rcpt
       ],
-      content_type => 'multipart/alternative',
       data => [
         template => 'invite',
         room => $room

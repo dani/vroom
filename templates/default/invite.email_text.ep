@@ -2,9 +2,13 @@
   my $url = $self->url_for('/')->to_abs;
   $url .= ($url =~ m/\/$/) ? '' : '/';
 %>
-<%=
-  $self->l('TO_JOIN_CLICK_THIS_LINK')
-%>
+<%=l 'YOU_ARE_INVITED_TO_A_MEETING' %>
+
+  * <%=l 'A_MODERN_BROWSER' %>
+  * <%=l 'A_WEBCAM' %>
+  * <%=l 'A_MIC' %>
+
+<%=l 'WHEN_YOU_ARE_READY' %>
 
 <%= $url . $room %>
 

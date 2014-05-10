@@ -12,9 +12,12 @@ our %Lexicon = (
   "ERROR_NOT_LOGGED_IN"                  => "Sorry, your not logged in",
   "EMAIL_INVITATION"                     => "Video conference invitation",
   "INVITE_SENT_TO_s"                     => "An invitation was sent to %s",
-  "TO_JOIN_CLICK_THIS_LINK"              => "You're invited to join a video conference. " .
-                                            "All you need is a modern web browser and a webcam. When you're ready, " .
-                                            "just go to this address",
+  "YOU_ARE_INVITED_TO_A_MEETING"         => "You are awaited on a video conferecing room. " .
+                                            "Before joining it, make sure you have all the necessary",
+  "A_MODERN_BROWSER"                     => "A modern web browser, recent versions of Mozilla Firefox, Google Chrome or Opera will work",
+  "A_WEBCAM"                             => "A webcam",
+  "A_MIC"                                => "A microphone",
+  "WHEN_YOU_ARE_READY"                   => "When you are ready, go to this address to join the conference",
   "HAVE_A_NICE_MEETING"                  => "Have a nice meeting :-)",
   "EMAIL_SIGN"                           => "VROOM! And video conferencing becomes free, simple and safe",
   "FEEDBACK"                             => "Feedback",

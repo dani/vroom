@@ -12,10 +12,14 @@ our %Lexicon = (
     "ERROR_ROOM_s_LOCKED"                       => "Le salon %s est verrouillé, vous ne pouvez pas le rejoindre",
     "ERROR_OCCURED"                             => "Une erreur est survenue",
     "ERROR_NOT_LOGGED_IN"                       => "Désolé, vous n'êtes pas identifié",
-    "EMAIL_INVITATION"                          => "Vidéo conférence",
-    "TO_JOIN_CLICK_THIS_LINK"                   => "Vous êtes attendu sur un salon de vidéo conférence. " .
-                                                   "Tout ce dont vous avez besoin est un navigateur web récent et " .
-                                                   "une webcam. Quand vous êtes prêt, rendez-vous sur cette adresse",
+    "EMAIL_INVITATION"                          => "Invitation à une conférence vidéo",
+    "YOU_ARE_INVITED_TO_A_MEETING"              => "Vous êtes attendu sur un salon de vidéo conférence. " .
+                                                   "Avant de le rejoindre, assurez vous de disposer de tout le nécessaire",
+    "A_MODERN_BROWSER"                          => "Un navigateur web moderne, les versions récentes des navigateurs Mozilla " .
+                                                   "Firefox, Google Chrome ou Opera fonctionneront",
+    "A_WEBCAM"                                  => "Une webcam",
+    "A_MIC"                                     => "Un micro",
+    "WHEN_YOU_ARE_READY"                        => "Quand vous êtes prêt, rendez-vous sur cette adresse pour joindre la conférence",
     "HAVE_A_NICE_MEETING"                       => "Bonne réunion :-)",
     "EMAIL_SIGN"                                => "VROOM! Et la visio conférence devient libre, simple et sûr",
     "FEEDBACK"                                  => "Retour d'expérience",

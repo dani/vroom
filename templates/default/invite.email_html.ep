@@ -1,29 +1,37 @@
-<html>
-  <p>
-    <%
-      my $url = $self->url_for('/')->to_abs;
-      $url .= ($url =~ m/\/$/) ? '' : '/';
-    %>
-    <%=
-      $self->l('TO_JOIN_CLICK_THIS_LINK');
-    %>
-    <br/>
-    <p>
-      <center>
-        <h1>
-          <a href="<%= $url . $room %>">
-            <%= $url . $room %>
-          </a>
-        </h1>
-      </center>
-    </p>
-  <br>
-  <p>
+<%
+  my $url = $self->url_for('/')->to_abs;
+  $url .= ($url =~ m/\/$/) ? '' : '/';
+%>
+<p>
+  <%=l 'YOU_ARE_INVITED_TO_A_MEETING' %>
+  <ul>
+    <li>
+      <%=l 'A_MODERN_BROWSER' %>
+    </li>
+    <li>
+      <%=l 'A_WEBCAM' %>
+    </li>
+    <li>
+      <%=l 'A_MIC' %>
+    </li>
+  </ul>
+</p>
+<p>
+  <%=l 'WHEN_YOU_ARE_READY' %>
+  <center>
+    <h1>
+      <a href="<%= $url . $room %>">
+        <%= $url . $room %>
+      </a>
+    </h1>
+  </center>
+</p>
+<br>
+<p>
   <%=l 'HAVE_A_NICE_MEETING' %>
-  </p>
-  <p style="font-size:small;-webkit-text-size-adjust:none;color:#666;">
-    &mdash;
-    <br>
-    <%=l 'EMAIL_SIGN' %>
-  </p>
-</html>
+</p>
+<p style="font-size:small;-webkit-text-size-adjust:none;color:#666;">
+  &mdash;
+  <br>
+  <%=l 'EMAIL_SIGN' %>
+</p>

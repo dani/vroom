@@ -28,23 +28,25 @@ sub register {
         Email::MIME->create(
           body => Encode::encode('UTF-8', $self->render(
             @data,
-            format => $args->{format} ? $args->{format} : 'email_html',
-            partial => 1
-          )),
-          attributes => {
-            charset      => 'utf-8',
-            content_type => 'text/html',
-          }
-        ),
-        Email::MIME->create(
-          body => Encode::encode('UTF-8', $self->render(
-            @data,
             format => $args->{format} ? $args->{format} : 'email_text',
             partial => 1
           )),
           attributes => {
             charset      => 'utf-8',
+            encoding     => '7bit',
             content_type => 'text/plain',
+          }
+        ),
+        Email::MIME->create(
+          body => Encode::encode('UTF-8', $self->render(
+            @data,
+            format => $args->{format} ? $args->{format} : 'email_html',
+            partial => 1
+          )),
+          attributes => {
+            charset      => 'utf-8',
+            encoding     => '7bit',
+            content_type => 'text/html',
           }
         ),
       );
@@ -64,7 +66,7 @@ sub register {
       );
 
       $email->charset_set     ( $args->{charset}      ? $args->{charset}      : 'utf-8'     );
-      $email->content_type_set( $args->{content_type} ? $args->{content_type} : 'text/html' );
+      $email->content_type_set( $args->{content_type} ? $args->{content_type} : 'multipart/alternative' );
 
       return Email::Sender::Simple->try_to_send( $email, { transport => $transport } ) if $transport;
 
