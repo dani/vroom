@@ -84,6 +84,31 @@
             <span class="glyphicon glyphicon-expand">
             </span>
           </label>
+          <button class="btn btn-default dropdown-toggle help" type="button" id="confMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
+            <span class="glyphicon glyphicon-wrench"></span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="confMenuButton" id="confMenu">
+            <li>
+              <form class="navbar-form" id="joinPassForm" action="" method="post">
+                <center>
+                  <p><%=l 'YOU_CAN_PASSWORD_PROTECT_JOIN' %></p>
+                </center>
+                <div class="form-group">
+                  <input type="password" id="joinPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>"/>
+                </div>
+                <div class="form-group">
+                  <input type="password" id="joinPass2" class="form-control help" placeholder="<%=l 'PASSWORD_CONFIRM' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>"/>
+                  <span class="form-group-btn">
+                    <button id="joinPassButton" type="submit" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>">
+                      <span class="glyphicon glyphicon-ok"
+                      </span>
+                    </button>
+                  </span>
+                </div>
+              </form>
+            </li>
+          </ul>
         </div>
         <div class="btn-group navbar-form navbar-right" data-toggle="buttons" >
           <button class="btn btn-default help" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
