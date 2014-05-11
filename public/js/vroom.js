@@ -464,7 +464,8 @@ function initVroom(room) {
   });
 
   // Do not close the dropdown menu when filling the email recipient
-  $("#inviteDropdownContainer").on("click", "li", function(e){
+  // and in other dropdown menus
+  $(".dropdown-menu").on("click", "li", function(e){
     e.stopPropagation();
   });
   // Handle Email Invitation
