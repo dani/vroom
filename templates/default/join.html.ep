@@ -97,7 +97,7 @@
                 <div class="input-group">
                   <input type="password" id="joinPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>"/>
                   <span class="input-group-btn">
-                    <button id="setJoinPassButton" type="button" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>">
+                    <button id="setJoinPassButton" type="button" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>">
                       <span class="glyphicon glyphicon-ok"
                       </span>
                     </button>
