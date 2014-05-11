@@ -616,6 +616,55 @@ function initVroom(room) {
     }
   });
 
+  $('#joinPass').on('input', function() {
+    if ($('#joinPass').val() == ''){
+      $('#setJoinPassButton').addClass('disabled');
+    }
+    else{
+      $('#setJoinPassButton').removeClass('disabled');
+    }
+  });
+
+  // Join password protection
+  $('#setJoinPassButton').click(function(event) {
+    var pass = $('#joinPass').val();
+    $('#joinPass').val('');
+    $('#setJoinPassButton').addClass('disabled');
+    $.ajax({
+      data: {
+        action: 'setJoinPassword',
+        password: pass,
+        room: roomName
+      },
+      error: function(data) {
+        var msg = (data && data.msg) ? data.msg : locale.ERROR_OCCURED;
+        $.notify(msg, 'error');
+      },
+      success: function(data) {
+        $.notify(data.msg, 'success');
+        $('#joinPass').val('');
+      }
+    });
+  });
+
+  // Remove password protection
+  $('#removeJoinPassButton').click(function(event) {
+    $.ajax({
+      data: {
+        action: 'setJoinPassword',
+        room: roomName 
+      },
+      error: function(data) {
+        var msg = (data && data.msg) ? data.msg : locale.ERROR_OCCURED;
+        $.notify(msg, 'error');
+      },
+      success: function(data) {
+        $.notify(data.msg, 'success');
+        $('#joinPass').val('');
+      }
+    });
+  });
+
   // Choose another color. Useful if two peers have the same
   $('#changeColorButton').click(function(){
     peers.local.color = chooseColor();

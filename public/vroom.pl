@@ -237,6 +237,22 @@ helper get_mtime => sub {
   return stat($file)->mtime;
 };
 
+# password protect a room
+helper set_join_pass => sub {
+  my $self = shift;
+  my ($room,$pass) = @_;
+  return undef unless ( %{ $self->get_room($room) });
+  my $sth = eval { $self->db->prepare("UPDATE rooms SET join_password=? where name=?;") } || return undef;
+  $sth->execute($pass,$room) || return undef;
+  if ($pass){
+    $self->app->log->debug($self->session('name') . " has set a password on room $room");
+  }
+  else{
+    $self->app->log->debug($self->session('name') . " has removed password on room $room");
+  }
+  return 1;
+};
+
 any '/' => 'index';
 
 get '/about' => sub {
@@ -338,7 +354,6 @@ get '/(*room)' => sub {
       room => $room
     );
   }
-  $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60});
   my @participants = $self->get_participants($room);
   if ($data->{'locked'}){
     unless (($self->session('name') eq $data->{'owner'}) || (grep { $_ eq $self->session('name') } @participants )){
@@ -349,6 +364,8 @@ get '/(*room)' => sub {
       );
     }
   }
+  # TODO: check join password here
+  $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60});
   # Add this user to the participants table
   unless($self->add_participant($room,$self->session('name'))){
     return $self->render('error',
@@ -451,6 +468,26 @@ post '/action' => sub {
       return $self->render(
                json => {
                  msg => '',
+               }
+             );
+    }
+  }
+  elsif ($action eq 'setJoinPassword'){
+    my $pass = $self->param('password');
+    $pass = undef if ($pass eq '');
+    my $res = $self->set_join_pass($room,$pass);
+    if (!$res){
+      return $self->render(
+               json => {
+                 msg => $self->l('ERROR_OCCURED'),
+               },
+               status   => '500'
+             );
+    }
+    else{
+      return $self->render(
+               json => {
+                 msg => ($pass) ? 'JOIN_PASSWORD_SET':'JOIN_PASSWORD_REMOVED',
                }
              );
     }
