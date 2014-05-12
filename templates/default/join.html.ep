@@ -64,11 +64,6 @@
           </button>
         </div>
         <div class="btn-group navbar-form navbar-left" data-toggle="buttons">
-          <label class="btn btn-default<%= $locked eq 'checked' ? ' btn-danger active':'' %> help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
-            <input type="checkbox" id="lockButton" <%= $locked %>>
-            <span class="glyphicon glyphicon-lock">
-            </span>
-          </label>
           <label class="btn btn-default help" id="muteMicLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_MIC' %>">
             <input type="checkbox" id="muteMicButton">
             <span class="glyphicon glyphicon-volume-off">
@@ -90,7 +85,7 @@
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="confMenuButton" id="confMenu">
             <li>
-              <form class="navbar-form" id="joinPassForm" action="" method="post">
+              <div class="navbar-form">
                 <center>
                   <p><%=l 'YOU_CAN_PASSWORD_PROTECT_JOIN' %></p>
                 </center>
@@ -107,7 +102,23 @@
                     </button>
                   </span>
                 </div>
-              </form>
+              </div>
+            </li>
+            <li class="divider"></li>
+            <li>
+            <li>
+              <div class="navbar-form">
+                <center>
+                  <p><%=l 'PREVENT_TO_JOIN' %></p>
+                  <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default<%= $locked eq 'checked' ? ' btn-danger active':'' %> help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
+                      <input type="checkbox" id="lockButton" <%= $locked %>>
+                      <span class="glyphicon glyphicon-lock">
+                      </span>
+                    </label>
+                  </div>
+                </center>
+              </div>
             </li>
           </ul>
         </div>
