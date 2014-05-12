@@ -64,6 +64,7 @@ our %Lexicon = (
   "REMOVE_PASSWORD"                      => "Remove the password",
   "JOIN_PASSWORD_SET"                    => "This room is now password protected",
   "JOIN_PASSWORD_REMOVED"                => "This room isn't password protected anymore",
+  "NOT_ALLOWED"                          => "You are not allowed to do this",
   "WRONG_PASSWORD"                       => "Wrong password",
   "PASSWORD_REQUIRED"                    => "Password required",
   "A_PASSWORD_IS_NEEDED_TO_JOIN"         => "You must provide a password to join this room",

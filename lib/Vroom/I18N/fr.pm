@@ -70,6 +70,7 @@ our %Lexicon = (
     "REMOVE_PASSWORD"                           => "Supprimer le mot de passe",
     "JOIN_PASSWORD_SET"                         => "Le salon est protégé par mot de passe",
     "JOIN_PASSWORD_REMOVED"                     => "Le salon n'est plus protégé par mot de passe",
+    "NOT_ALLOWED"                               => "Vous n'êtes pas autorisé à faire ceci",
     "WRONG_PASSWORD"                            => "Mauvais mot de passe",
     "PASSWORD_REQUIRED"                         => "Mot de passe requis",
     "A_PASSWORD_IS_NEEDED_TO_JOIN"              => "Vous devez saisir un mot de passe pour rejoindre ce salon",
