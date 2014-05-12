@@ -417,8 +417,7 @@ get '/(*room)' => sub {
       room => $room
     );
   }
-  $self->stash(locked       => $data->{locked} ? 'checked':'',
-               turnPassword => $data->{token});
+  $self->stash(turnPassword => $data->{token});
   $self->render('join');
 };
 
@@ -466,32 +465,6 @@ post '/action' => sub {
         msg => sprintf($self->l('INVITE_SENT_TO_s'), $rcpt)
       }
     );
-  }
-  if ($action =~ m/(un)?lock/){
-    my ($lock,$success);
-    if ($action eq 'lock'){
-      $lock = 1;
-      $success = $self->l('ROOM_LOCKED');
-    }
-    else{
-      $lock = 0;
-      $success = $self->l('ROOM_UNLOCKED');
-    }
-    my $room = $self->param('room');
-    my $res = $self->lock_room($room,$lock);
-    unless ($res){
-      return $self->render(
-               json => {
-                 msg => $self->l('ERROR_OCCURED'),
-               },
-               status   => '500'
-             );
-    }
-    return $self->render(
-             json => {
-               msg => $success,
-             }
-           );
   }
   elsif ($action eq 'ping'){
     my $res = $self->ping_room($room);

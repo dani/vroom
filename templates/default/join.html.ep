@@ -104,22 +104,6 @@
                 </div>
               </div>
             </li>
-            <li class="divider"></li>
-            <li>
-            <li>
-              <div class="navbar-form">
-                <center>
-                  <p><%=l 'PREVENT_TO_JOIN' %></p>
-                  <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-default<%= $locked eq 'checked' ? ' btn-danger active':'' %> help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
-                      <input type="checkbox" id="lockButton" <%= $locked %>>
-                      <span class="glyphicon glyphicon-lock">
-                      </span>
-                    </label>
-                  </div>
-                </center>
-              </div>
-            </li>
           </ul>
         </div>
         <div class="btn-group navbar-form navbar-right" data-toggle="buttons" >
