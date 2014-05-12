@@ -409,6 +409,8 @@ get '/(*room)' => sub {
     $url .= ($url =~ m/\/$/) ? '' : '/';
     return $self->redirect_to($url . 'password/' . $room);
   }
+  # Set this peer as a simple participant if he has no role yet
+  $self->session($room => {role => 'participant'}) if (!$self->session($room) || !self->session($room)->{role});
   $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60});
   # Add this user to the participants table
   unless($self->add_participant($room,$self->session('name'))){
