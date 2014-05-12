@@ -530,7 +530,7 @@ post '/action' => sub {
     else{
       return $self->render(
                json => {
-                 msg => ($pass) ? 'JOIN_PASSWORD_SET':'JOIN_PASSWORD_REMOVED',
+                 msg => ($pass) ? $self->l('JOIN_PASSWORD_SET') : $self->l('JOIN_PASSWORD_REMOVED'),
                }
              );
     }
