@@ -403,7 +403,7 @@ get '/(*room)' => sub {
       );
     }
   }
-  if ($data->{join_password} && (!$self->session($room) || %{$self->session($room)}->{role} ne 'participant')){
+  if ($data->{join_password} && (!$self->session($room) || $self->session($room)->{role} ne 'participant')){
     my $url = $self->url_for('/');
     $url .= ($url =~ m/\/$/) ? '' : '/';
     return $self->redirect_to($url . 'password/' . $room);
