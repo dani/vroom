@@ -106,7 +106,7 @@ helper login => sub {
 
 helper logout => sub {
   my $self = shift;
-  $self->session( expires => 1);
+  $self->session( expires => 1 );
   $self->app->log->info($self->session('name') . " logged out");
 };
 
@@ -329,6 +329,45 @@ post '/localize' => sub {
   return $self->render(json => $strings);
 };
 
+get '/password/(:room)' => sub {
+  my $self = shift;
+  my $room = $self->stash('room') || '';
+  my $data = $self->get_room($room);
+  unless ($data){
+    return $self->render('error',
+      err  => 'ERROR_ROOM_s_DOESNT_EXIST',
+      msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
+      room => $room
+    );
+  }
+  $self->render('password', room => $room);
+};
+
+post '/password/(:room)' => sub {
+  my $self = shift;
+  my $room = $self->stash('room') || '';
+  my $data = $self->get_room($room);
+  unless ($data){
+    return $self->render('error',
+      err  => 'ERROR_ROOM_s_DOESNT_EXIST',
+      msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
+      room => $room
+    );
+  }
+  my $pass = $self->param('password');
+  if ($pass eq $data->{join_password}){
+    $self->session($room => {role => 'participant'});
+    $self->redirect_to($self->url_for('/') . $room);
+  }
+  else{
+    $self->render('error',
+      err  => 'WRONG_PASSWORD',
+      msg  => sprintf ($self->l("WRONG_PASSWORD"), $room),
+      room => $room
+    );
+  }
+};
+
 get '/(*room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
@@ -364,7 +403,11 @@ get '/(*room)' => sub {
       );
     }
   }
-  # TODO: check join password here
+  if ($data->{join_password} && (!$self->session($room) || %{$self->session($room)}->{role} ne 'participant')){
+    my $url = $self->url_for('/');
+    $url .= ($url =~ m/\/$/) ? '' : '/';
+    return $self->redirect_to($url . 'password/' . $room);
+  }
   $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60});
   # Add this user to the participants table
   unless($self->add_participant($room,$self->session('name'))){
