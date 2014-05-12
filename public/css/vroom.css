@@ -76,6 +76,9 @@
 #inviteMenu {
   min-width: 400px;
 }
+#confMenu {
+  min-width: 400px;
+}
 #chatBox {
   max-height:300px;
   resize:none;
