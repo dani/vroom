@@ -296,6 +296,7 @@ post '/create' => sub {
   $self->res->headers->cache_control('max-age=1, no-cache');
   my $name = $self->param('roomName') || $self->get_random_name();
   $self->login;
+  $self->session($name => {role => 'owner'});
   unless ($self->valid_room_name($name)){
     return $self->render('error',
       room => $name,
@@ -490,20 +491,28 @@ post '/action' => sub {
   }
   elsif ($action eq 'setJoinPassword'){
     my $pass = $self->param('password');
-    $pass = undef if ($pass eq '');
-    my $res = $self->set_join_pass($room,$pass);
+    $pass = undef if ($pass && $pass eq '');
+    my $res = undef;
+    my $errmsg = 'ERROR_OCCURED';
+    if ($self->session($room)->{role} eq 'owner'){
+      $res = $self->set_join_pass($room,$pass);
+    }
+    else{
+      $errmsg = 'NOT_ALLOWED';
+    }
     if (!$res){
       return $self->render(
                json => {
-                 msg => $self->l('ERROR_OCCURED'),
+                 msg    => $self->l($errmsg),
+                 status => 'error'
                },
-               status   => '500'
              );
     }
     else{
       return $self->render(
                json => {
-                 msg => ($pass) ? $self->l('JOIN_PASSWORD_SET') : $self->l('JOIN_PASSWORD_REMOVED'),
+                 msg    => ($pass) ? $self->l('JOIN_PASSWORD_SET') : $self->l('JOIN_PASSWORD_REMOVED'),
+                 status => 'success'
                }
              );
     }

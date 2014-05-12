@@ -608,14 +608,19 @@ function initVroom(room) {
         password: pass,
         room: roomName
       },
-      error: function(data) {
-        var msg = (data && data.msg) ? data.msg : locale.ERROR_OCCURED;
+      error: function() {
+        var msg = locale.ERROR_OCCURED;
         $.notify(msg, 'error');
       },
       success: function(data) {
-        $.notify(data.msg, 'success');
         $('#joinPass').val('');
-        webrtc.sendToAll('password_protect_on', {});
+        if (data.status == 'success'){
+          $.notify(data.msg, 'success');
+          webrtc.sendToAll('password_protect_on', {});
+        }
+        else{
+          $.notify(data.msg, 'error');
+        }
       }
     });
   });
@@ -627,14 +632,19 @@ function initVroom(room) {
         action: 'setJoinPassword',
         room: roomName 
       },
-      error: function(data) {
-        var msg = (data && data.msg) ? data.msg : locale.ERROR_OCCURED;
+      error: function() {
+        var msg = locale.ERROR_OCCURED;
         $.notify(msg, 'error');
       },
       success: function(data) {
-        $.notify(data.msg, 'success');
         $('#joinPass').val('');
-        webrtc.sendToAll('password_protect_off', {});
+        if (data.status == 'success'){
+          $.notify(data.msg, 'success');
+          webrtc.sendToAll('password_protect_off', {});
+        }
+        else{
+          $.notify(data.msg, 'error');
+        }
       }
     });
   });
