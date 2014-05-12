@@ -212,7 +212,7 @@ helper valid_room_name => sub {
   my $ret = undef;
   my $len = length $name;
   # A few names are reserved
-  my @reserved = qw(about help feedback goodbye admin create localize action missing dies);
+  my @reserved = qw(about help feedback goodbye admin create localize action missing dies password);
   if ($len > 0 && $len < 50 && $name =~ m/^[\w\-]+$/ && !grep { $name eq $_ }  @reserved){
     $ret = 1;
   }
