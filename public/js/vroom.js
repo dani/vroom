@@ -27,6 +27,8 @@ var locale = {
   ONE_OF_THE_PEERS: '',
   ROOM_LOCKED_BY_s: '',
   ROOM_UNLOCKED_BY_s: '',
+  PASSWORD_PROTECT_ON_BY_s: '',
+  PASSWORD_PROTECT_OFF_BY_s: '',
   CANT_SEND_TO_s: '',
   SCREEN_s: '',
   TO_INVITE_SHARE_THIS_URL: ''
@@ -428,6 +430,14 @@ function initVroom(room) {
     $.notify(sprintf(locale.ROOM_UNLOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
   });
 
+  webrtc.on('password_protect_on', function(data){
+    $.notify(sprintf(locale.PASSWORD_PROTECT_ON_BY_s, stringEscape(peers[data.id].displayName)), 'info');
+  });
+
+  webrtc.on('password_protect_off', function(data){
+    $.notify(sprintf(locale.PASSWORD_PROTECT_OFF_BY_s, stringEscape(peers[data.id].displayName)), 'info');
+  });
+
   // Handle the readyToCall event: join the room
   webrtc.once('readyToCall', function () {
     webrtc.joinRoom(room);
@@ -643,6 +653,7 @@ function initVroom(room) {
       success: function(data) {
         $.notify(data.msg, 'success');
         $('#joinPass').val('');
+        webrtc.sendToAll('password_protect_on', {});
       }
     });
   });
@@ -661,6 +672,7 @@ function initVroom(room) {
       success: function(data) {
         $.notify(data.msg, 'success');
         $('#joinPass').val('');
+        webrtc.sendToAll('password_protect_off', {});
       }
     });
   });
