@@ -91,24 +91,6 @@ function initVroom(room) {
     dataType: 'json',    
   });
 
-  // get our role (participant or owner)
-  $.ajax({
-    data: {
-      action: 'getRole',
-      room: roomName
-    },
-    error: function(data) {
-      $.notify(locale.ERROR_OCCURED, 'error');
-    },
-    success: function(data) {
-      peers.local.role = data.msg;
-      // Enable owner reserved menu
-      if (data.msg == 'owner'){
-        $('.ownerEl').show(500);
-      }
-    }
-  });
-
   // Screen sharing is only suported on chrome > 26
   if ( !$.browser.webkit || $.browser.versionNumber < 26 ) {
     $("#shareScreenLabel").addClass('disabled');
@@ -125,6 +107,29 @@ function initVroom(room) {
       return '&#' + i.charCodeAt(0) + ';';
     });
     return string;
+  }
+
+  // Update our role
+  function updateRole() {
+    $.ajax({
+      data: {
+        action: 'getRole',
+        room: roomName
+      },
+      error: function(data) {
+        $.notify(locale.ERROR_OCCURED, 'error');
+      },
+      success: function(data) { 
+        peers.local.role = data.msg;
+        // Enable owner reserved menu
+        if (data.msg == 'owner'){
+          $('.ownerEl').show(500);
+        }
+        else{
+          $('.ownerEl').hide(500);
+        }
+      }
+    });
   }
 
   // Select a color (randomly) from this list, used for text chat
@@ -758,6 +763,9 @@ function initVroom(room) {
       $('#chatBox').val('').prop('rows', 1);
     }
   });
+
+  // Check if we are the owner of the room
+  updateRole();
 
   // Ping the room every minutes
   // Used to detect inactive rooms
