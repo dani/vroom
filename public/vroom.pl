@@ -316,7 +316,6 @@ post '/create' => sub {
   $self->res->headers->cache_control('max-age=1, no-cache');
   my $name = $self->param('roomName') || $self->get_random_name();
   $self->login;
-  $self->session($name => {role => 'owner'});
   unless ($self->valid_room_name($name)){
     return $self->render('error',
       room => $name,
@@ -333,6 +332,7 @@ post '/create' => sub {
     );
   }
   else{
+    $self->session($name => {role => 'owner'});
     $self->redirect_to($self->url_for('/') . $name);
   }
 };
