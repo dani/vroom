@@ -64,8 +64,6 @@ setTimeout(function(){
 
 // Resize a few element on window resize
 window.onresize = function (){
-  $('#webRTCVideo').css('max-height', maxHeight());
-  $('#mainVideo>video').css('max-height', maxHeight());
   setPanelHeight();
 };
 
@@ -913,6 +911,10 @@ function initVroom(room) {
     });
   }, 60000);
 
+  window.onresize = function (){
+    $('#webRTCVideo').css('max-height', maxHeight());
+    $('#mainVideo>video').css('max-height', maxHeight());
+  };  
   // Preview heigh is limited to the windows heigh, minus the navbar, minus 25px
   $('#webRTCVideo').css('max-height', maxHeight());
 
