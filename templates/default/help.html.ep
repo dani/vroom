@@ -21,13 +21,55 @@
       <div class="panel-heading">
         <h4 class="panel-title">
           <a data-toggle="collapse" data-parent="#accordion" href="#collapseScreenShare">    
-            <%=l 'SREEN_SHARING' %>
+            <%=l 'SCREEN_SHARING' %>
           </a>
         </h4>
       </div>
       <div id="collapseScreenShare" class="panel-collapse collapse">
         <div class="panel-body">
           <%==l 'HELP_SCREEN_SHARING' %>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOwnerPrivilege">
+            <%=l 'OWNER_PRIVILEGES' %>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseOwnerPrivilege" class="panel-collapse collapse">
+        <div class="panel-body">
+          <%=l 'HELP_OWNER_PRIVILEGES' %>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapsePersistentRooms">
+            <%=l 'PERSISTENT_ROOMS' %>
+          </a>
+        </h4>
+      </div>
+      <div id="collapsePersistentRooms" class="panel-collapse collapse">
+        <div class="panel-body">
+          <%==l 'HELP_PERSISTENT_ROOMS' %>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseReserveYourRoom">
+            <%=l 'RESERVE_YOUR_ROOM' %>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseReserveYourRoom" class="panel-collapse collapse">
+        <div class="panel-body">
+          <%==l 'HELP_RESERVE_YOUR_ROOM' %>
         </div>
       </div>
     </div>

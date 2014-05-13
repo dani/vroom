@@ -133,17 +133,31 @@ our %Lexicon = (
                                                    "récentes de Mozilla Firefox, Google Chrome et Opéra fonctionnent pour l'instant. " .
                                                    "Les autres navigateurs (principalement Internet Explorer et Safari) devraient " .
                                                    "suivrent un jour, mais ne fonctionneront pas actuellement",
-    "SREEN_SHARING"                             => "Partage d'écran",
-    "HELP_SCREEN_SHARING"                       => "VROOM vous permet de partager votre écran avec tous les autres participants d'une conférence. " .
+    "SCREEN_SHARING"                             => "Partage d'écran",
+    "HELP_SCREEN_SHARING"                       => "VROOM vous permet de partager votre écran (ou juste une fenêtre) avec les autres " .
+                                                   "participants d'un salon. " .
                                                    "Pour l'instant, le partage d'écran ne fonctionne qu'avec le navigateur Google Chrome, " .
-                                                   "et nécessite d'effectuer le réglage suivant (à partir de la version 34, ce réglage n'est " .
-                                                   "plus nécessaire)" . 
-                                                   "<ul>" . 
-                                                   "  <li>Tapez chrome://flags/ dans la barre d'adresse</li>" .
-                                                   "  <li>Recherchez \"Activer la fonctionnalité de capture d'écran dans getUserMedia()\" et cliquez sur " .
-                                                   "      le lien \"Activer\" juste en dessous</li>" .
-                                                   "  <li>Cliquez sur le bouton \"Relancer maintenant\" qui apparait en bas de la page</li>" .
-                                                   "</ul>",
+                                                   "et nécessite l'installation d'une petite extension (l'installation vous sera proposée " .
+                                                   "la première fois que vous essayez de partager votre écran)", 
+    "OWNER_PRIVILEGES"                          => "Privilèges des créateurs de salon",
+    "HELP_OWNER_PRIVILEGES"                     => "Le créateur d'un salon (aussi appelé gestionnaire) dispose de privilèges spéciaux " .
+                                                   "sur ce dernier (par rapport à ceux qui rejoignent le salon après, qui ne seront que " .
+                                                   "de simples participants). Il peut par exemple protéger l'accès par un mot de passe, " .
+                                                   "qui sera demandé avant de pouvoir rejoindre le salon. Il peut aussi définir le mot " .
+                                                   "de passe du gestionnaire ce qui lui permettra, s'il quitte le salon, de retrouver " .
+                                                   "ses privilèges lorsqu'il se connecte à nouveau.",
+    "PERSISTENT_ROOMS"                          => "Salons persistants",
+    "HELP_PERSISTENT_ROOMS"                     => "Par défaut, les salons sont éphémères, c'est à dire qu'ils sont automatiquement " .
+                                                   "supprimés si ils ne présentent aucune activité pendant une durée prolongée (une heure " .
+                                                   "par défaut). Le créateur du salon peut définir un mot de passe de gestionaire, ce qui " .
+                                                   "rendra le salon persistent: il sera conservé indéfiniement. Pour le supprimer, le " .
+                                                   "gestionnaire peut simplement supprimer le mot de passe de gestion, ce qui rendra le " .
+                                                   "salon éphémère à nouveau (il sera donc supprimé si aucune activité n'est détecté).",
+    "RESERVE_YOUR_ROOM"                         => "Réservez votre salon",
+    "HELP_RESERVE_YOUR_ROOM"                    => "Vous souhaitez réserver le nom de votre salon pour qu'il soit toujours disponible " .
+                                                   "pour vous (nom de votre entreprise, nom d'un projet en cours etc.) ? Entrez simplement " .
+                                                   "un mot de passe pour rejoindre le salon et un mot de passe de gestionnaire. Le " .
+                                                   "salon sera conservé aussi longtemps que le mot de passe de gestionnaire est en place.",
     "ABOUT_VROOM"                               => "VROOM est un logiciel libre exploitant les dernières technologies du " .
                                                    "web vous permettant d'organiser simplement des visio conférences. Fini " .
                                                    "les galères à devoir installer un client sur le poste au dernier moment, " .

@@ -122,17 +122,27 @@ our %Lexicon = (
                                             "is the capacity of your Internet pipe. Usually, you can chat with " .
                                             "up to 5~6 person without problem",
   "SUPPORTED_BROWSERS"                   => "Supported browsers",
-  "HELP_BROWSERS_SUPPORTED"              => "Vroom works with any modern, standard compliant browsers, which means any recent Mozilla Firefox, Google Chrome or Opera.",
+  "HELP_BROWSERS_SUPPORTED"              => "VROOM works with any modern, standard compliant browsers, which means any " .
+                                            "recent Mozilla Firefox, Google Chrome or Opera.",
   "SCREEN_SHARING"                       => "Screen Sharing",
-  "HELP_SCREEN_SHARING"                  => "VROOM lets you share your screen with the other members of the room. For now " .
-                                            "this feature is only available in Google Chrome, and you need to change the following setting " .
-                                            "(since version 34, this setting isn't needed anymore)" .
-                                            "<ul>" .
-                                            "  <li>Type chrome://flags in the address bar" .
-                                            "  <li>Look for the option \"Enable screen sharing in getUserMedia()\" and click on " .
-                                            "      the \"enable\" link</li>" .
-                                            "  <li>Click on the \"Restart now\" button which has just appeared at the bottom</li>" .
-                                            "</ul>",
+  "HELP_SCREEN_SHARING"                  => "VROOM lets you share your screen (or a single window) with the other members of the room. For now " .
+                                            "this feature is only available in Google Chrome, and you need to install an extension " .
+                                            "(you'll be prompted for it the first time you try to share your screen)",
+  "OWNER_PRIVILEGES"                     => "Room creator's privileges",
+  "HELP_OWNER_PRIVILEGES"                => "Room's creator (also called manager) has special privileges (compared to those who join " .
+                                            "later, which are simple participants). For example, he can protect access with a password " .
+                                            "which will be required before you can join the room. He also can set the manager's password " .
+                                            "which will allow him, if he leaves the room, to recover its privileges when he connects again.",
+  "PERSISTENT_ROOMS"                     => "Persistant rooms",
+  "HELP_PERSISTENT_ROOMS"                => "By default, rooms are ephemeral, which means they are automatically deleted if they " .
+                                            "have no activity for a long time (default is one hour). The room's creator can define " .
+                                            "a manager's password, which will make the room persistent: it'll be kept indefinitly. " .
+                                            "In order to delete the room, the owner can simply unset the manager's password, which " .
+                                            "will make the room ephemeral again (it'll be deleted if no activity is detected).",
+  "RESERVE_YOUR_ROOM"                    => "Reserve your room",
+  "HELP_RESERVE_YOUR_ROOM"               => "Want to reserve your room name so it's always available for you (company name, ongoing project " .
+                                            "etc.) ? Just set both a join password and the manager password. The room will be kept " .
+                                            "as long as the manager password is set",
   "ABOUT_VROOM"                          => "VROOM is a free spftware using the latest web technologies and lets you " .
                                             "to easily organize video meetings. Forget all the pain with installing " .
                                             "a client on your computer in a hury, compatibility issues between MAC OS " .
