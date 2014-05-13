@@ -7,6 +7,7 @@ CREATE TABLE `rooms` (
   `activity_timestamp` int(20) DEFAULT NULL,
   `locked` tinyint(1) DEFAULT '0',
   `join_password` varchar(160) DEFAULT NULL,
+  `owner_password` varchar(160) DEFAULT NULL,
   `token` varchar(160) DEFAULT NULL,
   `realm` varchar(160) DEFAULT NULL,
   `persistent` tinyint(1) DEFAULT '0',

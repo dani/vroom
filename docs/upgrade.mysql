@@ -1,0 +1,1 @@
+ALTER TABLE rooms add COLUMN `owner_password` varchar(160) DEFAULT NULL after `join_password`;
