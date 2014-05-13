@@ -104,7 +104,7 @@ function initVroom(room) {
       peers.local.role = data.msg;
       // Enable owner reserved menu
       if (data.msg == 'owner'){
-        $('.ownerEl').show();
+        $('.ownerEl').show(500);
       }
     }
   });
