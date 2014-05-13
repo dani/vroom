@@ -681,7 +681,8 @@ function initVroom(room) {
   });
 
   // Join password protection
-  $('#setJoinPassButton').click(function(event) {
+  $('#joinPassForm').submit(function(event) {
+    event.preventDefault();
     var pass = $('#joinPass').val();
     $('#joinPass').val('');
     $('#setJoinPassButton').addClass('disabled');
@@ -734,7 +735,7 @@ function initVroom(room) {
     });
   });
 
-
+  // Set owner password
   $('#ownerPass').on('input', function() {
     if ($('#ownerPass').val() == ''){
       $('#setOwnerPassButton').addClass('disabled');
@@ -743,9 +744,8 @@ function initVroom(room) {
       $('#setOwnerPassButton').removeClass('disabled');
     }
   });
-
-  // Set owner password
-  $('#setOwnerPassButton').click(function(event) {
+  $('#ownerPassForm').submit(function(event) {
+    event.preventDefault();
     var pass = $('#ownerPass').val();
     $('#ownerPass').val('');
     $('#setOwnerPassButton').addClass('disabled');
