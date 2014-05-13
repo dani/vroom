@@ -18,6 +18,7 @@ our %Lexicon = (
   "A_WEBCAM"                             => "A webcam",
   "A_MIC"                                => "A microphone",
   "WHEN_YOU_ARE_READY"                   => "When you are ready, go to this address to join the conference",
+  "YOU_WILL_NEED_THIS_PASSWORD"          => "The following password is needed to join the room",
   "HAVE_A_NICE_MEETING"                  => "Have a nice meeting :-)",
   "EMAIL_SIGN"                           => "VROOM! And video conferencing becomes free, simple and safe",
   "FEEDBACK"                             => "Feedback",

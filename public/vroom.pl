@@ -437,12 +437,13 @@ post '/action' => sub {
            );
   }
   $self->stash(room => $room);
+  my $data = $self->get_room($room);
   return $self->render(
            json => {
              msg => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room)
            },
            status => '500'
-         ) unless ($self->get_room($room));
+         ) unless ($data);
 
   if ($action eq 'invite'){
     my $rcpt = $self->param('recipient');
@@ -453,7 +454,8 @@ post '/action' => sub {
       ],
       data => [
         template => 'invite',
-        room => $room
+        room => $room,
+        joinPassword => $data->{join_password}
       ],
     ) ||
     return $self->render(
