@@ -79,6 +79,9 @@
 #confMenu {
   min-width: 400px;
 }
+.ownerEl {
+  display: none;
+}
 #chatBox {
   max-height:300px;
   resize:none;

@@ -428,7 +428,7 @@ post '/action' => sub {
   my $self = shift;
   my $action = $self->param('action');
   my $room = $self->param('room') || "";
-  if (!$self->session('name') || !$self->has_joined($self->session('name'), $room)){
+  if (!$self->session('name') || !$self->has_joined($self->session('name'), $room) || !$self->session($room) || !$self->session($room)->{role}){
     return $self->render(
              json => {
                msg => $self->l('ERROR_NOT_LOGGED_IN'),
@@ -518,6 +518,14 @@ post '/action' => sub {
                }
              );
     }
+  }
+  elsif ($action eq 'getRole'){
+    return $self->render(
+               json => {
+                 msg    => $self->session($room)->{role},
+                 status => 'success'
+               },
+             );
   }
 };
 

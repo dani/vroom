@@ -79,7 +79,9 @@
             <span class="glyphicon glyphicon-expand">
             </span>
           </label>
-          <button class="btn btn-default dropdown-toggle help" type="button" id="confMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
+        </div>
+        <div class="btn-group navbar-form navbar-left">
+          <button class="btn btn-default dropdown-toggle help ownerEl" type="button" id="confMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
             <span class="glyphicon glyphicon-wrench"></span>
             <span class="caret"></span>
           </button>

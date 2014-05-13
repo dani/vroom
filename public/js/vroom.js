@@ -75,7 +75,8 @@ function initVroom(room) {
       micMuted: false,
       videoPaused: false,
       displayName: '',
-      color: chooseColor()
+      color: chooseColor(),
+      role: 'participant'
     }
   };
   var mainVid = false,
@@ -88,6 +89,24 @@ function initVroom(room) {
     url: rootUrl + 'action',
     type: 'POST',
     dataType: 'json',    
+  });
+
+  // get our role (participant or owner)
+  $.ajax({
+    data: {
+      action: 'getRole',
+      room: roomName
+    },
+    error: function(data) {
+      $.notify(locale.ERROR_OCCURED, 'error');
+    },
+    success: function(data) {
+      peers.local.role = data.msg;
+      // Enable owner reserved menu
+      if (data.msg == 'owner'){
+        $('.ownerEl').show();
+      }
+    }
   });
 
   // Screen sharing is only suported on chrome > 26
