@@ -12,6 +12,7 @@ use Mojo::JSON;
 use DBI;
 use Data::GUID qw(guid_string);
 use Digest::MD5 qw(md5_hex);
+use Crypt::SaltedHash;
 use MIME::Base64;
 use Email::Sender::Transport::Sendmail;
 use Encode;
@@ -253,6 +254,25 @@ helper set_join_pass => sub {
   return 1;
 };
 
+# Set owner password
+helper set_owner_pass => sub {
+  my $self = shift;
+  my ($room,$pass) = @_;
+  return undef unless ( %{ $self->get_room($room) });
+  if ($pass){
+    my $sth = eval { $self->db->prepare("UPDATE rooms SET owner_password=?,persistent='1' where name=?;") } || return undef;
+    my $csh = Crypt::SaltedHash->new(algorithm => 'SHA-256');
+    $csh->add($pass);
+    $sth->execute($csh->generate,$room) || return undef;
+    $self->app->log->debug($self->session('name') . " has set an owner password on room $room, which is now persistent");
+  }
+  else{
+    my $sth = eval { $self->db->prepare("UPDATE rooms SET owner_password=?,persistent='0' where name=?;") } || return undef;
+    $sth->execute(undef,$room) || return undef;
+    $self->app->log->debug($self->session('name') . " has removed the owner password on room $room, which is not persistent anymore");
+  }
+};
+
 any '/' => 'index';
 
 get '/about' => sub {
@@ -356,7 +376,11 @@ post '/password/(:room)' => sub {
     );
   }
   my $pass = $self->param('password');
-  if ($pass eq $data->{join_password}){
+  if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
+    $self->session($room => {role => 'owner'});
+    $self->redirect_to($self->url_for('/') . $room);
+  }
+  elsif ($pass eq $data->{join_password}){
     $self->session($room => {role => 'participant'});
     $self->redirect_to($self->url_for('/') . $room);
   }
@@ -493,13 +517,19 @@ post '/action' => sub {
              );
     }
   }
-  elsif ($action eq 'setJoinPassword'){
+  elsif ($action eq 'setPassword'){
     my $pass = $self->param('password');
+    my $type = $self->param('type') || 'join';
     $pass = undef if ($pass && $pass eq '');
     my $res = undef;
     my $errmsg = 'ERROR_OCCURED';
     if ($self->session($room)->{role} eq 'owner'){
-      $res = $self->set_join_pass($room,$pass);
+      if ($type eq 'owner'){
+        $res = $self->set_owner_pass($room,$pass);
+      }
+      else{
+        $res = $self->set_join_pass($room,$pass);
+      }
     }
     else{
       $errmsg = 'NOT_ALLOWED';
@@ -515,7 +545,7 @@ post '/action' => sub {
     else{
       return $self->render(
                json => {
-                 msg    => ($pass) ? $self->l('JOIN_PASSWORD_SET') : $self->l('JOIN_PASSWORD_REMOVED'),
+                 msg    => ($pass) ? $self->l('PASSWORD_SET') : $self->l('PASSWORD_REMOVED'),
                  status => 'success'
                }
              );

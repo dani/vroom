@@ -106,6 +106,28 @@
                 </div>
               </div>
             </li>
+            <li class="divider">
+            </li>
+            <li>
+              <div class="navbar-form">
+                <center>
+                  <p><%=l 'OWNER_PASSWORD_MAKES_PERSISTENT' %></p>
+                </center>
+                <div class="input-group">
+                  <input type="password" id="ownerPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OWNER_PASSWORD' %>"/>
+                  <span class="input-group-btn">
+                    <button id="setOwnerPassButton" type="button" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OWNER_PASSWORD' %>">
+                      <span class="glyphicon glyphicon-ok"
+                      </span>
+                    </button>
+                    <button id="removeOwnerPassButton" type="button" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'REMOVE_OWNER_PASSWORD' %>">
+                      <span class="glyphicon glyphicon-remove"
+                      </span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </li>
           </ul>
         </div>
         <div class="btn-group navbar-form navbar-right" data-toggle="buttons" >

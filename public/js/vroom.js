@@ -27,6 +27,8 @@ var locale = {
   ONE_OF_THE_PEERS: '',
   PASSWORD_PROTECT_ON_BY_s: '',
   PASSWORD_PROTECT_OFF_BY_s: '',
+  OWNER_PASSWORD_CHANGED_BY_s: '',
+  OWNER_PASSWORD_REMOVED_BY_s: '',
   CANT_SEND_TO_s: '',
   SCREEN_s: '',
   TO_INVITE_SHARE_THIS_URL: ''
@@ -442,12 +444,22 @@ function initVroom(room) {
     $(el).remove();
   });
 
+  // A few notif on password set/unset
   webrtc.on('password_protect_on', function(data){
     $.notify(sprintf(locale.PASSWORD_PROTECT_ON_BY_s, stringEscape(peers[data.id].displayName)), 'info');
   });
-
   webrtc.on('password_protect_off', function(data){
     $.notify(sprintf(locale.PASSWORD_PROTECT_OFF_BY_s, stringEscape(peers[data.id].displayName)), 'info');
+  });
+  webrtc.on('owner_password_changed', function(data){
+    if (peers.local.role == 'owner'){
+      $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
+    }
+  });
+  webrtc.on('owner_password_removed', function(data){
+    if (peers.local.role == 'owner'){
+      $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
+    }
   });
 
   // Handle the readyToCall event: join the room
@@ -628,8 +640,9 @@ function initVroom(room) {
     $('#setJoinPassButton').addClass('disabled');
     $.ajax({
       data: {
-        action: 'setJoinPassword',
+        action: 'setPassword',
         password: pass,
+        type: 'join',
         room: roomName
       },
       error: function() {
@@ -653,7 +666,8 @@ function initVroom(room) {
   $('#removeJoinPassButton').click(function(event) {
     $.ajax({
       data: {
-        action: 'setJoinPassword',
+        action: 'setPassword',
+        type: 'join',
         room: roomName 
       },
       error: function() {
@@ -665,6 +679,70 @@ function initVroom(room) {
         if (data.status == 'success'){
           $.notify(data.msg, 'success');
           webrtc.sendToAll('password_protect_off', {});
+        }
+        else{
+          $.notify(data.msg, 'error');
+        }
+      }
+    });
+  });
+
+
+  $('#ownerPass').on('input', function() {
+    if ($('#ownerPass').val() == ''){
+      $('#setOwnerPassButton').addClass('disabled');
+    }
+    else{
+      $('#setOwnerPassButton').removeClass('disabled');
+    }
+  });
+
+  // Set owner password
+  $('#setOwnerPassButton').click(function(event) {
+    var pass = $('#ownerPass').val();
+    $('#ownerPass').val('');
+    $('#setOwnerPassButton').addClass('disabled');
+    $.ajax({
+      data: {
+        action: 'setPassword',
+        password: pass,
+        type: 'owner',
+        room: roomName
+      },
+      error: function() {
+        var msg = locale.ERROR_OCCURED;
+        $.notify(msg, 'error');
+      },
+      success: function(data) {
+        $('#ownerPass').val('');
+        if (data.status == 'success'){
+          $.notify(data.msg, 'success');
+          webrtc.sendToAll('owner_password_changed', {});
+        }
+        else{
+          $.notify(data.msg, 'error');
+        }
+      }
+    });
+  });
+
+  // Remove the owner password
+  $('#removeOwnerPassButton').click(function(event) {
+    $.ajax({
+      data: {
+        action: 'setPassword',
+        type: 'owner',
+        room: roomName
+      },
+      error: function() {
+        var msg = locale.ERROR_OCCURED;
+        $.notify(msg, 'error');
+      },
+      success: function(data) {
+        $('#ownerPass').val('');
+        if (data.status == 'success'){
+          $.notify(data.msg, 'success');
+          webrtc.sendToAll('owner_password_removed', {});
         }
         else{
           $.notify(data.msg, 'error');
