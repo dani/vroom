@@ -130,6 +130,30 @@
             </li>
           </ul>
         </div>
+        <div class="btn-group navbar-form navbar-left">
+          <button class="btn btn-default dropdown-toggle help unauthEl" type="button" id="authMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>">
+            <span class="glyphicon glyphicon-log-in"></span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="authMenuButton" id="authMenu">
+            <li>
+              <form class="navbar-form" id="authForm">
+                <center>
+                  <p><%=l 'AUTH_TO_MANAGE_THE_ROOM' %></p>
+                </center>
+                <div class="input-group">
+                  <input type="password" id="authPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>"/>
+                  <span class="input-group-btn">
+                    <button id="authPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>">
+                      <span class="glyphicon glyphicon-ok"
+                      </span>
+                    </button>
+                  </span>
+                </div>
+              </form>
+            </li>
+          </ul>
+        </div>
         <div class="btn-group navbar-form navbar-right" data-toggle="buttons" >
           <button class="btn btn-default help" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
             <span class="glyphicon glyphicon-log-out">

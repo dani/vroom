@@ -551,10 +551,34 @@ post '/action' => sub {
              );
     }
   }
+  elsif ($action eq 'authenticate'){
+    my $pass = $self->param('password');
+    my $res = undef;
+    my $msg = 'ERROR_OCCURED';
+    my $status = 'error';
+    if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
+      $self->session($room, {role => 'owner'});
+      $msg = 'AUTH_SUCCESS';
+      $status = 'success';
+    }
+    elsif ($data->{owner_password}){
+      $msg = 'WRONG_PASSWORD';
+    }
+    else{
+      $msg = 'NOT_ALLOWED';
+    }
+    return $self->render(
+               json => {
+                 msg    => $self->l($msg),
+                 status => $status
+               },
+             );
+  }
   elsif ($action eq 'getRole'){
     return $self->render(
                json => {
-                 msg    => $self->session($room)->{role},
+                 role   => $self->session($room)->{role},
+                 auth   => ($data->{owner_password}) ? 'yes' : 'no',
                  status => 'success'
                },
              );

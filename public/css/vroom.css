@@ -79,7 +79,13 @@
 #confMenu {
   min-width: 400px;
 }
+#authMenu {
+  min-width: 400px;
+}
 .ownerEl {
+  display: none;
+}
+.unauthEl{
   display: none;
 }
 #chatBox {

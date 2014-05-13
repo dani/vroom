@@ -122,13 +122,17 @@ function initVroom(room) {
         $.notify(locale.ERROR_OCCURED, 'error');
       },
       success: function(data) { 
-        peers.local.role = data.msg;
+        peers.local.role = data.role;
         // Enable owner reserved menu
-        if (data.msg == 'owner'){
+        if (data.role == 'owner'){
+          $('.unauthEl').hide(500);
           $('.ownerEl').show(500);
         }
         else{
           $('.ownerEl').hide(500);
+          if (data.auth == 'yes'){
+            $('.unauthEl').show(500);
+          }
         }
       }
     });
@@ -455,10 +459,16 @@ function initVroom(room) {
     if (peers.local.role == 'owner'){
       $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
     }
+    else{
+      updateRole();
+    }
   });
   webrtc.on('owner_password_removed', function(data){
     if (peers.local.role == 'owner'){
       $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
+    }
+    else{
+      updateRole();
     }
   });
 
@@ -622,6 +632,43 @@ function initVroom(room) {
       $("#suspendCamLabel").removeClass('btn-danger');
       $.notify(locale.CAM_RESUMED, 'info');
     }
+  });
+
+  // Handle auth
+  $('#authPass').on('input', function() {
+    if ($('#authPass').val() == ''){
+      $('#authPassButton').addClass('disabled');
+    }
+    else{
+      $('#authPassButton').removeClass('disabled');
+    }
+  });
+  $('#authForm').submit(function(event) {
+    event.preventDefault();
+    var pass = $('#authPass').val();
+    $.ajax({
+      data: {
+        action: 'authenticate',
+        password: pass,
+        room: roomName
+      },
+      error: function(data) {
+        var msg = locale.ERROR_OCCURED;
+        $.notify(msg, 'error');
+      },
+      success: function(data) {
+        $('#authPass').val('');
+        if (data.status == 'success'){
+          updateRole();
+          $.notify(data.msg, 'success');
+        }
+        else{
+          $.notify(data.msg, 'error');
+        }
+        // Close the auth menu
+        $('#authMenu').dropdown('toggle');
+      }
+    });
   });
 
   $('#joinPass').on('input', function() {
