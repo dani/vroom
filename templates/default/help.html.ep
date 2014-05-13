@@ -1,21 +1,37 @@
-% title $self->l('Help');
+% title $self->l('HELP');
 %= include 'header'
 %= include 'public_toolbar'
 <div class="container-fluid">
-  <div class="row clearfix">
-    <div class="col-md-12 column">
-      <h3>
-        <%=l 'SUPPORTED_BROWSERS' %>
-      </h3>
-      <p>
-        <%=l 'HELP_BROWSERS_SUPPORTED' %>
-      </p>
-      <h3>
-        <%=l 'SREEN_SHARING' %>
-      </h3>
-      <p>
-        <%==l 'HELP_SCREEN_SHARING' %>
-      </p>
+  <div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseBrowsers">
+            <%=l 'SUPPORTED_BROWSERS' %>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseBrowsers" class="panel-collapse collapse">
+        <div class="panel-body">
+          <%=l 'HELP_BROWSERS_SUPPORTED' %>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseScreenShare">    
+            <%=l 'SREEN_SHARING' %>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseScreenShare" class="panel-collapse collapse">
+        <div class="panel-body">
+          <%==l 'HELP_SCREEN_SHARING' %>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+%= include 'js_include'
+%= include 'footer'

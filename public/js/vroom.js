@@ -55,7 +55,7 @@ function inviteUrlPopup(){
 
 // set the height of the thumbnails so they are always equals
 function setPanelHeight() {
-  $(".panel").height(Math.max.apply(null, $(".panel").map(function() { return $(this).height(); })));
+  $(".panelIndex").height(Math.max.apply(null, $(".panelIndex").map(function() { return $(this).height(); })));
 }
 
 setTimeout(function(){
