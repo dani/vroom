@@ -1,0 +1,7 @@
+<%==l 'FROM' %>: <%= $email %>
+
+<%==l 'COMMENT' %>: <%== $comment %>
+
+--
+<%==l 'EMAIL_SIGN' %>
+
