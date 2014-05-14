@@ -517,14 +517,15 @@ post '/action' => sub {
     unless ($res){
       return $self->render(
                json => {
-                 msg => $self->l('ERROR_OCCURED'),
+                 msg    => $self->l('ERROR_OCCURED'),
+                 status => 'error'
                },
-               status   => '500'
              );
     }
     return $self->render(
              json => {
-               msg => $success,
+               msg    => $success,
+               status => 'success'
              }
            );
   }

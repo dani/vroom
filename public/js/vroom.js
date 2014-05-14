@@ -580,20 +580,24 @@ function initVroom(room) {
         room: roomName
       },
       error: function(data) {
-        var msg = (data && data.msg) ? data.msg : locale.ERROR_OCCURED;
-        $.notify(msg, 'error');
+        $.notify(locale.ERROR_OCCURED, 'error');
       },
       success: function(data) {
-        $.notify(data.msg, 'info');
-        if (action === 'lock'){
-          $("#lockLabel").addClass('btn-danger');
-          webrtc.sendToAll('room_locked', {});
+        if (data.status == 'success'){
+          $.notify(data.msg, 'info');
+          if (action === 'lock'){
+            $("#lockLabel").addClass('btn-danger');
+            webrtc.sendToAll('room_locked', {});
+          }
+          else{
+            $("#lockLabel").removeClass('btn-danger');
+            webrtc.sendToAll('room_unlocked', {});
+          }
         }
         else{
-          $("#lockLabel").removeClass('btn-danger');
-          webrtc.sendToAll('room_unlocked', {});
+          $.notify(data.msg, 'error');
         }
-      }
+      }  
     });
   });
 
