@@ -20,6 +20,7 @@ our %Lexicon = (
     "A_WEBCAM"                                  => "Une webcam",
     "A_MIC"                                     => "Un micro",
     "WHEN_YOU_ARE_READY"                        => "Quand vous êtes prêt, rendez-vous sur cette adresse pour joindre la conférence",
+    "MESSAGE_FROM_ORGANIZER"                    => "Message de l'organisateur de la réunion",
     "HAVE_A_NICE_MEETING"                       => "Bonne réunion :-)",
     "EMAIL_SIGN"                                => "VROOM! Et la visio conférence devient libre, simple et sûr",
     "FEEDBACK"                                  => "Retour d'expérience",

@@ -2,7 +2,7 @@
   my $url = $self->url_for('/')->to_abs;
   $url .= ($url =~ m/\/$/) ? '' : '/';
 %>
-<%=l 'YOU_ARE_INVITED_TO_A_MEETING' %>
+<%==l 'YOU_ARE_INVITED_TO_A_MEETING' %>
 
   * <%=l 'A_MODERN_BROWSER' %>
   * <%=l 'A_WEBCAM' %>
@@ -10,12 +10,14 @@
 
 <%=l 'WHEN_YOU_ARE_READY' %>
 
-<%= $url . $room %>
+<%== $url . $room %>
 
 <% if ($message && $message ne ''){ %>
+<%==l 'MESSAGE_FROM_ORGANIZER' %>:
+
 <%== $message %>
 <% } %>
 
 <%=l 'HAVE_A_NICE_MEETING' %>
 -- 
-<%=l 'EMAIL_SIGN' %>
+<%==l 'EMAIL_SIGN' %>

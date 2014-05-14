@@ -28,6 +28,9 @@
 </p>
 <% if ($message && $message ne ''){ %>
 <p>
+  <%=l 'MESSAGE_FROM_ORGANIZER' %>:
+</p>
+<p>
   <%= $message %>
 </p>
 <% } %>
