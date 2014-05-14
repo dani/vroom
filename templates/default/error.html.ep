@@ -3,7 +3,7 @@
 %= include 'public_toolbar'
 <div class="container-fluid">
   <div class="jumbotron alert-danger">
-    <h1><%=l 'ERROR_OCCURED' %></h1>
+    <h2<%=l 'ERROR_OCCURED' %></h2>
     <p><%= $msg %></p>
     <div class="btn-group">
       <a class="btn btn-primary btn-lg" role="button" href="<%= $self->url_for('/') %>"><%=l 'BACK_TO_MAIN_MENU' %></a>
