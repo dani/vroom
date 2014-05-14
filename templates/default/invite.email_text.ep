@@ -12,6 +12,10 @@
 
 <%= $url . $room %>
 
+<% if ($message && $message ne ''){ %>
+<%== $message %>
+<% } %>
+
 <%=l 'HAVE_A_NICE_MEETING' %>
 -- 
 <%=l 'EMAIL_SIGN' %>

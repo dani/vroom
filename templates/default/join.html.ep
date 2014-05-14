@@ -42,6 +42,13 @@
                     </button>
                   </span>
                 </div>
+                <div class="input-group">
+                  <textarea id="message" name="message" class="form-control help" placeholder="<%=l 'MESSAGE' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_CUSTOM_MESSAGE' %>"></textarea>
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-envelope">
+                    </span>
+                  </span>
+                </div>
               </form>
             </li>
           </ul>

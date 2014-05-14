@@ -470,7 +470,8 @@ post '/action' => sub {
          ) unless ($data);
 
   if ($action eq 'invite'){
-    my $rcpt = $self->param('recipient');
+    my $rcpt    = $self->param('recipient');
+    my $message = $self->param('message');
     $self->email(
       header => [
         Subject => encode("MIME-Header", $self->l("EMAIL_INVITATION")),
@@ -478,7 +479,8 @@ post '/action' => sub {
       ],
       data => [
         template => 'invite',
-        room => $room,
+        room     => $room,
+        message  => $message
       ],
     ) ||
     return $self->render(
@@ -576,9 +578,10 @@ post '/action' => sub {
   elsif ($action eq 'getRole'){
     return $self->render(
                json => {
-                 role   => $self->session($room)->{role},
-                 auth   => ($data->{owner_password}) ? 'yes' : 'no',
-                 status => 'success'
+                 role         => $self->session($room)->{role},
+                 owner_auth   => ($data->{owner_password}) ? 'yes' : 'no',
+                 join_auth    => ($data->{join_password})  ? 'yes' : 'no',
+                 status       => 'success'
                },
              );
   }

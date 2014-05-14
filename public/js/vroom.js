@@ -128,7 +128,7 @@ function initVroom(room) {
         }
         else{
           $('.ownerEl').hide(500);
-          if (data.auth == 'yes'){
+          if (data.owner_auth == 'yes'){
             $('.unauthEl').show(500);
           }
         }
@@ -513,7 +513,8 @@ function initVroom(room) {
   // Handle Email Invitation
   $('#inviteEmail').submit(function(event) {
     event.preventDefault();
-    var rcpt = $('#recipient').val();
+    var rcpt    = $('#recipient').val();
+        message = $('#message').val();
     // Simple email address verification
     if (!rcpt.match(/\S+@\S+\.\S+/)){
       $.notify(locale.ERROR_MAIL_INVALID, 'error');
@@ -523,6 +524,7 @@ function initVroom(room) {
       data: {
         action: 'invite',
         recipient: rcpt,
+        message: message,
         room: roomName
       },
       error: function(data) {
@@ -531,7 +533,7 @@ function initVroom(room) {
       },
       success: function(data) {
         $.notify(data.msg, 'success');
-        $('#recipient').val('');
+        $('#recipient,#message').val('');
       }
     });
   });

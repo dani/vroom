@@ -26,6 +26,11 @@
     </h1>
   </center>
 </p>
+<% if ($message && $message ne ''){ %>
+<p>
+  <%= $message %>
+</p>
+<% } %>
 <br>
 <p>
   <%=l 'HAVE_A_NICE_MEETING' %>
