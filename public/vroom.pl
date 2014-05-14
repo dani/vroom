@@ -425,15 +425,12 @@ get '/(*room)' => sub {
       room => $room
     );
   }
-  my @participants = $self->get_participants($room);
   if ($data->{'locked'} && (!$self->session($room) || $self->session($room)->{role} ne 'owner')){
-    unless (($self->session('name') eq $data->{'owner'}) || (grep { $_ eq $self->session('name') } @participants )){
-      return $self->render('error',
-        msg => sprintf($self->l("ERROR_ROOM_s_LOCKED"), $room),
-        err => 'ERROR_ROOM_s_LOCKED',
-        room => $room
-      );
-    }
+    return $self->render('error',
+      msg => sprintf($self->l("ERROR_ROOM_s_LOCKED"), $room),
+      err => 'ERROR_ROOM_s_LOCKED',
+      room => $room
+    );
   }
   if ($data->{join_password} && (!$self->session($room) || $self->session($room)->{role} !~ m/^participant|owner$/)){
     my $url = $self->url_for('/');
