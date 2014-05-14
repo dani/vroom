@@ -504,28 +504,19 @@ post '/action' => sub {
   }
   if ($action =~ m/(un)?lock/){
     my ($lock,$success);
-    if ($action eq 'lock'){
-      $lock = 1;
-      $success = $self->l('ROOM_LOCKED');
+    my $msg = 'ERROR_OCCURED';
+    my $status = 'error';
+    if (!$self->session($room) || $self->session($room)->{role} ne 'owner'){
+      $msg = 'NOT_ALLOWED';
     }
-    else{
-      $lock = 0;
-      $success = $self->l('ROOM_UNLOCKED');
-    }
-    my $room = $self->param('room');
-    my $res = $self->lock_room($room,$lock);
-    unless ($res){
-      return $self->render(
-               json => {
-                 msg    => $self->l('ERROR_OCCURED'),
-                 status => 'error'
-               },
-             );
+    elsif ($self->lock_room($room,($action eq 'lock') ? '1':'0')){
+      $status = 'success';
+      $msg = ($action eq 'lock') ? 'ROOM_LOCKED' : 'ROOM_UNLOCKED';
     }
     return $self->render(
              json => {
-               msg    => $success,
-               status => 'success'
+               msg    => $self->l($msg),
+               status => $status
              }
            );
   }
