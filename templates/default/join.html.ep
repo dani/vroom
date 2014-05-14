@@ -34,7 +34,7 @@
                   <p><%=l 'YOU_CAN_INVITE_BY_MAIL' %></p>
                 </center>
                 <div class="input-group">
-                  <input type="email" id="recipient" class="form-control help" placeholder="<%=l 'EMAIL_INVITE' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>"/>
+                  <input type="email" id="recipient" class="form-control help" placeholder="<%=l 'EMAIL_PLACEHOLDER' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>"/>
                   <span class="input-group-btn">
                     <button id="inviteEmailButton" type="submit" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>">
                       <span class="glyphicon glyphicon-send">
