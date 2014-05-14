@@ -26,11 +26,6 @@
     </h1>
   </center>
 </p>
-<% if ($joinPassword && $joinPassword ne ''){ %>
-<p>
-  <%=l 'YOU_WILL_NEED_THIS_PASSWORD' %>: <%= $joinPassword %>
-</p>
-<% } %>
 <br>
 <p>
   <%=l 'HAVE_A_NICE_MEETING' %>

@@ -12,10 +12,6 @@
 
 <%= $url . $room %>
 
-<% if ($joinPassword && $joinPassword ne ''){ %>
-<%=l 'YOU_WILL_NEED_THIS_PASSWORD' %>: <%== $joinPassword %>
-<% } %>
-
 <%=l 'HAVE_A_NICE_MEETING' %>
 -- 
 <%=l 'EMAIL_SIGN' %>

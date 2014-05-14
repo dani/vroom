@@ -244,6 +244,7 @@ helper set_join_pass => sub {
   my ($room,$pass) = @_;
   return undef unless ( %{ $self->get_room($room) });
   my $sth = eval { $self->db->prepare("UPDATE rooms SET join_password=? where name=?;") } || return undef;
+  $pass = ($pass) ? Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($pass)->generate : undef;
   $sth->execute($pass,$room) || return undef;
   if ($pass){
     $self->app->log->debug($self->session('name') . " has set a password on room $room");
@@ -261,9 +262,8 @@ helper set_owner_pass => sub {
   return undef unless ( %{ $self->get_room($room) });
   if ($pass){
     my $sth = eval { $self->db->prepare("UPDATE rooms SET owner_password=?,persistent='1' where name=?;") } || return undef;
-    my $csh = Crypt::SaltedHash->new(algorithm => 'SHA-256');
-    $csh->add($pass);
-    $sth->execute($csh->generate,$room) || return undef;
+    my $pass = Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($pass)->generate;
+    $sth->execute($pass,$room) || return undef;
     $self->app->log->debug($self->session('name') . " has set an owner password on room $room, which is now persistent");
   }
   else{
@@ -380,7 +380,7 @@ post '/password/(:room)' => sub {
     $self->session($room => {role => 'owner'});
     $self->redirect_to($self->url_for('/') . $room);
   }
-  elsif ($pass eq $data->{join_password}){
+  elsif ($data->{join_password} && Crypt::SaltedHash->validate($data->{join_password}, $pass)){
     $self->session($room => {role => 'participant'});
     $self->redirect_to($self->url_for('/') . $room);
   }
@@ -479,7 +479,6 @@ post '/action' => sub {
       data => [
         template => 'invite',
         room => $room,
-        joinPassword => $data->{join_password}
       ],
     ) ||
     return $self->render(
