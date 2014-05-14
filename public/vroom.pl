@@ -455,18 +455,18 @@ post '/action' => sub {
   if (!$self->session('name') || !$self->has_joined($self->session('name'), $room) || !$self->session($room) || !$self->session($room)->{role}){
     return $self->render(
              json => {
-               msg => $self->l('ERROR_NOT_LOGGED_IN'),
+               msg    => $self->l('ERROR_NOT_LOGGED_IN'),
+               status => 'error'
              },
-             status => 403
            );
   }
   $self->stash(room => $room);
   my $data = $self->get_room($room);
   return $self->render(
            json => {
-             msg => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room)
+             msg    => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
+             status => 'error'
            },
-           status => '500'
          ) unless ($data);
 
   if ($action eq 'invite'){
@@ -485,14 +485,15 @@ post '/action' => sub {
     ) ||
     return $self->render(
       json => {
-        msg => $self->l('ERROR_OCCURED'),
+        msg    => $self->l('ERROR_OCCURED'),
+        status => 'error'
       },
-      status => 500
     );
     $self->app->log->info($self->session('name') . " sent an invitation for room $room to $rcpt");
     $self->render(
       json => {
-        msg => sprintf($self->l('INVITE_SENT_TO_s'), $rcpt)
+        msg    => sprintf($self->l('INVITE_SENT_TO_s'), $rcpt),
+        status => 'success'
       }
     );
   }
@@ -505,15 +506,16 @@ post '/action' => sub {
     if (!$res){
       return $self->render(
                json => {
-                 msg => $self->l('ERROR_OCCURED'),
+                 msg    => $self->l('ERROR_OCCURED'),
+                 status => 'error'
                },
-               status   => '500'
              );
     }
     else{
       return $self->render(
                json => {
-                 msg => '',
+                 msg    => '',
+                 status => 'success'
                }
              );
     }

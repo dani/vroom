@@ -528,12 +528,16 @@ function initVroom(room) {
         room: roomName
       },
       error: function(data) {
-        var msg = (data && data.msg) ? data.msg : locale.ERROR_OCCURED;
-        $.notify(msg, 'error');
+        $.notify(locale.ERROR_OCCURED, 'error');
       },
       success: function(data) {
-        $.notify(data.msg, 'success');
         $('#recipient,#message').val('');
+        if (data.status == 'success'){
+          $.notify(data.msg, 'success');
+        }
+        else{
+          $.notify(data.msg, 'error');
+        }
       }
     });
   });
@@ -653,8 +657,7 @@ function initVroom(room) {
         room: roomName
       },
       error: function(data) {
-        var msg = locale.ERROR_OCCURED;
-        $.notify(msg, 'error');
+        $.notify(locale.ERROR_OCCURED, 'error');
       },
       success: function(data) {
         $('#authPass').val('');
@@ -694,8 +697,7 @@ function initVroom(room) {
         room: roomName
       },
       error: function() {
-        var msg = locale.ERROR_OCCURED;
-        $.notify(msg, 'error');
+        $.notify(locale.ERROR_OCCURED, 'error');
       },
       success: function(data) {
         $('#joinPass').val('');
@@ -719,8 +721,7 @@ function initVroom(room) {
         room: roomName 
       },
       error: function() {
-        var msg = locale.ERROR_OCCURED;
-        $.notify(msg, 'error');
+        $.notify(locale.ERROR_OCCURED, 'error');
       },
       success: function(data) {
         $('#joinPass').val('');
@@ -757,8 +758,7 @@ function initVroom(room) {
         room: roomName
       },
       error: function() {
-        var msg = locale.ERROR_OCCURED;
-        $.notify(msg, 'error');
+        $.notify(locale.ERROR_OCCURED, 'error');
       },
       success: function(data) {
         $('#ownerPass').val('');
@@ -782,8 +782,7 @@ function initVroom(room) {
         room: roomName
       },
       error: function() {
-        var msg = locale.ERROR_OCCURED;
-        $.notify(msg, 'error');
+        $.notify(locale.ERROR_OCCURED, 'error');
       },
       success: function(data) {
         $('#ownerPass').val('');
@@ -901,12 +900,10 @@ function initVroom(room) {
         room: roomName
       },
       error: function(data) {
-        var msg = (data && data.msg) ? data.msg : locale.ERROR_OCCURED;
-        $.notify(msg, 'error');
+        $.notify(locale.ERROR_OCCURED, 'error');
       },
       success: function(data) {
-        // In case of success, only notify if the server replied something
-        if (data.msg !== ''){
+        if (data.status == 'success' && data.msg && data.msg != ''){
           $.notify(data.msg, 'success');
         }
       }
