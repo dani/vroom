@@ -96,7 +96,7 @@
             <li>
               <div class="navbar-form">
                 <div class="btn-group" data-toggle="buttons">
-                  <label class="btn btn-default<%= $locked eq 'checked' ? ' btn-danger active':'' %> help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
+                  <label class="btn btn-default<%= $locked eq 'checked' ? ' btn-danger':'' %> help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
                     <input type="checkbox" id="lockButton" <%= $locked %>>
                     <span class="glyphicon glyphicon-lock">
                     </span>
