@@ -306,6 +306,13 @@ get 'feedback_thanks' => 'feedback_thanks';
 get '/goodby/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
+  if (!$self->get_room($room)){
+    return $self->render('error',
+      err  => 'ERROR_ROOM_s_DOESNT_EXIST',
+      msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
+      room => $room
+    );
+  }
   $self->remove_participant($room,$self->session('name'));
   $self->logout;
 } => 'goodby';
