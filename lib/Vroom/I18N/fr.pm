@@ -90,6 +90,7 @@ our %Lexicon = (
     "PASSWORD_REQUIRED"                         => "Mot de passe requis",
     "A_PASSWORD_IS_NEEDED_TO_JOIN"              => "Vous devez saisir un mot de passe pour rejoindre ce salon",
     "TRY_AGAIN"                                 => "Essayer à nouveau",
+    "AUTH_IF_OWNER"                             => "Authentifiez-vous si vous êtes le propriétaire du salon",
     "LOGOUT"                                    => "Quitter le salon",
     "SET_YOUR_NAME_TO_CHAT"                     => "Vous devez saisir votre nom avant de pouvoir tchater",
     "SEND_MESSAGE"                              => "Envoyer le message",

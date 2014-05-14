@@ -11,6 +11,8 @@
       <a class="btn btn-default btn-lg" role="button" href="<%= $self->url_for('/') . $room %>"><%=l 'JOIN_THIS_ROOM' %></a>
       <% } elsif ($err eq 'WRONG_PASSWORD'){ %>
       <a class="btn btn-default btn-lg" role="button" href="<%= $self->url_for('/password') . '/' . $room %>"><%=l 'TRY_AGAIN' %></a>
+      <% } elsif ($err eq 'ERROR_ROOM_s_LOCKED'){ %>
+      <a class="btn btn-default btn-lg" role="button" href="<%= $self->url_for('/password') . '/' . $room %>"><%=l 'AUTH_IF_OWNER' %></a>
       <% } %>
     </div>
   </div>
