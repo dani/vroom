@@ -25,6 +25,8 @@ var locale = {
   CAM_RESUMED: '',
   SET_YOUR_NAME_TO_CHAT: '',
   ONE_OF_THE_PEERS: '',
+  ROOM_LOCKED_BY_s: '',
+  ROOM_UNLOCKED_BY_s: '',
   PASSWORD_PROTECT_ON_BY_s: '',
   PASSWORD_PROTECT_OFF_BY_s: '',
   OWNER_PASSWORD_CHANGED_BY_s: '',
@@ -446,7 +448,15 @@ function initVroom(room) {
     $(el).remove();
   });
 
-  // A few notif on password set/unset
+  // A few notif on password set/unset or lock/unlock
+  webrtc.on('room_locked', function(data){
+    $('#lockLabel').addClass('btn-danger active');
+    $.notify(sprintf(locale.ROOM_LOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
+  });
+  webrtc.on('room_unlocked', function(data){
+    $('#lockLabel').removeClass('btn-danger active');
+    $.notify(sprintf(locale.ROOM_UNLOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
+  });
   webrtc.on('password_protect_on', function(data){
     $.notify(sprintf(locale.PASSWORD_PROTECT_ON_BY_s, stringEscape(peers[data.id].displayName)), 'info');
   });
@@ -559,6 +569,32 @@ function initVroom(room) {
     peers.local.displayName = $('#displayName').val();
     updateDisplayName('local');
     webrtc.sendDirectlyToAll('vroom', 'setDisplayName', $('#displayName').val());
+  });
+
+  // Handle room lock/unlock
+  $('#lockButton').change(function() {
+    var action = ($(this).is(":checked")) ? 'lock':'unlock';
+    $.ajax({
+      data: {
+        action: action,
+        room: roomName
+      },
+      error: function(data) {
+        var msg = (data && data.msg) ? data.msg : locale.ERROR_OCCURED;
+        $.notify(msg, 'error');
+      },
+      success: function(data) {
+        $.notify(data.msg, 'info');
+        if (action === 'lock'){
+          $("#lockLabel").addClass('btn-danger');
+          webrtc.sendToAll('room_locked', {});
+        }
+        else{
+          $("#lockLabel").removeClass('btn-danger');
+          webrtc.sendToAll('room_unlocked', {});
+        }
+      }
+    });
   });
 
   // ScreenSharing
