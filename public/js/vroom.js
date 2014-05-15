@@ -136,6 +136,10 @@ function initVroom(room) {
             $('.unauthEl').show(500);
           }
         }
+        if (data.locked == 'yes'){
+          $('#lockLabel').addClass('btn-danger active');
+          $('#lockButton').prop('checked', true);
+        }
       }
     });
   }
@@ -456,10 +460,12 @@ function initVroom(room) {
   // A few notif on password set/unset or lock/unlock
   webrtc.on('room_locked', function(data){
     $('#lockLabel').addClass('btn-danger active');
+    $('#lockButton').prop('checked', true);
     $.notify(sprintf(locale.ROOM_LOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
   });
   webrtc.on('room_unlocked', function(data){
     $('#lockLabel').removeClass('btn-danger active');
+    $('#lockButton').prop('checked', false);
     $.notify(sprintf(locale.ROOM_UNLOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
   });
   webrtc.on('password_protect_on', function(data){
@@ -591,11 +597,11 @@ function initVroom(room) {
         if (data.status == 'success'){
           $.notify(data.msg, 'info');
           if (action === 'lock'){
-            $("#lockLabel").addClass('btn-danger');
+            $("#lockLabel").addClass('btn-danger active');
             webrtc.sendToAll('room_locked', {});
           }
           else{
-            $("#lockLabel").removeClass('btn-danger');
+            $("#lockLabel").removeClass('btn-danger active');
             webrtc.sendToAll('room_unlocked', {});
           }
         }

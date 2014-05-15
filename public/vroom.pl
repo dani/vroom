@@ -516,7 +516,6 @@ get '/(*room)' => sub {
   }
   # Now display the room page
   $self->render('join',
-    locked       => $data->{locked} ? 'checked':'',
     turnPassword => $data->{token}
   );
 };
