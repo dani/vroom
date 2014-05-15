@@ -529,27 +529,23 @@ post '/action' => sub {
            );
   }
   elsif ($action eq 'ping'){
+    my $status = 'error';
+    my $msg = 'ERROR_OCCURED';
     my $res = $self->ping_room($room);
     # Cleanup expired rooms every ~10 pings
     if ((int (rand 100)) <= 10){
       $self->delete_rooms;
     }
-    if (!$res){
-      return $self->render(
-               json => {
-                 msg    => $self->l('ERROR_OCCURED'),
-                 status => 'error'
-               },
-             );
+    if ($res){
+      $status = 'success';
+      $msg = '';
     }
-    else{
-      return $self->render(
-               json => {
-                 msg    => '',
-                 status => 'success'
-               }
-             );
-    }
+    return $self->render(
+             json => {
+               msg    => $msg,
+               status => $status
+             }
+           );
   }
   elsif ($action eq 'setPassword'){
     my $pass = $self->param('password');
