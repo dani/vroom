@@ -4,7 +4,6 @@
 # released under the MIT licence
 # Copyright 2014 Firewall Services
 
-
 use lib '../lib';
 use Mojolicious::Lite;
 use Mojolicious::Plugin::Mailer;
@@ -18,6 +17,7 @@ use Email::Sender::Transport::Sendmail;
 use Encode;
 use File::stat;
 
+# List The different components we rely on.
 # Used to generate thanks on the about template
 our $components = {
   "SimpleWebRTC" => {
@@ -59,6 +59,7 @@ our $components = {
 };
 
 app->log->level('info');
+# Read conf file, and set default values
 our $config = plugin Config => {
   file     => '../conf/vroom.conf',
   default  => {
@@ -81,22 +82,25 @@ our $config = plugin Config => {
 
 app->log->level($config->{logLevel});
 
+# Load I18N, and declare supported languages
 plugin I18N => {
   namespace => 'Vroom::I18N',
   support_url_langs => [qw(en fr)]
 };
 
-
+# Load mailer plugin with its default values
 plugin Mailer => {
   from      => $config->{emailFrom},
   transport => Email::Sender::Transport::Sendmail->new({ sendmail => $config->{sendmail}}),
 };
 
+# Wrapper arround DBI
 helper db => sub { 
   my $dbh = DBI->connect($config->{dbi}, $config->{dbUser}, $config->{dbPassword}) || die "Could not connect";
   $dbh
 };
 
+# Create a cookie based session
 helper login => sub {
   my $self = shift;
   return if $self->session('name');
@@ -106,23 +110,29 @@ helper login => sub {
   $self->app->log->info($self->session('name') . " logged in from " . $self->tx->remote_address);
 };
 
+# Expire the cookie
 helper logout => sub {
   my $self = shift;
   $self->session( expires => 1 );
   $self->app->log->info($self->session('name') . " logged out");
 };
 
+# Create a new room in the DB
+# Requires two args: the name of the room and the session name of the creator
 helper create_room => sub {
   my $self = shift;
   my ($name,$owner) = @_;
+  # Exit if the name isn't valid or already taken
   return undef if ( $self->get_room($name) || !$self->valid_room_name($name));
   my $sth = eval { $self->db->prepare("INSERT INTO rooms (name,create_timestamp,activity_timestamp,owner,token,realm) VALUES (?,?,?,?,?,?);") } || return undef;
+  # Gen a random token. Will be used as a turnPassword
   my $tp = join '' => map{('a'..'z','A'..'Z','0'..'9')[rand 62]} 0..49;
   $sth->execute($name,time(),time(),$owner,$tp,$config->{realm}) || return undef;
   $self->app->log->info("room $name created by " . $self->session('name'));
   return 1;
 };
 
+# Read room param in the DB and return a perl hash
 helper get_room => sub {
   my $self = shift;
   my ($name) = @_;
@@ -131,6 +141,8 @@ helper get_room => sub {
   return $sth->fetchall_hashref('name')->{$name};
 };
 
+# Lock/unlock a room, to prevent new participants
+# Takes two arg: room name and 1 for lock, 0 for unlock
 helper lock_room => sub {
   my $self = shift;
   my ($name,$lock) = @_;
@@ -143,6 +155,8 @@ helper lock_room => sub {
   return 1;
 };
 
+# Add a participant in the database. Used by the signaling server to check
+# if user is allowed
 helper add_participant => sub {
   my $self = shift;
   my ($name,$participant) = @_;
@@ -153,6 +167,7 @@ helper add_participant => sub {
   return 1;
 };
 
+# Remove participant from the DB
 helper remove_participant => sub {
   my $self = shift;
   my ($name,$participant) = @_;
@@ -163,6 +178,7 @@ helper remove_participant => sub {
   return 1;
 };
 
+# Get a list of participants of a room
 helper get_participants => sub {
   my $self = shift;
   my ($name) = @_;
@@ -176,6 +192,8 @@ helper get_participants => sub {
   return @res;
 };
 
+# Check if a participant has joined a room
+# Takes two args: the session name, and the room name
 helper has_joined => sub {
   my $self = shift;
   my ($session,$name) = @_;
@@ -186,6 +204,7 @@ helper has_joined => sub {
   return $ret;
 };
 
+# Purge unused rooms
 helper delete_rooms => sub {
   my $self = shift;
   $self->app->log->debug('Removing unused rooms');
@@ -204,6 +223,8 @@ helper delete_rooms => sub {
   return 1;
 };
 
+# Just update the activity timestamp
+# so we can detect unused rooms
 helper ping_room => sub {
   my $self = shift;
   my ($name) = @_;
@@ -219,10 +240,9 @@ helper valid_room_name => sub {
   my $self = shift;
   my ($name) = @_;
   my $ret = undef;
-  my $len = length $name;
   # A few names are reserved
   my @reserved = qw(about help feedback goodbye admin create localize action missing dies password);
-  if ($len > 0 && $len < 50 && $name =~ m/^[\w\-]+$/ && !grep { $name eq $_ }  @reserved){
+  if ($name =~ m/^[\w\-]{1,49}$/ && !grep { $name eq $_ }  @reserved){
     $ret = 1;
   }
   return $ret;
@@ -239,14 +259,19 @@ helper get_random_name => sub {
   return $name;
 };
 
-# return the mtime of a file
+# Return the mtime of a file
+# Used to append the timestamp to JS and CSS files
+# So client can get new version immediatly
 helper get_mtime => sub {
   my $self = shift;
   my ($file) = @_;
   return stat($file)->mtime;
 };
 
-# password protect a room
+# Password protect a room
+# Takes two args: room name and password
+# If password is undef: remove the password
+# Password is hashed and salted before being stored
 helper set_join_pass => sub {
   my $self = shift;
   my ($room,$pass) = @_;
@@ -263,11 +288,14 @@ helper set_join_pass => sub {
   return 1;
 };
 
-# Set owner password
+# Set owner password. Not needed to join a room
+# but needed to prove you're the owner, and access the configuration menu
 helper set_owner_pass => sub {
   my $self = shift;
   my ($room,$pass) = @_;
   return undef unless ( %{ $self->get_room($room) });
+  # For now, setting an owner password makes the room persistant
+  # Might be separated in the future
   if ($pass){
     my $sth = eval { $self->db->prepare("UPDATE rooms SET owner_password=?,persistent='1' where name=?;") } || return undef;
     my $pass = Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($pass)->generate;
@@ -281,15 +309,20 @@ helper set_owner_pass => sub {
   }
 };
 
+# Route / to the index page
 any '/' => 'index';
 
+# Route for the about page
 get '/about' => sub {
   my $self = shift;
   $self->stash( components => $components );
 } => 'about';
 
+# Route for the help page
 get '/help' => 'help';
 
+# Routes for feedback. One get to display the form
+# and one post to get data from it
 get '/feedback' => 'feedback';
 post '/feedback' => sub {
   my $self = shift;
@@ -309,8 +342,10 @@ post '/feedback' => sub {
   $self->redirect_to($self->url_for('feedback_thanks'));
 };
 
+# Route for the thanks after feedback form
 get 'feedback_thanks' => 'feedback_thanks';
 
+# Route for the goodbye page, displayed when someone leaves a room
 get '/goodby/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
@@ -329,8 +364,11 @@ get '/goodby/(:room)' => sub {
 post '/create' => sub {
   my $self = shift;
   $self->res->headers->cache_control('max-age=1, no-cache');
+  # No name provided ? Lets generate one
   my $name = $self->param('roomName') || $self->get_random_name();
+  # Create a session for this user, but don't set a role for now
   $self->login;
+  # Error if the name is invalid
   unless ($self->valid_room_name($name)){
     return $self->render('error',
       room => $name,
@@ -338,14 +376,18 @@ post '/create' => sub {
       err  => 'ERROR_NAME_INVALID'
     );
   }
+  # Cleanup unused rooms before trying to create it
   $self->delete_rooms;
   unless ($self->create_room($name,$self->session('name'))){
+    # If creation failed, it's most likly a name conflict
     return $self->render('error',
       room => $name,
       msg  => $self->l('ERROR_NAME_CONFLICT'),
       err  => 'ERROR_NAME_CONFLICT'
     );
   }
+  # EVerything went fine, the room is created, lets mark this user owner of the room
+  # and redirect him on it.
   else{
     $self->session($name => {role => 'owner'});
     $self->redirect_to($self->url_for('/') . $name);
@@ -365,6 +407,7 @@ post '/localize' => sub {
   return $self->render(json => $strings);
 };
 
+# Route for the password page
 get '/password/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room') || '';
@@ -379,6 +422,7 @@ get '/password/(:room)' => sub {
   $self->render('password', room => $room);
 };
 
+# Route for password submiting
 post '/password/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room') || '';
@@ -391,14 +435,17 @@ post '/password/(:room)' => sub {
     );
   }
   my $pass = $self->param('password');
+  # First check if we got the owner password, and if so, mark this user as owner
   if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
     $self->session($room => {role => 'owner'});
     $self->redirect_to($self->url_for('/') . $room);
   }
+  # Then, check if it's the join password
   elsif ($data->{join_password} && Crypt::SaltedHash->validate($data->{join_password}, $pass)){
     $self->session($room => {role => 'participant'});
     $self->redirect_to($self->url_for('/') . $room);
   }
+  # Else, it's a wrong password, display an error page
   else{
     $self->render('error',
       err  => 'WRONG_PASSWORD',
@@ -408,6 +455,7 @@ post '/password/(:room)' => sub {
   }
 };
 
+# Catch all route: if nothing else match, it's the name of a room
 get '/(*room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
@@ -416,8 +464,6 @@ get '/(*room)' => sub {
     $self->redirect_to($self->url_for('/') . lc $room);
   }
   $self->delete_rooms;
-  # Not auth yet, probably a guest
-  $self->login;
   unless ($self->valid_room_name($room)){
     return $self->render('error',
       msg  => $self->l('ERROR_NAME_INVALID'),
@@ -433,20 +479,25 @@ get '/(*room)' => sub {
       room => $room
     );
   }
-  if ($data->{'locked'} && (!$self->session($room) || $self->session($room)->{role} ne 'owner')){
+  # Create a session if not already done
+  $self->login;
+  # If the room is locked and we're not the owner, we cannot join it !
+  if ($data->{'locked'} && $self->session($room)->{role} ne 'owner'){
     return $self->render('error',
       msg => sprintf($self->l("ERROR_ROOM_s_LOCKED"), $room),
       err => 'ERROR_ROOM_s_LOCKED',
       room => $room
     );
   }
+  # Now, if the room is password protected and we're not a participant, nor the owner, lets prompt for the password
   if ($data->{join_password} && (!$self->session($room) || $self->session($room)->{role} !~ m/^participant|owner$/)){
     my $url = $self->url_for('/');
     $url .= ($url =~ m/\/$/) ? '' : '/';
     return $self->redirect_to($url . 'password/' . $room);
   }
-  # Set this peer as a simple participant if he has no role yet
+  # Set this peer as a simple participant if he has no role yet (shouldn't happen)
   $self->session($room => {role => 'participant'}) if (!$self->session($room) || !$self->session($room)->{role});
+  # Short life cookie to negociate a session with the signaling server
   $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60});
   # Add this user to the participants table
   unless($self->add_participant($room,$self->session('name'))){
@@ -456,15 +507,19 @@ get '/(*room)' => sub {
       room => $room
     );
   }
-  $self->stash(locked       => $data->{locked} ? 'checked':'',
-               turnPassword => $data->{token});
-  $self->render('join');
+  # Now display the room page
+  $self->render('join',
+    locked       => $data->{locked} ? 'checked':'',
+    turnPassword => $data->{token}
+  );
 };
 
+# Route for various room actions
 post '/action' => sub {
   my $self = shift;
   my $action = $self->param('action');
   my $room = $self->param('room') || "";
+  # Refuse any action from non members of the room
   if (!$self->session('name') || !$self->has_joined($self->session('name'), $room) || !$self->session($room) || !$self->session($room)->{role}){
     return $self->render(
              json => {
@@ -473,8 +528,18 @@ post '/action' => sub {
              },
            );
   }
+  # Sanity check on the room name
+  return $self->render(
+           json => {
+             msg    => sprintf ($self->l("ERROR_NAME_INVALID"), $room),
+             status => 'error'
+           },
+         ) unless ($self->valid_room_name($room));
+  # Push the room name to the stash, just in case
   $self->stash(room => $room);
+  # Gather room info from the DB
   my $data = $self->get_room($room);
+  # Stop here if the room doesn't exist
   return $self->render(
            json => {
              msg    => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
@@ -482,6 +547,7 @@ post '/action' => sub {
            },
          ) unless ($data);
 
+  # Handle email invitation
   if ($action eq 'invite'){
     my $rcpt    = $self->param('recipient');
     my $message = $self->param('message');
@@ -510,10 +576,12 @@ post '/action' => sub {
       }
     );
   }
+  # Handle room lock/unlock
   if ($action =~ m/(un)?lock/){
     my ($lock,$success);
     my $msg = 'ERROR_OCCURED';
     my $status = 'error';
+    # Only the owner can lock or unlock a room
     if (!$self->session($room) || $self->session($room)->{role} ne 'owner'){
       $msg = 'NOT_ALLOWED';
     }
@@ -528,6 +596,7 @@ post '/action' => sub {
              }
            );
   }
+  # Handle activity pings sent every minute by each participant
   elsif ($action eq 'ping'){
     my $status = 'error';
     my $msg = 'ERROR_OCCURED';
@@ -547,13 +616,16 @@ post '/action' => sub {
              }
            );
   }
+  # Handle password (join and owner)
   elsif ($action eq 'setPassword'){
     my $pass = $self->param('password');
     my $type = $self->param('type') || 'join';
+    # Empty password is equivalent to no password at all
     $pass = undef if ($pass && $pass eq '');
     my $res = undef;
     my $msg = 'ERROR_OCCURED';
     my $status = 'error';
+    # Once again, only the owner can do this
     if ($self->session($room)->{role} eq 'owner'){
       if ($type eq 'owner'){
         $res = $self->set_owner_pass($room,$pass);
@@ -566,6 +638,7 @@ post '/action' => sub {
         $status = 'success';
       }
     }
+    # Simple participants will get an error
     else{
       $msg = 'NOT_ALLOWED';
     }
@@ -576,11 +649,13 @@ post '/action' => sub {
              }
            );
   }
+  # A participant is trying to auth as an owner, lets check that
   elsif ($action eq 'authenticate'){
     my $pass = $self->param('password');
     my $res = undef;
     my $msg = 'ERROR_OCCURED';
     my $status = 'error';
+    # Auth succeed ? lets promote him to owner of the room
     if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
       $self->session($room, {role => 'owner'});
       $msg = 'AUTH_SUCCESS';
@@ -589,6 +664,7 @@ post '/action' => sub {
     elsif ($data->{owner_password}){
       $msg = 'WRONG_PASSWORD';
     }
+    # There's no owner password, so you cannot auth
     else{
       $msg = 'NOT_ALLOWED';
     }
@@ -599,26 +675,26 @@ post '/action' => sub {
                },
              );
   }
+  # Return your role and various info about the room
   elsif ($action eq 'getRole'){
     return $self->render(
                json => {
                  role         => $self->session($room)->{role},
                  owner_auth   => ($data->{owner_password}) ? 'yes' : 'no',
                  join_auth    => ($data->{join_password})  ? 'yes' : 'no',
+                 locked       => ($data->{locked})         ? 'yes' : 'no' ,
                  status       => 'success'
                },
              );
   }
 };
 
-# Not found (404)
-get '/missing' => sub { shift->render('does_not_exist') };
-# Exception (500)
-get '/dies' => sub { die 'Intentional error' };
-
+# use the templates defined in the config
 push @{app->renderer->paths}, '../templates/'.$config->{template};
+# Set the secret used to sign cookies
 app->secret($config->{secret});
 app->sessions->secure(1);
 app->sessions->cookie_name('vroom');
+# And start, lets VROOM !!
 app->start;
 
