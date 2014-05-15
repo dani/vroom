@@ -71,6 +71,7 @@ our $config = plugin Config => {
     realm                         => 'vroom',
     emailFrom                     => 'vroom@example.com',
     feedbackRecipient             => 'admin@example.com',
+    poweredBy                     => '<a href="http://www.firewall-services.com" target="_blank">Firewall Services</a>',
     template                      => 'default',
     inactivityTimeout             => 3600,
     persistentInactivityTimeout   => 0,

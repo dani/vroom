@@ -4,6 +4,8 @@ use base 'Vroom::I18N';
 our %Lexicon = ( 
   _AUTO => 1,
   "WELCOME"                              => "Welcome on VROOM !!",
+  "VROOM_IS_FREE_SOFTWARE"               => "VROOM is a free software, released under the MIT licence",
+  "POWERED_BY"                           => "Proudly powered by",
   "ERROR_NAME_INVALID"                   => "This name is not valid",
   "ERROR_NAME_CONFLICT"                  => "A room with this name already exists, please choose another one",
   "ERROR_ROOM_s_DOESNT_EXIST"            => "The room %s doesn't exist",

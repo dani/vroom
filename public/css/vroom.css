@@ -157,6 +157,24 @@
   text-align: justify;
   text-justify:inter-word;
 }
+html,
+body {
+  height: 100%;
+}
+#wrap {
+  min-height: 100%;
+  height: auto;
+  margin: 0 auto -50px;
+  padding: 0 0 50px;
+}
+#footerContainer{
+  height: 50px;
+  background-color: #F8F8F8;
+  border-top: solid #E7E7E7 2px;
+}
+.footer{
+  padding-top: 10px;
+}
 @media screen and (max-width: 480px) {
   body {
     font-size: 0.8em;

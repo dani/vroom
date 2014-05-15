@@ -1,4 +1,9 @@
-<div id="footer">
-</div>
+  </div>
+  <div id="footerContainer">
+    <div class="container-fluid footer">
+      <p class="text-muted pull-left"><%=l 'VROOM_IS_FREE_SOFTWARE' %></p>
+      <p class="text-muted pull-right brand"><%=l 'POWERED_BY' %> <%== $config->{poweredBy} %></p>
+    </div>
+  </div>
 </body>
 </html>
