@@ -1,6 +1,6 @@
 % title sprintf l('ROOM_s'), $room;
 %= include 'header'
-  <div id="wrap" class="container-fluid">
+  <div class="container-fluid">
     <nav id="toolbar" class="navbar navbar-default" role="toolbar">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#roomToolBar">
@@ -116,11 +116,11 @@
                   <input type="password" id="joinPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>"/>
                   <span class="input-group-btn">
                     <button id="setJoinPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>">
-                      <span class="glyphicon glyphicon-ok"
+                      <span class="glyphicon glyphicon-ok">
                       </span>
                     </button>
                     <button id="removeJoinPassButton" type="button" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'REMOVE_PASSWORD' %>">
-                      <span class="glyphicon glyphicon-remove"
+                      <span class="glyphicon glyphicon-remove">
                       </span>
                     </button>
                   </span>
@@ -138,11 +138,11 @@
                   <input type="password" id="ownerPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OWNER_PASSWORD' %>"/>
                   <span class="input-group-btn">
                     <button id="setOwnerPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OWNER_PASSWORD' %>">
-                      <span class="glyphicon glyphicon-ok"
+                      <span class="glyphicon glyphicon-ok">
                       </span>
                     </button>
                     <button id="removeOwnerPassButton" type="button" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'REMOVE_OWNER_PASSWORD' %>">
-                      <span class="glyphicon glyphicon-remove"
+                      <span class="glyphicon glyphicon-remove">
                       </span>
                     </button>
                   </span>
@@ -166,7 +166,7 @@
                   <input type="password" id="authPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>"/>
                   <span class="input-group-btn">
                     <button id="authPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>">
-                      <span class="glyphicon glyphicon-ok"
+                      <span class="glyphicon glyphicon-ok">
                       </span>
                     </button>
                   </span>
@@ -270,7 +270,7 @@
           </div>
         </div>
         <div id="mainVideo" class="col-sm-8 hidden-xs">
-        <div>
+        </div>
       </div>
     </div>
 %= include 'js_include'
