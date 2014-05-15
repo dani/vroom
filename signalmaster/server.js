@@ -47,7 +47,7 @@ io.configure(function(){
       data.cookie = cookie_reader.parse(data.headers.cookie);
       var session = data.cookie['vroomsession'];
       if (typeof session != 'string'){
-        console.log('Cookie vrommsession not found, access unauthorized');
+        console.log('Cookie vroomsession not found, access unauthorized');
         return ('error', false);
       }
       // vroomsession is base64(user:room:token) so let's decode this !
