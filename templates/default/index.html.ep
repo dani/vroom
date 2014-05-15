@@ -9,7 +9,7 @@
         <%=l 'CREATE_ROOM' %>
       </center>
     </h2>
-    <form id="createRoom" class="form-inline" action="<%= $self->url_for('/create') %>" method="post">
+    <form id="createRoom" class="form-inline" action="<%= $self->get_url('/create') %>" method="post">
       <fieldset>
         <div class="control-group">
           <div class="input-group input-group-lg">

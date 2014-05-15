@@ -15,16 +15,16 @@
       <div class="collapse navbar-collapse" id="toolBar">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a href="<%= $self->url_for('/') %>"><%=l 'HOME' %></a>
+            <a href="<%= $self->get_url('/') %>"><%=l 'HOME' %></a>
           </li>
           <li>
-            <a href="<%= $self->url_for('/help') %>"><%=l 'HELP' %></a>
+            <a href="<%= $self->get_url('/help') %>"><%=l 'HELP' %></a>
           </li>
           <li>
-            <a href="<%= $self->url_for('/about') %>"><%=l 'ABOUT' %></a>
+            <a href="<%= $self->get_url('/about') %>"><%=l 'ABOUT' %></a>
           </li>
           <li>
-            <a href="<%= $self->url_for('/feedback') %>"><%=l 'FEEDBACK' %></a>
+            <a href="<%= $self->get_url('/feedback') %>"><%=l 'FEEDBACK' %></a>
           </li>
         </ul>
       </div>

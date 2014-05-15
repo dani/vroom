@@ -6,13 +6,13 @@
     <h2<%=l 'ERROR_OCCURED' %></h2>
     <p><%= $msg %></p>
     <div class="btn-group">
-      <a class="btn btn-primary btn-lg" role="button" href="<%= $self->url_for('/') %>"><%=l 'BACK_TO_MAIN_MENU' %></a>
+      <a class="btn btn-primary btn-lg" role="button" href="<%= $self->get_url('/') %>"><%=l 'BACK_TO_MAIN_MENU' %></a>
       <% if ($err eq 'ERROR_NAME_CONFLICT'){ %>
-      <a class="btn btn-default btn-lg" role="button" href="<%= $self->url_for('/') . $room %>"><%=l 'JOIN_THIS_ROOM' %></a>
+      <a class="btn btn-default btn-lg" role="button" href="<%= $self->get_url('/') . $room %>"><%=l 'JOIN_THIS_ROOM' %></a>
       <% } elsif ($err eq 'WRONG_PASSWORD'){ %>
-      <a class="btn btn-default btn-lg" role="button" href="<%= $self->url_for('/password') . '/' . $room %>"><%=l 'TRY_AGAIN' %></a>
+      <a class="btn btn-default btn-lg" role="button" href="<%= $self->get_url('/password') . '/' . $room %>"><%=l 'TRY_AGAIN' %></a>
       <% } elsif ($err eq 'ERROR_ROOM_s_LOCKED'){ %>
-      <a class="btn btn-default btn-lg" role="button" href="<%= $self->url_for('/password') . '/' . $room %>"><%=l 'AUTH_IF_OWNER' %></a>
+      <a class="btn btn-default btn-lg" role="button" href="<%= $self->get_url('/password') . '/' . $room %>"><%=l 'AUTH_IF_OWNER' %></a>
       <% } %>
     </div>
   </div>

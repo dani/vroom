@@ -1,9 +1,5 @@
     <script type="text/javascript">
-      <%
-        my $url = $self->url_for('/');
-        $url .= ($url =~ m/\/$/) ? '' : '/';
-      %>
-      var rootUrl = '<%= $url %>';
+      var rootUrl = '<%= $self->get_url('/'); %>';
     </script>
     <% foreach my $js (qw(simplewebrtc.bundle.js jquery-1.11.1.min.js bootstrap.min.js
                           notify-combined.min.js jquery.browser.min.js sprintf.js

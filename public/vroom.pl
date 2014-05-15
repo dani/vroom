@@ -269,6 +269,14 @@ helper get_mtime => sub {
   return stat($file)->mtime;
 };
 
+# Wrapper arround url_for which adds a trailing / if needed
+helper get_url => sub {
+  my $self = shift;
+  my $url = $self->url_for(shift);
+  $url .= ($url =~ m/\/$/) ? '' : '/';
+  return $url;
+};
+
 # Password protect a room
 # Takes two args: room name and password
 # If password is undef: remove the password
@@ -340,7 +348,7 @@ post '/feedback' => sub {
       comment  => $comment
     ],
   );
-  $self->redirect_to($self->url_for('feedback_thanks'));
+  $self->redirect_to($self->get_url('feedback_thanks'));
 };
 
 # Route for the thanks after feedback form
@@ -391,7 +399,7 @@ post '/create' => sub {
   # and redirect him on it.
   else{
     $self->session($name => {role => 'owner'});
-    $self->redirect_to($self->url_for('/') . $name);
+    $self->redirect_to($self->get_url('/') . $name);
   }
 };
 
@@ -439,12 +447,12 @@ post '/password/(:room)' => sub {
   # First check if we got the owner password, and if so, mark this user as owner
   if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
     $self->session($room => {role => 'owner'});
-    $self->redirect_to($self->url_for('/') . $room);
+    $self->redirect_to($self->get_url('/') . $room);
   }
   # Then, check if it's the join password
   elsif ($data->{join_password} && Crypt::SaltedHash->validate($data->{join_password}, $pass)){
     $self->session($room => {role => 'participant'});
-    $self->redirect_to($self->url_for('/') . $room);
+    $self->redirect_to($self->get_url('/') . $room);
   }
   # Else, it's a wrong password, display an error page
   else{
@@ -462,7 +470,7 @@ get '/(*room)' => sub {
   my $room = $self->stash('room');
   # Redirect to lower case
   if ($room ne lc $room){
-    $self->redirect_to($self->url_for('/') . lc $room);
+    $self->redirect_to($self->get_url('/') . lc $room);
   }
   $self->delete_rooms;
   unless ($self->valid_room_name($room)){
@@ -492,14 +500,12 @@ get '/(*room)' => sub {
   }
   # Now, if the room is password protected and we're not a participant, nor the owner, lets prompt for the password
   if ($data->{join_password} && (!$self->session($room) || $self->session($room)->{role} !~ m/^participant|owner$/)){
-    my $url = $self->url_for('/');
-    $url .= ($url =~ m/\/$/) ? '' : '/';
-    return $self->redirect_to($url . 'password/' . $room);
+    return $self->redirect_to($self->get_url('/password') . $room);
   }
   # Set this peer as a simple participant if he has no role yet (shouldn't happen)
   $self->session($room => {role => 'participant'}) if (!$self->session($room) || !$self->session($room)->{role});
   # Short life cookie to negociate a session with the signaling server
-  $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60});
+  $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60, path => '/'});
   # Add this user to the participants table
   unless($self->add_participant($room,$self->session('name'))){
     return $self->render('error',

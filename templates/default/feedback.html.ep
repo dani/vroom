@@ -3,7 +3,7 @@
 %= include 'public_toolbar'
 <div class="container-fluid">
   <div id="feedbackFormContainer" class="well">  
-    <form role="form" action="<%=url_for('/feedback')%>" method="post">
+    <form role="form" action="<%= $self->get_url('/feedback') %>" method="post">
       <legend>
         <center>
           <%=l 'GIVE_US_YOUR_FEEDBACK' %>
