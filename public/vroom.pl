@@ -552,7 +552,8 @@ post '/action' => sub {
     my $type = $self->param('type') || 'join';
     $pass = undef if ($pass && $pass eq '');
     my $res = undef;
-    my $errmsg = 'ERROR_OCCURED';
+    my $msg = 'ERROR_OCCURED';
+    my $status = 'error';
     if ($self->session($room)->{role} eq 'owner'){
       if ($type eq 'owner'){
         $res = $self->set_owner_pass($room,$pass);
@@ -560,26 +561,20 @@ post '/action' => sub {
       else{
         $res = $self->set_join_pass($room,$pass);
       }
+      if ($res){
+        $msg = ($pass) ? $self->l('PASSWORD_SET') : $self->l('PASSWORD_REMOVED');
+        $status = 'success';
+      }
     }
     else{
-      $errmsg = 'NOT_ALLOWED';
+      $msg = 'NOT_ALLOWED';
     }
-    if (!$res){
-      return $self->render(
-               json => {
-                 msg    => $self->l($errmsg),
-                 status => 'error'
-               },
-             );
-    }
-    else{
-      return $self->render(
-               json => {
-                 msg    => ($pass) ? $self->l('PASSWORD_SET') : $self->l('PASSWORD_REMOVED'),
-                 status => 'success'
-               }
-             );
-    }
+    return $self->render(
+             json => {
+               msg    => $msg,
+               status => $status
+             }
+           );
   }
   elsif ($action eq 'authenticate'){
     my $pass = $self->param('password');
