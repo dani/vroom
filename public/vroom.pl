@@ -62,19 +62,20 @@ app->log->level('info');
 our $config = plugin Config => {
   file     => '../conf/vroom.conf',
   default  => {
-    dbi                 => 'DBI:mysql:database=vroom;host=localhost',
-    dbUser              => 'vroom',
-    dbPassword          => 'vroom',
-    signalingServer     => 'https://vroom.example.com/',
-    stunServer          => 'stun.l.google.com:19302',
-    realm               => 'vroom',
-    emailFrom           => 'vroom@example.com',
-    feedbackRecipient   => 'admin@example.com',
-    template            => 'default',
-    inactivityTimeout   => 3600,
-    logLevel            => 'info',
-    chromeExtensionId   => 'ecicdpoejfllflombfanbhfpgcimjddn',
-    sendmail            => '/sbin/sendmail'
+    dbi                           => 'DBI:mysql:database=vroom;host=localhost',
+    dbUser                        => 'vroom',
+    dbPassword                    => 'vroom',
+    signalingServer               => 'https://vroom.example.com/',
+    stunServer                    => 'stun.l.google.com:19302',
+    realm                         => 'vroom',
+    emailFrom                     => 'vroom@example.com',
+    feedbackRecipient             => 'admin@example.com',
+    template                      => 'default',
+    inactivityTimeout             => 3600,
+    persistentInactivityTimeout   => 0,
+    logLevel                      => 'info',
+    chromeExtensionId             => 'ecicdpoejfllflombfanbhfpgcimjddn',
+    sendmail                      => '/sbin/sendmail'
   }
 };
 
@@ -193,6 +194,13 @@ helper delete_rooms => sub {
     $self->db->do("DELETE FROM participants WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='0');");
     $self->db->do("DELETE FROM rooms WHERE activity_timestamp < $timeout AND persistent='0';");
   } || return undef;
+  if ($config->{persistentInactivityTimeout} && $config->{persistentInactivityTimeout} > 0){
+    eval {
+      my $timeout = time()-$config->{persistentInactivityTimeout};
+      $self->db->do("DELETE FROM participants WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='1');");
+      $self->db->do("DELETE FROM rooms WHERE activity_timestamp < $timeout AND persistent='1';");
+    } || return undef;
+  }
   return 1;
 };
 

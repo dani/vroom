@@ -20,8 +20,12 @@ template => 'default',
 secret => 'ChangeMe!',
 
 # App
-# Rooms without any activity for that long will be destroyed
+# Rooms without any activity for that long (in seconds) will be destroyed
 inactivityTimeout => 3600,
+# Inactivity timeout (in seconds) for persistent rooms
+# 0 means they are not deleted. You can use a high number
+# so that persistent rooms are kept long enough, but deleted when not used
+persistentInactivityTimeout => 0,
 logLevel => 'info',
 
 # ID of the Chrome extension for screen sharing
