@@ -542,7 +542,7 @@ post '/action' => sub {
     }
     return $self->render(
              json => {
-               msg    => $msg,
+               msg    => $self->l($msg),
                status => $status
              }
            );
