@@ -65,6 +65,7 @@ our %Lexicon = (
   "CLICK_TO_CHAT"                        => "Click to access the chat",
   "PREVENT_TO_JOIN"                      => "Prevent other participants to join this room",
   "MUTE_MIC"                             => "Turn off your microphone",
+  "NO_SOUND_DETECTED"                    => "No sound detected, please check your microphone (input level might be too low)",
   "SUSPEND_CAM"                          => "Suspend your webcam, other will see a black screen instead, but can still hear you",
   "CONFIGURE"                            => "Configuration",
   "YOU_CAN_PASSWORD_PROTECT_JOIN"        => "You can protect this room with a password",

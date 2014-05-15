@@ -70,6 +70,7 @@ our %Lexicon = (
     "CLICK_TO_CHAT"                             => "Cliquez ici pour accéder au tchat",
     "PREVENT_TO_JOIN"                           => "Empêchez d'autres participants de rejoindre ce salon",
     "MUTE_MIC"                                  => "Coupez votre micro",
+    "NO_SOUND_DETECTED"                         => "Aucun son n'a été détecté. Vérifiez votre micro (le volume de votre micro est peut-être trop faible)",
     "SUSPEND_CAM"                               => "Stoppez la webcam, les autres verront un écran noir à la place, " .
                                                    "mais pourront toujours vous entendre",
     "CONFIGURE"                                 => "Configuration",

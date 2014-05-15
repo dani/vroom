@@ -33,7 +33,8 @@ var locale = {
   OWNER_PASSWORD_REMOVED_BY_s: '',
   CANT_SEND_TO_s: '',
   SCREEN_s: '',
-  TO_INVITE_SHARE_THIS_URL: ''
+  TO_INVITE_SHARE_THIS_URL: '',
+  NO_SOUND_DETECTED: ''
 };
 
 // Localize the strings we need
@@ -83,7 +84,8 @@ function initVroom(room) {
   };
   var mainVid = false,
       chatHistory = {},
-      chatIndex = 0;
+      chatIndex = 0,
+      maxVol = -100;
 
   $('#name_local').css('background-color', peers.local.color);
 
@@ -354,6 +356,9 @@ function initVroom(room) {
 
   // Handle volume changes from our own mic
   webrtc.on('volumeChange', function (volume, treshold) {
+    if (volume > maxVol){
+      maxVol = volume;
+    }
     if (peers.local.micMuted) {
       return;
     }
@@ -949,6 +954,16 @@ function initVroom(room) {
       }
     });
   }, 60000);
+
+  // Check if sound is detected and warn if it hasn't
+  setTimeout(function (){
+    if (maxVol < -40){
+      $.notify(locale.NO_SOUND_DETECTED, {
+        className: 'error',
+        autoHide: false
+      });
+    }
+  }, 10000);
 
   window.onresize = function (){
     $('#webRTCVideo').css('max-height', maxHeight());
