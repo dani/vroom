@@ -159,12 +159,15 @@ our %Lexicon = (
                                                    "par défaut). Le créateur du salon peut définir un mot de passe de gestionaire, ce qui " .
                                                    "rendra le salon persistent: il sera conservé indéfiniement. Pour le supprimer, le " .
                                                    "gestionnaire peut simplement supprimer le mot de passe de gestion, ce qui rendra le " .
-                                                   "salon éphémère à nouveau (il sera donc supprimé si aucune activité n'est détecté).",
+                                                   "salon éphémère à nouveau (il sera donc supprimé si aucune activité n'est détecté). " .
+                                                   "Notez qu'un salon persistent peut tout de même être supprimé si il n'est pas utilisé " .
+                                                   "pendant une très longue période.",
     "RESERVE_YOUR_ROOM"                         => "Réservez votre salon",
     "HELP_RESERVE_YOUR_ROOM"                    => "Vous souhaitez réserver le nom de votre salon pour qu'il soit toujours disponible " .
                                                    "pour vous (nom de votre entreprise, nom d'un projet en cours etc.) ? Entrez simplement " .
                                                    "un mot de passe pour rejoindre le salon et un mot de passe de gestionnaire. Le " .
-                                                   "salon sera conservé aussi longtemps que le mot de passe de gestionnaire est en place.",
+                                                   "salon sera conservé aussi longtemps que le mot de passe de gestionnaire est en place ".
+                                                   "(du moment que vous vous en servez de temps en temps)",
     "ABOUT_VROOM"                               => "VROOM est un logiciel libre exploitant les dernières technologies du " .
                                                    "web vous permettant d'organiser simplement des visio conférences. Fini " .
                                                    "les galères à devoir installer un client sur le poste au dernier moment, " .

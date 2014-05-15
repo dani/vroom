@@ -145,11 +145,13 @@ our %Lexicon = (
                                             "have no activity for a long time (default is one hour). The room's creator can define " .
                                             "a manager's password, which will make the room persistent: it'll be kept indefinitly. " .
                                             "In order to delete the room, the owner can simply unset the manager's password, which " .
-                                            "will make the room ephemeral again (it'll be deleted if no activity is detected).",
+                                            "will make the room ephemeral again (it'll be deleted if no activity is detected). " .
+                                            "Note that a persistent room can still be deleted if it's not used for a very long period " .
+                                            "of time.",
   "RESERVE_YOUR_ROOM"                    => "Reserve your room",
   "HELP_RESERVE_YOUR_ROOM"               => "Want to reserve your room name so it's always available for you (company name, ongoing project " .
                                             "etc.) ? Just set both a join password and the manager password. The room will be kept " .
-                                            "as long as the manager password is set",
+                                            "as long as the manager password is set (and as long as you use it from time to time)",
   "ABOUT_VROOM"                          => "VROOM is a free spftware using the latest web technologies and lets you " .
                                             "to easily organize video meetings. Forget all the pain with installing " .
                                             "a client on your computer in a hury, compatibility issues between MAC OS " .
