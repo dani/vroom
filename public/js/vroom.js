@@ -541,7 +541,7 @@ function initVroom(room) {
         $.notify(locale.ERROR_OCCURED, 'error');
       },
       success: function(data) {
-        $('#recipient,#message').val('');
+        $('#recipient').val('');
         if (data.status == 'success'){
           $.notify(data.msg, 'success');
         }
