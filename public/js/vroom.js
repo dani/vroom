@@ -493,6 +493,7 @@ function initVroom(room) {
 
   // Handle the readyToCall event: join the room
   webrtc.once('readyToCall', function () {
+    peers.local.id = webrtc.connection.socket.sessionid;
     webrtc.joinRoom(room);
   });
 
