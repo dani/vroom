@@ -412,6 +412,9 @@ function initVroom(room) {
     // The peer sets a displayName, record this in our peers struct
     else if (data.type == 'setDisplayName'){
       var name = data.payload;
+      if (name.length > 50){
+        return;
+      }
       peer.logger.log('Received displayName ' + stringEscape(name) + ' from peer ' + peer.id);
       // Set display name under the video
       peers[peer.id].displayName = name;
@@ -603,21 +606,25 @@ function initVroom(room) {
 
   // Set your DisplayName
   $('#displayName').on('input', function() {
+    var name = $('#displayName').val();
+    if (name.length > 50){
+      return;
+    }
     // Enable chat input when you set your disaplay name
-    if ($('#displayName').val() != '' && $('#chatBox').attr('disabled')){
+    if (name != '' && $('#chatBox').attr('disabled')){
       $('#chatBox').removeAttr('disabled');
       $('#chatBox').removeAttr('placeholder');
       peers.local.hasName = true;
     }
     // And disable it again if you remove your display name
-    else if ($('#displayName').val() == ''){
+    else if (name == ''){
       $('#chatBox').attr('disabled', true);
       $('#chatBox').attr('placeholder', locale.SET_YOUR_NAME_TO_CHAT);
       peers.local.hasName = false;
     }
-    peers.local.displayName = $('#displayName').val();
+    peers.local.displayName = name;
     updateDisplayName('local');
-    webrtc.sendDirectlyToAll('vroom', 'setDisplayName', $('#displayName').val());
+    webrtc.sendDirectlyToAll('vroom', 'setDisplayName', name);
   });
 
   // Handle room lock/unlock
