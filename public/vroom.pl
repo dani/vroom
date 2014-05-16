@@ -193,6 +193,34 @@ helper get_participants => sub {
   return @res;
 };
 
+# Set the role of a peer
+helper set_peer_role => sub {
+  my $self = shift;
+  my ($room,$name,$id,$role) = @_;
+  # Check if this ID isn't the one from another peer first
+  my $sth = eval { $self->db->prepare("SELECT * FROM participants WHERE peer_id=? AND participant!=? AND id IN (SELECT id FROM rooms WHERE name=?)") } || return undef;
+  $sth->execute($id,$name,$room) || return undef;
+  return undef if ($sth->rows > 0);
+  $sth = eval { $self->db->prepare("UPDATE participants SET peer_id=?,role=? WHERE participant=? AND id IN (SELECT id FROM rooms WHERE name=?)") } || return undef;
+  $sth->execute($id,$role,$name,$room) || return undef;
+  return 1;
+};
+
+# Return the role of a peer, from it's signaling ID
+helper get_peer_role => sub {
+  my $self = shift;
+  my ($room,$id) = @_;
+  my $sth = eval { $self->db->prepare("SELECT role from participants WHERE peer_id=? AND id IN (SELECT id FROM rooms WHERE name=?)") } || return undef;
+  $sth->execute($id,$room) || return undef;
+  if ($sth->rows == 1){
+    my ($role) = $sth->fetchrow_array();
+    return $role;
+  }
+  else{
+    return 'participant';
+  }
+};
+
 # Check if a participant has joined a room
 # Takes two args: the session name, and the room name
 helper has_joined => sub {
@@ -682,16 +710,32 @@ post '/action' => sub {
              );
   }
   # Return your role and various info about the room
-  elsif ($action eq 'getRole'){
+  elsif ($action eq 'getRoomInfo'){
+    my $id = $self->param('id');
+    my $res = 'error';
+    if ($self->session($room) && $self->session($room)->{role}){
+      $res = ($self->set_peer_role($room,$self->session('name'),$id, $self->session($room)->{role})) ? 'success':$res;
+    }
     return $self->render(
                json => {
                  role         => $self->session($room)->{role},
                  owner_auth   => ($data->{owner_password}) ? 'yes' : 'no',
                  join_auth    => ($data->{join_password})  ? 'yes' : 'no',
                  locked       => ($data->{locked})         ? 'yes' : 'no' ,
-                 status       => 'success'
+                 status       => $res
                },
              );
+  }
+  # Return the role of a peer
+  elsif ($action eq 'getPeerRole'){
+    my $id = $self->param('id');
+    my $role = $self->get_peer_role($room,$id);
+    return $self->render(
+      json => {
+        role => $role,
+        status => 'success'
+      }
+    );
   }
 };
 

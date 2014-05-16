@@ -53,7 +53,18 @@
   font-family: 'Glyphicons Halflings';
   color: red;
   font-size: 2em;
-  content: "\e106";;
+  content: "\e106";
+}
+.owner{
+  position: absolute;
+  left: 20px;
+  top: 0px;
+}
+.owner:before{
+  font-family: 'Glyphicons Halflings';
+  color: red;
+  font-size: 2em;
+  content: "\e124";;
 }
 .displayName {
   text-align: center;

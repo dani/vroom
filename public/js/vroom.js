@@ -114,16 +114,21 @@ function initVroom(room) {
   }
 
   // Update our role
-  function updateRole() {
+  function updateRole(){
     $.ajax({
       data: {
-        action: 'getRole',
-        room: roomName
+        action: 'getRoomInfo',
+        room: roomName,
+        id: peers.local.id
       },
-      error: function(data) {
+      error: function(data){
         $.notify(locale.ERROR_OCCURED, 'error');
       },
-      success: function(data) { 
+      success: function(data){
+        // Notify others if our role changed
+        if (data.role != peers.local.role){
+          webrtc.sendToAll('role_change', {});
+        }
         peers.local.role = data.role;
         // Enable owner reserved menu
         if (data.role == 'owner'){
@@ -139,6 +144,29 @@ function initVroom(room) {
         if (data.locked == 'yes'){
           $('#lockLabel').addClass('btn-danger active');
           $('#lockButton').prop('checked', true);
+        }
+      }
+    });
+  }
+
+  // Get the role of a peer
+  function getPeerRole(id){
+    $.ajax({
+      data: {
+        action: 'getPeerRole',
+        room: roomName,
+        id: id
+      },
+      error: function(data){
+        $.notify(locale.ERROR_OCCURED, 'error');
+      },
+      success: function(data){
+        peers[id].role = data.role;
+        if (data.role == 'owner'){
+          $("#overlay_" + id).append('<div id="owner_' + id + '" class="owner"></div>');
+        }
+        else{
+          $('#owner_' + id).remove();
         }
       }
     });
@@ -233,6 +261,8 @@ function initVroom(room) {
         if(!peers.local.hasHistory && chatIndex == 0){
           peer.sendDirectly('vroom', 'getHistory', '');
         }
+        // Get the role of this peer
+        getPeerRole(peer.id);
       }, 3500);
     }
     $(div).attr('id', 'peer_' + id);
@@ -446,6 +476,12 @@ function initVroom(room) {
     $("#overlay_" + data.id).append('<div id="' + div + '" class="' + cl + '"></div>');
   });
 
+  // This peer claims he changed its role (usually from participant to owner)
+  // Lets check this
+  webrtc.on('role_change', function(data){
+    getPeerRole(data.id);
+  });
+
   // Handle unmute/resume
   webrtc.on('unmute', function(data){
     if (data.name === 'audio'){
@@ -494,6 +530,7 @@ function initVroom(room) {
   // Handle the readyToCall event: join the room
   webrtc.once('readyToCall', function () {
     peers.local.id = webrtc.connection.socket.sessionid;
+    updateRole();
     webrtc.joinRoom(room);
   });
 
@@ -939,9 +976,6 @@ function initVroom(room) {
       $('#chatBox').val('').prop('rows', 1);
     }
   });
-
-  // Check if we are the owner of the room
-  updateRole();
 
   // Ping the room every minutes
   // Used to detect inactive rooms

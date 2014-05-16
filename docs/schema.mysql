@@ -20,6 +20,8 @@ DROP TABLE IF EXISTS `participants`;
 CREATE TABLE `participants` (
   `id` int(11) NOT NULL,
   `participant` varchar(60) NOT NULL,
+  `peer_id` varchar(40) DEFAULT NULL,
+  `role` varchar(20) DEFAULT 'participant',
   PRIMARY KEY (`id`,`participant`)
 );
 #DROP TABLE IF EXISTS `turnusers_lt`;
