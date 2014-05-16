@@ -63,6 +63,7 @@ our %Lexicon = (
   "DISPLAY_NAME"                         => "Display name",
   "YOUR_NAME"                            => "Your name",
   "NAME_SENT_TO_OTHERS"                  => "This name will be sent to the other peers so they can identify you. You need to set your name before you can chat",
+  "DISPLAY_NAME_TOO_LONG"                => "This name is too long",
   "CHANGE_COLOR"                         => "Change your color",
   "CLICK_TO_CHAT"                        => "Click to access the chat",
   "PREVENT_TO_JOIN"                      => "Prevent other participants to join this room",

@@ -34,7 +34,8 @@ var locale = {
   CANT_SEND_TO_s: '',
   SCREEN_s: '',
   TO_INVITE_SHARE_THIS_URL: '',
-  NO_SOUND_DETECTED: ''
+  NO_SOUND_DETECTED: '',
+  DISPLAY_NAME_TOO_LONG: ''
 };
 
 // Localize the strings we need
@@ -608,7 +609,12 @@ function initVroom(room) {
   $('#displayName').on('input', function() {
     var name = $('#displayName').val();
     if (name.length > 50){
+      $('#displayName').parent().addClass('has-error');
+      $('#displayName').notify(locale.DISPLAY_NAME_TOO_LONG, 'error');
       return;
+    }
+    else{
+      $('#displayName').parent().removeClass('has-error');
     }
     // Enable chat input when you set your disaplay name
     if (name != '' && $('#chatBox').attr('disabled')){

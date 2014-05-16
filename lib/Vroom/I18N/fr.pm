@@ -68,6 +68,7 @@ our %Lexicon = (
     "YOUR_NAME"                                 => "Votre nom",
     "NAME_SENT_TO_OTHERS"                       => "Ce nom sera envoyé aux autres participants pour qu'ils puissent vous identifier. " .
                                                    "Vous devez en saisir un avant de pouvoir utiliser le tchat",
+    "DISPLAY_NAME_TOO_LONG"                     => "Ce nom est trop long",
     "CHANGE_COLOR"                              => "Changez de couleur",
     "CLICK_TO_CHAT"                             => "Cliquez ici pour accéder au tchat",
     "PREVENT_TO_JOIN"                           => "Empêchez d'autres participants de rejoindre ce salon",
