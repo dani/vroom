@@ -11,5 +11,6 @@
     </div>
   </div>
 </div>
-%=include 'footer'
+%= include 'js_include'
+%= include 'footer'
 
