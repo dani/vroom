@@ -519,8 +519,8 @@ function initVroom(room) {
       // Wait a bit for the peer to leave, but end connection if it's still here
       // after 2 seconds
       setTimeout(function(){
-        if (peers[data.id]){
-          peers[data.id].obj.end();
+        if (peers[data.payload.id]){
+          peers[data.payload.id].obj.end();
         }
       }, 2000);
     }
