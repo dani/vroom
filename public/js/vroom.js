@@ -38,15 +38,21 @@ var locale = {
   DISPLAY_NAME_TOO_LONG: '',
   s_IS_MUTING_YOU: '',
   s_IS_MUTING_s: '',
+  s_IS_UNMUTING_YOU: '',
+  s_IS_UNMUTING_s: '',
   s_IS_SUSPENDING_YOU: '',
   s_IS_SUSPENDING_s: '',
+  s_IS_RESUMING_YOU: '',
+  s_IS_RESUMING_s: '',
   s_IS_KICKING_s: '',
   MUTE_PEER: '',
   SUSPEND_PEER: '',
   KICK_PEER: '',
   YOU_HAVE_MUTED_s: '',
+  YOU_HAVE_UNMUTED_s: '',
   CANT_MUTE_OWNER: '',
   YOU_HAVE_SUSPENDED_s: '',
+  YOU_HAVE_RESUMED_s: '',
   CANT_SUSPEND_OWNER: '',
   YOU_HAVE_KICKED_s: '',
   CANT_KICK_OWNER: ''
@@ -292,6 +298,8 @@ function initVroom(room) {
       peers[peer.id] = {
         displayName: peer.id,
         color: color,
+        micMuted: false,
+        videoPaused: false,
         dc: peer.getDataChannel('vroom'),
         obj: peer
       };
@@ -437,8 +445,12 @@ function initVroom(room) {
   // Mute a peer
   function mutePeer(id){
     if (peers[id] && peers[id].role != 'owner'){
-      webrtc.sendToAll('owner_mute', {peer: id});
-      $.notify(sprintf(locale.YOU_HAVE_MUTED_s, peers[id].displayName), 'info');
+      var msg    = locale.YOU_HAVE_MUTED_s;
+      if (peers[id].micMuted){
+        msg    = locale.YOU_HAVE_UNMUTED_s
+      }
+      webrtc.sendToAll('owner_toggle_mute', {peer: id});
+      $.notify(sprintf(msg, peers[id].displayName), 'info');
     }
     else{
       $.notify(locale.CANT_MUTE_OWNER, 'error');
@@ -447,8 +459,12 @@ function initVroom(room) {
   // Puase a peer
   function pausePeer(id){
     if (peers[id] && peers[id].role != 'owner'){
-      webrtc.sendToAll('owner_pause', {peer: id});
-      $.notify(sprintf(locale.YOU_HAVE_SUSPENDED_s, peers[id].displayName), 'info');
+      var msg    = locale.YOU_HAVE_SUSPENDED_s;
+      if (peers[id].videoPaused){
+        msg    = locale.YOU_HAVE_RESUMED_s;
+      }
+      webrtc.sendToAll('owner_toggle_pause', {peer: id});
+      $.notify(sprintf(msg, peers[id].displayName), 'info');
     }
     else{
       $.notify(locale.CANT_SUSPEND_OWNER, 'error');
@@ -494,8 +510,8 @@ function initVroom(room) {
     peers.local.videoPaused = false;
   }
 
-  // An owner is muting ourself
-  webrtc.on('owner_mute', function(data){
+  // An owner is muting/unmuting ourself
+  webrtc.on('owner_toggle_mute', function(data){
     if (peers[data.id].role != 'owner'){
       return;
     }
@@ -507,26 +523,48 @@ function initVroom(room) {
         $('#muteMicButton').prop('checked', true);
         $.notify(sprintf(locale.s_IS_MUTING_YOU, peers[data.id].displayName), 'info');
       }
+      else {
+        unmuteMic();
+        $("#muteMicLabel").removeClass('btn-danger active');
+        $('#muteMicButton').prop('checked', false);
+        $.notify(sprintf(locale.s_IS_UNMUTING_YOU, peers[data.id].displayName), 'info');
+      }
     }
     else if (data.payload.peer != peers.local.id){
-      $.notify(sprintf(locale.s_IS_MUTING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+      if (peers[data.payload.peer].micMuted){
+        $.notify(sprintf(locale.s_IS_UNMUTING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+      }
+      else{
+        $.notify(sprintf(locale.s_IS_MUTING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+      }
     }
   });
-  // An owner is pausing our webcam
-  webrtc.on('owner_pause', function(data){
+  // An owner is pausing/resuming our webcam
+  webrtc.on('owner_toggle_pause', function(data){
     if (peers[data.id].role != 'owner'){
       return;
     }
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
-      if (!peers.local.paused){
+      if (!peers.local.videoPaused){
         suspendCam();
         $("#suspendCamLabel").addClass('btn-danger active');
         $('#suspendCamButton').prop('checked', true);
         $.notify(sprintf(locale.s_IS_SUSPENDING_YOU, peers[data.id].displayName), 'info');
       }
+      else{
+        resumeCam();
+        $("#suspendCamLabel").removeClass('btn-danger active');
+        $('#suspendCamButton').prop('checked', false);
+        $.notify(sprintf(locale.s_IS_RESUMING_YOU, peers[data.id].displayName), 'info');
+      }
     }
     else if (data.payload.peer != peers.local.id){
-      $.notify(sprintf(locale.s_IS_SUSPENDING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+      if (peers[data.payload.peer].videoPaused){
+        $.notify(sprintf(locale.s_IS_RESUMING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+      }
+      else{
+        $.notify(sprintf(locale.s_IS_SUSPENDING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+      }
     }
   });
   // An owner is kicking us from the room
