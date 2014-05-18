@@ -17,4 +17,5 @@
     </div>
   </div>
 </div>
+%= include 'js_common'
 %= include 'footer'

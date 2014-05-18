@@ -25,5 +25,5 @@
     </form>
   </div>
 </div>
-%= include 'js_include'
+%= include 'js_common'
 %= include 'footer'

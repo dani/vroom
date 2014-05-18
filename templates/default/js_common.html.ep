@@ -1,9 +1,7 @@
     <script type="text/javascript">
       var rootUrl = '<%= $self->get_url('/'); %>';
     </script>
-    <% foreach my $js (qw(simplewebrtc.bundle.js jquery-1.11.1.min.js bootstrap.min.js
-                          notify-combined.min.js jquery.browser.min.js sprintf.js
-                          FileSaver.js vroom.js)){
+    <% foreach my $js (qw(jquery-1.11.1.min.js bootstrap.min.js notify-combined.min.js vroom.js)){
     %>
     <script type="text/javascript" src="/js/<%= $js %>?<%= $self->get_mtime("js/$js") %>"></script>
     <% } %>

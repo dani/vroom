@@ -1,0 +1,5 @@
+    <%
+      foreach my $js (qw(simplewebrtc.bundle.js jquery.browser.min.js sprintf.js FileSaver.js)){
+    %>
+    <script type="text/javascript" src="/js/<%= $js %>?<%= $self->get_mtime("js/$js") %>"></script>
+    <% } %>
