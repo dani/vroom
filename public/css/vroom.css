@@ -118,7 +118,7 @@
 .actionKick:before{
   font-family: 'Glyphicons Halflings';
   color: red;
-  content: "\e020";
+  content: "\e083";
 }
 #chatBox {
   max-height:300px;
