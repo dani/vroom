@@ -40,7 +40,10 @@ var locale = {
   s_IS_MUTING_s: '',
   s_IS_SUSPENDING_YOU: '',
   s_IS_SUSPENDING_s: '',
-  s_IS_KICKING_s: ''
+  s_IS_KICKING_s: '',
+  MUTE_PEER: '',
+  SUSPEND_PEER: '',
+  KICK_PEER: ''
 };
 
 // Localize the strings we need
@@ -256,17 +259,17 @@ function initVroom(room) {
            class: 'actionMute btn btn-default btn-sm',
            id: 'actionMute_' + id,
            click: function() { mutePeer(id) },
-         }))
+         }).prop('title', locale.MUTE_PEER))
         .append($('<button></button>', {
            class: 'actionPause btn btn-default btn-sm',
            id: 'actionPause_' + id,
            click: function() { pausePeer(id) },
-         }))
+         }).prop('title', locale.SUSPEND_PEER))
         .append($('<button></button>', {
            class: 'actionKick btn btn-default btn-sm',
            id: 'actionKick_' + id,
            click: function() { kickPeer(id) },
-         })));
+         }).prop('title', locale.KICK_PEER)));
       $(div).hover(
         function(){
           if (peers.local.role == 'owner'){
