@@ -43,7 +43,13 @@ var locale = {
   s_IS_KICKING_s: '',
   MUTE_PEER: '',
   SUSPEND_PEER: '',
-  KICK_PEER: ''
+  KICK_PEER: '',
+  YOU_HAVE_MUTED_s: '',
+  CANT_MUTE_OWNER: '',
+  YOU_HAVE_SUSPENDED_s: '',
+  CANT_SUSPEND_OWNER: '',
+  YOU_HAVE_KICKED_s: '',
+  CANT_KICK_OWNER: ''
 };
 
 // Localize the strings we need
@@ -430,22 +436,40 @@ function initVroom(room) {
 
   // Mute a peer
   function mutePeer(id){
-    webrtc.sendToAll('owner_mute', {peer: id});
+    if (peers[id] && peers[id].role != 'owner'){
+      webrtc.sendToAll('owner_mute', {peer: id});
+      $.notify(sprintf(locale.YOU_HAVE_MUTED_s, peers[id].displayName), 'info');
+    }
+    else{
+      $.notify(locale.CANT_MUTE_OWNER, 'error');
+    }
   }
   // Puase a peer
   function pausePeer(id){
-    webrtc.sendToAll('owner_pause', {peer: id});
+    if (peers[id] && peers[id].role != 'owner'){
+      webrtc.sendToAll('owner_pause', {peer: id});
+      $.notify(sprintf(locale.YOU_HAVE_SUSPENDED_s, peers[id].displayName), 'info');
+    }
+    else{
+      $.notify(locale.CANT_SUSPEND_OWNER, 'error');
+    }
   }
   // Kick a peer
   function kickPeer(id){
-    webrtc.sendToAll('owner_kick', {peer: id});
-    // Wait a bit for the peer to leave, but end connection if it's still here
-    // after 2 seconds
-    setTimeout(function(){
-      if (peers[id]){
-        peers[id].obj.end();
-      }
-    }, 2000);
+    if (peers[id] && peers[id].role != 'owner'){
+      webrtc.sendToAll('owner_kick', {peer: id});
+      // Wait a bit for the peer to leave, but end connection if it's still here
+      // after 2 seconds
+      setTimeout(function(){
+        if (peers[id]){
+          peers[id].obj.end();
+        }
+      }, 2000);
+      $.notify(sprintf(locale.YOU_HAVE_KICKED_s, peers[id].displayName), 'info');
+    }
+    else{
+      $.notify(locale.CANT_KICK_OWNER, 'error');
+    }
   }
 
   // Mute our mic
@@ -475,7 +499,7 @@ function initVroom(room) {
     if (peers[data.id].role != 'owner'){
       return;
     }
-    if (data.payload.peer && data.payload.peer == peers.local.id){
+    if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
       // Ignore this if the remote peer isn't the owner of the room
       if (!peers.local.micMuted){
         muteMic();
@@ -484,7 +508,7 @@ function initVroom(room) {
         $.notify(sprintf(locale.s_IS_MUTING_YOU, peers[data.id].displayName), 'info');
       }
     }
-    else{
+    else if (data.payload.peer != peers.local.id){
       $.notify(sprintf(locale.s_IS_MUTING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
     }
   });
@@ -493,7 +517,7 @@ function initVroom(room) {
     if (peers[data.id].role != 'owner'){
       return;
     }
-    if (data.payload.peer && data.payload.peer == peers.local.id){
+    if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
       if (!peers.local.paused){
         suspendCam();
         $("#suspendCamLabel").addClass('btn-danger active');
@@ -501,7 +525,7 @@ function initVroom(room) {
         $.notify(sprintf(locale.s_IS_SUSPENDING_YOU, peers[data.id].displayName), 'info');
       }
     }
-    else{
+    else if (data.payload.peer != peers.local.id){
       $.notify(sprintf(locale.s_IS_SUSPENDING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
     }
   });
@@ -510,11 +534,11 @@ function initVroom(room) {
     if (peers[data.id].role != 'owner'){
       return;
     }
-    if (data.payload.peer && data.payload.peer == peers.local.id){
+    if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
       hangupCall;
       window.location.assign(rootUrl + 'kicked/' + roomName);
     }
-    else{
+    else if (data.payload.peer != peers.local.id && peers[data.payload.peer] && peers[data.payload.peer].role != 'owner'){
       $.notify(sprintf(locale.s_IS_KICKING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
       // Wait a bit for the peer to leave, but end connection if it's still here
       // after 2 seconds
