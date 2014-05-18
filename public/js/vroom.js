@@ -630,10 +630,12 @@ function initVroom(room) {
       showVolume($('#volume_' + data.id), -46);
       var div = 'mute_' + data.id,
           cl = 'muted';
+      peers[data.id].micMuted = true;
     }
     else if (data.name === 'video'){
       var div = 'pause_' + data.id,
           cl = 'paused';
+      peers[data.id].videoPaused = true;
     }
     else{
       return;
@@ -651,9 +653,11 @@ function initVroom(room) {
   webrtc.on('unmute', function(data){
     if (data.name === 'audio'){
       var el = "#mute_" + data.id;
+      peers[data.id].micMuted = false;
     }
     else { // if (data.name === 'video')
       var el = "#pause_" + data.id;
+      peers[data.id].videoPaused = false;
     }
     $(el).remove();
   });
