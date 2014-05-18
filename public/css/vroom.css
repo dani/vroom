@@ -84,6 +84,9 @@
   max-width: 700px;
   margin: auto;
 }
+#roomToolBar {
+  overflow: visible !important;
+}
 #inviteMenu {
   min-width: 400px;
 }
