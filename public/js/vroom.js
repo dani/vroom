@@ -35,7 +35,12 @@ var locale = {
   SCREEN_s: '',
   TO_INVITE_SHARE_THIS_URL: '',
   NO_SOUND_DETECTED: '',
-  DISPLAY_NAME_TOO_LONG: ''
+  DISPLAY_NAME_TOO_LONG: '',
+  s_IS_MUTING_YOU: '',
+  s_IS_MUTING_s: '',
+  s_IS_SUSPENDING_YOU: '',
+  s_IS_SUSPENDING_s: '',
+  s_IS_KICKING_s: ''
 };
 
 // Localize the strings we need
@@ -162,12 +167,14 @@ function initVroom(room) {
         $.notify(locale.ERROR_OCCURED, 'error');
       },
       success: function(data){
-        peers[id].role = data.role;
-        if (data.role == 'owner'){
-          $("#overlay_" + id).append('<div id="owner_' + id + '" class="owner"></div>');
-        }
-        else{
-          $('#owner_' + id).remove();
+        if (peers[id]){
+          peers[id].role = data.role;
+          if (data.role == 'owner'){
+            $("#overlay_" + id).append('<div id="owner_' + id + '" class="owner"></div>');
+          }
+          else{
+            $('#owner_' + id).remove();
+          }
         }
       }
     });
@@ -241,6 +248,35 @@ function initVroom(room) {
       $('<div></div>').addClass('volumeBar').attr('id', 'volume_' + id).appendTo(div);
       $('<div></div>').addClass('displayName').attr('id', 'name_' + id).appendTo(div);
       $('<div></div>').attr('id', 'overlay_' + id).appendTo(div);
+      $('<div></div>').addClass('ownerActions').attr('id', 'ownerActions_' + id).appendTo(div)
+        .append($('<div></div>',{
+           class: 'btn-group'
+         })
+        .append($('<button></button>', {
+           class: 'actionMute btn btn-default btn-sm',
+           id: 'actionMute_' + id,
+           click: function() { mutePeer(id) },
+         }))
+        .append($('<button></button>', {
+           class: 'actionPause btn btn-default btn-sm',
+           id: 'actionPause_' + id,
+           click: function() { pausePeer(id) },
+         }))
+        .append($('<button></button>', {
+           class: 'actionKick btn btn-default btn-sm',
+           id: 'actionKick_' + id,
+           click: function() { kickPeer(id) },
+         })));
+      $(div).hover(
+        function(){
+          if (peers.local.role == 'owner'){
+            $('#ownerActions_' + id).show(200);
+          }
+        },
+        function(){
+          $('#ownerActions_' + id).hide(200);
+        }
+      );
       // Create a new dataChannel
       // will be used for text chat and displayName
       var color = chooseColor();
@@ -388,6 +424,104 @@ function initVroom(room) {
     var blob = new Blob([content], {type: "text/html;charset=utf-8"});
     saveAs(blob, filename);
   }
+
+  // Mute a peer
+  function mutePeer(id){
+    webrtc.sendToAll('owner_mute', {peer: id});
+  }
+  // Puase a peer
+  function pausePeer(id){
+    webrtc.sendToAll('owner_pause', {peer: id});
+  }
+  // Kick a peer
+  function kickPeer(id){
+    webrtc.sendToAll('owner_kick', {peer: id});
+    // Wait a bit for the peer to leave, but end connection if it's still here
+    // after 2 seconds
+    setTimeout(function(){
+      if (peers[id]){
+        peers[id].obj.end();
+      }
+    }, 2000);
+  }
+
+  // Mute our mic
+  function muteMic(){
+    webrtc.mute();
+    peers.local.micMuted = true;
+    showVolume($('#localVolume'), -45);
+  }
+  // Unmute
+  function unmuteMic(){
+    webrtc.unmute();
+    peers.local.micMuted = false;
+  }
+  // Suspend or webcam
+  function suspendCam(){
+    webrtc.pauseVideo();
+    peers.local.videoPaused = true;
+  }
+  // Resume webcam
+  function resumeCam(){
+    webrtc.resumeVideo();
+    peers.local.videoPaused = false;
+  }
+
+  // An owner is muting ourself
+  webrtc.on('owner_mute', function(data){
+    if (peers[data.id].role != 'owner'){
+      return;
+    }
+    if (data.payload.peer && data.payload.peer == peers.local.id){
+      // Ignore this if the remote peer isn't the owner of the room
+      if (!peers.local.micMuted){
+        muteMic();
+        $("#muteMicLabel").addClass('btn-danger active');
+        $('#muteMicButton').prop('checked', true);
+        $.notify(sprintf(locale.s_IS_MUTING_YOU, peers[data.id].displayName), 'info');
+      }
+    }
+    else{
+      $.notify(sprintf(locale.s_IS_MUTING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+    }
+  });
+  // An owner is pausing our webcam
+  webrtc.on('owner_pause', function(data){
+    if (peers[data.id].role != 'owner'){
+      return;
+    }
+    if (data.payload.peer && data.payload.peer == peers.local.id){
+      if (!peers.local.paused){
+        suspendCam();
+        $("#suspendCamLabel").addClass('btn-danger active');
+        $('#suspendCamButton').prop('checked', true);
+        $.notify(sprintf(locale.s_IS_SUSPENDING_YOU, peers[data.id].displayName), 'info');
+      }
+    }
+    else{
+      $.notify(sprintf(locale.s_IS_SUSPENDING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+    }
+  });
+  // An owner is kicking us from the room
+  webrtc.on('owner_kick', function(data){
+    if (peers[data.id].role != 'owner'){
+      return;
+    }
+    if (data.payload.peer && data.payload.peer == peers.local.id){
+      hangupCall;
+      window.location.assign(rootUrl + 'kicked/' + roomName);
+    }
+    else{
+      $.notify(sprintf(locale.s_IS_KICKING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+      // Wait a bit for the peer to leave, but end connection if it's still here
+      // after 2 seconds
+      setTimeout(function(){
+        if (peers[data.id]){
+          peers[data.id].obj.end();
+        }
+      }, 2000);
+    }
+  });
 
   // Handle volume changes from our own mic
   webrtc.on('volumeChange', function (volume, treshold) {
@@ -558,6 +692,9 @@ function initVroom(room) {
       $('#mainVideo').html('');
       mainVid = false;
     }
+    if (peer && peers[peer.id]){
+      delete peers[peer.id];
+    }
   });
 
   // Error sending something through dataChannel
@@ -709,15 +846,12 @@ function initVroom(room) {
   $('#muteMicButton').change(function() {
     var action = ($(this).is(":checked")) ? 'mute':'unmute';
     if (action === 'mute'){
-      webrtc.mute();
-      peers.local.micMuted = true;
-      showVolume($('#localVolume'), -45);
+      muteMic();
       $("#muteMicLabel").addClass('btn-danger');
       $.notify(locale.MIC_MUTED, 'info');
     }
     else{
-      webrtc.unmute();
-      peers.local.micMuted = false;
+      unmuteMic();
       $("#muteMicLabel").removeClass('btn-danger');
       $.notify(locale.MIC_UNMUTED, 'info');
     }
@@ -727,14 +861,12 @@ function initVroom(room) {
   $('#suspendCamButton').change(function() {
     var action = ($(this).is(":checked")) ? 'pause':'resume';
     if (action === 'pause'){
-      webrtc.pauseVideo();
-      peers.local.videoPaused = true;
+      suspendCam();
       $("#suspendCamLabel").addClass('btn-danger');
       $.notify(locale.CAM_SUSPENDED, 'info');
     }
     else{
-      webrtc.resumeVideo();
-      peers.local.videoPaused = false;
+      resumeCam();
       $("#suspendCamLabel").removeClass('btn-danger');
       $.notify(locale.CAM_RESUMED, 'info');
     }

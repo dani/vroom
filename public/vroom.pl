@@ -270,7 +270,7 @@ helper valid_room_name => sub {
   my ($name) = @_;
   my $ret = undef;
   # A few names are reserved
-  my @reserved = qw(about help feedback goodbye admin create localize action missing dies password);
+  my @reserved = qw(about help feedback goodbye admin create localize action missing dies password kicked);
   if ($name =~ m/^[\w\-]{1,49}$/ && !grep { $name eq $_ }  @reserved){
     $ret = 1;
   }
@@ -396,6 +396,22 @@ get '/goodby/(:room)' => sub {
   $self->remove_participant($room,$self->session('name'));
   $self->logout;
 } => 'goodby';
+
+# Route for the kicked page
+# Should be merged with the goodby route
+get '/kicked/(:room)' => sub {
+  my $self = shift;
+  my $room = $self->stash('room');
+  if (!$self->get_room($room)){
+    return $self->render('error',
+      err  => 'ERROR_ROOM_s_DOESNT_EXIST',
+      msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
+      room => $room
+    );
+  }
+  $self->remove_participant($room,$self->session('name'));
+  $self->logout;
+} => 'kicked';
 
 # This handler creates a new room
 post '/create' => sub {

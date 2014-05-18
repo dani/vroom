@@ -99,6 +99,27 @@
 .unauthEl{
   display: none;
 }
+.ownerActions {
+  position: absolute;
+  left: 15px;
+  top: 0px;  
+  display: none;
+}
+.actionMute:before{
+  font-family: 'Glyphicons Halflings';
+  color: red;
+  content: "\e036";
+}
+.actionPause:before{
+  font-family: 'Glyphicons Halflings';
+  color: red;
+  content: "\e106";
+}
+.actionKick:before{
+  font-family: 'Glyphicons Halflings';
+  color: red;
+  content: "\e020";
+}
 #chatBox {
   max-height:300px;
   resize:none;
