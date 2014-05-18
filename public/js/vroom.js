@@ -186,6 +186,7 @@ function initVroom(room) {
           peers[id].role = data.role;
           if (data.role == 'owner'){
             $("#overlay_" + id).append('<div id="owner_' + id + '" class="owner"></div>');
+            $("#ownerActions_" + id).remove();
           }
           else{
             $('#owner_' + id).remove();
