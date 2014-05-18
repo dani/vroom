@@ -259,7 +259,8 @@ function initVroom(room) {
     // add the volume bar and the mute/pause overlay
     else{
       id = peer.id;
-      // Create 3 divs which will contains the volume bar, the displayName and the muted/paused el (overlay)
+      // Create 4 divs which will contains the volume bar, the displayName, the muted/paused and
+      // the owner actions (overlay)
       $('<div></div>').addClass('volumeBar').attr('id', 'volume_' + id).appendTo(div);
       $('<div></div>').addClass('displayName').attr('id', 'name_' + id).appendTo(div);
       $('<div></div>').attr('id', 'overlay_' + id).appendTo(div);
