@@ -6,7 +6,7 @@ Copyright 2014 Firewall Services
 
 
 // Default notifications
-$.notify.defaults( { globalPosition: "bottom left" } );
+$.notify.defaults( { globalPosition: 'bottom left' } );
 // Enable tooltip on required elements
 $('.help').tooltip({container: 'body'});
 
@@ -79,7 +79,7 @@ function inviteUrlPopup(){
 
 // set the height of the thumbnails so they are always equals
 function setPanelHeight() {
-  $(".panelIndex").height(Math.max.apply(null, $(".panelIndex").map(function() { return $(this).height(); })));
+  $('.panelIndex').height(Math.max.apply(null, $('.panelIndex').map(function() { return $(this).height(); })));
 }
 
 setTimeout(function(){
@@ -118,7 +118,7 @@ function initVroom(room) {
 
   // Screen sharing is only suported on chrome > 26
   if ( !$.browser.webkit || $.browser.versionNumber < 26 ) {
-    $("#shareScreenLabel").addClass('disabled');
+    $('#shareScreenLabel').addClass('disabled');
   }
 
   // If browser doesn't support webRTC or dataChannels
@@ -185,8 +185,8 @@ function initVroom(room) {
         if (peers[id]){
           peers[id].role = data.role;
           if (data.role == 'owner'){
-            $("#overlay_" + id).append('<div id="owner_' + id + '" class="owner"></div>');
-            $("#ownerActions_" + id).remove();
+            $('#overlay_' + id).append('<div id="owner_' + id + '" class="owner"></div>');
+            $('#ownerActions_' + id).remove();
           }
           else{
             $('#owner_' + id).remove();
@@ -241,7 +241,7 @@ function initVroom(room) {
     playSound('join.mp3');
     // The main div of this new video
     // will contain the video plus all other info like displayName, overlay and volume bar
-    var div = $('<div></div>').addClass('col-xs-6 col-sm-12 col-lg-6 previewContainer').append(video).appendTo("#webRTCVideo");
+    var div = $('<div></div>').addClass('col-xs-6 col-sm-12 col-lg-6 previewContainer').append(video).appendTo('#webRTCVideo');
     // Peer isn't defined ? it's our own local screen
     var id;
     if (!peer){
@@ -323,7 +323,7 @@ function initVroom(room) {
     }
     $(div).attr('id', 'peer_' + id);
     // Disable context menu on the video
-    $(video).bind("contextmenu", function(){
+    $(video).bind('contextmenu', function(){
       return false;
     });
     // And go full screen on double click
@@ -341,7 +341,7 @@ function initVroom(room) {
       else {
         $('#mainVideo').html($(video).clone().dblclick(function() {
           fullScreen(this);
-          }).css('max-height', maxHeight()).bind("contextmenu", function(){ return false; }));
+          }).css('max-height', maxHeight()).bind('contextmenu', function(){ return false; }));
         $('.selected').removeClass('selected');
         $(this).addClass('selected');
         mainVid = id;
@@ -440,7 +440,7 @@ function initVroom(room) {
 
   // Save content to a file
   function downloadContent(filename, content){
-    var blob = new Blob([content], {type: "text/html;charset=utf-8"});
+    var blob = new Blob([content], {type: 'text/html;charset=utf-8'});
     saveAs(blob, filename);
   }
 
@@ -458,7 +458,7 @@ function initVroom(room) {
       $.notify(locale.CANT_MUTE_OWNER, 'error');
     }
   }
-  // Puase a peer
+  // Pause a peer
   function pausePeer(id){
     if (peers[id] && peers[id].role != 'owner'){
       var msg    = locale.YOU_HAVE_SUSPENDED_s;
@@ -521,13 +521,13 @@ function initVroom(room) {
       // Ignore this if the remote peer isn't the owner of the room
       if (!peers.local.micMuted){
         muteMic();
-        $("#muteMicLabel").addClass('btn-danger active');
+        $('#muteMicLabel').addClass('btn-danger active');
         $('#muteMicButton').prop('checked', true);
         $.notify(sprintf(locale.s_IS_MUTING_YOU, peers[data.id].displayName), 'info');
       }
       else {
         unmuteMic();
-        $("#muteMicLabel").removeClass('btn-danger active');
+        $('#muteMicLabel').removeClass('btn-danger active');
         $('#muteMicButton').prop('checked', false);
         $.notify(sprintf(locale.s_IS_UNMUTING_YOU, peers[data.id].displayName), 'info');
       }
@@ -549,13 +549,13 @@ function initVroom(room) {
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
       if (!peers.local.videoPaused){
         suspendCam();
-        $("#suspendCamLabel").addClass('btn-danger active');
+        $('#suspendCamLabel').addClass('btn-danger active');
         $('#suspendCamButton').prop('checked', true);
         $.notify(sprintf(locale.s_IS_SUSPENDING_YOU, peers[data.id].displayName), 'info');
       }
       else{
         resumeCam();
-        $("#suspendCamLabel").removeClass('btn-danger active');
+        $('#suspendCamLabel').removeClass('btn-danger active');
         $('#suspendCamButton').prop('checked', false);
         $.notify(sprintf(locale.s_IS_RESUMING_YOU, peers[data.id].displayName), 'info');
       }
@@ -680,7 +680,7 @@ function initVroom(room) {
     else{
       return;
     }
-    $("#overlay_" + data.id).append('<div id="' + div + '" class="' + cl + '"></div>');
+    $('#overlay_' + data.id).append('<div id="' + div + '" class="' + cl + '"></div>');
   });
 
   // This peer claims he changed its role (usually from participant to owner)
@@ -692,11 +692,11 @@ function initVroom(room) {
   // Handle unmute/resume
   webrtc.on('unmute', function(data){
     if (data.name === 'audio'){
-      var el = "#mute_" + data.id;
+      var el = '#mute_' + data.id;
       peers[data.id].micMuted = false;
     }
     else { // if (data.name === 'video')
-      var el = "#pause_" + data.id;
+      var el = '#pause_' + data.id;
       peers[data.id].videoPaused = false;
     }
     $(el).remove();
@@ -778,7 +778,7 @@ function initVroom(room) {
 
   // Do not close the dropdown menu when filling the email recipient
   // and in other dropdown menus
-  $(".dropdown-menu").on("click", "li", function(e){
+  $('.dropdown-menu').on('click', 'li', function(e){
     e.stopPropagation();
   });
   // Handle Email Invitation
@@ -856,11 +856,11 @@ function initVroom(room) {
         if (data.status == 'success'){
           $.notify(data.msg, 'info');
           if (action === 'lock'){
-            $("#lockLabel").addClass('btn-danger active');
+            $('#lockLabel').addClass('btn-danger active');
             webrtc.sendToAll('room_locked', {});
           }
           else{
-            $("#lockLabel").removeClass('btn-danger active');
+            $('#lockLabel').removeClass('btn-danger active');
             webrtc.sendToAll('room_unlocked', {});
           }
         }
@@ -907,7 +907,7 @@ function initVroom(room) {
     }
     else{
       webrtc.stopScreenShare();
-      $("#shareScreenLabel").removeClass('btn-danger');
+      $('#shareScreenLabel').removeClass('btn-danger');
       $.notify(locale.SCREEN_UNSHARED, 'success');
       peers.local.screenShared = false;
     }
@@ -915,30 +915,30 @@ function initVroom(room) {
 
   // Handle microphone mute/unmute
   $('#muteMicButton').change(function() {
-    var action = ($(this).is(":checked")) ? 'mute':'unmute';
+    var action = ($(this).is(':checked')) ? 'mute':'unmute';
     if (action === 'mute'){
       muteMic();
-      $("#muteMicLabel").addClass('btn-danger');
+      $('#muteMicLabel').addClass('btn-danger');
       $.notify(locale.MIC_MUTED, 'info');
     }
     else{
       unmuteMic();
-      $("#muteMicLabel").removeClass('btn-danger');
+      $('#muteMicLabel').removeClass('btn-danger');
       $.notify(locale.MIC_UNMUTED, 'info');
     }
   });
 
   // Suspend the webcam
   $('#suspendCamButton').change(function() {
-    var action = ($(this).is(":checked")) ? 'pause':'resume';
+    var action = ($(this).is(':checked')) ? 'pause':'resume';
     if (action === 'pause'){
       suspendCam();
-      $("#suspendCamLabel").addClass('btn-danger');
+      $('#suspendCamLabel').addClass('btn-danger');
       $.notify(locale.CAM_SUSPENDED, 'info');
     }
     else{
       resumeCam();
-      $("#suspendCamLabel").removeClass('btn-danger');
+      $('#suspendCamLabel').removeClass('btn-danger');
       $.notify(locale.CAM_RESUMED, 'info');
     }
   });
@@ -1121,10 +1121,10 @@ function initVroom(room) {
   window.onunload = window.onbeforeunload = hangupCall;
 
   // Go fullscreen on double click
-  $("#webRTCVideoLocal").dblclick(function() {
+  $('#webRTCVideoLocal').dblclick(function() {
     fullScreen(this);
   });
-  $("#webRTCVideoLocal").click(function() {
+  $('#webRTCVideoLocal').click(function() {
     // If this video is already the main one, remove the main
     if ($(this).hasClass('selected')){
       $('#mainVideo').html('');
@@ -1161,10 +1161,10 @@ function initVroom(room) {
     var h = parseInt($(this).css('height'));
     var mh = parseInt($(this).css('max-height'));
     // Scrollbar, we need to add a row
-    if ($(this).prop("scrollHeight") > $(this).prop('clientHeight') && h < mh){
+    if ($(this).prop('scrollHeight') > $(this).prop('clientHeight') && h < mh){
       // Do a loop so that we can adapt to copy/pastes of several lines
       // But do not add more than 10 rows at a time
-      for (var i = 0; $(this).prop("scrollHeight") > $(this).prop('clientHeight') && h < mh && i<10; i++){
+      for (var i = 0; $(this).prop('scrollHeight') > $(this).prop('clientHeight') && h < mh && i<10; i++){
         $(this).prop('rows', $(this).prop('rows')+1);
       }
     }
