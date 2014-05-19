@@ -210,7 +210,7 @@ function initVroom(room) {
 
   // Just play a sound  
   function playSound(sound){
-    var audio = new Audio('/snd/'+sound);
+    var audio = new Audio(rootUrl + 'snd/' + sound);
     audio.play();
   }
 
