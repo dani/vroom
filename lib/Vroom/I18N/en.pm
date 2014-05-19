@@ -89,6 +89,7 @@ our %Lexicon = (
   "A_PASSWORD_IS_NEEDED_TO_JOIN"         => "You must provide a password to join this room",
   "TRY_AGAIN"                            => "Try again",
   "AUTH_IF_OWNER"                        => "Authenticate if you are the room owner",
+  "CREATE_THIS_ROOM"                     => "Create this room",
   "LOGOUT"                               => "Leave the room",
   "SET_YOUR_NAME_TO_CHAT"                => "You need to set your name to be able to chat",
   "SEND_MESSAGE"                         => "Send the message",
