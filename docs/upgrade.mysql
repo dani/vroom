@@ -1,3 +1,8 @@
 ALTER TABLE `rooms` ADD COLUMN `owner_password` varchar(160) DEFAULT NULL AFTER `join_password`;
 ALTER TABLE `participants` ADD COLUMN `peer_id` varchar(40) DEFAULT NULL AFTER `participant`;
 ALTER TABLE `participants` ADD COLUMN `role` varchar(20) DEFAULT 'participant' AFTER `peer_id`;
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id` int(11) NOT NULL,
+  `email` varchar(254),
+  PRIMARY KEY (`id`,`email`)
+);

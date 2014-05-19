@@ -24,6 +24,12 @@ CREATE TABLE `participants` (
   `role` varchar(20) DEFAULT 'participant',
   PRIMARY KEY (`id`,`participant`)
 );
+DROP TABLE IF EXISTS `notifications`;
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `email` varchar(254),
+  PRIMARY KEY (`id`,`email`)
+);
 #DROP TABLE IF EXISTS `turnusers_lt`;
 #CREATE TABLE `turnusers_lt` (
 #  name varchar(512) PRIMARY KEY,
