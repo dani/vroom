@@ -683,23 +683,26 @@ function initVroom(room) {
     $('#overlay_' + data.id).append('<div id="' + div + '" class="' + cl + '"></div>');
   });
 
-  // This peer claims he changed its role (usually from participant to owner)
-  // Lets check this
-  webrtc.on('role_change', function(data){
-    getPeerRole(data.id);
-  });
-
   // Handle unmute/resume
   webrtc.on('unmute', function(data){
     if (data.name === 'audio'){
       var el = '#mute_' + data.id;
       peers[data.id].micMuted = false;
     }
-    else { // if (data.name === 'video')
+    else if (data.name === 'video'){
       var el = '#pause_' + data.id;
       peers[data.id].videoPaused = false;
     }
+    else{
+      return;
+    }
     $(el).remove();
+  });
+
+  // This peer claims he changed its role (usually from participant to owner)
+  // Lets check this
+  webrtc.on('role_change', function(data){
+    getPeerRole(data.id);
   });
 
   // A few notif on password set/unset or lock/unlock
