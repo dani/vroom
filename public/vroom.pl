@@ -535,7 +535,7 @@ get '/(*room)' => sub {
   # Create a session if not already done
   $self->login;
   # If the room is locked and we're not the owner, we cannot join it !
-  if ($data->{'locked'} && $self->session($room)->{role} ne 'owner'){
+  if ($data->{'locked'} && (!$self->session($room) || !$self->session($room)->{role} || $self->session($room)->{role} ne 'owner')){
     return $self->render('error',
       msg => sprintf($self->l("ERROR_ROOM_s_LOCKED"), $room),
       err => 'ERROR_ROOM_s_LOCKED',
