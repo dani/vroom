@@ -594,6 +594,7 @@ post '/action' => sub {
   return $self->render(
            json => {
              msg    => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
+             err    => 'ERROR_ROOM_s_DOESNT_EXIST',
              status => 'error'
            },
          ) unless ($data);
