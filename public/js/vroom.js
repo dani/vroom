@@ -161,6 +161,9 @@ function initVroom(room) {
           if (data.owner_auth == 'yes'){
             $('.unauthEl').show(500);
           }
+          else{
+            $('.unauthEl').hide(500);
+          }
         }
         if (data.locked == 'yes'){
           $('#lockLabel').addClass('btn-danger active');
