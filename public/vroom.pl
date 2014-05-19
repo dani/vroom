@@ -539,7 +539,8 @@ get '/(*room)' => sub {
     return $self->render('error',
       msg => sprintf($self->l("ERROR_ROOM_s_LOCKED"), $room),
       err => 'ERROR_ROOM_s_LOCKED',
-      room => $room
+      room => $room,
+      ownerPass => ($data->{owner_password}) ? '1':'0'
     );
   }
   # Now, if the room is password protected and we're not a participant, nor the owner, lets prompt for the password
