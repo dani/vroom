@@ -34,37 +34,54 @@
   </div>
   <br/><br/>
   <div class="row">
-    <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-body panelIndex">
-          <center>
-            <img src="/img/lock.png" alt="Secure">
-            <h1><%=l 'SECURE' %></h1>
-          </center>
-          <p><%=l "P2P_COMMUNICATION" %></p>
+    <div id="carouselIndexContainer" class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+      <div id="carouselIndex" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#carouselIndex" data-slide-to="0" class="active"></li>
+          <li data-target="#carouselIndex" data-slide-to="1"></li>
+          <li data-target="#carouselIndex" data-slide-to="2"></li>
+        </ol>
+        <div id="carouselIndexContent" class="carousel-inner">
+          <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
+            <img class="img-responsive carouselLogo" src="/img/lock.png" alt="Secure">
+            <p>
+              <%=l 'P2P_COMMUNICATION' %>
+            </p>
+            <div class="carousel-caption carouselIndexCaption">
+              <h1>
+                <%=l 'SECURE' %>
+              </h1>
+            </div>
+          </div>
+          <div class="item active carouselIndexItem col-xs-10 col-xs-offset-1">
+            <img class="img-responsive carouselLogo" src="/img/universal.png" alt="Universal">
+            <p>
+              <%=l 'MODERN_BROWSERS' %>
+            </p>
+            <div class="carousel-caption carouselIndexCaption">
+              <h1>
+                <%=l 'WORKS_EVERYWHERE' %>
+              </h1>
+            </div>
+          </div>
+          <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
+            <img class="img-responsive carouselLogo" src="/img/share.png" alt="Multi User">
+            <p>
+              <%=l 'THE_LIMIT_IS_YOUR_PIPE' %>
+            </p>
+            <div class="carousel-caption carouselIndexCaption">
+              <h1>
+                <%=l 'MULTI_USER' %>
+              </h1>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-body panelIndex">
-          <center>
-            <img src="/img/universal.png" alt="Universal">
-            <h1><%=l 'WORKS_EVERYWHERE' %></h1>
-          </center>
-          <p><%=l "MODERN_BROWSERS" %></p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-body panelIndex">
-          <center>
-            <img src="/img/share.png" alt="Peer to peer">
-            <h1><%=l 'MULTI_USER' %></h1>
-          </center>
-          <p><%=l "THE_LIMIT_IS_YOUR_PIPE" %></p>
-        </div>
+        <a class="left carousel-control" href="#carouselIndex" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#carouselIndex" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
       </div>
     </div>
   </div>

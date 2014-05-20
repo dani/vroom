@@ -192,9 +192,20 @@
   text-align: justify;
   text-justify:inter-word;
 }
+.carouselLogo {
+  margin: auto;
+  padding: 60px;
+}
+.carouselIndexItem {
+  height: 500px !important;
+  text-align: center;
+}
+.carouselIndexCaption {
+  color: grey;
+}
 .modal-body {
   text-align: justify;
-  text-justify:inter-word;
+  text-justify: inter-word;
 }
 html,
 body {
