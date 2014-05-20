@@ -655,7 +655,12 @@ post '/action' => sub {
   if ($action eq 'invite'){
     my $rcpt    = $self->param('recipient');
     my $message = $self->param('message');
-    $self->email(
+    my $status  = 'error';
+    my $msg     = $self->l('ERROR_OCCURED');
+    if ($rcpt !~ m/\S+@\S+\.\S+$/){
+      $msg = $self->l('ERROR_MAIL_INVALID');
+    }
+    elsif ($self->email(
       header => [
         Subject => encode("MIME-Header", $self->l("EMAIL_INVITATION")),
         To => $rcpt
@@ -665,18 +670,15 @@ post '/action' => sub {
         room     => $room,
         message  => $message
       ],
-    ) ||
-    return $self->render(
-      json => {
-        msg    => $self->l('ERROR_OCCURED'),
-        status => 'error'
-      },
-    );
-    $self->app->log->info($self->session('name') . " sent an invitation for room $room to $rcpt");
+    )){
+      $self->app->log->info($self->session('name') . " sent an invitation for room $room to $rcpt");
+      $status = 'success';
+      $msg = sprintf($self->l('INVITE_SENT_TO_s'), $rcpt);
+    }
     $self->render(
       json => {
-        msg    => sprintf($self->l('INVITE_SENT_TO_s'), $rcpt),
-        status => 'success'
+        msg    => $msg,
+        status => $status
       }
     );
   }
