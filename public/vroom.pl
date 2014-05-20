@@ -354,7 +354,7 @@ helper add_notification => sub {
   my ($room,$email) = @_;
   my $data = $self->get_room($room);
   return undef unless ($data);
-  my $sth = eval { $self->db->prepare("INSERT IGNORE INTO notifications (id,email) VALUES (?,?)") } || return undef;
+  my $sth = eval { $self->db->prepare("INSERT INTO notifications (id,email) VALUES (?,?)") } || return undef;
   $sth->execute($data->{id},$email) || return undef;
   return 1;
 };
