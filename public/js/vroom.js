@@ -160,7 +160,7 @@ function initVroom(room) {
   }
 
   // Update our role
-  function updateRole(){
+  function getRoomInfo(){
     $.ajax({
       data: {
         action: 'getRoomInfo',
@@ -766,7 +766,7 @@ function initVroom(room) {
       $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
     }
     else{
-      updateRole();
+      getRoomInfo();
     }
   });
   webrtc.on('owner_password_removed', function(data){
@@ -774,14 +774,14 @@ function initVroom(room) {
       $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
     }
     else{
-      updateRole();
+      getRoomInfo();
     }
   });
 
   // Handle the readyToCall event: join the room
   webrtc.once('readyToCall', function () {
     peers.local.id = webrtc.connection.socket.sessionid;
-    updateRole();
+    getRoomInfo();
     webrtc.joinRoom(room);
   });
 
@@ -1009,7 +1009,7 @@ function initVroom(room) {
       success: function(data) {
         $('#authPass').val('');
         if (data.status == 'success'){
-          updateRole();
+          getRoomInfo();
           $.notify(data.msg, 'success');
         }
         else{
