@@ -78,6 +78,16 @@ function inviteUrlPopup(){
   return false;
 }
 
+// Add a new email address to be notified whn someone joins
+function addNotifiedEmail(email){
+  var id = email.replace('@', '_AT_').replace('.', '_DOT_');
+  $('<li></li>').html(email + '  <a href="javascript:void(0);" onclick="removeNotifiedEmail(\'' + email + '\');" title="' + locale.REMOVE_THIS_ADDRESS + '">' +
+                              '    <span class="glyphicon glyphicon-remove-circle"></span>' +
+                              '  </a>')
+   .attr('id', 'emailNotification_' + id)
+   .appendTo('#emailNotificationList');
+}
+
 // Remove the address from the list
 function removeNotifiedEmail(email){
   var id = email.replace('@', '_AT_').replace('.', '_DOT_');
@@ -104,9 +114,90 @@ function removeNotifiedEmail(email){
   });
 }
 
+// Escape entities
+function stringEscape(string){
+  string = string.replace(/[\u00A0-\u99999<>\&]/gim, function(i) {
+    return '&#' + i.charCodeAt(0) + ';';
+  });
+  return string;
+}
+
+// Select a color (randomly) from this list, used for text chat
+function chooseColor(){
+  // Shamelessly taken from http://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
+  var colors = [
+    '#B1C7FD', '#DDFDB1', '#FDB1F3', '#B1FDF0', '#FDDAB1', '#C4B1FD', '#B4FDB1', '#FDB1CA',
+    '#B1E1FD', '#F7FDB1', '#EDB1FD', '#B1FDD7', '#FDC1B1', '#B1B7FD', '#CEFDB1', '#FDB1E4',
+    '#B1FAFD', '#FDEAB1', '#D4B1FD', '#B1FDBD', '#FDB1BB', '#B1D1FD', '#E7FDB1', '#FDB1FD',
+    '#B1FDE7', '#B1FDE7'
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
 // set the height of the thumbnails so they are always equals
 function setPanelHeight() {
   $('.panelIndex').height(Math.max.apply(null, $('.panelIndex').map(function() { return $(this).height(); })));
+}
+
+// Just play a sound
+function playSound(sound){
+  var audio = new Audio(rootUrl + 'snd/' + sound);
+  audio.play();
+}
+
+// Request full screen
+function fullScreen(el){
+  if (el.requestFullScreen){
+    el.requestFullScreen();
+  }
+  else if (el.webkitRequestFullScreen){
+    el.webkitRequestFullScreen();
+  }
+  else if (el.mozRequestFullScreen){
+    el.mozRequestFullScreen();
+  }
+}
+
+// Linkify urls
+// Taken from http://rickyrosario.com/blog/converting-a-url-into-a-link-in-javascript-linkify-function/
+function linkify(text){
+  if (text) {
+    text = text.replace(
+      /((https?\:\/\/)|(www\.))(\S+)(\w{2,4})(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi,
+      function(url){
+        var full_url = url;
+        if (!full_url.match('^https?:\/\/')) {
+          full_url = 'http://' + full_url;
+        }
+        return '<a href="' + full_url + '" target="_blank">' + url + '</a>';
+      }
+    );
+  }
+  return text;
+}
+
+// Save content to a file
+function downloadContent(filename, content){
+  var blob = new Blob([content], {type: 'text/html;charset=utf-8'});
+  saveAs(blob, filename);
+}
+
+// Return current time formatted as XX:XX:XX
+function getTime(){
+  var d = new Date();
+  var hours   = d.getHours().toString(),
+      minutes = d.getMinutes().toString(),
+      seconds = d.getSeconds().toString();
+  hours   = (hours.length < 2)   ? '0' + hours:hours;
+  minutes = (minutes.length < 2) ? '0' + minutes:minutes;
+  seconds = (seconds.length < 2) ? '0' + seconds:seconds;
+  return hours + ':' + minutes + ':' + seconds;
+}
+
+// get max height for the main video and the preview div
+function maxHeight(){
+  // Which is the window height, minus toolbar, and a margin of 25px
+  return $(window).height()-$('#toolbar').height()-25;
 }
 
 setTimeout(function(){
@@ -151,14 +242,6 @@ function initVroom(room) {
   // If browser doesn't support webRTC or dataChannels
   if (!webrtc.capabilities.support || !webrtc.capabilities.dataChannel){
     $('#noWebrtcSupport').modal('show');
-  }
-
-  // Escape entities
-  function stringEscape(string){
-    string = string.replace(/[\u00A0-\u99999<>\&]/gim, function(i) {
-      return '&#' + i.charCodeAt(0) + ';';
-    });
-    return string;
   }
 
   // Update our role
@@ -228,40 +311,6 @@ function initVroom(room) {
         }
       }
     });
-  }
-
-  // Select a color (randomly) from this list, used for text chat
-  function chooseColor(){
-    // Shamelessly taken from http://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
-    var colors = [
-      '#B1C7FD', '#DDFDB1', '#FDB1F3', '#B1FDF0', '#FDDAB1', '#C4B1FD', '#B4FDB1', '#FDB1CA',
-      '#B1E1FD', '#F7FDB1', '#EDB1FD', '#B1FDD7', '#FDC1B1', '#B1B7FD', '#CEFDB1', '#FDB1E4',
-      '#B1FAFD', '#FDEAB1', '#D4B1FD', '#B1FDBD', '#FDB1BB', '#B1D1FD', '#E7FDB1', '#FDB1FD',
-      '#B1FDE7', '#B1FDE7'
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  }
-
-  // Just play a sound  
-  function playSound(sound){
-    var audio = new Audio(rootUrl + 'snd/' + sound);
-    audio.play();
-  }
-
-  // Request full screen
-  function fullScreen(el){
-    if (el.requestFullScreen)
-      el.requestFullScreen();
-    else if (el.webkitRequestFullScreen)
-      el.webkitRequestFullScreen();
-    else if (el.mozRequestFullScreen)
-      el.mozRequestFullScreen();
-  }
-
-  // get max height for the main video and the preview div
-  function maxHeight(){
-    // Which is the window height, minus toolbar, and a margin of 25px
-    return $(window).height()-$('#toolbar').height()-25;
   }
 
   // Logout
@@ -399,36 +448,6 @@ function initVroom(room) {
     }
   }
 
-  // Return curren time formatted as XX:XX:XX
-  function getTime(){
-    var d = new Date();
-    var hours   = d.getHours().toString(),
-        minutes = d.getMinutes().toString(),
-        seconds = d.getSeconds().toString();
-    hours   = (hours.length < 2)   ? '0' + hours:hours;
-    minutes = (minutes.length < 2) ? '0' + minutes:minutes;
-    seconds = (seconds.length < 2) ? '0' + seconds:seconds;
-    return hours + ':' + minutes + ':' + seconds;
-  }
-
-  // Linkify urls
-  // Taken from http://rickyrosario.com/blog/converting-a-url-into-a-link-in-javascript-linkify-function/
-  function linkify(text){
-    if (text) {
-      text = text.replace(
-        /((https?\:\/\/)|(www\.))(\S+)(\w{2,4})(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi,
-        function(url){
-          var full_url = url;
-          if (!full_url.match('^https?:\/\/')) {
-            full_url = 'http://' + full_url;
-          }
-          return '<a href="' + full_url + '" target="_blank">' + url + '</a>';
-        }
-      );
-    }
-    return text;
-  }
-
   // Add a new message to the chat history
   function newChatMessage(from,message,time,color){
     // displayName has already been escaped
@@ -470,12 +489,6 @@ function initVroom(room) {
     var screenName = (peers[id] && peers[id].hasName) ? sprintf(locale.SCREEN_s, stringEscape(peers[id].displayName)) : '';
     $('#name_' + id).html(display).css('background-color', color);
     $('#name_' + id + '_screen').html(screenName).css('background-color', color);
-  }
-
-  // Save content to a file
-  function downloadContent(filename, content){
-    var blob = new Blob([content], {type: 'text/html;charset=utf-8'});
-    saveAs(blob, filename);
   }
 
   // Mute a peer
@@ -544,16 +557,6 @@ function initVroom(room) {
   function resumeCam(){
     webrtc.resumeVideo();
     peers.local.videoPaused = false;
-  }
-
-  // Add a new email address in the list of the ones notified when someone joins
-  function addNotifiedEmail(email){
-    var id = email.replace('@', '_AT_').replace('.', '_DOT_');
-    $('<li></li>').html(email + '  <a href="javascript:void(0);" onclick="removeNotifiedEmail(\'' + email + '\');" title="' + locale.REMOVE_THIS_ADDRESS + '">' +
-                                '    <span class="glyphicon glyphicon-remove-circle"></span>' +
-                                '  </a>')
-     .attr('id', 'emailNotification_' + id)
-     .appendTo('#emailNotificationList');
   }
 
   // An owner is muting/unmuting ourself
