@@ -94,6 +94,7 @@ function removeNotifiedEmail(email){
       if (data.status == 'success'){
         $.notify(data.msg, 'success');
         $('#emailNotification_' + id).remove();
+        webrtc.sendToAll('notif_change', {});
       }
       else{
         $.notify(data.msg, 'error');
@@ -744,6 +745,15 @@ function initVroom(room) {
     getPeerRole(data.id);
   });
 
+  // A new notified email has been added
+  webrtc.on('notif_change', function(data){
+    if (peers.local.role != 'owner'){
+      return;
+    }
+    $('#emailNotificationList > li').remove();
+    getRoomInfo();
+  });
+
   // A few notif on password set/unset or lock/unlock
   webrtc.on('room_locked', function(data){
     $('#lockLabel').addClass('btn-danger active');
@@ -1172,6 +1182,7 @@ function initVroom(room) {
         if (data.status == 'success'){
           $.notify(data.msg, 'success');
           addNotifiedEmail($('#newEmailNotification').val());
+          webrtc.sendToAll('notif_change', {});
           $('#newEmailNotification').val('');
         }
         else{
