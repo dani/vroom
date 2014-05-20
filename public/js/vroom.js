@@ -55,7 +55,8 @@ var locale = {
   YOU_HAVE_RESUMED_s: '',
   CANT_SUSPEND_OWNER: '',
   YOU_HAVE_KICKED_s: '',
-  CANT_KICK_OWNER: ''
+  CANT_KICK_OWNER: '',
+  REMOVE_THIS_ADDRESS: ''
 };
 
 // Localize the strings we need
@@ -548,7 +549,7 @@ function initVroom(room) {
   // Add a new email address in the list of the ones notified when someone joins
   function addNotifiedEmail(email){
     var id = email.replace('@', '_AT_').replace('.', '_DOT_');
-    $('<li></li>').html(email + '  <a href="javascript:void(0);" onclick="removeNotifiedEmail(\'' + email + '\');">' +
+    $('<li></li>').html(email + '  <a href="javascript:void(0);" onclick="removeNotifiedEmail(\'' + email + '\');" title="' + locale.REMOVE_THIS_ADDRESS + '">' +
                                 '    <span class="glyphicon glyphicon-remove-circle"></span>' +
                                 '  </a>')
      .attr('id', 'emailNotification_' + id)

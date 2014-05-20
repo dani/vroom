@@ -90,6 +90,7 @@ our %Lexicon = (
     "REMOVE_OWNER_PASSWORD"                     => "Supprimer le mot de passe du gestionnaire. Le salon redeviendra éphémère",
     "ADD_NOTIFICATION"                          => "Ajouter une notification",
     "ADD_THIS_ADDRESS"                          => "Ajouter cette adresse",
+    "REMOVE_THIS_ADDRESS"                       => "Supprimer cette adresse",
     "NOTIFICATION_ON_JOIN"                      => "Vous pouvez ajouter des adresses email qui recevront une notification dès que quelqu'un rejoint ce salon",
     "s_WILL_BE_NOTIFIED"                        => "%s recevra une notification à chaque fois qu'une personne rejoint ce salon",
     "s_WONT_BE_NOTIFIED_ANYMORE"                => "%s ne recevra plus les notifications pour ce salon",
