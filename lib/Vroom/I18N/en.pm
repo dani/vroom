@@ -198,6 +198,10 @@ our %Lexicon = (
   "HELP_RESERVE_YOUR_ROOM"               => "Want to reserve your room name so it's always available for you (company name, ongoing project " .
                                             "etc.) ? Just set both a join password and the manager password. The room will be kept " .
                                             "as long as the manager password is set (and as long as you use it from time to time)",
+  "BE_NOTIFIED"                          => "Notifications",
+  "HELP_BE_NOTIFIED"                     => "You can be notified by email as soon as someone joins one of your rooms. For example, " .
+                                            "create a room, add a password to make it persistent and add the link in your email signature. " .
+                                            "When someone wants to talk with you, you'll get the notification",
   "ABOUT_VROOM"                          => "VROOM is a free spftware using the latest web technologies and lets you " .
                                             "to easily organize video meetings. Forget all the pain with installing " .
                                             "a client on your computer in a hury, compatibility issues between MAC OS " .

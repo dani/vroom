@@ -216,6 +216,11 @@ our %Lexicon = (
                                                    "un mot de passe pour rejoindre le salon et un mot de passe de gestionnaire. Le " .
                                                    "salon sera conservé aussi longtemps que le mot de passe de gestionnaire est en place ".
                                                    "(du moment que vous vous en servez de temps en temps)",
+    "BE_NOTIFIED"                               => "Notifications",
+    "HELP_BE_NOTIFIED"                          => "Vous pouvez être notifiés par email dès que quelqu'un rejoint un de vos salons. " .
+                                                   "Par exemple, créez un salon, ajoutez un mot de passe pour le rendre persistant et " .
+                                                   "ajoutez le lien dans votre signature de mail. Dès que quelqu'un cherche à discuter " .
+                                                   "avez vous, vous recevrez une notification",
     "ABOUT_VROOM"                               => "VROOM est un logiciel libre exploitant les dernières technologies du " .
                                                    "web vous permettant d'organiser simplement des visio conférences. Fini " .
                                                    "les galères à devoir installer un client sur le poste au dernier moment, " .
