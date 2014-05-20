@@ -597,8 +597,22 @@ get '/(*room)' => sub {
       room => $room
     );
   }
+  # Send notifications
+  foreach my $rcpt ($self->get_notification($room)){
+    $self->email(
+      header => [
+        Subject => encode("MIME-Header", $self->l("JOIN_NOTIFICATION")),
+        To => $rcpt
+      ],
+      data => [
+        template => 'notification',
+        room     => $room,
+      ],
+    );
+  }
   # Now display the room page
   $self->render('join',
+    format => 'html',
     turnPassword => $data->{token}
   );
 };
@@ -805,24 +819,24 @@ post '/action' => sub {
     my $email  = $self->param('email');
     my $type   = $self->param('type');
     my $status = 'error';
-    my $msg    = 'ERROR_OCCURED';
+    my $msg    = $self->l('ERROR_OCCURED');
     if ($self->session($room)->{role} ne 'owner'){
-      $msg = 'NOT_ALLOWED';
+      $msg = $self->l('NOT_ALLOWED');
     }
     elsif ($email !~ m/^\S+@\S+\.\S+$/){
-      $msg = 'ERROR_MAIL_INVALID';
+      $msg = $self->l('ERROR_MAIL_INVALID');
     }
     elsif ($type eq 'add' && $self->add_notification($room,$email)){
       $status = 'success';
-      $msg = 's_WILL_BE_NOTIFIED';
+      $msg = sprintf($self->l('s_WILL_BE_NOTIFIED'), $email);
     }
     elsif ($type eq 'remove' && $self->remove_notification($room,$email)){
       $status = 'success';
-      $msg = 's_WONT_BE_NOTIFIED_ANYMORE';
+      $msg = sprintf($self->l('s_WONT_BE_NOTIFIED_ANYMORE'), $email);
     }
     return $self->render(
       json => {
-        msg    => $self->l($msg),
+        msg    => $msg,
         status => $status
       }
     );
