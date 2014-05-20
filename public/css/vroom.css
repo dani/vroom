@@ -123,6 +123,10 @@
   color: red;
   content: "\e083";
 }
+#emailNotificationList {
+  padding-right: 12px;
+  padding-left: 12px;
+}
 #chatBox {
   max-height:300px;
   resize:none;

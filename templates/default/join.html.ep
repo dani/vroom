@@ -149,6 +149,26 @@
                 </div>
               </form>
             </li>
+            <li class="divider">
+            </li>
+            <li>
+              <center>
+                <p><%=l 'NOTIFICATION_ON_JOIN' %></p>
+              </center>
+              <ul class="list-inline" id="emailNotificationList">
+              </ul>
+              <form class="navbar-form" id="newEmailNotificationForm">
+                <div class="input-group">
+                  <input type="email" id="newEmailNotification" class="form-control help" placeholder="<%=l 'EMAIL_PLACEHOLDER' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'ADD_NOTIFICATION' %>"/>
+                  <span class="input-group-btn">
+                    <button id="newEmailNotificationButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'ADD_THIS_ADDRESS' %>">
+                      <span class="glyphicon glyphicon-ok">
+                      </span>
+                    </button>
+                  </span>
+                </div>
+              </form>
+            </li>
           </ul>
         </div>
         <div class="btn-group navbar-form navbar-left">

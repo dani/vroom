@@ -240,12 +240,14 @@ helper delete_rooms => sub {
   eval {
     my $timeout = time()-$config->{inactivityTimeout};
     $self->db->do("DELETE FROM participants WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='0');");
+    $self->db->do("DELETE FROM notifications WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='0');");
     $self->db->do("DELETE FROM rooms WHERE activity_timestamp < $timeout AND persistent='0';");
   } || return undef;
   if ($config->{persistentInactivityTimeout} && $config->{persistentInactivityTimeout} > 0){
     eval {
       my $timeout = time()-$config->{persistentInactivityTimeout};
       $self->db->do("DELETE FROM participants WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='1');");
+      $self->db->do("DELETE FROM notifications WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='1');");
       $self->db->do("DELETE FROM rooms WHERE activity_timestamp < $timeout AND persistent='1';");
     } || return undef;
   }
@@ -344,6 +346,42 @@ helper set_owner_pass => sub {
     $sth->execute(undef,$room) || return undef;
     $self->app->log->debug($self->session('name') . " has removed the owner password on room $room, which is not persistent anymore");
   }
+};
+
+# Add an email address to the list of notifications
+helper add_notification => sub {
+  my $self = shift;
+  my ($room,$email) = @_;
+  my $data = $self->get_room($room);
+  return undef unless ($data);
+  my $sth = eval { $self->db->prepare("INSERT IGNORE INTO notifications (id,email) VALUES (?,?)") } || return undef;
+  $sth->execute($data->{id},$email) || return undef;
+  return 1;
+};
+
+# Return the list of email addresses
+helper get_notification => sub {
+  my $self = shift;
+  my ($room) = @_;
+  $room = $self->get_room($room) || return undef;
+  my $sth = eval { $self->db->prepare("SELECT email FROM notifications WHERE id=?;") } || return undef;
+  $sth->execute($room->{id}) || return undef;
+  my @res;
+  while(my @row = $sth->fetchrow_array){
+    push @res, $row[0];
+  }
+  return @res;
+};
+
+# Remove an email from notification list
+helper remove_notification => sub {
+  my $self = shift;
+  my ($room,$email) = @_;
+  my $data = $self->get_room($room);
+  return undef unless ($data);
+  my $sth = eval { $self->db->prepare("DELETE FROM notifications where id=? and email=?") } || return undef;
+  $sth->execute($data->{id},$email) || return undef;
+  return 1;
 };
 
 # Route / to the index page
@@ -731,15 +769,22 @@ post '/action' => sub {
   elsif ($action eq 'getRoomInfo'){
     my $id = $self->param('id');
     my $res = 'error';
+    my %emailNotif;
     if ($self->session($room) && $self->session($room)->{role}){
       $res = ($self->set_peer_role($room,$self->session('name'),$id, $self->session($room)->{role})) ? 'success':$res;
+    }
+    if ($self->session($room)->{role} eq 'owner'){
+      my $i = 0;
+      my @email = $self->get_notification($room);
+      %emailNotif = map { $i => $email[$i++] } @email;
     }
     return $self->render(
                json => {
                  role         => $self->session($room)->{role},
                  owner_auth   => ($data->{owner_password}) ? 'yes' : 'no',
                  join_auth    => ($data->{join_password})  ? 'yes' : 'no',
-                 locked       => ($data->{locked})         ? 'yes' : 'no' ,
+                 locked       => ($data->{locked})         ? 'yes' : 'no',
+                 notif        => Mojo::JSON->new->encode({email => { %emailNotif }}),
                  status       => $res
                },
              );
@@ -752,6 +797,33 @@ post '/action' => sub {
       json => {
         role => $role,
         status => 'success'
+      }
+    );
+  }
+  # Add a new email for notifications when someone joins
+  elsif ($action eq 'emailNotification'){
+    my $email  = $self->param('email');
+    my $type   = $self->param('type');
+    my $status = 'error';
+    my $msg    = 'ERROR_OCCURED';
+    if ($self->session($room)->{role} ne 'owner'){
+      $msg = 'NOT_ALLOWED';
+    }
+    elsif ($email !~ m/^\S+@\S+\.\S+$/){
+      $msg = 'ERROR_MAIL_INVALID';
+    }
+    elsif ($type eq 'add' && $self->add_notification($room,$email)){
+      $status = 'success';
+      $msg = 's_WILL_BE_NOTIFIED';
+    }
+    elsif ($type eq 'remove' && $self->remove_notification($room,$email)){
+      $status = 'success';
+      $msg = 's_WONT_BE_NOTIFIED_ANYMORE';
+    }
+    return $self->render(
+      json => {
+        msg    => $self->l($msg),
+        status => $status
       }
     );
   }

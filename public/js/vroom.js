@@ -77,6 +77,31 @@ function inviteUrlPopup(){
   return false;
 }
 
+// Remove the address from the list
+function removeNotifiedEmail(email){
+  var id = email.replace('@', '_AT_').replace('.', '_DOT_');
+  $.ajax({
+    data: {
+      action: 'emailNotification',
+      type: 'remove',
+      email: email,
+      room: roomName
+    },
+    error: function() {
+      $.notify(locale.ERROR_OCCURED, 'error');
+    },
+    success: function(data) {
+      if (data.status == 'success'){
+        $.notify(data.msg, 'success');
+        $('#emailNotification_' + id).remove();
+      }
+      else{
+        $.notify(data.msg, 'error');
+      }
+    }
+  });
+}
+
 // set the height of the thumbnails so they are always equals
 function setPanelHeight() {
   $('.panelIndex').height(Math.max.apply(null, $('.panelIndex').map(function() { return $(this).height(); })));
@@ -155,6 +180,10 @@ function initVroom(room) {
         if (data.role == 'owner'){
           $('.unauthEl').hide(500);
           $('.ownerEl').show(500);
+          var notif = JSON.parse(data.notif);
+          $.each(notif.email, function(index, val){
+            addNotifiedEmail(val);
+          });
         }
         else{
           $('.ownerEl').hide(500);
@@ -513,6 +542,13 @@ function initVroom(room) {
   function resumeCam(){
     webrtc.resumeVideo();
     peers.local.videoPaused = false;
+  }
+
+  // Add a new email address in the list of the ones notified when someone joins
+  function addNotifiedEmail(email){
+    var id = email.replace('@', '_AT_').replace('.', '_DOT_');
+    $('<li></li>').html(email + '  <a href="javascript:void(0);" onclick="removeNotifiedEmail(\'' + email + '\');"><span class="glyphicon glyphicon-remove-circle"></span></a>').attr('id', 'emailNotification_' + id)
+     .appendTo('#emailNotificationList');
   }
 
   // An owner is muting/unmuting ourself
@@ -1100,6 +1136,43 @@ function initVroom(room) {
         if (data.status == 'success'){
           $.notify(data.msg, 'success');
           webrtc.sendToAll('owner_password_removed', {});
+        }
+        else{
+          $.notify(data.msg, 'error');
+        }
+      }
+    });
+  });
+
+  // Add an email to be notified when someone joins
+  // First, enable the add button when you start typing
+  // TODO: should be enabled only when the input looks like an email address
+  $('#newEmailNotification').on('input', function() {
+    if ($('#newEmailNotification').val() == ''){
+      $('#newEmailNotificationButton').addClass('disabled');
+    }
+    else{
+      $('#newEmailNotificationButton').removeClass('disabled');
+    }
+  });
+  // Then send this new address to the frontend
+  $('#newEmailNotificationForm').submit(function(event){
+    event.preventDefault();
+    $.ajax({
+      data: {
+        action: 'emailNotification',
+        type: 'add',
+        email: $('#newEmailNotification').val(),
+        room: roomName
+      },
+      error: function() {
+        $.notify(locale.ERROR_OCCURED, 'error');
+      },
+      success: function(data) {
+        if (data.status == 'success'){
+          $.notify(data.msg, 'success');
+          addNotifiedEmail($('#newEmailNotification').val());
+          $('#newEmailNotification').val('');
         }
         else{
           $.notify(data.msg, 'error');
