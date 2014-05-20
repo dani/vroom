@@ -134,11 +134,6 @@ function chooseColor(){
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
-// set the height of the thumbnails so they are always equals
-function setPanelHeight() {
-  $('.panelIndex').height(Math.max.apply(null, $('.panelIndex').map(function() { return $(this).height(); })));
-}
-
 // Just play a sound
 function playSound(sound){
   var audio = new Audio(rootUrl + 'snd/' + sound);
@@ -199,15 +194,6 @@ function maxHeight(){
   // Which is the window height, minus toolbar, and a margin of 25px
   return $(window).height()-$('#toolbar').height()-25;
 }
-
-setTimeout(function(){
-  setPanelHeight();
-}, 50);
-
-// Resize a few element on window resize
-window.onresize = function (){
-  setPanelHeight();
-};
 
 function initVroom(room) {
 
