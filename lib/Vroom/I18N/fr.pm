@@ -168,8 +168,8 @@ our %Lexicon = (
     "THE_LIMIT_IS_YOUR_PIPE"                    => "Avec VROOM, vous n'avez pas de limite de participants, vous pouvez discuter à " .
                                                    "plusieurs en même temps. La seule limite est la capacité de votre connexion Internet. " .
                                                    "En général, vous pouvez discuter à 5~6 personnes sans problème.",
-    "NO_SIGNIN"                                 => "Pas besoin de vous inscrire",
-    "YOU_DONT_HAVE_TO_REGISTER"                 => "Vous êtes fatigués de créer un compte sur tous les services possibles et imaginables, " .
+    "NO_SIGNIN"                                 => "Pas d'inscription",
+    "YOU_DONT_HAVE_TO_REGISTER"                 => "Vous en avez marre de créer un compte sur tous les services possibles et imaginables, " .
                                                    "de devoir vérifier que ceux avec qui vous voulez parler ont eux aussi créer un compte ? " .
                                                    "Ça tombe bien, avec VROOM, vous n'en avez pas besoin: aucun compte à créer",
     "QUICK"                                     => "Rapide",
