@@ -477,7 +477,7 @@ post '/create' => sub {
       err  => 'ERROR_NAME_CONFLICT'
     );
   }
-  # EVerything went fine, the room is created, lets mark this user owner of the room
+  # Everything went fine, the room is created, lets mark this user owner of the room
   # and redirect him on it.
   else{
     $self->session($name => {role => 'owner'});
