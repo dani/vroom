@@ -158,18 +158,30 @@ our %Lexicon = (
     "SECURE"                                    => "Sécurisé",
     "P2P_COMMUNICATION"                         => "Avec VROOM, vos communications se font de pair à pair (directement enre utilisateurs), " .
                                                    "et sont sécurisées. " .
-                                                   "Nos serveurs ne servent qu'au signalement, pour que chacun puisse se connecter aux autres " .
-                                                   "(comme un point de rendez-vous virtuel). Seulement si certains d'entre vous se trouvent " .
-                                                   "derrière des pare feu stricts, les flux seront relayés à travers nos serveurs, en dernier " .
-                                                   "recours, mais même dans ce cas, nous ne relayons que des flux chiffrés, inintelligibles",
+                                                   "Nos serveurs ne sont utilisé que pour le signalement, pour que chacun puisse se connecter " .
+                                                   "aux autres ",
     "WORKS_EVERYWHERE"                          => "Universel",
     "MODERN_BROWSERS"                           => "VROOM fonctionne avec les navigateurs modernes (Google Chrome, Mozilla Firefox, Opera), " .
                                                    "vous n'avez aucun plugin à installer, ni codec, ni client logiciel, ni à " .
                                                    "envoyer la doc technique aux autres participants. Vous n'avez qu'à cliquer, et discuter",
     "MULTI_USER"                                => "Multi utilisateurs",
-    "THE_LIMIT_IS_YOUR_PIPE"                    => "VROOM n'impose pas de limite sur le nombre de participants, vous pouvez discuter à " .
+    "THE_LIMIT_IS_YOUR_PIPE"                    => "Avec VROOM, vous n'avez pas de limite de participants, vous pouvez discuter à " .
                                                    "plusieurs en même temps. La seule limite est la capacité de votre connexion Internet. " .
                                                    "En général, vous pouvez discuter à 5~6 personnes sans problème.",
+    "NO_SIGNIN"                                 => "Pas besoin de vous inscrire",
+    "YOU_DONT_HAVE_TO_REGISTER"                 => "Vous êtes fatigués de créer un compte sur tous les services possibles et imaginables, " .
+                                                   "de devoir vérifier que ceux avec qui vous voulez parler ont eux aussi créer un compte ? " .
+                                                   "Ça tombe bien, avec VROOM, vous n'en avez pas besoin: aucun compte à créer",
+    "QUICK"                                     => "Rapide",
+    "STOP_WASTING_TIME"                         => "Ne perdez plus votre temps à vérifier, installer, expliquer. Cliquez, envoyez un lien " .
+                                                   "à qui vous voulez, et discutez. On ne peut pas faire plus simple ou plus rapide.",
+    "SHARE_DESKTOP_OR_WINDOW"                   => "Partagez votre écran entier, ou seulement une fenêtre en un clique avec une qualité " .
+                                                   "exceptionnelle. Grâce à cette fonctionnalité, diffusez n'importe quel contenue " .
+                                                   "(images, présentations, documents etc...)",
+    "TEXT_CHAT"                                 => "Tchat intégré",
+    "SECURED_TEXT_CHAT"                         => "La vidéo et le son ne vous suffisent pas ? Vous pouvez aussi utiliser le tchat intégré et " .
+                                                   "entièrement sécurisé: vos discussions se font directement entre les membres, et ne passent " .
+                                                   "à aucun moment par nos serveurs.",
     "SUPPORTED_BROWSERS"                        => "Navigateurs supportés",
     "HELP_BROWSERS_SUPPORTED"                   => "VROOM fonctionne avec tous les navigateurs modernes et respectueux des standards. " .
                                                    "Les technologies employées (WebRTC) étant très récentes, seules les versions " .

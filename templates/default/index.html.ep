@@ -34,16 +34,20 @@
   </div>
   <br/><br/>
   <div class="row">
-    <div id="carouselIndexContainer" class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+    <div id="carouselIndexContainer" class="col-md-8 col-md-offset-2 col-xl-6 col-xl-offset-3">
       <div id="carouselIndex" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
+        <ol class="carousel-indicators carouselIndexIndicator">
           <li data-target="#carouselIndex" data-slide-to="0" class="active"></li>
           <li data-target="#carouselIndex" data-slide-to="1"></li>
           <li data-target="#carouselIndex" data-slide-to="2"></li>
+          <li data-target="#carouselIndex" data-slide-to="3"></li>
+          <li data-target="#carouselIndex" data-slide-to="4"></li>
+          <li data-target="#carouselIndex" data-slide-to="5"></li>
+          <li data-target="#carouselIndex" data-slide-to="6"></li>
         </ol>
         <div id="carouselIndexContent" class="carousel-inner">
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="/img/lock.png" alt="Secure">
+            <img class="img-responsive carouselLogo" src="/img/lock.png" alt="<%=l 'SECURE' %>">
             <p>
               <%=l 'P2P_COMMUNICATION' %>
             </p>
@@ -54,7 +58,7 @@
             </div>
           </div>
           <div class="item active carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="/img/universal.png" alt="Universal">
+            <img class="img-responsive carouselLogo" src="/img/universal.png" alt="<%=l 'WORKS_EVERYWHERE' %>">
             <p>
               <%=l 'MODERN_BROWSERS' %>
             </p>
@@ -65,13 +69,57 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="/img/share.png" alt="Multi User">
+            <img class="img-responsive carouselLogo" src="/img/share.png" alt="<%=l 'MULTI_USER' %>">
             <p>
               <%=l 'THE_LIMIT_IS_YOUR_PIPE' %>
             </p>
             <div class="carousel-caption carouselIndexCaption">
               <h1>
                 <%=l 'MULTI_USER' %>
+              </h1>
+            </div>
+          </div>
+          <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
+            <img class="img-responsive carouselLogo" src="/img/signin.png" alt="<%=l 'NO_SIGNIN' %>">
+            <p>
+              <%=l 'YOU_DONT_HAVE_TO_REGISTER' %>
+            </p>
+            <div class="carousel-caption carouselIndexCaption">
+              <h1>
+                <%=l 'NO_SIGNIN' %>
+              </h1>
+            </div>
+          </div>
+          <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
+            <img class="img-responsive carouselLogo" src="/img/clock.png" alt="<%=l 'QUICK' %>">
+            <p>
+              <%=l 'STOP_WASTING_TIME' %>
+            </p>
+            <div class="carousel-caption carouselIndexCaption">
+              <h1>
+                <%=l 'QUICK' %>
+              </h1>
+            </div>
+          </div>
+          <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
+            <img class="img-responsive carouselLogo" src="/img/screen.png" alt="<%=l 'SCREEN_SHARING' %>">
+            <p>
+              <%=l 'SHARE_DESKTOP_OR_WINDOW' %>
+            </p>
+            <div class="carousel-caption carouselIndexCaption">
+              <h1>
+                <%=l 'SCREEN_SHARING' %>
+              </h1>
+            </div>
+          </div>
+          <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
+            <img class="img-responsive carouselLogo" src="/img/chat.png" alt="<%=l 'TEXT_CHAT' %>">
+            <p>
+              <%=l 'SECURED_TEXT_CHAT' %>
+            </p>
+            <div class="carousel-caption carouselIndexCaption">
+              <h1>
+                <%=l 'TEXT_CHAT' %>
               </h1>
             </div>
           </div>

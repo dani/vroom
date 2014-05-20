@@ -151,9 +151,7 @@ our %Lexicon = (
   "P2P_COMMUNICATION"                    => "With VROOM, your communication is done peer to peer, and secured. " .
                                             "Our servers are only used for signaling, so that everyone can connect " .
                                             "directly to each other (see it like a virtual meeting point). All your " .
-                                            "important data is sent directly. Only if you are behind a strict firewall, " .
-                                            "streams will be relayed by our servers, as a last resort, but even in this case, " .
-                                            "we will just relay encrypted blobs.",
+                                            "important data is sent directly.",
   "WORKS_EVERYWHERE"                     => "Universal",
   "MODERN_BROWSERS"                      => "VROOM works with modern browsers (Chrome, Mozilla Firefox or Opera), " .
                                             "you don't have to install plugins, codecs, client software, then " .
@@ -164,6 +162,18 @@ our %Lexicon = (
                                             "you can chat with several people at the same time. The only limit " .
                                             "is the capacity of your Internet pipe. Usually, you can chat with " .
                                             "up to 5~6 person without problem",
+  "NO_SIGNIN"                            => "No need to register",
+  "YOU_DONT_HAVE_TO_REGISTER"            => "Tired of creating an account on each and every service you can find, checking " .
+                                            "your friends or coworkers did the same ? Well, great news, with VROOM, you do not need to, " .
+                                            "in fact, you don't have to register at all",
+  "QUICK"                                => "Quick",
+  "STOP_WASTING_TIME"                    => "Stop wasting time checking, installing, explaining. Just click, send a link, and talk. " .
+                                            "It couldn't be simpler or faster",
+  "SHARE_DESKTOP_OR_WINDOW"              => "Share your entire screen, or only a window in a single click, with an great quality. " .
+                                            "With this feature, broadcast any content (images, presententions, documents etc...)",
+  "TEXT_CHAT"                            => "Chat Included",
+  "SECURED_TEXT_CHAT"                    => "Video and audio are not enough ? You can also use the included text chat, and fully secured: " .
+                                            "your discussions are done directly between members and will never be sent on our servers.",
   "SUPPORTED_BROWSERS"                   => "Supported browsers",
   "HELP_BROWSERS_SUPPORTED"              => "VROOM works with any modern, standard compliant browsers, which means any " .
                                             "recent Mozilla Firefox, Google Chrome or Opera.",

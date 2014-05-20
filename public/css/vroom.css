@@ -190,14 +190,20 @@
 }
 .carouselLogo {
   margin: auto;
-  padding: 60px;
+  padding: 20px;
 }
 .carouselIndexItem {
-  height: 500px !important;
+  height: 350px !important;
   text-align: center;
 }
 .carouselIndexCaption {
   color: grey;
+}
+.carouselIndexIndicator li {
+  background-color: grey;
+}
+.carouselIndexIndicator .active {
+  background-color: red;
 }
 .modal-body {
   text-align: justify;
