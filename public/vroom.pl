@@ -384,6 +384,18 @@ helper remove_notification => sub {
   return 1;
 };
 
+
+# Set/unset ask for name
+helper ask_for_name => sub {
+  my $self = shift;
+  my ($room,$set) = @_;
+  my $data = $self->get_room($room);
+  return undef unless ($data);
+  my $sth = eval { $self->db->prepare("UPDATE rooms SET ask_for_name=? WHERE name=?") } || return undef;
+  $sth->execute($set,$room) || return undef;
+  return 1;
+};
+
 # Route / to the index page
 any '/' => 'index';
 
@@ -836,6 +848,29 @@ post '/action' => sub {
     elsif ($type eq 'remove' && $self->remove_notification($room,$email)){
       $status = 'success';
       $msg = sprintf($self->l('s_WONT_BE_NOTIFIED_ANYMORE'), $email);
+    }
+    return $self->render(
+      json => {
+        msg    => $msg,
+        status => $status
+      }
+    );
+  }
+  # Set/unset askForName
+  elsif ($action eq 'askForName'){
+    my $type = $self->param('type');
+    my $status = 'error';
+    my $msg    = $self->l('ERROR_OCCURED');
+    if ($self->session($room)->{role} ne 'owner'){
+      $msg = $self->l('NOT_ALLOWED');
+    }
+    elsif($type eq 'set' && $self->ask_for_name($room,'1')){
+      $status = 'success';
+      $msg = $self->l('NAME_WILL_BE_ASKED');
+    }
+    elsif($type eq 'unset' && $self->ask_for_name($room,'0')){
+      $status = 'success';
+      $msg = $self->l('NAME_WONT_BE_ASKED');
     }
     return $self->render(
       json => {
