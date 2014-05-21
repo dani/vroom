@@ -800,6 +800,7 @@ post '/action' => sub {
                  owner_auth   => ($data->{owner_password}) ? 'yes' : 'no',
                  join_auth    => ($data->{join_password})  ? 'yes' : 'no',
                  locked       => ($data->{locked})         ? 'yes' : 'no',
+                 ask_for_name => ($data->{ask_for_name})   ? 'yes' : 'no',
                  notif        => Mojo::JSON->new->encode({email => { %emailNotif }}),
                  status       => $res
                },
