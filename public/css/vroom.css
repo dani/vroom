@@ -111,17 +111,14 @@
 }
 .actionMute:before{
   font-family: 'Glyphicons Halflings';
-  color: red;
   content: "\e036";
 }
 .actionPause:before{
   font-family: 'Glyphicons Halflings';
-  color: red;
   content: "\e106";
 }
 .actionKick:before{
   font-family: 'Glyphicons Halflings';
-  color: red;
   content: "\e083";
 }
 #emailNotificationList {
