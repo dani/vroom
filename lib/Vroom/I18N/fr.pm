@@ -31,11 +31,12 @@ our %Lexicon = (
     "VROOM_IS_AWESOME"                          => "VROOM est vraiment génial ;-)",
     "SUBMIT"                                    => "Envoyer",
     "THANK_YOU"                                 => "Merci :-)",
-    "THANKS_FOR_YOUR_FEEDBACK"                  => "Votre message a bien été transmis, merci d'avoir pris le temps de nous faire part de votre expérience",
+    "THANKS_FOR_YOUR_FEEDBACK"                  => "Votre message a bien été transmis, merci d'avoir pris le temps de nous faire part " .
+                                                   "de votre expérience",
     "FEEDBACK_FROM_VROOM"                       => "Retour d'expérience de VROOM",
     "FROM"                                      => "De la part de",
     "GIVE_US_YOUR_FEEDBACK"                     => "Parlez-nous de votre expérience",
-    "YOUR_FEEDBACK_HELPS_US"                    => "Votre retour d'expérience (bonne ou mauvaise) peut nous aider à améliorer cette application",
+    "YOUR_FEEDBACK_HELPS_US"                    => "Votre retour d'expérience (bonne ou mauvaise) peut nous aider à améliorer ce service",
     "INVITE_SENT_TO_s"                          => "Une invitation a été envoyée à %s",
     "ROOM_LOCKED"                               => "Ce salon est maintenant verrouillé",
     "ROOM_UNLOCKED"                             => "Ce salon est maintenant déverrouillé",
@@ -44,8 +45,8 @@ our %Lexicon = (
     "ROOM_UNLOCKED_BY_s"                        => "%s a déverrouillé le salon",
     "PASSWORD_PROTECT_ON_BY_s"                  => "%s a protégé le salon par un mot de passe",
     "PASSWORD_PROTECT_OFF_BY_s"                 => "%s a supprimé la protection par mot de passe",
-    "OWNER_PASSWORD_CHANGED_BY_s"               => "%s a modifié le mot de passe du gestionnaire du salon",
-    "OWNER_PASSWORD_REMOVED_BY_s"               => "%s a supprimé le mot de passe du gestionnaire du salon. Ce salon n'est donc plus persistant",
+    "OWNER_PASSWORD_CHANGED_BY_s"               => "%s a modifié le mot de passe de gestionnaire du salon",
+    "OWNER_PASSWORD_REMOVED_BY_s"               => "%s a supprimé le mot de passe de gestionnaire du salon. Ce salon n'est donc plus persistant",
     "OOOPS"                                     => "Oups",
     "GOODBY"                                    => "Au revoir",
     "THANKS_SEE_YOU_SOON"                       => "Merci et à bientôt",
@@ -60,10 +61,11 @@ our %Lexicon = (
     "INVITE_PEOPLE"                             => "Invitez des participants",
     "TO_INVITE_SHARE_THIS_URL"                  => "Envoyez cette adresse à d'autres personnes pour qu'elles vous rejoignent",
     "YOU_CAN_INVITE_BY_MAIL"                    => "Vous pouvez aussi envoyer une invitation par email",
-    "SEND_INVITE"                               => "Envoyez une invitation par mail",
+    "SEND_INVITE"                               => "Envoyer une invitation par mail",
     "EMAIL_PLACEHOLDER"                         => "j.smith\@exemple.com",
     "MESSAGE"                                   => "Message",
-    "SEND_CUSTOM_MESSAGE"                       => "Vous pouvez ajouter un message personnalisé, par exemple le mot de passe nécessaire pour rejoindre le salon",
+    "SEND_CUSTOM_MESSAGE"                       => "Vous pouvez ajouter un message personnalisé, par exemple le mot de passe nécessaire pour " .
+                                                   "rejoindre le salon",
     "DISPLAY_NAME"                              => "Nom",
     "YOUR_NAME"                                 => "Votre nom",
     "NAME_SENT_TO_OTHERS"                       => "Ce nom sera envoyé aux autres participants pour qu'ils puissent vous identifier. " .
@@ -71,17 +73,16 @@ our %Lexicon = (
     "DISPLAY_NAME_TOO_LONG"                     => "Ce nom est trop long",
     "DISPLAY_NAME_REQUIRED"                     => "Vous devez entrer votre nom",
     "SET_A_DISPLAY_NAME"                        => "Merci de saisir votre nom avant de pouvoir rejoindre le salon",
-    "FORCE_DISPLAY_NAME"                        => "Les participants devront saisir un nom avant de pouvoir rejoindre le salon",
+    "FORCE_DISPLAY_NAME"                        => "Les participants doivent saisir leur nom avant de rejoindre le salon",
     "NAME_WONT_BE_ASKED"                        => "La saisie du nom ne sera plus obligatoire pour rejoindre ce salon",
-    "CHANGE_COLOR"                              => "Changez de couleur",
-    "CLICK_TO_CHAT"                             => "Cliquez ici pour accéder au tchat",
-    "PREVENT_TO_JOIN"                           => "Empêchez d'autres participants de rejoindre ce salon",
-    "MUTE_MIC"                                  => "Coupez votre micro",
+    "CHANGE_COLOR"                              => "Changer de couleur",
+    "CLICK_TO_CHAT"                             => "Accéder au tchat",
+    "PREVENT_TO_JOIN"                           => "Empêcher d'autres participants de rejoindre ce salon",
+    "MUTE_MIC"                                  => "Couper le micro",
     "NO_SOUND_DETECTED"                         => "Aucun son n'a été détecté. Vérifiez votre micro (son volume est peut-être trop faible)",
-    "SUSPEND_CAM"                               => "Stoppez la webcam, les autres verront un écran noir à la place, " .
-                                                   "mais pourront toujours vous entendre",
+    "SUSPEND_CAM"                               => "Stopper la webcam",
     "CONFIGURE"                                 => "Configuration",
-    "YOU_CAN_PASSWORD_PROTECT_JOIN"             => "Vous pouvez protéger le salon par un mot de passe",
+    "YOU_CAN_PASSWORD_PROTECT_JOIN"             => "Protéger l'accès au salon par un mot de passe",
     "PASSWORD"                                  => "Mot de passe",
     "PASSWORD_PROTECT"                          => "Protéger par mot de passe",
     "REMOVE_PASSWORD"                           => "Supprimer le mot de passe",
@@ -89,17 +90,18 @@ our %Lexicon = (
     "PASSWORD_REMOVED"                          => "Le mot de passe a été supprimé",
     "AUTHENTICATE"                              => "Authentification",
     "AUTH_TO_MANAGE_THE_ROOM"                   => "Authentifiez-vous pour gérer le salon",
-    "OWNER_PASSWORD_MAKES_PERSISTENT"           => "Vous pouvez ajouter un mot de passe de gestionnaire. Ceci rendra le salon persistant",
+    "OWNER_PASSWORD_MAKES_PERSISTENT"           => "Ajouter un mot de passe de gestionnaire. Ceci rendra le salon persistant",
     "OWNER_PASSWORD"                            => "Mot de passe du gestionnaire",
-    "REMOVE_OWNER_PASSWORD"                     => "Supprimer le mot de passe du gestionnaire. Le salon redeviendra éphémère",
+    "REMOVE_OWNER_PASSWORD"                     => "Supprimer le mot de passe de gestionnaire. Le salon redeviendra éphémère",
     "ADD_NOTIFICATION"                          => "Ajouter une notification",
     "ADD_THIS_ADDRESS"                          => "Ajouter cette adresse",
     "REMOVE_THIS_ADDRESS"                       => "Supprimer cette adresse",
-    "NOTIFICATION_ON_JOIN"                      => "Vous pouvez ajouter des adresses email qui recevront une notification dès que quelqu'un rejoint ce salon",
+    "NOTIFICATION_ON_JOIN"                      => "Ajouter des adresses email qui recevront une notification dès que quelqu'un rejoint ce salon",
     "s_WILL_BE_NOTIFIED"                        => "%s recevra une notification à chaque fois qu'une personne rejoint ce salon",
     "s_WONT_BE_NOTIFIED_ANYMORE"                => "%s ne recevra plus les notifications pour ce salon",
     "JOIN_NOTIFICATION"                         => "Quelqu'un a rejoint votre salon",
-    "SOMEONE_JOINED_A_ROOM"                     => "Quelqu'un a rejoint un salon de vidéo conférence, et votre adresse est configurée pour recevoir ces notifications",
+    "SOMEONE_JOINED_A_ROOM"                     => "Quelqu'un a rejoint un salon de vidéo conférence, et votre adresse est configurée " .
+                                                   "pour recevoir ces notifications",
     "PARTICIPANT_NAME"                          => "La personne qui a rejoint votre salon se nomme",
     "AUTH_SUCCESS"                              => "Vous êtes maintenant authentifié",
     "NOT_ALLOWED"                               => "Vous n'êtes pas autorisé à faire ceci",
@@ -126,7 +128,7 @@ our %Lexicon = (
     "s_IS_RESUMING_s"                           => "%s a réactivé la webcam de %s",
     "s_IS_KICKING_s"                            => "%s a éjecté %s du salon",
     "KICKED"                                    => "Éjecté",
-    "YOU_HAVE_BEEN_KICKED"                      => "Vous avez été éjecté du salon",
+    "YOU_HAVE_BEEN_KICKED"                      => "Vous avez été banni du salon",
     "AN_ADMIN_HAS_KICKED_YOU"                   => "Un administrateur du salon vous a exclus",
     "YOU_HAVE_MUTED_s"                          => "Vous avez coupé le micro de %s",
     "YOU_HAVE_UNMUTED_s"                        => "Vous avez réactivé le micro de %s",
@@ -140,13 +142,14 @@ our %Lexicon = (
     "MIC_UNMUTED"                               => "Votre micro est à nouveau actif",
     "CAM_SUSPENDED"                             => "Votre webcam est en pause",
     "CAM_RESUMED"                               => "Votre webcam est à nouveau active",
-    "SHARE_YOUR_SCREEN"                         => "Partagez votre écran avec les autres membres du salon",
+    "SHARE_YOUR_SCREEN"                         => "Partager votre écran",
     "CANT_SHARE_SCREEN"                         => "Désolé, mais votre configuration ne vous permet pas de partager votre écran",
     "SCREEN_SHARING_ONLY_FOR_CHROME"            => "Désolé, mais vous ne pouvez pas partager votre écran. Seul le navigateur Google Chrome " .
                                                    "supporte cette fonction pour l'instant",
     "SCREEN_SHARING_CANCELLED"                  => "Le partage d'écran a été annulé",
     "EXTENSION_REQUIRED"                        => "Une extension est nécessaire",
-    "VROOM_CHROME_EXTENSION"                    => "Pour activer le partage d'écran, vous devez installer une extension, cliquez sur le lien ci-dessous, puis raffraîchissez cette page",
+    "VROOM_CHROME_EXTENSION"                    => "Pour activer le partage d'écran, vous devez installer une extension, cliquez sur le " .
+                                                   "lien ci-dessous, puis raffraîchissez cette page",
     "EVERYONE_CAN_SEE_YOUR_SCREEN"              => "Tous les autres participants peuvent voir votre écran",
     "SCREEN_UNSHARED"                           => "Vous ne partagez plus votre écran",
     "ERROR_MAIL_INVALID"                        => "Veuillez saisir une adresse email valide",
@@ -167,7 +170,7 @@ our %Lexicon = (
                                                    "aux autres ",
     "WORKS_EVERYWHERE"                          => "Universel",
     "MODERN_BROWSERS"                           => "VROOM fonctionne avec les navigateurs modernes (Google Chrome, Mozilla Firefox, Opera), " .
-                                                   "vous n'avez aucun plugin à installer, ni codec, ni client logiciel, ni à " .
+                                                   "vous n'avez aucun plugin à installer, ni codec, ni logiciel, ni à " .
                                                    "envoyer la doc technique aux autres participants. Vous n'avez qu'à cliquer, et discuter",
     "MULTI_USER"                                => "Multi utilisateurs",
     "THE_LIMIT_IS_YOUR_PIPE"                    => "Avec VROOM, vous n'avez pas de limite de participants, vous pouvez discuter à " .
@@ -189,11 +192,11 @@ our %Lexicon = (
                                                    "à aucun moment par nos serveurs.",
     "SUPPORTED_BROWSERS"                        => "Navigateurs supportés",
     "HELP_BROWSERS_SUPPORTED"                   => "VROOM fonctionne avec tous les navigateurs modernes et respectueux des standards. " .
-                                                   "Les technologies employées (WebRTC) étant très récentes, seules les versions " .
+                                                   "Les technologies employées (WebRTC) étant encore jeunes, seules les versions " .
                                                    "récentes de Mozilla Firefox, Google Chrome et Opéra fonctionnent pour l'instant. " .
                                                    "Les autres navigateurs (principalement Internet Explorer et Safari) devraient " .
                                                    "suivrent un jour, mais ne fonctionneront pas actuellement",
-    "SCREEN_SHARING"                             => "Partage d'écran",
+    "SCREEN_SHARING"                            => "Partage d'écran",
     "HELP_SCREEN_SHARING"                       => "VROOM vous permet de partager votre écran (ou juste une fenêtre) avec les autres " .
                                                    "participants d'un salon. " .
                                                    "Pour l'instant, le partage d'écran ne fonctionne qu'avec le navigateur Google Chrome, " .
