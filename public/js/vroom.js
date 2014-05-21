@@ -1275,10 +1275,9 @@ function initVroom(room) {
   });
 
   // Add an email to be notified when someone joins
-  // First, enable the add button when you start typing
-  // TODO: should be enabled only when the input looks like an email address
+  // First, enable the add button when the input looks like an email address
   $('#newEmailNotification').on('input', function() {
-    if ($('#newEmailNotification').val() == ''){
+    if (!$('#newEmailNotification').val().match(/^\S+\@\S+\.\S+$/)){
       $('#newEmailNotificationButton').addClass('disabled');
     }
     else{
