@@ -609,19 +609,6 @@ get '/(*room)' => sub {
       room => $room
     );
   }
-  # Send notifications
-  foreach my $rcpt ($self->get_notification($room)){
-    $self->email(
-      header => [
-        Subject => encode("MIME-Header", $self->l("JOIN_NOTIFICATION")),
-        To => $rcpt
-      ],
-      data => [
-        template => 'notification',
-        room     => $room,
-      ],
-    );
-  }
   # Now display the room page
   $self->render('join',
     format => 'html',
@@ -877,6 +864,29 @@ post '/action' => sub {
         msg    => $msg,
         status => $status
       }
+    );
+  }
+  # New participant joined the room
+  elsif ($action eq 'join'){
+    my $name = $self->param('name') || '';
+    # Send notifications
+    foreach my $rcpt ($self->get_notification($room)){
+      $self->email(
+        header => [
+          Subject => encode("MIME-Header", $self->l("JOIN_NOTIFICATION")),
+          To => $rcpt
+        ],
+        data => [
+          template => 'notification',
+          room     => $room,
+          name     => $name
+        ],
+      );
+    }
+    return $self->render(
+        json => {
+          status => 'success'
+        }
     );
   }
 };

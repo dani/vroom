@@ -94,6 +94,7 @@ our %Lexicon = (
   "s_WONT_BE_NOTIFIED_ANYMORE"           => "%s won't be notified anymore",
   "JOIN_NOTIFICATION"                    => "Someone joined the room",
   "SOMEONE_JOINED_A_ROOM"                => "Someone joined a video conference room, and your address is configured to receive this notifications",
+  "PARTICIPANT_NAME"                     => "The one who just joined your room is named",
   "AUTH_SUCCESS"                         => "You are now authenticated",
   "NOT_ALLOWED"                          => "You are not allowed to do this",
   "WRONG_PASSWORD"                       => "Wrong password",

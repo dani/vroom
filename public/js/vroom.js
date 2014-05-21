@@ -830,6 +830,25 @@ function initVroom(room) {
         });
       }
     }, 10000);
+    // Notify the frontend a new participant has joined
+    $.ajax({
+      data: {
+        action: 'join',
+        room: roomName,
+        name: (peers.local.hasName) ? peers.local.displayName : ''
+      },
+      error: function(data) {
+        $.notify(locale.ERROR_OCCURED, 'error');
+      },
+      success: function(data) {
+        if (data.status == 'success' && data.msg){
+          $.notify(data.msg, 'success');
+        }
+        else{
+          $.notify(data.msg, 'error');
+        }
+      }
+    });
   });
 
   // Handle new video stream added: someone joined the room

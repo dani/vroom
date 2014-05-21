@@ -100,6 +100,7 @@ our %Lexicon = (
     "s_WONT_BE_NOTIFIED_ANYMORE"                => "%s ne recevra plus les notifications pour ce salon",
     "JOIN_NOTIFICATION"                         => "Quelqu'un a rejoint votre salon",
     "SOMEONE_JOINED_A_ROOM"                     => "Quelqu'un a rejoint un salon de vidéo conférence, et votre adresse est configurée pour recevoir ces notifications",
+    "PARTICIPANT_NAME"                          => "La personne qui a rejoint votre salon se nomme",
     "AUTH_SUCCESS"                              => "Vous êtes maintenant authentifié",
     "NOT_ALLOWED"                               => "Vous n'êtes pas autorisé à faire ceci",
     "WRONG_PASSWORD"                            => "Mauvais mot de passe",

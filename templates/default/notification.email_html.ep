@@ -5,6 +5,11 @@
 <p>
   <%=l 'SOMEONE_JOINED_A_ROOM' %>
 </p>
+<% if ($name && $name ne ''){ %>
+<p>
+  <%=l 'PARTICIPANT_NAME' %>: <%= $name %>
+</p>
+<% } %>
 <p>
   <%=l 'WHEN_YOU_ARE_READY' %>
   <center>
