@@ -866,7 +866,7 @@ post '/action' => sub {
     }
     elsif($type eq 'set' && $self->ask_for_name($room,'1')){
       $status = 'success';
-      $msg = $self->l('NAME_WILL_BE_ASKED');
+      $msg = $self->l('FORCE_DISPLAY_NAME');
     }
     elsif($type eq 'unset' && $self->ask_for_name($room,'0')){
       $status = 'success';
