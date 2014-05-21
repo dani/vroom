@@ -976,6 +976,8 @@ function initVroom(room) {
       peers.local.hasName = true;
       peers.local.displayName = name;
       updateDisplayName('local');
+      $('#chatBox').removeAttr('disabled');
+      $('#chatBox').removeAttr('placeholder');
       webrtc.joinRoom(room);
     }
   });
