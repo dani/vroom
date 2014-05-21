@@ -819,6 +819,19 @@ function initVroom(room) {
     }
   });
 
+  // When we joined the room
+  webrtc.on('joinedRoom', function(){
+    // Check if sound is detected and warn if it hasn't
+    setTimeout(function (){
+      if (maxVol < -40){
+        $.notify(locale.NO_SOUND_DETECTED, {
+          className: 'error',
+          autoHide: false
+        });
+      }
+    }, 10000);
+  });
+
   // Handle new video stream added: someone joined the room
   webrtc.on('videoAdded', function(video,peer){
     addVideo(video,peer);
@@ -1387,16 +1400,6 @@ function initVroom(room) {
       }
     });
   }, 60000);
-
-  // Check if sound is detected and warn if it hasn't
-  setTimeout(function (){
-    if (maxVol < -40){
-      $.notify(locale.NO_SOUND_DETECTED, {
-        className: 'error',
-        autoHide: false
-      });
-    }
-  }, 10000);
 
   window.onresize = function (){
     $('#webRTCVideo').css('max-height', maxHeight());
