@@ -208,6 +208,28 @@
         </div>
       </div>
     </nav>
+    <div class="modal fade" role="dialog" id="setDisplayName" aria-labelledby="setDisplayName" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="setDisplayNameTitle"><%=l 'DISPLAY_NAME_REQUIRED' %></h4>
+          </div>
+          <div clas="modal-body">
+            <form role="form" class="well" id="displayNamePreForm">
+              <label for="displayNamePre"><%=l 'SET_A_DISPLAY_NAME' %></label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="displayNamePre" name="displayNamePre" placeholder="<%=l 'YOUR_NAME' %>">
+                <span class="input-group-btn">
+                  <button type="submit" id="displayNamePreButton" class="btn btn-default disabled">
+                    <span class="glyphicon glyphicon-log-in"></span>
+                  </button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="modal fade" role="dialog" id="chromeExtMessage" aria-labelledby="chromeExtMessage" aria-hidden="true">
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
