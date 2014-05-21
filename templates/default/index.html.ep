@@ -52,9 +52,9 @@
               <%=l 'P2P_COMMUNICATION' %>
             </p>
             <div class="carousel-caption carouselIndexCaption">
-              <h1>
+              <h2>
                 <%=l 'SECURE' %>
-              </h1>
+              </h2>
             </div>
           </div>
           <div class="item active carouselIndexItem col-xs-10 col-xs-offset-1">
@@ -63,9 +63,9 @@
               <%=l 'MODERN_BROWSERS' %>
             </p>
             <div class="carousel-caption carouselIndexCaption">
-              <h1>
+              <h2>
                 <%=l 'WORKS_EVERYWHERE' %>
-              </h1>
+              </h2>
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
@@ -74,9 +74,9 @@
               <%=l 'THE_LIMIT_IS_YOUR_PIPE' %>
             </p>
             <div class="carousel-caption carouselIndexCaption">
-              <h1>
+              <h2>
                 <%=l 'MULTI_USER' %>
-              </h1>
+              </h2>
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
@@ -85,9 +85,9 @@
               <%=l 'YOU_DONT_HAVE_TO_REGISTER' %>
             </p>
             <div class="carousel-caption carouselIndexCaption">
-              <h1>
+              <h2>
                 <%=l 'NO_SIGNIN' %>
-              </h1>
+              </h2>
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
@@ -96,9 +96,9 @@
               <%=l 'STOP_WASTING_TIME' %>
             </p>
             <div class="carousel-caption carouselIndexCaption">
-              <h1>
+              <h2>
                 <%=l 'QUICK' %>
-              </h1>
+              </h2>
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
@@ -107,9 +107,9 @@
               <%=l 'SHARE_DESKTOP_OR_WINDOW' %>
             </p>
             <div class="carousel-caption carouselIndexCaption">
-              <h1>
+              <h2>
                 <%=l 'SCREEN_SHARING' %>
-              </h1>
+              </h2>
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
@@ -118,9 +118,9 @@
               <%=l 'SECURED_TEXT_CHAT' %>
             </p>
             <div class="carousel-caption carouselIndexCaption">
-              <h1>
+              <h2>
                 <%=l 'TEXT_CHAT' %>
-              </h1>
+              </h2>
             </div>
           </div>
         </div>
