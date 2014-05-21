@@ -230,7 +230,7 @@ our %Lexicon = (
                                                    "web vous permettant d'organiser simplement des visio conférences. Fini " .
                                                    "les galères à devoir installer un client sur le poste au dernier moment, " .
                                                    "l'incompatibilité MAC OS ou GNU/Linux, les problèmes de redirection de port, " .
-                                                   "les appels au support technique parce que la visio s'établie pas, les " .
+                                                   "les appels au support technique parce que la visio ne s'établie pas, les " .
                                                    "soucis d'H323 vs SIP vs ISDN. Tout ce qu'il vous faut désormais, c'est:" .
                                                    "<ul>" .
                                                    "  <li>Un poste (PC, MAC, tablette, peu importe)</li>" .
