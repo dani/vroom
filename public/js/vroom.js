@@ -269,6 +269,10 @@ function initVroom(room) {
           $('#lockLabel').addClass('btn-danger active');
           $('#lockButton').prop('checked', true);
         }
+        if (data.ask_for_name == 'yes'){
+          $('#askForNameLabel').addClass('btn-danger active');
+          $('#askForNameButton').prop('checked', true);
+        }
       }
     });
   }
@@ -913,6 +917,35 @@ function initVroom(room) {
           $.notify(data.msg, 'error');
         }
       }  
+    });
+  });
+
+  // Force participants to set a name
+  $('#askForNameButton').change(function() {
+    var type = ($(this).is(":checked")) ? 'set':'unset';
+    $.ajax({
+      data: {
+        action: 'askForName',
+        type: type,
+        room: roomName
+      },
+      error: function(data) {
+        $.notify(locale.ERROR_OCCURED, 'error');
+      },
+      success: function(data) {
+        if (data.status == 'success'){
+          $.notify(data.msg, 'info');
+          if (type === 'set'){
+            $('#askForNameLabel').addClass('btn-danger active');
+          }
+          else{
+            $('#askForNameLabel').removeClass('btn-danger active');
+          }
+        }
+        else{
+          $.notify(data.msg, 'error');
+        }
+      }
     });
   });
 
