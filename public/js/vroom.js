@@ -844,7 +844,7 @@ function initVroom(room) {
         if (data.status == 'success' && data.msg){
           $.notify(data.msg, 'success');
         }
-        else{
+        else if (data.msg){
           $.notify(data.msg, 'error');
         }
       }
