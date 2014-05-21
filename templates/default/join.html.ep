@@ -102,6 +102,11 @@
                       <span class="glyphicon glyphicon-lock">
                       </span>
                     </label>
+                    <label class="btn btn-default help" id="askForNameLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'FORCE_DISPLAY_NAME' %>">
+                      <input type="checkbox" id="askForNameButton">
+                      <span class="glyphicon glyphicon-leaf">
+                      </span>
+                    </label>
                   </div>
                 </div>
               </center>
