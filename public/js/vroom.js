@@ -56,7 +56,8 @@ var locale = {
   CANT_SUSPEND_OWNER: '',
   YOU_HAVE_KICKED_s: '',
   CANT_KICK_OWNER: '',
-  REMOVE_THIS_ADDRESS: ''
+  REMOVE_THIS_ADDRESS: '',
+  DISPLAY_NAME_REQUIRED: ''
 };
 
 // Localize the strings we need
@@ -207,6 +208,7 @@ function initVroom(room) {
       role: 'participant'
     }
   };
+  var roomInfo;
   var mainVid = false,
       chatHistory = {},
       chatIndex = 0,
@@ -238,6 +240,7 @@ function initVroom(room) {
         room: roomName,
         id: peers.local.id
       },
+      async: false,
       error: function(data){
         $.notify(locale.ERROR_OCCURED, 'error');
       },
@@ -247,6 +250,7 @@ function initVroom(room) {
           webrtc.sendToAll('role_change', {});
         }
         peers.local.role = data.role;
+        roomInfo = data;
         // Enable owner reserved menu
         if (data.role == 'owner'){
           $('.unauthEl').hide(500);
@@ -751,6 +755,24 @@ function initVroom(room) {
     getRoomInfo();
   });
 
+  // askForName set
+  webrtc.on('ask_for_name_on', function(data){
+    if (peers.local.role != 'owner'){
+      return;
+    }
+    getRoomInfo();
+    $('#askForNameLabel').addClass('btn-danger active');
+    $('#askForNameButton').prop('checked', true);
+  });
+  webrtc.on('ask_for_name_off', function(data){
+    if (peers.local.role != 'owner'){
+      return;
+    }
+    getRoomInfo();
+    $('#askForNameLabel').removeClass('btn-danger active');
+    $('#askForNameButton').prop('checked', false);
+  });
+
   // A few notif on password set/unset or lock/unlock
   webrtc.on('room_locked', function(data){
     $('#lockLabel').addClass('btn-danger active');
@@ -789,7 +811,12 @@ function initVroom(room) {
   webrtc.once('readyToCall', function () {
     peers.local.id = webrtc.connection.socket.sessionid;
     getRoomInfo();
-    webrtc.joinRoom(room);
+    if (roomInfo.ask_for_name && roomInfo.ask_for_name == 'yes'){
+      $('#setDisplayName').modal('show');
+    }
+    else{
+      webrtc.joinRoom(room);
+    }
   });
 
   // Handle new video stream added: someone joined the room
@@ -889,6 +916,37 @@ function initVroom(room) {
     updateDisplayName('local');
     webrtc.sendDirectlyToAll('vroom', 'setDisplayName', name);
   });
+  // This is the displayName input before joining the room
+  $('#displayNamePre').on('input', function() {
+    var name = $('#displayNamePre').val();
+    if (name.length > 0 && name.length < 50){
+      $('#displayNamePreButton').removeClass('disabled');
+      $('#displayNamePre').parent().removeClass('has-error');
+    }
+    else{
+      $('#displayNamePreButton').addClass('disabled');
+      $('#displayNamePre').parent().addClass('has-error');
+      if (name.length < 1){
+        $('#displayNamePre').notify(locale.DISPLAY_NAME_REQUIRED, 'error');
+      }
+      else{
+        $('#displayNamePre').notify(locale.DISPLAY_NAME_TOO_LONG, 'error');
+      }
+    }
+  });
+
+  $('#displayNamePreForm').submit(function(event){
+    event.preventDefault();
+    var name = $('#displayNamePre').val();
+    if (name.length > 0 && name.length < 50){
+      $('#setDisplayName').modal('hide');
+      $('#displayName').val(name);
+      peers.local.hasName = true;
+      peers.local.displayName = name;
+      updateDisplayName('local');
+      webrtc.joinRoom(room);
+    }
+  });
 
   // Handle room lock/unlock
   $('#lockButton').change(function() {
@@ -937,9 +995,11 @@ function initVroom(room) {
           $.notify(data.msg, 'info');
           if (type === 'set'){
             $('#askForNameLabel').addClass('btn-danger active');
+            webrtc.sendToAll('ask_for_name_on', {});
           }
           else{
             $('#askForNameLabel').removeClass('btn-danger active');
+            webrtc.sendToAll('ask_for_name_off', {});
           }
         }
         else{
