@@ -165,9 +165,7 @@ our %Lexicon = (
     "ABOUT"                                     => "À propos",
     "SECURE"                                    => "Sécurisé",
     "P2P_COMMUNICATION"                         => "Avec VROOM, vos communications se font de pair à pair (directement enre utilisateurs), " .
-                                                   "et sont sécurisées. " .
-                                                   "Nos serveurs ne sont utilisé que pour le signalement, pour que chacun puisse se connecter " .
-                                                   "aux autres ",
+                                                   "et sont sécurisées",
     "WORKS_EVERYWHERE"                          => "Universel",
     "MODERN_BROWSERS"                           => "VROOM fonctionne avec les navigateurs modernes (Google Chrome, Mozilla Firefox, Opera), " .
                                                    "vous n'avez aucun plugin à installer, ni codec, ni logiciel, ni à " .

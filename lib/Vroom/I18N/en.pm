@@ -153,10 +153,7 @@ our %Lexicon = (
   "HELP"                                 => "Help",
   "ABOUT"                                => "About",
   "SECURE"                               => "Secure",
-  "P2P_COMMUNICATION"                    => "With VROOM, your communication is done peer to peer, and secured. " .
-                                            "Our servers are only used for signaling, so that everyone can connect " .
-                                            "directly to each other (see it like a virtual meeting point). All your " .
-                                            "important data is sent directly.",
+  "P2P_COMMUNICATION"                    => "With VROOM, your communications are done peer to peer, and secured",
   "WORKS_EVERYWHERE"                     => "Universal",
   "MODERN_BROWSERS"                      => "VROOM works with modern browsers (Chrome, Mozilla Firefox or Opera), " .
                                             "you don't have to install plugins, codecs, client software, then " .
