@@ -190,6 +190,14 @@ function getTime(){
   return hours + ':' + minutes + ':' + seconds;
 }
 
+// Temporarily suspend a button, prevent abuse
+function suspendButton(el){
+  $(el).attr('disabled', true);
+  setTimeout(function(){
+    $(el).attr('disabled', false);
+  }, 1000);
+}
+
 // get max height for the main video and the preview div
 function maxHeight(){
   // Which is the window height, minus toolbar, and a margin of 25px
@@ -1014,6 +1022,7 @@ function initVroom(room) {
         }
       }  
     });
+    suspendButton($(this));
   });
 
   // Force participants to set a name
@@ -1045,6 +1054,7 @@ function initVroom(room) {
         }
       }
     });
+    suspendButton($(this));
   });
 
   // ScreenSharing
@@ -1215,6 +1225,7 @@ function initVroom(room) {
         }
       }
     });
+    suspendButton($(this));
   });
 
   // Set owner password
@@ -1276,6 +1287,7 @@ function initVroom(room) {
         }
       }
     });
+    suspendButton($(this));
   });
 
   // Add an email to be notified when someone joins
