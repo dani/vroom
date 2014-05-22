@@ -656,7 +656,10 @@ post '/action' => sub {
     my $message = $self->param('message');
     my $status  = 'error';
     my $msg     = $self->l('ERROR_OCCURED');
-    if ($rcpt !~ m/\S+@\S+\.\S+$/){
+    if (!$self->session($room) || $self->session($room)->{role} ne 'owner'){
+      $msg = 'NOT_ALLOWED';
+    }
+    elsif ($rcpt !~ m/\S+@\S+\.\S+$/){
       $msg = $self->l('ERROR_MAIL_INVALID');
     }
     elsif ($self->email(

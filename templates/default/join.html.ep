@@ -12,8 +12,42 @@
       </div>
       <input id="roomName" name="roomName" type="hidden" value="<%= $room %>"/>
       <div id="roomToolBar" class="collapse navbar-collapse">
+        <div class="navbar-form navbar-left input-group">
+          <div class="input-group">
+            <input type="text" id="displayName" class="form-control help" placeholder="<%=l 'YOUR_NAME' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'NAME_SENT_TO_OTHERS' %>"/>
+            <span class="input-group-btn">
+              <button id="changeColorButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CHANGE_COLOR' %>">
+                <span class="glyphicon glyphicon-tag">
+                </span>
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="btn-group navbar-form navbar-left">
+          <button id="chatDropdown" class="form-control collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
+            <span class="glyphicon glyphicon-comment">
+            </span>
+          </button>
+        </div>
+        <div class="btn-group navbar-form navbar-left" data-toggle="buttons">
+          <label class="btn btn-default help" id="muteMicLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_MIC' %>">
+            <input type="checkbox" id="muteMicButton">
+            <span class="glyphicon glyphicon-volume-off">
+            </span>
+          </label>
+          <label class="btn btn-default help" id="suspendCamLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUSPEND_CAM' %>">
+            <input type="checkbox" id="suspendCamButton">
+            <span class="glyphicon glyphicon-eye-close">
+            </span>
+          </label>
+          <label class="btn btn-default help" id="shareScreenLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SHARE_YOUR_SCREEN' %>">
+            <input type="checkbox" id="shareScreenButton">
+            <span class="glyphicon glyphicon-expand">
+            </span>
+          </label>
+        </div>
         <div id="inviteDropdownContainer" class="navbar-form navbar-left input-group">
-          <button class="btn btn-default dropdown-toggle help" type="button" id="inviteMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'INVITE_PEOPLE' %>">
+          <button class="btn btn-default dropdown-toggle help ownerEl" type="button" id="inviteMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'INVITE_PEOPLE' %>">
             <span class="glyphicon glyphicon-user"></span>
             <span class="caret"></span>
           </button>
@@ -52,40 +86,6 @@
               </form>
             </li>
           </ul>
-        </div>
-        <div class="navbar-form navbar-left input-group">
-          <div class="input-group">
-            <input type="text" id="displayName" class="form-control help" placeholder="<%=l 'YOUR_NAME' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'NAME_SENT_TO_OTHERS' %>"/>
-            <span class="input-group-btn">
-              <button id="changeColorButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CHANGE_COLOR' %>">
-                <span class="glyphicon glyphicon-tag">
-                </span>
-              </button>
-            </span>
-          </div>
-        </div>
-        <div class="btn-group navbar-form navbar-left">
-          <button id="chatDropdown" class="form-control collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
-            <span class="glyphicon glyphicon-comment">
-            </span>
-          </button>
-        </div>
-        <div class="btn-group navbar-form navbar-left" data-toggle="buttons">
-          <label class="btn btn-default help" id="muteMicLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_MIC' %>">
-            <input type="checkbox" id="muteMicButton">
-            <span class="glyphicon glyphicon-volume-off">
-            </span>
-          </label>
-          <label class="btn btn-default help" id="suspendCamLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUSPEND_CAM' %>">
-            <input type="checkbox" id="suspendCamButton">
-            <span class="glyphicon glyphicon-eye-close">
-            </span>
-          </label>
-          <label class="btn btn-default help" id="shareScreenLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SHARE_YOUR_SCREEN' %>">
-            <input type="checkbox" id="shareScreenButton">
-            <span class="glyphicon glyphicon-expand">
-            </span>
-          </label>
         </div>
         <div class="btn-group navbar-form navbar-left">
           <button class="btn btn-default dropdown-toggle help ownerEl" type="button" id="confMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
