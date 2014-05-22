@@ -81,8 +81,8 @@ function inviteUrlPopup(){
 
 // Add a new email address to be notified whn someone joins
 function addNotifiedEmail(email){
-  var id = email.replace('@', '_AT_').replace('.', '_DOT_');
-  $('<li></li>').html(email + '  <a href="javascript:void(0);" onclick="removeNotifiedEmail(\'' + email + '\');" title="' + locale.REMOVE_THIS_ADDRESS + '">' +
+  var id = email.replace(/['"]/g, '_');
+  $('<li></li>').html(email + '  <a href="javascript:void(0);" onclick="removeNotifiedEmail(\'' + email.replace('\'', '\\\'') + '\');" title="' + locale.REMOVE_THIS_ADDRESS + '">' +
                               '    <span class="glyphicon glyphicon-remove-circle"></span>' +
                               '  </a>')
    .attr('id', 'emailNotification_' + id)
@@ -91,7 +91,7 @@ function addNotifiedEmail(email){
 
 // Remove the address from the list
 function removeNotifiedEmail(email){
-  var id = email.replace('@', '_AT_').replace('.', '_DOT_');
+  var id = escapeJqSelector(email.replace(/['"]/, '_').replace('\\\'', '\''));
   $.ajax({
     data: {
       action: 'emailNotification',
@@ -113,6 +113,11 @@ function removeNotifiedEmail(email){
       }
     }
   });
+}
+
+// Taken from http://totaldev.com/content/escaping-characters-get-valid-jquery-id
+function escapeJqSelector(string){
+  return string.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
 }
 
 // Escape entities
