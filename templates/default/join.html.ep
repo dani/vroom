@@ -337,7 +337,7 @@
                    autoRequestMedia: true,
                    enableDataChannels: true,
                    debug: false,
-                   detectSpeakingEvents: false,
+                   detectSpeakingEvents: true,
                    adjustPeerVolume: false,
                    autoAdjustMic: false,
                    media: {
