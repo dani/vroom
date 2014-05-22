@@ -568,11 +568,12 @@ function initVroom(room) {
 
   // An owner is muting/unmuting ourself
   webrtc.on('owner_toggle_mute', function(data){
-    if (peers[data.id].role != 'owner'){
+    // Ignore this if the remote peer isn't the owner of the room
+    // or if the peer receiving it is our local screen
+    if (peers[data.id].role != 'owner' || data.roomType == 'screen'){
       return;
     }
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
-      // Ignore this if the remote peer isn't the owner of the room
       if (!peers.local.micMuted){
         muteMic();
         $('#muteMicLabel').addClass('btn-danger active');
@@ -597,7 +598,7 @@ function initVroom(room) {
   });
   // An owner is pausing/resuming our webcam
   webrtc.on('owner_toggle_pause', function(data){
-    if (peers[data.id].role != 'owner'){
+    if (peers[data.id].role != 'owner' || data.roomType == 'screen'){
       return;
     }
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
@@ -625,7 +626,7 @@ function initVroom(room) {
   });
   // An owner is kicking us from the room
   webrtc.on('owner_kick', function(data){
-    if (peers[data.id].role != 'owner'){
+    if (peers[data.id].role != 'owner' || data.roomType == 'screen'){
       return;
     }
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
@@ -760,12 +761,15 @@ function initVroom(room) {
   // This peer claims he changed its role (usually from participant to owner)
   // Lets check this
   webrtc.on('role_change', function(data){
+    if (data.roomType == 'screen'){
+      return;
+    }
     getPeerRole(data.id);
   });
 
   // A new notified email has been added
   webrtc.on('notif_change', function(data){
-    if (peers.local.role != 'owner'){
+    if (peers.local.role != 'owner' || data.roomType == 'screen'){
       return;
     }
     $('#emailNotificationList > li').remove();
@@ -792,22 +796,37 @@ function initVroom(room) {
 
   // A few notif on password set/unset or lock/unlock
   webrtc.on('room_locked', function(data){
+    if (data.roomType == 'screen'){
+      return;
+    }
     $('#lockLabel').addClass('btn-danger active');
     $('#lockButton').prop('checked', true);
     $.notify(sprintf(locale.ROOM_LOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
   });
   webrtc.on('room_unlocked', function(data){
+    if (data.roomType == 'screen'){
+      return;
+    }
     $('#lockLabel').removeClass('btn-danger active');
     $('#lockButton').prop('checked', false);
     $.notify(sprintf(locale.ROOM_UNLOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
   });
   webrtc.on('password_protect_on', function(data){
+    if (data.roomType == 'screen'){
+      return;
+    }
     $.notify(sprintf(locale.PASSWORD_PROTECT_ON_BY_s, stringEscape(peers[data.id].displayName)), 'info');
   });
   webrtc.on('password_protect_off', function(data){
+    if (data.roomType == 'screen'){
+      return;
+    }
     $.notify(sprintf(locale.PASSWORD_PROTECT_OFF_BY_s, stringEscape(peers[data.id].displayName)), 'info');
   });
   webrtc.on('owner_password_changed', function(data){
+    if (data.roomType == 'screen'){
+      return;
+    }
     if (peers.local.role == 'owner'){
       $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
     }
@@ -816,6 +835,9 @@ function initVroom(room) {
     }
   });
   webrtc.on('owner_password_removed', function(data){
+    if (data.roomType == 'screen'){
+      return;
+    }
     if (peers.local.role == 'owner'){
       $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
     }
@@ -882,14 +904,18 @@ function initVroom(room) {
   webrtc.on('videoRemoved', function(video,peer){
     playSound('leave.mp3');
     var id = (peer) ? peer.id : 'local';
-    id = (video.id.match(/_screen_/)) ? id + '_screen' : id;
+    // Is the screen sharing of a peer being removed ?
+    if (video.id.match(/_screen_/)){
+      id = id + '_screen';
+    }
+    // Or the peer itself
+    else if (peer && peers[peer.id]){
+      delete peers[peer.id];
+    }
     $("#peer_" + id).remove();
     if (mainVid === id){
       $('#mainVideo').html('');
       mainVid = false;
-    }
-    if (peer && peers[peer.id]){
-      delete peers[peer.id];
     }
   });
 
