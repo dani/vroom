@@ -34,7 +34,7 @@
   </div>
   <br/><br/>
   <div class="row">
-    <div id="carouselIndexContainer" class="col-md-8 col-md-offset-2 col-xl-6 col-xl-offset-3">
+    <div id="carouselIndexContainer" class="col-md-8 col-md-offset-2 col-xl-6 col-xl-offset-3 thumbnail">
       <div id="carouselIndex" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators carouselIndexIndicator">
           <li data-target="#carouselIndex" data-slide-to="0" class="active"></li>
@@ -51,7 +51,7 @@
             <p>
               <%=l 'P2P_COMMUNICATION' %>
             </p>
-            <div class="carousel-caption carouselIndexCaption">
+            <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
                 <%=l 'SECURE' %>
               </h2>
@@ -62,7 +62,7 @@
             <p>
               <%=l 'MODERN_BROWSERS' %>
             </p>
-            <div class="carousel-caption carouselIndexCaption">
+            <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
                 <%=l 'WORKS_EVERYWHERE' %>
               </h2>
@@ -73,7 +73,7 @@
             <p>
               <%=l 'THE_LIMIT_IS_YOUR_PIPE' %>
             </p>
-            <div class="carousel-caption carouselIndexCaption">
+            <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
                 <%=l 'MULTI_USER' %>
               </h2>
@@ -84,7 +84,7 @@
             <p>
               <%=l 'YOU_DONT_HAVE_TO_REGISTER' %>
             </p>
-            <div class="carousel-caption carouselIndexCaption">
+            <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
                 <%=l 'NO_SIGNIN' %>
               </h2>
@@ -95,7 +95,7 @@
             <p>
               <%=l 'STOP_WASTING_TIME' %>
             </p>
-            <div class="carousel-caption carouselIndexCaption">
+            <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
                 <%=l 'QUICK' %>
               </h2>
@@ -106,7 +106,7 @@
             <p>
               <%=l 'SHARE_DESKTOP_OR_WINDOW' %>
             </p>
-            <div class="carousel-caption carouselIndexCaption">
+            <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
                 <%=l 'SCREEN_SHARING' %>
               </h2>
@@ -117,7 +117,7 @@
             <p>
               <%=l 'SECURED_TEXT_CHAT' %>
             </p>
-            <div class="carousel-caption carouselIndexCaption">
+            <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
                 <%=l 'TEXT_CHAT' %>
               </h2>
