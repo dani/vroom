@@ -109,6 +109,9 @@
   top: 0px;  
   display: none;
 }
+#unreadMsg {
+  display: none;
+}
 .actionMute:before{
   font-family: 'Glyphicons Halflings';
   content: "\e036";

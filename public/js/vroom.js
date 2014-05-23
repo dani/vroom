@@ -702,7 +702,7 @@ function initVroom(room) {
       if ($('#chatDropdown').hasClass('collapsed')){
         $('#chatDropdown').addClass('btn-danger');
         playSound('newmsg.mp3');
-        $('#unreadMsg').text(parseInt($('#unreadMsg').text())+1);
+        $('#unreadMsg').text(parseInt($('#unreadMsg').text())+1).show(1000);
       }
       newChatMessage(peer.id,data.payload);
     }
@@ -1411,7 +1411,7 @@ function initVroom(room) {
   // and reset the unread msg counter
   $('#chatDropdown').click(function (){
     $('#chatDropdown').removeClass('btn-danger');
-    $('#unreadMsg').text('0');
+    $('#unreadMsg').text('0').hide(1000);
   });
   // The input is a textarea, trigger a submit
   // when the user hit enter, unless shift is pressed
