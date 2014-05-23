@@ -22,6 +22,7 @@
 .previewContainer{
   margin-top: 5px;
   margin-bottom: 5px;
+  display: none;
 }
 .previewContainer:nth-child(2n+1){
   clear: left;

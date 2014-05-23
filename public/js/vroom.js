@@ -341,7 +341,7 @@ function initVroom(room) {
         }).css('max-height', maxHeight()));
         $('.selected').removeClass('selected');
         el.addClass('selected');
-        mainVid = id;
+        mainVid = el.attr('id');
         $('#mainVideo').show(300);
       }
     }, wait);
@@ -441,7 +441,7 @@ function initVroom(room) {
       }, 3500);
       // Stop moh
       $('#mohPlayer')[0].pause();
-      $('.aloneEl').hide(200);
+      $('.aloneEl').hide(300);
       moh = false;
     }
     $(div).attr('id', 'peer_' + id);
@@ -458,6 +458,8 @@ function initVroom(room) {
     $(video).click(function() {
       handlePreviewClick($(this), peer.id);
     });
+    // Now display the div
+    div.show(200);
   }
 
   // Update volume of the corresponding peer
@@ -918,6 +920,7 @@ function initVroom(room) {
         $('.aloneEl').show(200);
       }
     }, 2000);
+    $('#videoLocalContainer').show(200);
   });
 
   // Handle new video stream added: someone joined the room
@@ -948,8 +951,11 @@ function initVroom(room) {
     else if (peer && peers[peer.id]){
       delete peers[peer.id];
     }
-    $("#peer_" + id).remove();
-    if (mainVid === id){
+    $("#peer_" + id).hide(300);
+    setTimeout(function(){
+      $("#peer_" + id).remove();
+    }, 300);
+    if (mainVid == id || mainVid == id + '_incoming'){
       $('#mainVideo').hide(500);
       setTimeout(function(){
         $('#mainVideo').html('');
