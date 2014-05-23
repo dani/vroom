@@ -456,7 +456,7 @@ function initVroom(room) {
     });
     // Simple click put this preview in the mainVideo div
     $(video).click(function() {
-      handlePreviewClick($(this), peer.id);
+      handlePreviewClick($(this), id);
     });
     // Now display the div
     div.show(200);
