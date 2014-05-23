@@ -337,7 +337,7 @@ function initVroom(room) {
       // Else, update the main video to use this one
       else{
         $('#mainVideo').html(el.clone().dblclick(function() {
-          fullScreen(el);
+          fullScreen(this);
         }).css('max-height', maxHeight()));
         $('.selected').removeClass('selected');
         el.addClass('selected');
