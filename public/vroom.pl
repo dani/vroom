@@ -55,6 +55,9 @@ our $components = {
   },
   "FileSaver" => {
     url => 'https://github.com/eligrey/FileSaver.js'
+  },
+  "WPZOOM Developer Icon Set" => {
+    url => 'https://www.iconfinder.com/search/?q=iconset%3Awpzoom-developer-icon-set'
   }
 };
 
