@@ -340,6 +340,10 @@
                    detectSpeakingEvents: true,
                    adjustPeerVolume: false,
                    autoAdjustMic: false,
+                   harkOptions: {
+                     interval: 300,
+                     threshold: -20
+                   },
                    media: {
                      video: {
                        mandatory: {
