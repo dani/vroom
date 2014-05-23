@@ -12,7 +12,7 @@ Video conf based on [SimpleWebRTC.js](https://github.com/HenrikJoreteg/SimpleWeb
 * Chairman features (mute/pause/kick other)
 * Internationalization (english and french for now)
 * Works with Mozilla Firefox, Google Chrome and Opera
-* Works on Windows, Linux, Android (probaly MAC OSX too)
+* Works on Windows, Linux, Android (probably MAC OSX too)
 * Fully opensource
 
 You can try our demo instance here: https://vroom.im
