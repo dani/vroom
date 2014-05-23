@@ -115,6 +115,9 @@
 #unreadMsg {
   display: none;
 }
+#mainVideo {
+  display: none;
+}
 .actionMute:before{
   font-family: 'Glyphicons Halflings';
   content: "\e036";

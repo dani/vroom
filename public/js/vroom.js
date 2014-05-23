@@ -321,6 +321,32 @@ function initVroom(room) {
     });
   }
 
+  // Put a video on the mainVideo div
+  function handlePreviewClick(el){
+    var wait = 1;
+    if ($('#mainVideo').html() != ''){
+      $('#mainVideo').hide(300);
+      wait = 300;
+    }
+    setTimeout(function(){
+      $('#mainVideo').html('');
+      // If this video is already the main one, remove the main
+      if (el.hasClass('selected')){
+        el.removeClass('selected');
+      }
+      // Else, update the main video to use this one
+      else{
+        $('#mainVideo').html(el.clone().dblclick(function() {
+          fullScreen(el);
+        }).css('max-height', maxHeight()));
+        $('.selected').removeClass('selected');
+        el.addClass('selected');
+        mainVid = 'self';
+        $('#mainVideo').show(300);
+      }
+    }, wait);
+  }
+
   // Logout
   function hangupCall(){
     webrtc.connection.disconnect();
@@ -430,19 +456,7 @@ function initVroom(room) {
     });
     // Simple click put this preview in the mainVideo div
     $(video).click(function() {
-      // This video was in the mainVideo div ? lets remove it
-      if ($(this).hasClass('selected')){
-        $(this).removeClass('selected');
-        $('#mainVideo').html('');
-      }
-      else {
-        $('#mainVideo').html($(video).clone().dblclick(function() {
-          fullScreen(this);
-          }).css('max-height', maxHeight()).bind('contextmenu', function(){ return false; }));
-        $('.selected').removeClass('selected');
-        $(this).addClass('selected');
-        mainVid = id;
-      }
+      handlePreviewClick($(this));
     });
   }
 
@@ -936,7 +950,10 @@ function initVroom(room) {
     }
     $("#peer_" + id).remove();
     if (mainVid === id){
-      $('#mainVideo').html('');
+      $('#mainVideo').hide(500);
+      setTimeout(function(){
+        $('#mainVideo').html('');
+      }, 500);
       mainVid = false;
     }
   });
@@ -1415,21 +1432,7 @@ function initVroom(room) {
     fullScreen(this);
   });
   $('#webRTCVideoLocal').click(function() {
-    // If this video is already the main one, remove the main
-    if ($(this).hasClass('selected')){
-      $('#mainVideo').html('');
-      $(this).removeClass('selected');
-      mainVid = false;
-    }
-    // Else, update the main video to use this one
-    else{
-      $('#mainVideo').html($(this).clone().dblclick(function() {
-        fullScreen(this);
-      }).css('max-height', maxHeight()));
-      $('.selected').removeClass('selected');
-      $(this).addClass('selected');
-      mainVid = 'self';
-    }
+    handlePreviewClick($(this));
   });
 
   // On click, remove the red label on the button
