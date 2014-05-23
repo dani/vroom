@@ -341,7 +341,8 @@
     <script>
       var roomName = '<%= $room %>';
       $( document ).ready(function() {
-        webrtc = new SimpleWebRTC({
+        setTimeout(function(){
+          webrtc = new SimpleWebRTC({
                    url: "<%= $config->{signalingServer} %>",
                    peerConnectionConfig: {
                      iceServers: [
@@ -369,7 +370,8 @@
                      audio: true
                    }
                  });
-        initVroom(roomName);
+          initVroom(roomName);
+        }, 300);
       });
     </script>
   </div>
