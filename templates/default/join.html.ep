@@ -203,6 +203,13 @@
             </li>
           </ul>
         </div>
+        <div class="btn-group navbar-form navbar-left" data-toggle="buttons">
+          <label class="btn btn-default help aloneEl" id="pauseMohLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PAUSE_MOH' %>">
+            <input type="checkbox" id="pauseMohButton">
+            <span class="glyphicon glyphicon-music">
+            </span>
+          </label>
+        </div>
         <div class="btn-group navbar-form navbar-right" data-toggle="buttons" >
           <button class="btn btn-default help" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
             <span class="glyphicon glyphicon-log-out">
@@ -324,6 +331,7 @@
           </div>
         </form>
       </div>
+      <audio id="mohPlayer" src="/snd/moh/<%= $moh %>" loop></audio>
       <div id="view" class="view row-fluid">
         <div id="webRTCVideo" class="col-xs-12 col-sm-4">
           <div class="col-xs-6 col-sm-12 col-lg-6 previewContainer">
@@ -335,7 +343,16 @@
             </div>
           </div>
         </div>
-        <div id="mainVideo" class="col-sm-8 hidden-xs">
+        <div id="mainView" class="col-sm-8 hidden-xs">
+          <div id="mainVideo">
+          </div>
+          <div id="aloneMsg" class="aloneEl">
+            <center>
+              <h2>
+                <%=l 'ALONE_IN_ROOM' %>
+              </h2>
+            </center>
+          </div>
         </div>
       </div>
     </div>

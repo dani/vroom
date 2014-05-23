@@ -109,6 +109,9 @@
   top: 0px;  
   display: none;
 }
+.aloneEl {
+  display: none;
+}
 #unreadMsg {
   display: none;
 }

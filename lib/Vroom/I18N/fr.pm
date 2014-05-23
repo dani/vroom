@@ -150,6 +150,8 @@ our %Lexicon = (
     "EXTENSION_REQUIRED"                        => "Une extension est nécessaire",
     "VROOM_CHROME_EXTENSION"                    => "Pour activer le partage d'écran, vous devez installer une extension, cliquez sur le " .
                                                    "lien ci-dessous, puis raffraîchissez cette page",
+    "PAUSE_MOH"                                 => "Mettre la musique en pause",
+    "ALONE_IN_ROOM"                             => "Patientez quelques instants le temps que d'autres personnes vous rejoignent",
     "EVERYONE_CAN_SEE_YOUR_SCREEN"              => "Tous les autres participants peuvent voir votre écran",
     "SCREEN_UNSHARED"                           => "Vous ne partagez plus votre écran",
     "ERROR_MAIL_INVALID"                        => "Veuillez saisir une adresse email valide",
@@ -278,6 +280,8 @@ our %Lexicon = (
                                                    "</ol>",
     "THANKS"                                    => "Remerciements",
     "ABOUT_THANKS"                              => "VROOM utilise les composants suivants, merci donc aux auteurs respectifs :-)",
+    "ABOUT_MUSICS"                              => "Merci également aux auteurs des morceaux de musique utilisés",
+    "FROM_AUTHOR"                               => "de"
 
 );
 

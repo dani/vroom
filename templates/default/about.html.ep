@@ -55,6 +55,15 @@
           <% } %>
         </ul>
       </p>
+      <p>
+        <%=l 'ABOUT_MUSICS' %>
+        <ul>
+          <% foreach my $music (sort keys %{$musics}) { %>
+            <li>
+              <%= $music %> <%=l 'FROM_AUTHOR' %> <a href="<%= $musics->{$music}->{author_url} %>"><%= $musics->{$music}->{author} %></a> (<a href="<%= $musics->{$music}->{licence_url} %>"><%= $musics->{$music}->{licence} %></a>)
+            </li>
+          <% } %>
+      </p>
     </div>
   </div>
 </div>

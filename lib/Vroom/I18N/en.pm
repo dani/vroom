@@ -140,6 +140,8 @@ our %Lexicon = (
   "SCREEN_SHARING_CANCELLED"             => "Screen sharing has been cancelled",
   "EXTENSION_REQUIRED"                   => "An extension is required",
   "VROOM_CHROME_EXTENSION"               => "To enable screen sharing, you need to install an extension. Click on the following link and refresh this page",
+  "PAUSE_MOH"                            => "Pause music",
+  "ALONE_IN_ROOM"                        => "Please wait a moment while nobody is here yet",
   "EVERYONE_CAN_SEE_YOUR_SCREEN"         => "All other participants can see your screen now",
   "SCREEN_UNSHARED"                      => "You do no longer share your screen",
   "ERROR_MAIL_INVALID"                   => "Please enter a valid email address",
@@ -243,6 +245,8 @@ our %Lexicon = (
                                             "</ol>",
   "THANKS"                               => "Thanks",
   "ABOUT_THANKS"                         => "VROOM uses the following components, so, thanks to their respective authors :-)",
+  "ABOUT_MUSICS"                         => "Also thanks to the authors of songs used",
+  "FROM_AUTHOR"                          => "from"
 
 
 ); 

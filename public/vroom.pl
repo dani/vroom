@@ -16,6 +16,7 @@ use MIME::Base64;
 use Email::Sender::Transport::Sendmail;
 use Encode;
 use File::stat;
+use File::Basename;
 
 # List The different components we rely on.
 # Used to generate thanks on the about template
@@ -58,6 +59,40 @@ our $components = {
   },
   "WPZOOM Developer Icon Set" => {
     url => 'https://www.iconfinder.com/search/?q=iconset%3Awpzoom-developer-icon-set'
+  }
+};
+
+# MOH authors for credits
+our $musics = {
+  "Papel Secante" => {
+    author      => "Angel Gaitan",
+    author_url  => "http://angelgaitan.bandcamp.com/",
+    licence     => "Creative Commons BY-SA",
+    licence_url => "http://creativecommons.org/licenses/by-sa/3.0"
+  },
+  "Overjazz" => {
+    author      => "Funkyproject",
+    author_url  => "http://www.funkyproject.fr",
+    licence     => "Creative Commons BY-SA",
+    licence_url => "http://creativecommons.org/licenses/by-sa/3.0"
+  },
+  "Polar Express" => {
+    author      => "Koteen",
+    author_url  => "http://?.?",
+    licence     => "Creative Commons BY-SA",
+    licence_url => "http://creativecommons.org/licenses/by-sa/3.0"
+  },
+  "Funky Goose" => {
+    author      => "Pepe Frias",
+    author_url  => "http://www.pepefrias.tk/",
+    licence     => "Creative Commons BY-SA",
+    licence_url => "http://creativecommons.org/licenses/by-sa/3.0"
+  },
+  "I got my own" => {
+    author      => "Reole",
+    author_url  => "http://www.reolemusic.com/",
+    licence     => "Creative Commons BY-SA",
+    licence_url => "http://creativecommons.org/licenses/by-sa/3.0"
   }
 };
 
@@ -399,13 +434,22 @@ helper ask_for_name => sub {
   return 1;
 };
 
+# Randomly choose a music on hold
+helper choose_moh => sub {
+  my $self = shift;
+  my @files = (<snd/moh/*.*>);
+  return basename($files[rand @files]);
+};
+
 # Route / to the index page
 any '/' => 'index';
 
 # Route for the about page
 get '/about' => sub {
   my $self = shift;
-  $self->stash( components => $components );
+  $self->stash( components => $components,
+                musics     => $musics
+  );
 } => 'about';
 
 # Route for the help page
@@ -614,7 +658,7 @@ get '/(*room)' => sub {
   }
   # Now display the room page
   $self->render('join',
-    format => 'html',
+    moh => $self->choose_moh(),
     turnPassword => $data->{token}
   );
 };

@@ -225,7 +225,8 @@ function initVroom(room) {
   var mainVid = false,
       chatHistory = {},
       chatIndex = 0,
-      maxVol = -100;
+      maxVol = -100,
+      moh = false;
 
   $('#name_local').css('background-color', peers.local.color);
 
@@ -412,6 +413,10 @@ function initVroom(room) {
         // Get the role of this peer
         getPeerRole(peer.id);
       }, 3500);
+      // Stop moh
+      $('#mohPlayer')[0].pause();
+      $('.aloneEl').hide(200);
+      moh = false;
     }
     $(div).attr('id', 'peer_' + id);
     // Disable context menu on the video
@@ -891,6 +896,14 @@ function initVroom(room) {
         }
       }
     });
+    // We will check if moh is needed
+    setInterval(function(){
+      if (!moh && Object.keys(peers).length < 2){
+        $('#mohPlayer')[0].play();
+        moh = true;
+        $('.aloneEl').show(200);
+      }
+    }, 2000);
   });
 
   // Handle new video stream added: someone joined the room
@@ -1376,6 +1389,18 @@ function initVroom(room) {
 
   $('#saveChat').click(function(){
     downloadContent('VROOM Tchat (' + room + ').html', $('#chatHistory').html());
+  });
+
+  // Suspend MoH
+  $('#pauseMohButton').change(function(){
+    if ($(this).is(":checked")){
+      $('#mohPlayer')[0].pause();
+      $('#pauseMohLabel').addClass('btn-danger');
+    }
+    else{
+      $('#mohPlayer')[0].play();
+      $('#pauseMohLabel').removeClass('btn-danger');
+    }
   });
 
   // Handle hangup/close window
