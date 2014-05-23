@@ -285,6 +285,22 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" role="dialog" id="noWebcam" aria-labelledby="noWebcam" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="noWebcamTitle"><%=l 'NO_WEBCAM' %></h4>
+          </div>
+          <div class="modal-body">
+            <p><%=l 'CANT_ACCESS_WEBCAM' %></p>
+            <center>
+              <img src="/img/webcam.png" alt="Webcam"/>
+            </center>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="frame">
       <div id="chatMenu" class="nav-collapse collapse">
         <div id="chatHistory" class="form-control">

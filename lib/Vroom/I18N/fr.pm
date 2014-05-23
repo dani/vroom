@@ -160,6 +160,9 @@ our %Lexicon = (
                                                    "ne dispose pas des fonctions nécessaires. Nous recommandons de télécharger " .
                                                    "un des navigateurs suivants, qui supportent les dernières technologies nécessaires " .
                                                    "à l'utilisation de VROOM",
+    "NO_WEBCAM"                                 => "Impossible d'accéder à votre webcam",
+    "CANT_ACCESS_WEBCAM"                        => "Nous n'avons pas pu accéder à votre webcam, vérifiez qu'elle soit bien connectée, allumée, et que ".
+                                                   "vous avez autorisé le navigateur à y accéder, puis raffraichissez cette page",
     "HOME"                                      => "Accueil",
     "HELP"                                      => "Aide",
     "ABOUT"                                     => "À propos",

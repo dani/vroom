@@ -895,8 +895,14 @@ function initVroom(room) {
     addVideo(video,peer);
   });
 
+  // We share our screen
   webrtc.on('localScreenAdded', function(video){
     addVideo(video);
+  });
+
+  // error opening the webcam stream
+  webrtc.on('localMediaError', function(){
+    $('#noWebcam').modal('show');
   });
 
   // Handle video stream removed: someone leaved the room
