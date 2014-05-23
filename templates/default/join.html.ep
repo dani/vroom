@@ -24,8 +24,11 @@
           </div>
         </div>
         <div class="btn-group navbar-form navbar-left">
-          <button id="chatDropdown" class="form-control collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
+          <button id="chatDropdown" class="btn btn-default collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
             <span class="glyphicon glyphicon-comment">
+            </span>
+            <span class="badge" id="unreadMsg">
+              0
             </span>
           </button>
         </div>

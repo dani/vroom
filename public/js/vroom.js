@@ -702,6 +702,7 @@ function initVroom(room) {
       if ($('#chatDropdown').hasClass('collapsed')){
         $('#chatDropdown').addClass('btn-danger');
         playSound('newmsg.mp3');
+        $('#unreadMsg').text(parseInt($('#unreadMsg').text())+1);
       }
       newChatMessage(peer.id,data.payload);
     }
@@ -1407,8 +1408,10 @@ function initVroom(room) {
   });
 
   // On click, remove the red label on the button
+  // and reset the unread msg counter
   $('#chatDropdown').click(function (){
     $('#chatDropdown').removeClass('btn-danger');
+    $('#unreadMsg').text('0');
   });
   // The input is a textarea, trigger a submit
   // when the user hit enter, unless shift is pressed
