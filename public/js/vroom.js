@@ -915,8 +915,10 @@ function initVroom(room) {
     // We will check if moh is needed
     setInterval(function(){
       if (!moh && Object.keys(peers).length < 2){
-        $('#mohPlayer')[0].play();
-        moh = true;
+        if (!$('#pauseMohButton').is(':checked')){
+          $('#mohPlayer')[0].play();
+          moh = true;
+        }
         $('.aloneEl').show(200);
       }
     }, 2000);
