@@ -322,7 +322,7 @@ function initVroom(room) {
   }
 
   // Put a video on the mainVideo div
-  function handlePreviewClick(el){
+  function handlePreviewClick(el, id){
     var wait = 1;
     if ($('#mainVideo').html() != ''){
       $('#mainVideo').hide(300);
@@ -341,7 +341,7 @@ function initVroom(room) {
         }).css('max-height', maxHeight()));
         $('.selected').removeClass('selected');
         el.addClass('selected');
-        mainVid = 'self';
+        mainVid = id;
         $('#mainVideo').show(300);
       }
     }, wait);
@@ -456,7 +456,7 @@ function initVroom(room) {
     });
     // Simple click put this preview in the mainVideo div
     $(video).click(function() {
-      handlePreviewClick($(this));
+      handlePreviewClick($(this), peer.id);
     });
   }
 
@@ -1432,7 +1432,7 @@ function initVroom(room) {
     fullScreen(this);
   });
   $('#webRTCVideoLocal').click(function() {
-    handlePreviewClick($(this));
+    handlePreviewClick($(this), 'self');
   });
 
   // On click, remove the red label on the button
