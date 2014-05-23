@@ -374,16 +374,18 @@ function initVroom(room) {
            id: 'actionKick_' + id,
            click: function() { kickPeer(id) },
          }).prop('title', locale.KICK_PEER)));
-      $(div).hover(
-        function(){
-          if (peers.local.role == 'owner'){
-            $('#ownerActions_' + id).show(200);
+      setTimeout (function(){
+        $(div).hover(
+          function(){
+            if (peers.local.role == 'owner'){
+              $('#ownerActions_' + id).show(200);
+            }
+          },
+          function(){
+            $('#ownerActions_' + id).hide(200);
           }
-        },
-        function(){
-          $('#ownerActions_' + id).hide(200);
-        }
-      );
+        );
+      }, 3500);
       // Create a new dataChannel
       // will be used for text chat and displayName
       var color = chooseColor();
