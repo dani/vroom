@@ -739,15 +739,15 @@ post '/action' => sub {
     my $status = 'error';
     # Only the owner can lock or unlock a room
     if (!$self->session($room) || $self->session($room)->{role} ne 'owner'){
-      $msg = 'NOT_ALLOWED';
+      $msg = $self->l('NOT_ALLOWED');
     }
     elsif ($self->lock_room($room,($action eq 'lock') ? '1':'0')){
       $status = 'success';
-      $msg = ($action eq 'lock') ? 'ROOM_LOCKED' : 'ROOM_UNLOCKED';
+      $msg = ($action eq 'lock') ? $self->l('ROOM_LOCKED') : $self->l('ROOM_UNLOCKED');
     }
     return $self->render(
              json => {
-               msg    => $self->l($msg),
+               msg    => $msg,
                status => $status
              }
            );
@@ -755,7 +755,7 @@ post '/action' => sub {
   # Handle activity pings sent every minute by each participant
   elsif ($action eq 'ping'){
     my $status = 'error';
-    my $msg = 'ERROR_OCCURED';
+    my $msg = $self->l('ERROR_OCCURED');
     my $res = $self->ping_room($room);
     # Cleanup expired rooms every ~10 pings
     if ((int (rand 100)) <= 10){
@@ -767,7 +767,7 @@ post '/action' => sub {
     }
     return $self->render(
              json => {
-               msg    => $self->l($msg),
+               msg    => $msg,
                status => $status
              }
            );
@@ -779,14 +779,14 @@ post '/action' => sub {
     # Empty password is equivalent to no password at all
     $pass = undef if ($pass && $pass eq '');
     my $res = undef;
-    my $msg = 'ERROR_OCCURED';
+    my $msg = $self->l('ERROR_OCCURED');
     my $status = 'error';
     # Once again, only the owner can do this
     if ($self->session($room)->{role} eq 'owner'){
       if ($type eq 'owner'){
         # Forbid a few common room names to be reserved
         if (grep { $room eq $_ } @{$config->{commonRoomNames}}){
-          $msg = 'ERROR_COMMON_ROOM_NAME';
+          $msg = $self->l('ERROR_COMMON_ROOM_NAME');
         }
         else{
           $res = $self->set_owner_pass($room,$pass);
@@ -802,7 +802,7 @@ post '/action' => sub {
     }
     # Simple participants will get an error
     else{
-      $msg = 'NOT_ALLOWED';
+      $msg = $self->l('NOT_ALLOWED');
     }
     return $self->render(
              json => {
@@ -815,24 +815,24 @@ post '/action' => sub {
   elsif ($action eq 'authenticate'){
     my $pass = $self->param('password');
     my $res = undef;
-    my $msg = 'ERROR_OCCURED';
+    my $msg = $self->l('ERROR_OCCURED');
     my $status = 'error';
     # Auth succeed ? lets promote him to owner of the room
     if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
       $self->session($room, {role => 'owner'});
-      $msg = 'AUTH_SUCCESS';
+      $msg = $self->l('AUTH_SUCCESS');
       $status = 'success';
     }
     elsif ($data->{owner_password}){
-      $msg = 'WRONG_PASSWORD';
+      $msg = $self->l('WRONG_PASSWORD');
     }
     # There's no owner password, so you cannot auth
     else{
-      $msg = 'NOT_ALLOWED';
+      $msg = $self->l('NOT_ALLOWED');
     }
     return $self->render(
                json => {
-                 msg    => $self->l($msg),
+                 msg    => $msg,
                  status => $status
                },
              );
