@@ -952,7 +952,7 @@ function initVroom(room) {
     setTimeout(function(){
       $("#peer_" + id).remove();
     }, 300);
-    if (mainVid == id || mainVid == id + '_incoming'){
+    if (mainVid == id + '_video_incoming' || mainVid == id + '_incoming'){
       $('#mainVideo').hide(500);
       setTimeout(function(){
         $('#mainVideo').html('');
