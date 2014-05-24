@@ -804,77 +804,70 @@ function initVroom(room) {
 
   // A new notified email has been added
   webrtc.on('notif_change', function(data){
-    if (peers.local.role != 'owner' || data.roomType == 'screen'){
+    if (peers.local.role != 'owner' || data.roomType == 'screen' || peers[data.id].role != 'owner'){
       return;
     }
     $('#emailNotificationList > li').remove();
     getRoomInfo();
   });
 
-  // askForName set
-  webrtc.on('ask_for_name_on', function(data){
-    if (peers.local.role != 'owner'){
+  // askForName set/unset
+  webrtc.on('ask_for_name', function(data){
+    if (peers.local.role != 'owner' || peers[data.id].role != 'owner'){
       return;
     }
-    getRoomInfo();
-    $('#askForNameLabel').addClass('btn-danger active');
-    $('#askForNameButton').prop('checked', true);
-  });
-  webrtc.on('ask_for_name_off', function(data){
-    if (peers.local.role != 'owner'){
-      return;
+    if (data.payload.action == 'set'){
+      roomInfo.ask_for_name = 'yes';
+      $('#askForNameLabel').addClass('btn-danger active');
+      $('#askForNameButton').prop('checked', true);
     }
-    getRoomInfo();
-    $('#askForNameLabel').removeClass('btn-danger active');
-    $('#askForNameButton').prop('checked', false);
+    else{
+      roomInfo.ask_for_name = 'no';
+      $('#askForNameLabel').removeClass('btn-danger active');
+      $('#askForNameButton').prop('checked', false);
+    }
   });
 
   // A few notif on password set/unset or lock/unlock
-  webrtc.on('room_locked', function(data){
-    if (data.roomType == 'screen'){
+  webrtc.on('room_lock', function(data){
+    if (data.roomType == 'screen' || peers[data.id].role != 'owner'){
       return;
     }
-    $('#lockLabel').addClass('btn-danger active');
-    $('#lockButton').prop('checked', true);
-    $.notify(sprintf(locale.ROOM_LOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
-  });
-  webrtc.on('room_unlocked', function(data){
-    if (data.roomType == 'screen'){
-      return;
-    }
-    $('#lockLabel').removeClass('btn-danger active');
-    $('#lockButton').prop('checked', false);
-    $.notify(sprintf(locale.ROOM_UNLOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
-  });
-  webrtc.on('password_protect_on', function(data){
-    if (data.roomType == 'screen'){
-      return;
-    }
-    $.notify(sprintf(locale.PASSWORD_PROTECT_ON_BY_s, stringEscape(peers[data.id].displayName)), 'info');
-  });
-  webrtc.on('password_protect_off', function(data){
-    if (data.roomType == 'screen'){
-      return;
-    }
-    $.notify(sprintf(locale.PASSWORD_PROTECT_OFF_BY_s, stringEscape(peers[data.id].displayName)), 'info');
-  });
-  webrtc.on('owner_password_changed', function(data){
-    if (data.roomType == 'screen'){
-      return;
-    }
-    if (peers.local.role == 'owner'){
-      $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
+    if (data.payload.action == 'lock'){
+      roomInfo.locked = 'yes';
+      $('#lockLabel').addClass('btn-danger active');
+      $('#lockButton').prop('checked', true);
+      $.notify(sprintf(locale.ROOM_LOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
     }
     else{
-      getRoomInfo();
+      roomInfo.locked = 'no';
+      $('#lockLabel').removeClass('btn-danger active');
+      $('#lockButton').prop('checked', false);
+      $.notify(sprintf(locale.ROOM_UNLOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
     }
   });
-  webrtc.on('owner_password_removed', function(data){
-    if (data.roomType == 'screen'){
+  webrtc.on('password_protect', function(data){
+    if (data.roomType == 'screen' || peers[data.id].role != 'owner'){
+      return;
+    }
+    if (data.payload.action == 'set'){
+      $.notify(sprintf(locale.PASSWORD_PROTECT_ON_BY_s, stringEscape(peers[data.id].displayName)), 'info');
+    }
+    else{
+      $.notify(sprintf(locale.PASSWORD_PROTECT_OFF_BY_s, stringEscape(peers[data.id].displayName)), 'info');
+    }
+  });
+  webrtc.on('owner_password', function(data){
+    if (data.roomType == 'screen' || peers[data.id].role != 'owner'){
       return;
     }
     if (peers.local.role == 'owner'){
-      $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
+      if (data.payload.action == 'set'){
+        $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
+      }
+      else{
+        $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
+      }
     }
     else{
       getRoomInfo();
@@ -1091,12 +1084,12 @@ function initVroom(room) {
           $.notify(data.msg, 'info');
           if (action === 'lock'){
             $('#lockLabel').addClass('btn-danger active');
-            webrtc.sendToAll('room_locked', {});
           }
           else{
+            on_off = 'off';
             $('#lockLabel').removeClass('btn-danger active');
-            webrtc.sendToAll('room_unlocked', {});
           }
+          webrtc.sendToAll('room_lock', {action: action});
         }
         else{
           $.notify(data.msg, 'error');
@@ -1123,12 +1116,11 @@ function initVroom(room) {
           $.notify(data.msg, 'info');
           if (type === 'set'){
             $('#askForNameLabel').addClass('btn-danger active');
-            webrtc.sendToAll('ask_for_name_on', {});
           }
           else{
             $('#askForNameLabel').removeClass('btn-danger active');
-            webrtc.sendToAll('ask_for_name_off', {});
           }
+           webrtc.sendToAll('ask_for_name', {action: type});
         }
         else{
           $.notify(data.msg, 'error');
@@ -1275,7 +1267,7 @@ function initVroom(room) {
         $('#joinPass').val('');
         if (data.status == 'success'){
           $.notify(data.msg, 'success');
-          webrtc.sendToAll('password_protect_on', {});
+          webrtc.sendToAll('password_protect', {action: 'set'});
         }
         else{
           $.notify(data.msg, 'error');
@@ -1299,7 +1291,7 @@ function initVroom(room) {
         $('#joinPass').val('');
         if (data.status == 'success'){
           $.notify(data.msg, 'success');
-          webrtc.sendToAll('password_protect_off', {});
+          webrtc.sendToAll('password_protect', {action: 'unset'});
         }
         else{
           $.notify(data.msg, 'error');
@@ -1337,7 +1329,7 @@ function initVroom(room) {
         $('#ownerPass').val('');
         if (data.status == 'success'){
           $.notify(data.msg, 'success');
-          webrtc.sendToAll('owner_password_changed', {});
+          webrtc.sendToAll('owner_password', {action: 'set'});
         }
         else{
           $.notify(data.msg, 'error');
@@ -1361,7 +1353,7 @@ function initVroom(room) {
         $('#ownerPass').val('');
         if (data.status == 'success'){
           $.notify(data.msg, 'success');
-          webrtc.sendToAll('owner_password_removed', {});
+          webrtc.sendToAll('owner_password', {action: 'remove'});
         }
         else{
           $.notify(data.msg, 'error');
