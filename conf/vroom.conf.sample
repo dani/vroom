@@ -27,6 +27,13 @@ inactivityTimeout => 3600,
 # 0 means they are not deleted. You can use a high number
 # so that persistent rooms are kept long enough, but deleted when not used
 persistentInactivityTimeout => 0,
+# A list of room names which are valid but too common to allow reservation
+# with an owner password
+commonRoomNames => [
+  'test', 'test1', 'test123', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+  '123', '1234', '12345', 'a', 'aa', 'abc', 'azerty', 'qwerty', 'vroom',
+  'foo', 'bar', 'baz'
+],
 logLevel => 'info',
 
 # ID of the Chrome extension for screen sharing

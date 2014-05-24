@@ -81,6 +81,7 @@ our %Lexicon = (
   "REMOVE_PASSWORD"                      => "Remove the password",
   "PASSWORD_SET"                         => "Password updated",
   "PASSWORD_REMOVED"                     => "Password removed",
+  "ERROR_COMMON_ROOM_NAME"               => "Sorry, this room name is too comon to be reserved",
   "AUTHENTICATE"                         => "Authentication",
   "AUTH_TO_MANAGE_THE_ROOM"              => "Authenticate to manage the room",
   "OWNER_PASSWORD_MAKES_PERSISTENT"      => "You can set a manager password. It will make this room persistent",

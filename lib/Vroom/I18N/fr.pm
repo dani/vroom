@@ -88,6 +88,7 @@ our %Lexicon = (
     "REMOVE_PASSWORD"                           => "Supprimer le mot de passe",
     "PASSWORD_SET"                              => "Le mot de passe a été mis à jour",
     "PASSWORD_REMOVED"                          => "Le mot de passe a été supprimé",
+    "ERROR_COMMON_ROOM_NAME"                    => "Désolé, le nom de ce salon est trop commun pour être réservé",
     "AUTHENTICATE"                              => "Authentification",
     "AUTH_TO_MANAGE_THE_ROOM"                   => "Authentifiez-vous pour gérer le salon",
     "OWNER_PASSWORD_MAKES_PERSISTENT"           => "Ajouter un mot de passe de gestionnaire. Ceci rendra le salon persistant",

@@ -113,6 +113,7 @@ our $config = plugin Config => {
     template                      => 'default',
     inactivityTimeout             => 3600,
     persistentInactivityTimeout   => 0,
+    commonRoomNames               => [ qw() ],
     logLevel                      => 'info',
     chromeExtensionId             => 'ecicdpoejfllflombfanbhfpgcimjddn',
     sendmail                      => '/sbin/sendmail'
@@ -783,7 +784,13 @@ post '/action' => sub {
     # Once again, only the owner can do this
     if ($self->session($room)->{role} eq 'owner'){
       if ($type eq 'owner'){
-        $res = $self->set_owner_pass($room,$pass);
+        # Forbid a few common room names to be reserved
+        if (grep { $room eq $_ } @{$config->{commonRoomNames}}){
+          $msg = 'ERROR_COMMON_ROOM_NAME';
+        }
+        else{
+          $res = $self->set_owner_pass($room,$pass);
+        }
       }
       else{
         $res = $self->set_join_pass($room,$pass);
