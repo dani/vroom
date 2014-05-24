@@ -338,7 +338,12 @@ function initVroom(room) {
       else{
         $('#mainVideo').html(el.clone().dblclick(function() {
           fullScreen(this);
-        }).css('max-height', maxHeight()));
+          })
+          .bind('contextmenu', function(){
+            return false;
+          })
+          .css('max-height', maxHeight())
+        );
         $('.selected').removeClass('selected');
         el.addClass('selected');
         mainVid = el.attr('id');
