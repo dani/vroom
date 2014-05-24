@@ -15,8 +15,7 @@
   text-align: center;
 }
 #mainVideo video {
-  max-width: 100%;
-  min-width: 75%;
+  width: 90% !important;
   height: auto;
 }
 .previewContainer{
