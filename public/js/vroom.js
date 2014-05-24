@@ -73,23 +73,32 @@ $.ajax({
   }
 });
 
+//
+// Define a few functions
+//
+
 // Popup with the URL to share
 function inviteUrlPopup(){
   window.prompt(locale.TO_INVITE_SHARE_THIS_URL, window.location.href);
   return false;
 }
 
-// Add a new email address to be notified whn someone joins
+// Add a new email address to be notified when someone joins
+// This only add the email address on the interface
 function addNotifiedEmail(email){
   var id = email.replace(/['"]/g, '_');
-  $('<li></li>').html(email + '  <a href="javascript:void(0);" onclick="removeNotifiedEmail(\'' + email.replace('\'', '\\\'') + '\');" title="' + locale.REMOVE_THIS_ADDRESS + '">' +
-                              '    <span class="glyphicon glyphicon-remove-circle"></span>' +
-                              '  </a>')
+  $('<li></li>').html(email +
+                     '  <a href="javascript:void(0);" onclick="removeNotifiedEmail(\'' + email.replace('\'', '\\\'') + '\');"' +
+                     ' title="' + locale.REMOVE_THIS_ADDRESS + '">' +
+                     '    <span class="glyphicon glyphicon-remove-circle"></span>' +
+                     '  </a>')
    .attr('id', 'emailNotification_' + id)
    .appendTo('#emailNotificationList');
 }
 
 // Remove the address from the list
+// Remove it from the interface and request the frontend to remove it from
+// the database too
 function removeNotifiedEmail(email){
   var id = escapeJqSelector(email.replace(/['"]/, '_').replace('\\\'', '\''));
   $.ajax({
@@ -115,12 +124,13 @@ function removeNotifiedEmail(email){
   });
 }
 
+// Escape a string to be used as a jQuerry selector
 // Taken from http://totaldev.com/content/escaping-characters-get-valid-jquery-id
 function escapeJqSelector(string){
   return string.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
 }
 
-// Escape entities
+// Escape entities to prevent XSS
 function stringEscape(string){
   string = string.replace(/[\u00A0-\u99999<>\&]/gim, function(i) {
     return '&#' + i.charCodeAt(0) + ';';
@@ -209,8 +219,11 @@ function maxHeight(){
   return $(window).height()-$('#toolbar').height()-25;
 }
 
+// This is the main function called when you join a room
 function initVroom(room) {
 
+  // This object will be used to record all
+  // the peers and their info. Init with our own info
   var peers = {
     local: {
       screenShared: false,
@@ -246,7 +259,7 @@ function initVroom(room) {
     $('#noWebrtcSupport').modal('show');
   }
 
-  // Update our role
+  // Get our role and other room settings from the server
   function getRoomInfo(){
     $.ajax({
       data: {
@@ -274,7 +287,9 @@ function initVroom(room) {
             addNotifiedEmail(val);
           });
         }
+        // We're are not owner of the room
         else{
+          // Hide owner reserved elements
           $('.ownerEl').hide(500);
           if (data.owner_auth == 'yes'){
             $('.unauthEl').show(500);
@@ -310,7 +325,9 @@ function initVroom(room) {
         if (peers[id]){
           peers[id].role = data.role;
           if (data.role == 'owner'){
-            $('#overlay_' + id).append('<div id="owner_' + id + '" class="owner"></div>');
+            // If this peer is a owner, we add the mark on its preview
+            $('#overlay_' + id).append($('<div></div>').attr('id', 'owner_' + id).addClass('owner'));
+            // And we disable owner's action for him
             $('#ownerActions_' + id).remove();
           }
           else{
@@ -321,21 +338,22 @@ function initVroom(room) {
     });
   }
 
-  // Put a video on the mainVideo div
+  // Put a video on the mainVideo div, called when you click on a video preview
   function handlePreviewClick(el, id){
     var wait = 1;
+    // There's already a main video, let's hide it
+    // and delay the new one so the fade out as time to complete
     if ($('#mainVideo').html() != ''){
       $('#mainVideo').hide(300);
       wait = 300;
     }
     setTimeout(function(){
       $('#mainVideo').html('');
-      // If this video is already the main one, remove the main
       if (el.hasClass('selected')){
         el.removeClass('selected');
       }
-      // Else, update the main video to use this one
       else{
+        // Clone this new preview into the main div
         $('#mainVideo').html(el.clone().dblclick(function() {
           fullScreen(this);
           })
@@ -361,11 +379,11 @@ function initVroom(room) {
   // including our own local screen
   function addVideo(video,peer){
     playSound('join.mp3');
-    // The main div of this new video
-    // will contain the video plus all other info like displayName, overlay and volume bar
+    // The div continer of this new video
+    // will contain the video preview plus all other info like displayName, overlay and volume bar
     var div = $('<div></div>').addClass('col-xs-6 col-sm-12 col-lg-6 previewContainer').append(video).appendTo('#webRTCVideo');
-    // Peer isn't defined ? it's our own local screen
     var id;
+    // Peer isn't defined ? it's our own local screen
     if (!peer){
       id = 'local';
       $('<div></div>').addClass('displayName').attr('id', 'name_local_screen').appendTo(div);
@@ -387,6 +405,8 @@ function initVroom(room) {
       $('<div></div>').addClass('volumeBar').attr('id', 'volume_' + id).appendTo(div);
       $('<div></div>').addClass('displayName').attr('id', 'name_' + id).appendTo(div);
       $('<div></div>').attr('id', 'overlay_' + id).appendTo(div);
+      // Will contains per peer action menu (mute/pause/kick), but will only be displayed
+      // on owners screen
       $('<div></div>').addClass('ownerActions').attr('id', 'ownerActions_' + id).appendTo(div)
         .append($('<div></div>',{
            class: 'btn-group'
@@ -406,6 +426,8 @@ function initVroom(room) {
            id: 'actionKick_' + id,
            click: function() { kickPeer(id) },
          }).prop('title', locale.KICK_PEER)));
+      // Display the menu now if we're a owner, but add some delay
+      // as those actions won't work until all the channels are ready
       setTimeout (function(){
         $(div).hover(
           function(){
@@ -418,9 +440,10 @@ function initVroom(room) {
           }
         );
       }, 3500);
-      // Create a new dataChannel
-      // will be used for text chat and displayName
+      // Choose a random color. If everything is OK
+      // this peer will send us its owne color in a few seconds
       var color = chooseColor();
+      // Now store this new peer in our object
       peers[peer.id] = {
         displayName: peer.id,
         color: color,
@@ -430,12 +453,14 @@ function initVroom(room) {
         obj: peer
       };
       // Send our info to this peer (displayName/color)
-      // but wait a bit so the "vroom" dataChannel acreated earlier is fully setup (or have more chances to be)
+      // but wait a bit so the "vroom" dataChannel created earlier is fully setup (or have more chances to be)
       // before we send
       setTimeout(function(){
-        if ($('#displayName').val() !== '') {
+        // displayName is private data, lets send it through dataChannel
+        if ($('#displayName').val() !== ''){
           peer.sendDirectly('vroom','setDisplayName', $('#displayName').val());
         }
+        // color can be sent through the signaling channel
         peer.send('peer_color', {color: peers.local.color});
         // We don't have chat history yet ? Lets ask to this new peer
         if(!peers.local.hasHistory && chatIndex == 0){
@@ -443,8 +468,8 @@ function initVroom(room) {
         }
         // Get the role of this peer
         getPeerRole(peer.id);
-      }, 3500);
-      // Stop moh
+      }, 3000);
+      // Stop moh, we're not alone anymore
       $('#mohPlayer')[0].pause();
       $('.aloneEl').hide(300);
       moh = false;
@@ -468,14 +493,15 @@ function initVroom(room) {
   }
 
   // Update volume of the corresponding peer
+  // Taken from SimpleWebRTC demo
   function showVolume(el, volume) {
     if (!el){
       return;
     }
-    if (volume < -45) { // vary between -45 and -20
+    if (volume < -45){ // vary between -45 and -20
       el.css('height', '0px');
     }
-    else if (volume > -20) {
+    else if (volume > -20){
       el.css('height', '100%');
     }
     else {
@@ -485,11 +511,14 @@ function initVroom(room) {
 
   // Add a new message to the chat history
   function newChatMessage(from,message,time,color){
-    // displayName has already been escaped
     var cl = (from === 'local') ? 'chatMsgSelf':'chatMsgOthers';
+    // We need to check time format as it can be sent from another
+    // peer if we asked for its history. If it's not define or doesn't look
+    // correct, we'll get time locally
     if (!time || !time.match(/^\d{1,2}:\d{1,2}:\d{1,2}$/)){
       time = getTime();
     }
+    // It's a message sent from a connected peer, we should have its info
     if (peers[from] && peers[from].color){
       var color = peers[from].color;
       var displayName = peers[from].displayName;
@@ -497,11 +526,14 @@ function initVroom(room) {
     // this peer might not be defined if we're importing chat history
     // So just use the from as the displayName and the provided color
     else{
-      var color = (color && color.match(/#[\da-f]{6}/i)) ? color:chooseColor();
+      var color = (color && color.match(/#[\da-f]{6}/i)) ? color : chooseColor();
       var displayName = from;
     }
+    // Create the new msg
     var newmsg = $('<div class="chatMsg ' + cl + '">' + time + ' ' + stringEscape(displayName) + '<p>' + linkify(stringEscape(message)) + '</p></div>').css('background-color', color);
+    // Add it in the history
     $('<div class="row chatMsgContainer"></div>').append(newmsg).appendTo('#chatHistory');
+    // Move the scroller down
     $('#chatHistory').scrollTop($('#chatHistory').prop('scrollHeight'));
     // Record this message in the history object
     // so we can send it to other peers asking for it
@@ -529,13 +561,15 @@ function initVroom(room) {
   // Mute a peer
   function mutePeer(id){
     if (peers[id] && peers[id].role != 'owner'){
-      var msg    = locale.YOU_HAVE_MUTED_s;
+      var msg = locale.YOU_HAVE_MUTED_s;
       if (peers[id].micMuted){
-        msg    = locale.YOU_HAVE_UNMUTED_s
+        msg = locale.YOU_HAVE_UNMUTED_s
       }
+      // notify everyone that we have muted this peer
       webrtc.sendToAll('owner_toggle_mute', {peer: id});
       $.notify(sprintf(msg, peers[id].displayName), 'info');
     }
+    // We cannot mute another owner
     else{
       $.notify(locale.CANT_MUTE_OWNER, 'error');
     }
@@ -605,13 +639,15 @@ function initVroom(room) {
     }
   }
 
-  // An owner is muting/unmuting ourself
+  // An owner is muting/unmuting someone
   webrtc.on('owner_toggle_mute', function(data){
     // Ignore this if the remote peer isn't the owner of the room
-    // or if the peer receiving it is our local screen
+    // or if the peer receiving it is our local screen sharing
     if (peers[data.id].role != 'owner' || data.roomType == 'screen'){
       return;
     }
+    // We are the one being (un)muted, and we're not owner
+    // Be nice and obey
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
       if (!peers.local.micMuted){
         muteMic();
@@ -626,7 +662,8 @@ function initVroom(room) {
         $.notify(sprintf(locale.s_IS_UNMUTING_YOU, peers[data.id].displayName), 'info');
       }
     }
-    else if (data.payload.peer != peers.local.id){
+    // It's another peer of the room
+    else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
       if (peers[data.payload.peer].micMuted){
         $.notify(sprintf(locale.s_IS_UNMUTING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
       }
@@ -635,7 +672,8 @@ function initVroom(room) {
       }
     }
   });
-  // An owner is pausing/resuming our webcam
+  // An owner is pausing/resuming a webcam.
+  // More or less the same dance than mute/unmute. Both fonctions should be merged
   webrtc.on('owner_toggle_pause', function(data){
     if (peers[data.id].role != 'owner' || data.roomType == 'screen'){
       return;
@@ -654,7 +692,7 @@ function initVroom(room) {
         $.notify(sprintf(locale.s_IS_RESUMING_YOU, peers[data.id].displayName), 'info');
       }
     }
-    else if (data.payload.peer != peers.local.id){
+    else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
       if (peers[data.payload.peer].videoPaused){
         $.notify(sprintf(locale.s_IS_RESUMING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
       }
@@ -663,7 +701,7 @@ function initVroom(room) {
       }
     }
   });
-  // An owner is kicking us from the room
+  // An owner is kicking someone out of the room
   webrtc.on('owner_kick', function(data){
     if (peers[data.id].role != 'owner' || data.roomType == 'screen'){
       return;
@@ -685,10 +723,12 @@ function initVroom(room) {
   });
 
   // Handle volume changes from our own mic
-  webrtc.on('volumeChange', function (volume, treshold) {
+  webrtc.on('volumeChange', function (volume, treshold){
+    // Record the highest level (used for the "no sound" detection)
     if (volume > maxVol){
       maxVol = volume;
     }
+    // Do nothing if we're muted
     if (peers.local.micMuted) {
       return;
     }
@@ -701,13 +741,14 @@ function initVroom(room) {
     if (data.type == 'volume'){
       showVolume($('#volume_' + peer.id), data.volume);
     }
-    // We only want to act on data receive from the vroom channel
+    // We only want to act on data received from the vroom channel
     if (label !== 'vroom'){
       return;
     }
-    // The peer sets a displayName, record this in our peers struct
+    // The peer sets a displayName, record this in our peers object
     else if (data.type == 'setDisplayName'){
       var name = data.payload;
+      // Ignore it if it's too long
       if (name.length > 50){
         return;
       }
@@ -726,7 +767,7 @@ function initVroom(room) {
     else if (data.type == 'getHistory'){
       peer.sendDirectly('vroom', 'chatHistory', JSON.stringify(chatHistory));
     }
-    // This peer is sending our chat history (and we don't have it yet)
+    // This peer is sending its chat history (and we don't have it yet)
     else if (data.type == 'chatHistory' && !peers.local.hasHistory){
       peers.local.hasHistory = true;
       var history = JSON.parse(data.payload);
@@ -736,6 +777,7 @@ function initVroom(room) {
     }
     // One peer just sent a text chat message
     else if (data.type == 'textChat'){
+      // Notify if the chat menu is collapsed
       if ($('#chatDropdown').hasClass('collapsed')){
         $('#chatDropdown').addClass('btn-danger');
         playSound('newmsg.mp3');
@@ -745,6 +787,7 @@ function initVroom(room) {
     }
   });
 
+  // A peer is sending its color
   webrtc.on('peer_color', function(data){
     var color = data.payload.color;
     if (!color.match(/#[\da-f]{6}/i)){
@@ -761,13 +804,16 @@ function initVroom(room) {
 
   // Received when a peer mute his mic, or pause the video
   webrtc.on('mute', function(data){
+    // Muting
     if (data.name === 'audio'){
+      // put the volume bar at the minimum
       showVolume($('#volume_' + data.id), -46);
       var div = 'mute_' + data.id,
           cl = 'muted';
       peers[data.id].micMuted = true;
       $('#actionMute_' + data.id).addClass('btn-danger');
     }
+    // Pausing webcam
     else if (data.name === 'video'){
       var div = 'pause_' + data.id,
           cl = 'paused';
@@ -807,7 +853,8 @@ function initVroom(room) {
     getPeerRole(data.id);
   });
 
-  // A new notified email has been added
+  // A new notified email has been added or removed
+  // We need to refresh the whole list
   webrtc.on('notif_change', function(data){
     if (peers.local.role != 'owner' || data.roomType == 'screen' || peers[data.id].role != 'owner'){
       return;
@@ -880,6 +927,7 @@ function initVroom(room) {
   });
 
   // Handle the readyToCall event: join the room
+  // Or prompt for a name first
   webrtc.once('readyToCall', function () {
     peers.local.id = webrtc.connection.socket.sessionid;
     getRoomInfo();
@@ -902,7 +950,10 @@ function initVroom(room) {
         });
       }
     }, 10000);
-    // Notify the frontend a new participant has joined
+    // Notify the server a new participant has joined (ourself)
+    // If we were prompted for our display name before joining
+    // we send it. Not that I like sending this kind of data to the server
+    // but it's needed for email notifications
     $.ajax({
       data: {
         action: 'join',
@@ -935,13 +986,12 @@ function initVroom(room) {
     addVideo(video);
   });
 
-  // error opening the webcam stream
+  // error opening the webcam or mic stream
   webrtc.on('localMediaError', function(){
     $('#noWebcam').modal('show');
   });
 
   // Handle video stream removed: someone leaved the room
-  // TODO: don't trigger on local screen unshare
   webrtc.on('videoRemoved', function(video,peer){
     playSound('leave.mp3');
     var id = (peer) ? peer.id : 'local';
@@ -954,6 +1004,7 @@ function initVroom(room) {
       delete peers[peer.id];
     }
     $("#peer_" + id).hide(300);
+    // Remove the div, but wait for the fade out to complete
     setTimeout(function(){
       $("#peer_" + id).remove();
     }, 300);
@@ -975,8 +1026,7 @@ function initVroom(room) {
     }
   });
 
-  // Do not close the dropdown menu when filling the email recipient
-  // and in other dropdown menus
+  // Do not close the dropdown menus (invite/conf) when filling fields
   $('.dropdown-menu').on('click', 'li', function(e){
     e.stopPropagation();
   });
@@ -986,6 +1036,7 @@ function initVroom(room) {
     var rcpt    = $('#recipient').val();
         message = $('#message').val();
     // Simple email address verification
+    // not fullproof, but email validation is a real nightmare
     if (!rcpt.match(/\S+@\S+\.\S+/)){
       $.notify(locale.ERROR_MAIL_INVALID, 'error');
       return;
@@ -1013,7 +1064,7 @@ function initVroom(room) {
   });
 
   // Set your DisplayName
-  $('#displayName').on('input', function() {
+  $('#displayName').on('input', function(){
     var name = $('#displayName').val();
     if (name.length > 50){
       $('#displayName').parent().addClass('has-error');
@@ -1025,14 +1076,12 @@ function initVroom(room) {
     }
     // Enable chat input when you set your disaplay name
     if (name != '' && $('#chatBox').attr('disabled')){
-      $('#chatBox').removeAttr('disabled');
-      $('#chatBox').removeAttr('placeholder');
+      $('#chatBox').removeAttr('disabled').removeAttr('placeholder');
       peers.local.hasName = true;
     }
     // And disable it again if you remove your display name
     else if (name == ''){
-      $('#chatBox').attr('disabled', true);
-      $('#chatBox').attr('placeholder', locale.SET_YOUR_NAME_TO_CHAT);
+      $('#chatBox').attr('disabled', true).attr('placeholder', locale.SET_YOUR_NAME_TO_CHAT);
       peers.local.hasName = false;
     }
     peers.local.displayName = name;
@@ -1067,8 +1116,7 @@ function initVroom(room) {
       peers.local.hasName = true;
       peers.local.displayName = name;
       updateDisplayName('local');
-      $('#chatBox').removeAttr('disabled');
-      $('#chatBox').removeAttr('placeholder');
+      $('#chatBox').removeAttr('disabled').removeAttr('placeholder');
       webrtc.joinRoom(room);
     }
   });
@@ -1101,6 +1149,7 @@ function initVroom(room) {
         }
       }  
     });
+    // DIsable the button for a moment so you cannot overload the server
     suspendButton($(this));
   });
 
@@ -1144,15 +1193,22 @@ function initVroom(room) {
     }
     if (!peers.local.screenShared && action === 'share'){
       webrtc.shareScreen(function(err){
+        // An error occured while sharing our screen
         if(err){
           if (err.name == 'EXTENSION_UNAVAILABLE'){
             var ver = 34;
-            if ($.browser.linux) ver = 35;
-            if ($.browser.webkit && $.browser.versionNumber >= ver)
+            if ($.browser.linux){
+              ver = 35;
+            }
+            if ($.browser.webkit && $.browser.versionNumber >= ver){
               $('#chromeExtMessage').modal('show');
-            else
+            }
+            else{
               cantShare(locale.SCREEN_SHARING_ONLY_FOR_CHROME);
+            }
           }
+          // This error usually means you have denied access (old flag way)
+          // or you cancelled screen sharing (new extension way)
           else if (err.name == 'PERMISSION_DENIED' || err.name == 'PermissionDeniedError'){
             cantShare(locale.SCREEN_SHARING_CANCELLED);
           }
@@ -1162,6 +1218,7 @@ function initVroom(room) {
           $('#shareScreenLabel').removeClass('active');
           return;
         }
+        // Screen sharing worked, warn that everyone can see it
         else{
           $("#shareScreenLabel").addClass('btn-danger');
           peers.local.screenShared = true;
@@ -1207,7 +1264,7 @@ function initVroom(room) {
     }
   });
 
-  // Handle auth
+  // Handle auth to become room owner
   $('#authPass').on('input', function() {
     if ($('#authPass').val() == ''){
       $('#authPassButton').addClass('disabled');
@@ -1243,6 +1300,7 @@ function initVroom(room) {
     });
   });
 
+  // Enable the submit button when the corresponding input is filled
   $('#joinPass').on('input', function() {
     if ($('#joinPass').val() == ''){
       $('#setJoinPassButton').addClass('disabled');
@@ -1378,7 +1436,7 @@ function initVroom(room) {
       $('#newEmailNotificationButton').removeClass('disabled');
     }
   });
-  // Then send this new address to the frontend
+  // Then send this new address to the server
   $('#newEmailNotificationForm').submit(function(event){
     event.preventDefault();
     $.ajax({
@@ -1439,6 +1497,7 @@ function initVroom(room) {
   $('#webRTCVideoLocal').dblclick(function() {
     fullScreen(this);
   });
+  // And put it in the main div on simple click
   $('#webRTCVideoLocal').click(function() {
     handlePreviewClick($(this), 'self');
   });
