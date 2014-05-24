@@ -589,6 +589,17 @@ function initVroom(room) {
     peers.local.videoPaused = false;
   }
 
+  // Check if MoH is needed
+  function checkMoh(){
+    if (!moh && Object.keys(peers).length < 2){
+      if (!$('#pauseMohButton').is(':checked')){
+        $('#mohPlayer')[0].play();
+        moh = true;
+      }
+      $('.aloneEl').show(200);
+    }
+  }
+
   // An owner is muting/unmuting ourself
   webrtc.on('owner_toggle_mute', function(data){
     // Ignore this if the remote peer isn't the owner of the room
@@ -912,16 +923,7 @@ function initVroom(room) {
         }
       }
     });
-    // We will check if moh is needed
-    setInterval(function(){
-      if (!moh && Object.keys(peers).length < 2){
-        if (!$('#pauseMohButton').is(':checked')){
-          $('#mohPlayer')[0].play();
-          moh = true;
-        }
-        $('.aloneEl').show(200);
-      }
-    }, 2000);
+    checkMoh();
     $('#videoLocalContainer').show(200);
   });
 
@@ -964,6 +966,7 @@ function initVroom(room) {
       }, 500);
       mainVid = false;
     }
+    checkMoh();
   });
 
   // Error sending something through dataChannel
