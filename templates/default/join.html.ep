@@ -54,8 +54,8 @@
             </span>
           </label>
         </div>
-        <div class="btn-group navbar-form navbar-left ownerEl">
-          <div class="btn-group">
+        <div class="btn-group navbar-form navbar-left">
+          <div class="btn-group ownerEl">
             <button class="btn btn-default dropdown-toggle help" type="button" id="inviteMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'INVITE_PEOPLE' %>">
               <span class="glyphicon glyphicon-user"></span>
               <span class="caret"></span>
@@ -96,7 +96,7 @@
               </li>
             </ul>
           </div>
-          <div class="btn-group">
+          <div class="btn-group ownerEl">
             <button class="btn btn-default dropdown-toggle help" type="button" id="confMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
               <span class="glyphicon glyphicon-wrench"></span>
               <span class="caret"></span>
