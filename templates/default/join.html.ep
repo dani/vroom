@@ -43,6 +43,11 @@
             <span class="glyphicon glyphicon-eye-close">
             </span>
           </label>
+          <label class="btn btn-default help aloneEl" id="pauseMohLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PAUSE_MOH' %>">
+            <input type="checkbox" id="pauseMohButton">
+            <span class="glyphicon glyphicon-music">
+            </span>
+          </label>
           <label class="btn btn-default help" id="shareScreenLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SHARE_YOUR_SCREEN' %>">
             <input type="checkbox" id="shareScreenButton">
             <span class="glyphicon glyphicon-expand">
@@ -204,13 +209,6 @@
               </form>
             </li>
           </ul>
-        </div>
-        <div class="btn-group navbar-form navbar-left" data-toggle="buttons">
-          <label class="btn btn-default help aloneEl" id="pauseMohLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PAUSE_MOH' %>">
-            <input type="checkbox" id="pauseMohButton">
-            <span class="glyphicon glyphicon-music">
-            </span>
-          </label>
         </div>
         <div class="btn-group navbar-form navbar-right" data-toggle="buttons" >
           <button class="btn btn-default help" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
