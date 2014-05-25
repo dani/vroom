@@ -4,7 +4,6 @@ released under the MIT licence
 Copyright 2014 Firewall Services
 */
 
-
 // Default notifications
 $.notify.defaults( { globalPosition: 'bottom left' } );
 // Enable tooltip on required elements
@@ -57,7 +56,9 @@ var locale = {
   YOU_HAVE_KICKED_s: '',
   CANT_KICK_OWNER: '',
   REMOVE_THIS_ADDRESS: '',
-  DISPLAY_NAME_REQUIRED: ''
+  DISPLAY_NAME_REQUIRED: '',
+  A_ROOM_ADMIN: '',
+  A_PARTICIPANT: ''
 };
 
 // Localize the strings we need
@@ -562,12 +563,13 @@ function initVroom(room) {
   function mutePeer(id){
     if (peers[id] && peers[id].role != 'owner'){
       var msg = locale.YOU_HAVE_MUTED_s;
+      var who = (peers[id].hasName) ? peers[id].displayName : locale.A_PARTICIPANT;
       if (peers[id].micMuted){
         msg = locale.YOU_HAVE_UNMUTED_s
       }
       // notify everyone that we have muted this peer
       webrtc.sendToAll('owner_toggle_mute', {peer: id});
-      $.notify(sprintf(msg, peers[id].displayName), 'info');
+      $.notify(sprintf(msg, who), 'info');
     }
     // We cannot mute another owner
     else{
@@ -578,11 +580,12 @@ function initVroom(room) {
   function pausePeer(id){
     if (peers[id] && peers[id].role != 'owner'){
       var msg    = locale.YOU_HAVE_SUSPENDED_s;
+      var who = (peers[id].hasName) ? peers[id].displayName : locale.A_PARTICIPANT;
       if (peers[id].videoPaused){
         msg    = locale.YOU_HAVE_RESUMED_s;
       }
       webrtc.sendToAll('owner_toggle_pause', {peer: id});
-      $.notify(sprintf(msg, peers[id].displayName), 'info');
+      $.notify(sprintf(msg, who), 'info');
     }
     else{
       $.notify(locale.CANT_SUSPEND_OWNER, 'error');
@@ -599,7 +602,8 @@ function initVroom(room) {
           peers[id].obj.end();
         }
       }, 2000);
-      $.notify(sprintf(locale.YOU_HAVE_KICKED_s, peers[id].displayName), 'info');
+      var who = (peers[id].hasName) ? peers[id].displayName : locale.A_PARTICIPANT;
+      $.notify(sprintf(locale.YOU_HAVE_KICKED_s, who), 'info');
     }
     else{
       $.notify(locale.CANT_KICK_OWNER, 'error');
@@ -651,26 +655,29 @@ function initVroom(room) {
     // We are the one being (un)muted, and we're not owner
     // Be nice and obey
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
       if (!peers.local.micMuted){
         muteMic();
         $('#muteMicLabel').addClass('btn-danger active');
         $('#muteMicButton').prop('checked', true);
-        $.notify(sprintf(locale.s_IS_MUTING_YOU, peers[data.id].displayName), 'info');
+        $.notify(sprintf(locale.s_IS_MUTING_YOU, who), 'info');
       }
       else {
         unmuteMic();
         $('#muteMicLabel').removeClass('btn-danger active');
         $('#muteMicButton').prop('checked', false);
-        $.notify(sprintf(locale.s_IS_UNMUTING_YOU, peers[data.id].displayName), 'info');
+        $.notify(sprintf(locale.s_IS_UNMUTING_YOU, who), 'info');
       }
     }
     // It's another peer of the room
     else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
+      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : locale.A_PARTICIPANT;
       if (peers[data.payload.peer].micMuted){
-        $.notify(sprintf(locale.s_IS_UNMUTING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+        $.notify(sprintf(locale.s_IS_UNMUTING_s, peers[data.id].who, target), 'info');
       }
       else{
-        $.notify(sprintf(locale.s_IS_MUTING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+        $.notify(sprintf(locale.s_IS_MUTING_s, who, target), 'info');
       }
     }
   });
@@ -681,25 +688,28 @@ function initVroom(room) {
       return;
     }
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
       if (!peers.local.videoPaused){
         suspendCam();
         $('#suspendCamLabel').addClass('btn-danger active');
         $('#suspendCamButton').prop('checked', true);
-        $.notify(sprintf(locale.s_IS_SUSPENDING_YOU, peers[data.id].displayName), 'info');
+        $.notify(sprintf(locale.s_IS_SUSPENDING_YOU, who), 'info');
       }
       else{
         resumeCam();
         $('#suspendCamLabel').removeClass('btn-danger active');
         $('#suspendCamButton').prop('checked', false);
-        $.notify(sprintf(locale.s_IS_RESUMING_YOU, peers[data.id].displayName), 'info');
+        $.notify(sprintf(locale.s_IS_RESUMING_YOU, who), 'info');
       }
     }
     else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
+      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : locale.A_PARTICIPANT;
       if (peers[data.payload.peer].videoPaused){
-        $.notify(sprintf(locale.s_IS_RESUMING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+        $.notify(sprintf(locale.s_IS_RESUMING_s, who, target), 'info');
       }
       else{
-        $.notify(sprintf(locale.s_IS_SUSPENDING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+        $.notify(sprintf(locale.s_IS_SUSPENDING_s, who, target), 'info');
       }
     }
   });
@@ -713,7 +723,9 @@ function initVroom(room) {
       window.location.assign(rootUrl + 'kicked/' + roomName);
     }
     else if (data.payload.peer != peers.local.id && peers[data.payload.peer] && peers[data.payload.peer].role != 'owner'){
-      $.notify(sprintf(locale.s_IS_KICKING_s, peers[data.id].displayName, peers[data.payload.peer].displayName), 'info');
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
+      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : locale.A_PARTICIPANT;
+      $.notify(sprintf(locale.s_IS_KICKING_s, who, target), 'info');
       // Wait a bit for the peer to leave, but end connection if it's still here
       // after 2 seconds
       setTimeout(function(){
