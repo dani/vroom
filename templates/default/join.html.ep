@@ -49,135 +49,137 @@
             </span>
           </label>
         </div>
-        <div id="inviteDropdownContainer" class="navbar-form navbar-left input-group">
-          <button class="btn btn-default dropdown-toggle help ownerEl" type="button" id="inviteMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'INVITE_PEOPLE' %>">
-            <span class="glyphicon glyphicon-user"></span>
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="inviteMenuButton" id="inviteMenu">
-            <li>
-              <center>
-                <p><%=l 'TO_INVITE_SHARE_THIS_URL' %></p>
-                <% my $url = $self->url_for('/')->to_abs;
-                   $url .= ($url =~ m/\/$/) ? '':'/';
-                %>
-                <h4><a href="javascript:void(0)" onclick="inviteUrlPopup();"><%= $url . $room %></a></h4>
-              </center>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <form class="navbar-form" id="inviteEmail" action="" method="post">
+        <div class="btn-group navbar-form navbar-left ownerEl">
+          <div class="btn-group">
+            <button class="btn btn-default dropdown-toggle help" type="button" id="inviteMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'INVITE_PEOPLE' %>">
+              <span class="glyphicon glyphicon-user"></span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="inviteMenuButton" id="inviteMenu">
+              <li>
                 <center>
-                  <p><%=l 'YOU_CAN_INVITE_BY_MAIL' %></p>
+                  <p><%=l 'TO_INVITE_SHARE_THIS_URL' %></p>
+                  <% my $url = $self->url_for('/')->to_abs;
+                     $url .= ($url =~ m/\/$/) ? '':'/';
+                  %>
+                  <h4><a href="javascript:void(0)" onclick="inviteUrlPopup();"><%= $url . $room %></a></h4>
                 </center>
-                <div class="input-group">
-                  <input type="email" id="recipient" class="form-control help" placeholder="<%=l 'EMAIL_PLACEHOLDER' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>"/>
-                  <span class="input-group-btn">
-                    <button id="inviteEmailButton" type="submit" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>">
-                      <span class="glyphicon glyphicon-send">
-                      </span>
-                    </button>
-                  </span>
-                </div>
-                <div class="input-group">
-                  <textarea id="message" name="message" class="form-control help" placeholder="<%=l 'MESSAGE' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_CUSTOM_MESSAGE' %>"></textarea>
-                  <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-envelope">
+              </li>
+              <li class="divider"></li>
+              <li>
+                <form class="navbar-form" id="inviteEmail" action="" method="post">
+                  <center>
+                    <p><%=l 'YOU_CAN_INVITE_BY_MAIL' %></p>
+                  </center>
+                  <div class="input-group">
+                    <input type="email" id="recipient" class="form-control help" placeholder="<%=l 'EMAIL_PLACEHOLDER' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>"/>
+                    <span class="input-group-btn">
+                      <button id="inviteEmailButton" type="submit" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>">
+                        <span class="glyphicon glyphicon-send">
+                        </span>
+                      </button>
                     </span>
-                  </span>
-                </div>
-              </form>
-            </li>
-          </ul>
-        </div>
-        <div class="btn-group navbar-form navbar-left">
-          <button class="btn btn-default dropdown-toggle help ownerEl" type="button" id="confMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
-            <span class="glyphicon glyphicon-wrench"></span>
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="confMenuButton" id="confMenu">
-            <li>
-              <center>
-                <div class="navbar-form">
-                  <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-default help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
-                      <input type="checkbox" id="lockButton">
-                      <span class="glyphicon glyphicon-lock">
-                      </span>
-                    </label>
-                    <label class="btn btn-default help" id="askForNameLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'FORCE_DISPLAY_NAME' %>">
-                      <input type="checkbox" id="askForNameButton">
-                      <span class="glyphicon glyphicon-leaf">
-                      </span>
-                    </label>
                   </div>
-                </div>
-              </center>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <form class="navbar-form" id="joinPassForm">
+                  <div class="input-group">
+                    <textarea id="message" name="message" class="form-control help" placeholder="<%=l 'MESSAGE' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_CUSTOM_MESSAGE' %>"></textarea>
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-envelope">
+                      </span>
+                    </span>
+                  </div>
+                </form>
+              </li>
+            </ul>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-default dropdown-toggle help" type="button" id="confMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
+              <span class="glyphicon glyphicon-wrench"></span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="confMenuButton" id="confMenu">
+              <li>
                 <center>
-                  <p><%=l 'YOU_CAN_PASSWORD_PROTECT_JOIN' %></p>
+                  <div class="navbar-form">
+                    <div class="btn-group" data-toggle="buttons">
+                      <label class="btn btn-default help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
+                        <input type="checkbox" id="lockButton">
+                        <span class="glyphicon glyphicon-lock">
+                        </span>
+                      </label>
+                      <label class="btn btn-default help" id="askForNameLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'FORCE_DISPLAY_NAME' %>">
+                        <input type="checkbox" id="askForNameButton">
+                        <span class="glyphicon glyphicon-leaf">
+                        </span>
+                      </label>
+                    </div>
+                  </div>
                 </center>
-                <div class="input-group">
-                  <input type="password" id="joinPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>"/>
-                  <span class="input-group-btn">
-                    <button id="setJoinPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>">
-                      <span class="glyphicon glyphicon-ok">
-                      </span>
-                    </button>
-                    <button id="removeJoinPassButton" type="button" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'REMOVE_PASSWORD' %>">
-                      <span class="glyphicon glyphicon-remove">
-                      </span>
-                    </button>
-                  </span>
-                </div>
-              </form>
-            </li>
-            <li class="divider">
-            </li>
-            <li>
-              <form class="navbar-form" id="ownerPassForm">
+              </li>
+              <li class="divider"></li>
+              <li>
+                <form class="navbar-form" id="joinPassForm">
+                  <center>
+                    <p><%=l 'YOU_CAN_PASSWORD_PROTECT_JOIN' %></p>
+                  </center>
+                  <div class="input-group">
+                    <input type="password" id="joinPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>"/>
+                    <span class="input-group-btn">
+                      <button id="setJoinPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>">
+                        <span class="glyphicon glyphicon-ok">
+                        </span>
+                      </button>
+                      <button id="removeJoinPassButton" type="button" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'REMOVE_PASSWORD' %>">
+                        <span class="glyphicon glyphicon-remove">
+                        </span>
+                      </button>
+                    </span>
+                  </div>
+                </form>
+              </li>
+              <li class="divider">
+              </li>
+              <li>
+                <form class="navbar-form" id="ownerPassForm">
+                  <center>
+                    <p><%=l 'OWNER_PASSWORD_MAKES_PERSISTENT' %></p>
+                  </center>
+                  <div class="input-group">
+                    <input type="password" id="ownerPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OWNER_PASSWORD' %>"/>
+                    <span class="input-group-btn">
+                      <button id="setOwnerPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OWNER_PASSWORD' %>">
+                        <span class="glyphicon glyphicon-ok">
+                        </span>
+                      </button>
+                      <button id="removeOwnerPassButton" type="button" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'REMOVE_OWNER_PASSWORD' %>">
+                        <span class="glyphicon glyphicon-remove">
+                        </span>
+                      </button>
+                    </span>
+                  </div>
+                </form>
+              </li>
+              <li class="divider">
+              </li>
+              <li>
                 <center>
-                  <p><%=l 'OWNER_PASSWORD_MAKES_PERSISTENT' %></p>
+                  <p><%=l 'NOTIFICATION_ON_JOIN' %></p>
                 </center>
-                <div class="input-group">
-                  <input type="password" id="ownerPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OWNER_PASSWORD' %>"/>
-                  <span class="input-group-btn">
-                    <button id="setOwnerPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OWNER_PASSWORD' %>">
-                      <span class="glyphicon glyphicon-ok">
-                      </span>
-                    </button>
-                    <button id="removeOwnerPassButton" type="button" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'REMOVE_OWNER_PASSWORD' %>">
-                      <span class="glyphicon glyphicon-remove">
-                      </span>
-                    </button>
-                  </span>
-                </div>
-              </form>
-            </li>
-            <li class="divider">
-            </li>
-            <li>
-              <center>
-                <p><%=l 'NOTIFICATION_ON_JOIN' %></p>
-              </center>
-              <ul class="list-inline" id="emailNotificationList">
-              </ul>
-              <form class="navbar-form" id="newEmailNotificationForm">
-                <div class="input-group">
-                  <input type="email" id="newEmailNotification" class="form-control help" placeholder="<%=l 'EMAIL_PLACEHOLDER' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'ADD_NOTIFICATION' %>"/>
-                  <span class="input-group-btn">
-                    <button id="newEmailNotificationButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'ADD_THIS_ADDRESS' %>">
-                      <span class="glyphicon glyphicon-ok">
-                      </span>
-                    </button>
-                  </span>
-                </div>
-              </form>
-            </li>
-          </ul>
+                <ul class="list-inline" id="emailNotificationList">
+                </ul>
+                <form class="navbar-form" id="newEmailNotificationForm">
+                  <div class="input-group">
+                    <input type="email" id="newEmailNotification" class="form-control help" placeholder="<%=l 'EMAIL_PLACEHOLDER' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'ADD_NOTIFICATION' %>"/>
+                    <span class="input-group-btn">
+                      <button id="newEmailNotificationButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'ADD_THIS_ADDRESS' %>">
+                        <span class="glyphicon glyphicon-ok">
+                        </span>
+                      </button>
+                    </span>
+                  </div>
+                </form>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="btn-group navbar-form navbar-left">
           <button class="btn btn-default dropdown-toggle help unauthEl" type="button" id="authMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>">
