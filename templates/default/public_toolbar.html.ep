@@ -10,7 +10,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a href="#"><img id="navBarLogo" src="/img/logo_vroom_alpha.png" class="hidden-xs"/></a>
+        <img id="navBarLogo" src="/img/logo_vroom_alpha.png" class="hidden-xs"/>
       </div>
       <div class="collapse navbar-collapse" id="toolBar">
         <ul class="nav navbar-nav navbar-right">
