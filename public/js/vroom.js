@@ -344,8 +344,8 @@ function initVroom(room) {
     // There's already a main video, let's hide it
     // and delay the new one so the fade out as time to complete
     if ($('#mainVideo').html() != ''){
-      $('#mainVideo').hide(300);
-      wait = 300;
+      $('#mainVideo').hide(200);
+      wait = 200;
     }
     setTimeout(function(){
       $('#mainVideo').html('');
@@ -365,7 +365,7 @@ function initVroom(room) {
         $('.selected').removeClass('selected');
         el.addClass('selected');
         mainVid = el.attr('id');
-        $('#mainVideo').show(300);
+        $('#mainVideo').show(200);
       }
     }, wait);
   }
