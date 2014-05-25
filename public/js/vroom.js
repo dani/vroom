@@ -630,13 +630,15 @@ function initVroom(room) {
 
   // Check if MoH is needed
   function checkMoh(){
-    if (!moh && Object.keys(peers).length < 2){
-      if (!$('#pauseMohButton').is(':checked')){
-        $('#mohPlayer')[0].play();
-        moh = true;
+    setTimeout(function(){
+      if (!moh && Object.keys(peers).length < 2){
+        if (!$('#pauseMohButton').is(':checked')){
+          $('#mohPlayer')[0].play();
+          moh = true;
+        }
+        $('.aloneEl').show(200);
       }
-      $('.aloneEl').show(200);
-    }
+    }, 3000);
   }
 
   // An owner is muting/unmuting someone
