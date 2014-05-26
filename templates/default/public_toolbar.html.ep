@@ -1,6 +1,6 @@
   <nav class="navbar navbar-default" role="navigation">
     <a href="https://github.com/dani/vroom">
-      <img id="forkMeRibbon" src="/img/fork_me_on_gh.png" alt="Fork me on GitHub" class="hidden-xs"/>
+      <img id="forkMeRibbon" src="<%= $self->get_url('/') %>img/fork_me_on_gh.png" alt="Fork me on GitHub" class="hidden-xs"/>
     </a>
     <div class="container-fluid">
       <div class="navbar-header">
@@ -10,7 +10,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <img id="navBarLogo" src="/img/logo_vroom_alpha.png" class="hidden-xs"/>
+        <img id="navBarLogo" src="<%= $self->get_url('/') %>img/logo_vroom_alpha.png" class="hidden-xs"/>
       </div>
       <div class="collapse navbar-collapse" id="toolBar">
         <ul class="nav navbar-nav navbar-right">

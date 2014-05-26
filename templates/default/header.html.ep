@@ -6,9 +6,9 @@
   <%
     foreach my $css (qw(bootstrap.min.css vroom.css)){
   %>
-  <link href="/<%= $self->get_mtime("css/$css") %>/css/<%= $css %>" rel="stylesheet" type="text/css">
+  <link href="<%= $self->get_url('/') %><%= $self->get_mtime("css/$css") %>/css/<%= $css %>" rel="stylesheet" type="text/css">
   <% } %>
-  <link rel="icon" type="image/png" href="/img/favicon.png" />
+  <link rel="icon" type="image/png" href="<%= $self->get_url('/') %>img/favicon.png" />
 </head>
 <body>
   <div id="wrap">

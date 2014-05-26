@@ -541,7 +541,7 @@ post '/create' => sub {
   # and redirect him on it.
   else{
     $self->session($name => {role => 'owner'});
-    $self->redirect_to($self->get_url('/') . $name);
+    $self->redirect_to($name);
   }
 };
 

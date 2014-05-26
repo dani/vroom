@@ -272,21 +272,21 @@
               <div class="col-sm-4">
                 <a href="http://www.mozilla.org/firefox/" target="_blank">
                   <center>
-                    <img src="/img/firefox.png" alt="Mozilla Firefox"/>
+                    <img src="<%= $self->get_url('/') %>img/firefox.png" alt="Mozilla Firefox"/>
                   </center>
                 </a>
               </div>
               <div class="col-sm-4">
                 <a href="http://www.google.com/chrome/" target="_blank">
                   <center>
-                    <img src="/img/chrome.png" alt="Google Chrome"/>
+                    <img src="<%= $self->get_url('/') %>img/chrome.png" alt="Google Chrome"/>
                   </center>
                 </a>
               </div>
               <div class="col-sm-4">
                 <a href="http://www.opera.com" target="_blank">
                   <center>
-                    <img src="/img/opera.png" alt="Opera"/>
+                    <img src="<%= $self->get_url('/') %>img/opera.png" alt="Opera"/>
                   </center>
                 </a>
               </div>
@@ -305,7 +305,7 @@
           <div class="modal-body">
             <p><%=l 'CANT_ACCESS_WEBCAM' %></p>
             <center>
-              <img src="/img/webcam.png" alt="Webcam"/>
+              <img src="<%= $self->get_url('/') %>img/webcam.png" alt="Webcam"/>
             </center>
           </div>
         </div>
@@ -331,7 +331,7 @@
           </div>
         </form>
       </div>
-      <audio id="mohPlayer" src="/snd/moh/<%= $moh %>" loop></audio>
+      <audio id="mohPlayer" src="<%= $self->get_url('/') %>snd/moh/<%= $moh %>" loop></audio>
       <div id="view" class="view row-fluid">
         <div id="webRTCVideo" class="col-xs-12 col-sm-4">
           <div class="col-xs-6 col-sm-12 col-lg-6 previewContainer" id="videoLocalContainer">

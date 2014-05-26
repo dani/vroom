@@ -47,7 +47,7 @@
         </ol>
         <div id="carouselIndexContent" class="carousel-inner">
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="/img/lock.png" alt="<%=l 'SECURE' %>">
+            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/lock.png" alt="<%=l 'SECURE' %>">
             <p>
               <%=l 'P2P_COMMUNICATION' %>
             </p>
@@ -58,7 +58,7 @@
             </div>
           </div>
           <div class="item active carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="/img/universal.png" alt="<%=l 'WORKS_EVERYWHERE' %>">
+            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/universal.png" alt="<%=l 'WORKS_EVERYWHERE' %>">
             <p>
               <%=l 'MODERN_BROWSERS' %>
             </p>
@@ -69,7 +69,7 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="/img/share.png" alt="<%=l 'MULTI_USER' %>">
+            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/share.png" alt="<%=l 'MULTI_USER' %>">
             <p>
               <%=l 'THE_LIMIT_IS_YOUR_PIPE' %>
             </p>
@@ -80,7 +80,7 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="/img/signin.png" alt="<%=l 'NO_SIGNIN' %>">
+            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/signin.png" alt="<%=l 'NO_SIGNIN' %>">
             <p>
               <%=l 'YOU_DONT_HAVE_TO_REGISTER' %>
             </p>
@@ -91,7 +91,7 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="/img/clock.png" alt="<%=l 'QUICK' %>">
+            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/clock.png" alt="<%=l 'QUICK' %>">
             <p>
               <%=l 'STOP_WASTING_TIME' %>
             </p>
@@ -102,7 +102,7 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="/img/screen.png" alt="<%=l 'SCREEN_SHARING' %>">
+            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/screen.png" alt="<%=l 'SCREEN_SHARING' %>">
             <p>
               <%=l 'SHARE_DESKTOP_OR_WINDOW' %>
             </p>
@@ -113,7 +113,7 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="/img/chat.png" alt="<%=l 'TEXT_CHAT' %>">
+            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/chat.png" alt="<%=l 'TEXT_CHAT' %>">
             <p>
               <%=l 'SECURED_TEXT_CHAT' %>
             </p>

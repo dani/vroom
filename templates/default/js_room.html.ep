@@ -1,5 +1,5 @@
     <%
       foreach my $js (qw(simplewebrtc.bundle.js jquery.browser.min.js sprintf.js FileSaver.js)){
     %>
-    <script type="text/javascript" src="/<%= $self->get_mtime("js/$js") %>/js/<%= $js %>"></script>
+    <script type="text/javascript" src="<%= $self->get_url('/') %><%= $self->get_mtime("js/$js") %>/js/<%= $js %>"></script>
     <% } %>
