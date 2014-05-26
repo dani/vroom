@@ -957,7 +957,7 @@ function initVroom(room) {
   webrtc.on('joinedRoom', function(){
     // Check if sound is detected and warn if it hasn't
     setTimeout(function (){
-      if (maxVol < -40){
+      if (maxVol < -60){
         $.notify(locale.NO_SOUND_DETECTED, {
           className: 'error',
           autoHide: false
