@@ -280,6 +280,7 @@ helper delete_rooms => sub {
     my $timeout = time()-$config->{inactivityTimeout};
     $self->db->do("DELETE FROM participants WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='0');");
     $self->db->do("DELETE FROM notifications WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='0');");
+    $self->db->do("DELETE FROM invitations WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='0');");
     $self->db->do("DELETE FROM rooms WHERE activity_timestamp < $timeout AND persistent='0';");
   } || return undef;
   if ($config->{persistentInactivityTimeout} && $config->{persistentInactivityTimeout} > 0){
@@ -287,6 +288,7 @@ helper delete_rooms => sub {
       my $timeout = time()-$config->{persistentInactivityTimeout};
       $self->db->do("DELETE FROM participants WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='1');");
       $self->db->do("DELETE FROM notifications WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='1');");
+      $self->db->do("DELETE FROM invitations WHERE id IN (SELECT id FROM rooms WHERE activity_timestamp < $timeout AND persistent='1');");
       $self->db->do("DELETE FROM rooms WHERE activity_timestamp < $timeout AND persistent='1';");
     } || return undef;
   }
@@ -318,10 +320,17 @@ helper valid_room_name => sub {
   return $ret;
 };
 
+# Generate a random token
+helper get_random => sub {
+  my $self = shift;
+  my ($size) = @_;
+  return join '' => map{('a'..'z','0'..'9')[rand 36]} 0..$size;
+};
+
 # Generate a random name
 helper get_random_name => sub {
   my $self = shift;
-  my $name = join '' => map{('a'..'z','0'..'9')[rand 36]} 0..9;
+  my $name = $self->get_random(9);
   # Get another one if already taken
   while ($self->get_room($name)){
     $name = $self->get_random_name();
@@ -440,6 +449,18 @@ helper choose_moh => sub {
   my $self = shift;
   my @files = (<snd/moh/*.*>);
   return basename($files[rand @files]);
+};
+
+# Add a invitation
+helper add_invitation => sub {
+  my $self = shift;
+  my ($room,$email) = @_;
+  my $from = $self->session('name') || return undef;
+  my $data = $self->get_room($room);
+  return undef unless ($data);
+  my $sth = eval { $self->db->prepare("INSERT INTO invitations (`id`,`from`,`token`,`email`) VALUES (?,?,?,?)") } || return undef;
+  $sth->execute($data->{id},$from,$self->get_random(50),$email) || return undef;
+  return 1;
 };
 
 # Route / to the index page
@@ -710,7 +731,7 @@ post '/action' => sub {
     elsif ($rcpt !~ m/\S+@\S+\.\S+$/){
       $msg = $self->l('ERROR_MAIL_INVALID');
     }
-    elsif ($self->email(
+    elsif ($self->add_invitation($room,$rcpt) && $self->email(
       header => [
         Subject => encode("MIME-Header", $self->l("EMAIL_INVITATION")),
         To => $rcpt
