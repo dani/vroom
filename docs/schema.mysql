@@ -31,6 +31,16 @@ CREATE TABLE `notifications` (
   `email` varchar(254),
   PRIMARY KEY (`id`,`email`)
 );
+DROP TABLE IF EXISTS `invitations`;
+CREATE TABLE `invitations` (
+  `id` int(11) NOT NULL,
+  `email` varchar(254) NOT NULL,
+  `token` varchar(160) NOT NULL,
+  `from` varchar(60) NOT NULL,
+  `response` varchar(20) DEFAULT NULL,
+  `processed` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`,`email`,`from`)
+);
 #DROP TABLE IF EXISTS `turnusers_lt`;
 #CREATE TABLE `turnusers_lt` (
 #  name varchar(512) PRIMARY KEY,
