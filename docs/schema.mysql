@@ -38,6 +38,7 @@ CREATE TABLE `invitations` (
   `token` varchar(160) NOT NULL,
   `from` varchar(60) NOT NULL,
   `response` varchar(20) DEFAULT NULL,
+  `message` text DEFAULT NULL,
   `processed` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`,`email`,`from`)
 );
