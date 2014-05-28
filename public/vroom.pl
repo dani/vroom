@@ -136,7 +136,13 @@ plugin Mailer => {
 
 # Wrapper arround DBI
 helper db => sub { 
-  my $dbh = DBI->connect($config->{dbi}, $config->{dbUser}, $config->{dbPassword}) || die "Could not connect";
+  my $dbh = DBI->connect($config->{dbi},
+                         $config->{dbUser},
+                         $config->{dbPassword},
+                         {
+                           mysql_enable_utf8 => 1,
+                         }
+  ) || die "Could not connect";
   $dbh
 };
 
