@@ -181,6 +181,15 @@ helper get_room => sub {
   return $sth->fetchall_hashref('name')->{$name};
 };
 
+# Get room param by ID instead of name
+helper get_room_by_id => sub {
+  my $self = shift;
+  my ($id) = @_;
+  my $sth = eval { $self->db->prepare("SELECT * FROM rooms WHERE id=?;") } || return undef;
+  $sth->execute($id) || return undef;
+  return $sth->fetchall_hashref('id')->{$id};
+};
+
 # Lock/unlock a room, to prevent new participants
 # Takes two arg: room name and 1 for lock, 0 for unlock
 helper lock_room => sub {
@@ -457,9 +466,26 @@ helper add_invitation => sub {
   my ($room,$email) = @_;
   my $from = $self->session('name') || return undef;
   my $data = $self->get_room($room);
+  my $id = $self->get_random(50);
   return undef unless ($data);
   my $sth = eval { $self->db->prepare("INSERT INTO invitations (`id`,`from`,`token`,`email`) VALUES (?,?,?,?)") } || return undef;
-  $sth->execute($data->{id},$from,$self->get_random(50),$email) || return undef;
+  $sth->execute($data->{id},$from,$id,$email) || return undef;
+  return $id;
+};
+
+helper get_invitation => sub {
+  my $self = shift;
+  my ($id) = @_;
+  my $sth = eval { $self->db->prepare("SELECT * FROM `invitations` WHERE token=?;") } || return undef;
+  $sth->execute($id) || return undef;
+  return $sth->fetchall_hashref('token')->{$id};
+};
+
+helper respond_invitation => sub {
+  my $self = shift;
+  my ($id,$response,$message) = @_;
+  my $sth = eval { $self->db->prepare("UPDATE `invitations` SET response=?,message=? WHERE token=?;") } || return undef;
+  $sth->execute($response,$message,$id) || return undef;
   return 1;
 };
 
@@ -531,6 +557,38 @@ get '/kicked/(:room)' => sub {
   $self->remove_participant($room,$self->session('name'));
   $self->logout;
 } => 'kicked';
+
+# Route for invitition response
+get '/invitation' => sub {
+  my $self = shift;
+  my $inviteId = $self->param('id') || '';
+  my $response = $self->param('response') || 'decline';
+  my $invite = $self->get_invitation($inviteId);
+  my $room = $self->get_room_by_id($invite->{id});
+  if (!$invite || !$room || $response !~ m/^(decline|later)$/){
+    return $self->render('error',
+      err  => 'ERROR_INVITATION_INVALID',
+      msg  => $self->l('ERROR_INVITATION_INVALID'),
+      room => $room
+    );
+  }
+  $self->render('invitation',
+    inviteId => $inviteId,
+    room     => $room->{name},
+    response => $response
+  );
+};
+
+post '/invitation' => sub {
+  my $self = shift;
+  my $id = $self->param('id') || '';
+  my $response = $self->param('response') || 'decline';
+  my $message = $self->param('message') || '';
+  if ($response !~ m/^(later|decline)$/ || !$self->respond_invitation($id,$response,$message)){
+    return $self->render('error');
+  }
+  $self->render('invitation_thanks');
+};
 
 # This handler creates a new room
 post '/create' => sub {
@@ -731,20 +789,24 @@ post '/action' => sub {
     elsif ($rcpt !~ m/\S+@\S+\.\S+$/){
       $msg = $self->l('ERROR_MAIL_INVALID');
     }
-    elsif ($self->add_invitation($room,$rcpt) && $self->email(
-      header => [
-        Subject => encode("MIME-Header", $self->l("EMAIL_INVITATION")),
-        To => $rcpt
-      ],
-      data => [
-        template => 'invite',
-        room     => $room,
-        message  => $message
-      ],
-    )){
-      $self->app->log->info($self->session('name') . " sent an invitation for room $room to $rcpt");
-      $status = 'success';
-      $msg = sprintf($self->l('INVITE_SENT_TO_s'), $rcpt);
+    else{
+      my $inviteId = $self->add_invitation($room,$rcpt);
+      if ($inviteId && $self->email(
+        header => [
+          Subject => encode("MIME-Header", $self->l("EMAIL_INVITATION")),
+          To => $rcpt
+        ],
+        data => [
+          template => 'invite',
+          room     => $room,
+          message  => $message,
+          inviteId => $inviteId
+        ],
+      )){
+        $self->app->log->info($self->session('name') . " sent an invitation for room $room to $rcpt");
+        $status = 'success';
+        $msg = sprintf($self->l('INVITE_SENT_TO_s'), $rcpt);
+      }
     }
     $self->render(
       json => {
