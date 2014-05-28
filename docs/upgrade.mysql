@@ -18,5 +18,6 @@ CREATE TABLE IF NOT EXISTS `invitations` (
   `response` varchar(20) DEFAULT NULL,
   `message` text DEFAULT NULL,
   `processed` tinyint(1) DEFAULT '0',
+  `timestamp` int(20) DEFAULT NULL,
   PRIMARY KEY (`token`)
 ) DEFAULT CHARSET=utf8;

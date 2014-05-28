@@ -474,8 +474,8 @@ helper add_invitation => sub {
   my $data = $self->get_room($room);
   my $id = $self->get_random(50);
   return undef unless ($data);
-  my $sth = eval { $self->db->prepare("INSERT INTO invitations (`id`,`from`,`token`,`email`) VALUES (?,?,?,?)") } || return undef;
-  $sth->execute($data->{id},$from,$id,$email) || return undef;
+  my $sth = eval { $self->db->prepare("INSERT INTO invitations (`id`,`from`,`token`,`email`,`timestamp`) VALUES (?,?,?,?,?)") } || return undef;
+  $sth->execute($data->{id},$from,$id,$email,time()) || return undef;
   return $id;
 };
 
@@ -515,6 +515,17 @@ helper processed_invitation => sub {
   my ($id) = @_;
   my $sth = eval { $self->db->prepare("UPDATE `invitations` SET `processed`='1' WHERE `token`=?;") } || return undef;
   $sth->execute($id) || return undef;
+  return 1;
+};
+
+# Purge expired invitation links
+helper delete_invitations => sub {
+  my $self = shift;
+  $self->app->log->debug('Removing expired invitations');
+  # Invitation older than 2 hours doesn't make much sense
+  my $timeout = time()-7200;
+  my $sth = eval { $self->db->prepare("DELETE FROM `invitations` WHERE `timestamp` < $timeout;") } || return undef;
+  $sth->execute() || return undef;
   return 1;
 };
 
@@ -872,6 +883,10 @@ post '/action' => sub {
     # Cleanup expired rooms every ~10 pings
     if ((int (rand 100)) <= 10){
       $self->delete_rooms;
+    }
+    # And same for expired invitation links
+    if ((int (rand 100)) <= 10){
+      $self->delete_invitations;
     }
     if ($res){
       $status = 'success';
