@@ -8,7 +8,7 @@
   * <%=l 'A_WEBCAM' %>
   * <%=l 'A_MIC' %>
 
-<%=l 'WHEN_YOU_ARE_READY' %>
+<%==l 'WHEN_YOU_ARE_READY' %>
 
 <%== $url . $room %>
 
@@ -18,10 +18,10 @@
 <%== $message %>
 <% } %>
 
-<%=l 'IF_YOU_CANNOT_JOIN' %> <%=l 'YOU_CAN_NOTIFY_THE_ORGANIZER' %>
+<%==l 'IF_YOU_CANNOT_JOIN' %> <%==l 'YOU_CAN_NOTIFY_THE_ORGANIZER' %>
 
-<%= $url . 'invitation?id=' . $inviteId %>
+<%== $url . 'invitation?id=' . $inviteId %>
 
-<%=l 'HAVE_A_NICE_MEETING' %>
+<%==l 'HAVE_A_NICE_MEETING' %>
 -- 
 <%==l 'EMAIL_SIGN' %>
