@@ -18,6 +18,10 @@
 <%== $message %>
 <% } %>
 
+<%=l 'IF_YOU_CANNOT_JOIN' %> <%=l 'YOU_CAN_NOTIFY_THE_ORGANIZER' %>
+
+<%= $url . 'invitation?id=' . $inviteId %>
+
 <%=l 'HAVE_A_NICE_MEETING' %>
 -- 
 <%==l 'EMAIL_SIGN' %>

@@ -34,6 +34,14 @@
   <%= $message %>
 </p>
 <% } %>
+<p>
+  <%=l 'IF_YOU_CANNOT_JOIN' %>
+    <h3>
+      <a style="color:red" href="<%= $url . 'invitation?id=' . $inviteId %>">
+        <%=l 'YOU_CAN_NOTIFY_THE_ORGANIZER' %>
+      </a>
+    </h3>
+</p>
 <br>
 <p>
   <%=l 'HAVE_A_NICE_MEETING' %>
