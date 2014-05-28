@@ -172,7 +172,7 @@ helper create_room => sub {
   return undef if ( $self->get_room($name) || !$self->valid_room_name($name));
   my $sth = eval { $self->db->prepare("INSERT INTO rooms (name,create_timestamp,activity_timestamp,owner,token,realm) VALUES (?,?,?,?,?,?);") } || return undef;
   # Gen a random token. Will be used as a turnPassword
-  my $tp = join '' => map{('a'..'z','A'..'Z','0'..'9')[rand 62]} 0..49;
+  my $tp = $self->get_random(49);
   $sth->execute($name,time(),time(),$owner,$tp,$config->{realm}) || return undef;
   $self->app->log->info("room $name created by " . $self->session('name'));
   return 1;
@@ -339,13 +339,13 @@ helper valid_room_name => sub {
 helper get_random => sub {
   my $self = shift;
   my ($size) = @_;
-  return join '' => map{('a'..'z','0'..'9')[rand 36]} 0..$size;
+  return join '' => map{('a'..'z','A'..'Z','0'..'9','0'..'9')[rand 72]} 0..$size;
 };
 
 # Generate a random name
 helper get_random_name => sub {
   my $self = shift;
-  my $name = $self->get_random(9);
+  my $name = lc $self->get_random(9);
   # Get another one if already taken
   while ($self->get_room($name)){
     $name = $self->get_random_name();
@@ -472,7 +472,7 @@ helper add_invitation => sub {
   my ($room,$email) = @_;
   my $from = $self->session('name') || return undef;
   my $data = $self->get_room($room);
-  my $id = $self->get_random(50);
+  my $id = $self->get_random(20);
   return undef unless ($data);
   my $sth = eval { $self->db->prepare("INSERT INTO invitations (`id`,`from`,`token`,`email`,`timestamp`) VALUES (?,?,?,?,?)") } || return undef;
   $sth->execute($data->{id},$from,$id,$email,time()) || return undef;
@@ -905,8 +905,9 @@ post '/action' => sub {
           $msg .= $self->l('HE_WONT_JOIN');
         }
         if ($invit->{message} && $invit->{message} ne ''){
-          $msg .= "\n" . $self->l('MESSAGE') . ":\n" . $invit->{message};
+          $msg .= "\n" . $self->l('MESSAGE') . ":\n" . $invit->{message} . "\n";
         }
+        $msg .= "\n";
         $self->processed_invitation($id);
       }
     }
