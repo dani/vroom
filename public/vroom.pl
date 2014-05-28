@@ -473,19 +473,42 @@ helper add_invitation => sub {
   return $id;
 };
 
+# return a hash with all the invitation param
+# just like get_room
 helper get_invitation => sub {
   my $self = shift;
   my ($id) = @_;
-  my $sth = eval { $self->db->prepare("SELECT * FROM `invitations` WHERE token=?;") } || return undef;
+  my $sth = eval { $self->db->prepare("SELECT * FROM `invitations` WHERE `token`=?;") } || return undef;
   $sth->execute($id) || return undef;
   return $sth->fetchall_hashref('token')->{$id};
+};
+
+# Find invitations which have a unprocessed repsponse
+helper find_invitations => sub {
+  my $self = shift;
+  my $sth = eval { $self->db->prepare("SELECT `token` FROM `invitations` WHERE `from`=? AND `response` IS NOT NULL AND `processed`='0';") } || return undef;
+  $sth->execute($self->session('name')) || return undef;
+  my @res;
+  while(my @row = $sth->fetchrow_array){
+    push @res, $row[0];
+  }
+  return @res;
 };
 
 helper respond_invitation => sub {
   my $self = shift;
   my ($id,$response,$message) = @_;
-  my $sth = eval { $self->db->prepare("UPDATE `invitations` SET response=?,message=? WHERE token=?;") } || return undef;
+  my $sth = eval { $self->db->prepare("UPDATE `invitations` SET `response`=?,`message`=? WHERE `token`=?;") } || return undef;
   $sth->execute($response,$message,$id) || return undef;
+  return 1;
+};
+
+# Mark a invitation response as processed
+helper processed_invitation => sub {
+  my $self = shift;
+  my ($id) = @_;
+  my $sth = eval { $self->db->prepare("UPDATE `invitations` SET `processed`='1' WHERE `token`=?;") } || return undef;
+  $sth->execute($id) || return undef;
   return 1;
 };
 
@@ -847,6 +870,24 @@ post '/action' => sub {
     if ($res){
       $status = 'success';
       $msg = '';
+    }
+    my @invitations = $self->find_invitations();
+    if (scalar @invitations > 0){
+      $msg = '';
+      foreach my $id (@invitations){
+        my $invit = $self->get_invitation($id);
+        $msg .= sprintf($self->l('INVITE_REPONSE_FROM_s'), $invit->{email}) . "\n" ;
+        if ($invit->{response} && $invit->{response} eq 'later'){
+          $msg .= $self->l('HE_WILL_TRY_TO_JOIN_LATER');
+        }
+        else{
+          $msg .= $self->l('HE_WONT_JOIN');
+        }
+        if ($invit->{message} && $invit->{message} ne ''){
+          $msg .= "\n" . $self->l('MESSAGE') . ":\n" . $invit->{message};
+        }
+        $self->processed_invitation($id);
+      }
     }
     return $self->render(
              json => {
