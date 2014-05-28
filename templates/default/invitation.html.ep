@@ -18,7 +18,7 @@
           <label for="response"><%=l 'WILL_YOU_JOIN' %></label>
           <select name="response" id="response" class="form-control">
             <option value="later"><%=l 'WILL_TRY_TO_JOIN_LATER' %></option>
-            <option value="decline"><%=l 'WONT_BE_ABL_TO_JOIN' %></option>
+            <option value="decline" selected><%=l 'WONT_BE_ABL_TO_JOIN' %></option>
           </select>
         </div>
         <div class="form-group">
