@@ -2,7 +2,7 @@
 %= include 'header'
 %= include 'public_toolbar'
 <div class="container-fluid">
-  <div class="well">
+  <div class="well publicForm">
     <form role="form" action="<%= $self->get_url('/invitation') %>" method="post">
       <legend>
         <center>

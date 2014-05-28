@@ -3,7 +3,7 @@
 %= include 'public_toolbar'
 
 <div class="container-fluid">
-  <div class="well" id="createRoomContainer">
+  <div class="well publicForm">
     <h2>
       <center>
         <%=l 'CREATE_ROOM' %>

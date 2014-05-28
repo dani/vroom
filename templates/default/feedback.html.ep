@@ -2,7 +2,7 @@
 %= include 'header'
 %= include 'public_toolbar'
 <div class="container-fluid">
-  <div id="feedbackFormContainer" class="well">  
+  <div class="well publicForm">
     <form role="form" action="<%= $self->get_url('/feedback') %>" method="post">
       <legend>
         <center>
