@@ -484,7 +484,7 @@ helper add_invitation => sub {
 helper get_invitation => sub {
   my $self = shift;
   my ($id) = @_;
-  my $sth = eval { $self->db->prepare("SELECT * FROM `invitations` WHERE `token`=?;") } || return undef;
+  my $sth = eval { $self->db->prepare("SELECT * FROM `invitations` WHERE `token`=? AND `processed`='0';") } || return undef;
   $sth->execute($id) || return undef;
   return $sth->fetchall_hashref('token')->{$id};
 };
