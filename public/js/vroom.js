@@ -1582,7 +1582,10 @@ function initVroom(room) {
       },
       success: function(data) {
         if (data.status == 'success' && data.msg && data.msg != ''){
-          $.notify(data.msg, 'success');
+          $.notify(data.msg, {
+            className: 'info',
+            autoHide: false
+          });
         }
       }
     });
