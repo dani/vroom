@@ -14,7 +14,7 @@ CREATE TABLE `rooms` (
   `persistent` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE (`name`)
-);
+) DEFAULT CHARSET=utf8;
 DROP VIEW IF EXISTS `turnusers_lt`;
 CREATE VIEW `turnusers_lt` AS SELECT `name` AS `name`, MD5(CONCAT(CONCAT(CONCAT(CONCAT(`name`,':'),`realm`),':'),`token`)) AS `hmackey` FROM `rooms`;
 DROP TABLE IF EXISTS `participants`;
@@ -24,13 +24,13 @@ CREATE TABLE `participants` (
   `peer_id` varchar(40) DEFAULT NULL,
   `role` varchar(20) DEFAULT 'participant',
   PRIMARY KEY (`id`,`participant`)
-);
+) DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS `notifications`;
 CREATE TABLE `notifications` (
   `id` int(11) NOT NULL,
   `email` varchar(254),
   PRIMARY KEY (`id`,`email`)
-);
+) DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS `invitations`;
 CREATE TABLE `invitations` (
   `id` int(11) NOT NULL,
@@ -40,8 +40,8 @@ CREATE TABLE `invitations` (
   `response` varchar(20) DEFAULT NULL,
   `message` text DEFAULT NULL,
   `processed` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`,`email`,`from`)
-);
+  PRIMARY KEY (`token`)
+) DEFAULT CHARSET=utf8;
 #DROP TABLE IF EXISTS `turnusers_lt`;
 #CREATE TABLE `turnusers_lt` (
 #  name varchar(512) PRIMARY KEY,
@@ -51,17 +51,17 @@ DROP TABLE IF EXISTS `turnusers_st`;
 CREATE TABLE `turnusers_st` (
   name varchar(512) PRIMARY KEY,
   password varchar(512)
-);
+) DEFAULT CHARSET=latin1;
 DROP TABLE IF EXISTS `turn_secret`;
 CREATE TABLE `turn_secret` (
   value varchar(512)
-);
+) DEFAULT CHARSET=latin1;
 DROP TABLE IF EXISTS `allowed_peer_ip`;
 CREATE TABLE `allowed_peer_ip` (
   ip_range varchar(256)
-);
+) DEFAULT CHARSET=latin1;
 DROP TABLE IF EXISTS `denied_peer_ip`;
 CREATE TABLE `denied_peer_ip` (
   ip_range varchar(256)
-);
+) DEFAULT CHARSET=latin1;
 

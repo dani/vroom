@@ -2,11 +2,14 @@ ALTER TABLE `rooms` ADD COLUMN `owner_password` varchar(160) DEFAULT NULL AFTER 
 ALTER TABLE `rooms` ADD COLUMN `ask_for_name` tinyint(1) DEFAULT NULL AFTER `locked`;
 ALTER TABLE `participants` ADD COLUMN `peer_id` varchar(40) DEFAULT NULL AFTER `participant`;
 ALTER TABLE `participants` ADD COLUMN `role` varchar(20) DEFAULT 'participant' AFTER `peer_id`;
+ALTER TABLE `rooms` DEFAULT CHARACTER SET utf8;
+ALTER TABLE `participants` DEFAULT CHARACTER SET utf8;
+ALTER TABLE `notifications` DEFAULT CHARACTER SET utf8;
 CREATE TABLE IF NOT EXISTS `notifications` (
   `id` int(11) NOT NULL,
   `email` varchar(254),
   PRIMARY KEY (`id`,`email`)
-);
+) DEFAULT CHARSET=utf8;
 CREATE TABLE IF NOT EXISTS `invitations` (
   `id` int(11) NOT NULL,
   `email` varchar(254) NOT NULL,
@@ -15,5 +18,5 @@ CREATE TABLE IF NOT EXISTS `invitations` (
   `response` varchar(20) DEFAULT NULL,
   `message` text DEFAULT NULL,
   `processed` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`,`email`,`from`)
-);
+  PRIMARY KEY (`token`)
+) DEFAULT CHARSET=utf8;
