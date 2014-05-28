@@ -10,24 +10,32 @@
         </center>
       </legend>
       <center>
-        <%=l 'JOIN_OR_LEAVE_A_MESSAGE' %>
+        <%=l 'CANNOT_JOIN_NOW' %>
       </center>
       <br>
-        <input name="id" type="hidden" value="<%= $inviteId %>"/>
-        <div class="form-group">
-          <label for="response"><%=l 'WILL_YOU_JOIN' %></label>
-          <select name="response" id="response" class="form-control">
-            <option value="later"><%=l 'WILL_TRY_TO_JOIN_LATER' %></option>
-            <option value="decline" selected><%=l 'WONT_BE_ABL_TO_JOIN' %></option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="message"><%=l 'MESSAGE' %></label>
-          <textarea name="message" id="message" class="form-control" rows="5" placeholder="<%=l 'DONT_WAIT_FOR_ME' %>"></textarea>
-        </div>
+      <input name="id" type="hidden" value="<%= $inviteId %>"/>
+      <div class="form-group">
+        <label for="response"><%=l 'WILL_YOU_JOIN' %></label>
+        <select name="response" id="response" class="form-control">
+          <option value="later"><%=l 'WILL_TRY_TO_JOIN_LATER' %></option>
+          <option value="decline" selected><%=l 'WONT_BE_ABL_TO_JOIN' %></option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message"><%=l 'MESSAGE' %></label>
+        <textarea name="message" id="message" class="form-control" rows="5" placeholder="<%=l 'DONT_WAIT_FOR_ME' %>"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="response"><%=l 'YOU_CAN_STILL_CHANGE_YOUR_MIND' %></label>
+        <p>
+          <%=l 'CLICK_SEND_OR_JOIN_NOW' %>
+        </p>
+      </div>
       <div class="btn-group">
-        <a class="btn btn-primary btn-lg" role="button" href="<%= $self->get_url('/') . $room %>"><%=l 'JOIN_THIS_ROOM' %></a>
         <button type="submit" class="btn btn-default btn-lg"><%=l 'SUBMIT' %></button>
+        <a class="btn btn-primary btn-lg" role="button" href="<%= $self->get_url('/') . $room %>">
+          <%=l 'JOIN_THIS_ROOM' %>
+        </a>
       </div>
     </form>
   </div>
