@@ -111,14 +111,14 @@
                         <span class="glyphicon glyphicon-ban-circle">
                         </span>
                       </label>
-                      <label class="btn btn-default help" id="askForNameLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'FORCE_DISPLAY_NAME' %>">
-                        <input type="checkbox" id="askForNameButton">
-                        <span class="glyphicon glyphicon-leaf">
-                        </span>
-                      </label>
                       <label class="btn btn-default help" id="persistentLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MAKE_THIS_ROOM_PERSISTENT' %>">
                         <input type="checkbox" id="persistentButton">
                         <span class="glyphicon glyphicon-pushpin">
+                        </span>
+                      </label>
+                      <label class="btn btn-default help" id="askForNameLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'FORCE_DISPLAY_NAME' %>">
+                        <input type="checkbox" id="askForNameButton">
+                        <span class="glyphicon glyphicon-leaf">
                         </span>
                       </label>
                     </div>
