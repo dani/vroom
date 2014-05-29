@@ -111,6 +111,11 @@
                         <span class="glyphicon glyphicon-ban-circle">
                         </span>
                       </label>
+                      <label class="btn btn-default help" id="joinPassLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>">
+                        <input type="checkbox" id="joinPassButton">
+                        <span class="glyphicon glyphicon-lock">
+                        </span>
+                      </label>
                       <label class="btn btn-default help" id="persistentLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MAKE_THIS_ROOM_PERSISTENT' %>">
                         <input type="checkbox" id="persistentButton">
                         <span class="glyphicon glyphicon-pushpin">
@@ -124,27 +129,6 @@
                     </div>
                   </div>
                 </center>
-              </li>
-              <li class="divider"></li>
-              <li>
-                <form class="navbar-form" id="joinPassForm">
-                  <center>
-                    <p><%=l 'YOU_CAN_PASSWORD_PROTECT_JOIN' %></p>
-                  </center>
-                  <div class="input-group">
-                    <input type="password" id="joinPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>"/>
-                    <span class="input-group-btn">
-                      <button id="setJoinPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>">
-                        <span class="glyphicon glyphicon-ok">
-                        </span>
-                      </button>
-                      <button id="removeJoinPassButton" type="button" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'REMOVE_PASSWORD' %>">
-                        <span class="glyphicon glyphicon-remove">
-                        </span>
-                      </button>
-                    </span>
-                  </div>
-                </form>
               </li>
               <li class="divider">
               </li>
@@ -310,6 +294,28 @@
                 <input type="password" id="ownerPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD' %>"/>
                 <input type="password" id="ownerPassConfirm" class="form-control help" placeholder="<%=l 'CONFIRM_PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIRM_PASSWORD' %>"/>
                 <button id="setOwnerPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUBMIT' %>"><%=l 'SUBMIT' %></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" role="dialog" id="joinPassModal" aria-labelledby="joinPassModal" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="joinPassTitle"><%=l 'PASSWORD_PROTECT' %></h4>
+          </div>
+          <div class="modal-body">
+            <form class="navbar-form" id="joinPassForm">
+              <center>
+                <p><%=l 'YOU_MUST_SET_A_PASSWORD' %></p>
+              </center>
+              <div class="input-group">
+                <input type="password" id="joinPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD' %>"/>
+                <input type="password" id="joinPassConfirm" class="form-control help" placeholder="<%=l 'CONFIRM_PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIRM_PASSWORD' %>"/>
+                <button id="setJoinPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUBMIT' %>"><%=l 'SUBMIT' %></button>
               </div>
             </form>
           </div>
