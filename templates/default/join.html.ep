@@ -108,7 +108,7 @@
                     <div class="btn-group" data-toggle="buttons">
                       <label class="btn btn-default help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
                         <input type="checkbox" id="lockButton">
-                        <span class="glyphicon glyphicon-lock">
+                        <span class="glyphicon glyphicon-ban-circle">
                         </span>
                       </label>
                       <label class="btn btn-default help" id="askForNameLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'FORCE_DISPLAY_NAME' %>">
