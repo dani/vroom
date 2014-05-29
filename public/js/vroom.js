@@ -58,7 +58,8 @@ var locale = {
   REMOVE_THIS_ADDRESS: '',
   DISPLAY_NAME_REQUIRED: '',
   A_ROOM_ADMIN: '',
-  A_PARTICIPANT: ''
+  A_PARTICIPANT: '',
+  PASSWORDS_DOES_NOT_MATCH: ''
 };
 
 // Localize the strings we need
@@ -287,6 +288,10 @@ function initVroom(room) {
           $.each(notif.email, function(index, val){
             addNotifiedEmail(val);
           });
+          if (data.owner_auth == 'yes'){
+            $('#persistentLabel').addClass('btn-danger active');
+            $('#persistentButton').prop('checked', true);
+          }
         }
         // We're are not owner of the room
         else{
@@ -930,9 +935,13 @@ function initVroom(room) {
     if (peers.local.role == 'owner'){
       if (data.payload.action == 'set'){
         $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
+        $('#persistentLabel').addClass('btn-danger active');
+        $('#persistentButton').prop('checked', true);
       }
       else{
         $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
+        $('#persistentLabel').removeClass('btn-danger active');
+        $('#persistentButton').prop('checked', false);
       }
     }
     else{
@@ -1378,41 +1387,91 @@ function initVroom(room) {
     suspendButton($(this));
   });
 
-  // Set owner password
-  $('#ownerPass').on('input', function() {
-    if ($('#ownerPass').val() == ''){
-      $('#setOwnerPassButton').addClass('disabled');
+  $('#persistentButton').change(function(){
+    var action = ($(this).is(':checked')) ? 'set':'unset';
+    if (action == 'set'){
+      $('#persistentModal').modal('show');
+      // Uncheck the button now
+      // so it's not inconsistent if we just close the modal dialog
+      // submitting the form will recheck it
+      $('#persistentButton').prop('checked', false);
+      $('#persistentLabel').removeClass('active');
     }
     else{
-      $('#setOwnerPassButton').removeClass('disabled');
+      $.ajax({
+        data: {
+          action: 'setPassword',
+          type: 'owner',
+          room: roomName
+        },
+        error: function() {
+          $.notify(locale.ERROR_OCCURED, 'error');
+        },
+        success: function(data) {
+          $('#ownerPass').val('');
+          if (data.status == 'success'){
+            $.notify(data.msg, 'success');
+            webrtc.sendToAll('owner_password', {action: 'remove'});
+            $('#persistentLabel').removeClass('btn-danger active');
+          }
+          else{
+            $.notify(data.msg, 'error');
+          }
+        }
+      });
+      suspendButton($(this));
     }
   });
-  $('#ownerPassForm').submit(function(event) {
+
+  // Set owner password
+  $('#ownerPassConfirm').on('input', function() {
+    if ($('#ownerPassConfirm').val() == $('#ownerPass').val() &&
+        $('#ownerPassConfirm').val() != ''){
+      $('#setOwnerPassButton').removeClass('disabled');
+      $('#ownerPassConfirm').parent().removeClass('has-error');
+    }
+    else{
+      $('#setOwnerPassButton').addClass('disabled');
+      $('#ownerPassConfirm').parent().addClass('has-error');
+    }
+  });
+  $('#persistentForm').submit(function(event) {
     event.preventDefault();
-    var pass = $('#ownerPass').val();
-    $('#ownerPass').val('');
-    $('#setOwnerPassButton').addClass('disabled');
-    $.ajax({
-      data: {
-        action: 'setPassword',
-        password: pass,
-        type: 'owner',
-        room: roomName
-      },
-      error: function() {
-        $.notify(locale.ERROR_OCCURED, 'error');
-      },
-      success: function(data) {
-        $('#ownerPass').val('');
-        if (data.status == 'success'){
-          $.notify(data.msg, 'success');
-          webrtc.sendToAll('owner_password', {action: 'set'});
+    var pass  = $('#ownerPass').val();
+    var pass2 = $('#ownerPassConfirm').val();
+    if (pass == pass2 && pass != ''){
+      $('#ownerPass').val('');
+      $('#ownerPassConfirm').val('');
+      $('#setOwnerPassButton').addClass('disabled');
+      $.ajax({
+        data: {
+          action: 'setPassword',
+          password: pass,
+          type: 'owner',
+          room: roomName
+        },
+        error: function() {
+          $.notify(locale.ERROR_OCCURED, 'error');
+          $('#persistentLabel').removeClass('btn-danger active');
+        },
+        success: function(data) {
+          $('#ownerPass').val('');
+          if (data.status == 'success'){
+            $('#persistentModal').modal('hide');
+            $('#persistentLabel').addClass('btn-danger active');
+            $('#persistentButton').prop('checked', true);
+            $.notify(data.msg, 'success');
+            webrtc.sendToAll('owner_password', {action: 'set'});
+          }
+          else{
+            $.notify(data.msg, 'error');
+          }
         }
-        else{
-          $.notify(data.msg, 'error');
-        }
-      }
-    });
+      });
+    }
+    else{
+      $('#ownerPassConfirm').notify(locale.PASSWORDS_DOES_NOT_MATCH, 'error');
+    }
   });
 
   // Remove the owner password
