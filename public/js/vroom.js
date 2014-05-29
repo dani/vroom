@@ -59,7 +59,7 @@ var locale = {
   DISPLAY_NAME_REQUIRED: '',
   A_ROOM_ADMIN: '',
   A_PARTICIPANT: '',
-  PASSWORDS_DOES_NOT_MATCH: ''
+  PASSWORDS_DO_NOT_MATCH: ''
 };
 
 // Localize the strings we need
@@ -1414,7 +1414,7 @@ function initVroom(room) {
       });
     }
     else{
-      $('#joinPassConfirm').notify(locale.PASSWORDS_DOES_NOT_MATCH, 'error');
+      $('#joinPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
     }
   });
 
@@ -1500,7 +1500,7 @@ function initVroom(room) {
       });
     }
     else{
-      $('#ownerPassConfirm').notify(locale.PASSWORDS_DOES_NOT_MATCH, 'error');
+      $('#ownerPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
     }
   });
 

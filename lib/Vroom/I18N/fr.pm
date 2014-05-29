@@ -102,9 +102,19 @@ our %Lexicon = (
     "YOU_CAN_PASSWORD_PROTECT_JOIN"             => "Protéger l'accès au salon par un mot de passe",
     "PASSWORD"                                  => "Mot de passe",
     "PASSWORD_PROTECT"                          => "Protéger par mot de passe",
-    "REMOVE_PASSWORD"                           => "Supprimer le mot de passe",
     "PASSWORD_SET"                              => "Le mot de passe a été mis à jour",
     "PASSWORD_REMOVED"                          => "Le mot de passe a été supprimé",
+    "PASSWORDS_DO_NOT_MATCH"                    => "Les mots de passe ne correspondent pas",
+    "MAKE_THIS_ROOM_PERSISTENT"                 => "Rendre ce salon persistant",
+    "SET_OWNER_PASS_PERSISTENT"                 => "Pour rendre ce salon persistant, vous devez saisir un mot de passe " .
+                                                   "de gestionnaire. Conservez soigneusement ce mot de passe, il vous " .
+                                                   "permettra de retrouver l'accès aux menus de configuration si vous vous reconnectez " .
+                                                   "plus tard. Une fois ce mot de passe saisi, ce salon sera considéré comme un salon " .
+                                                   "persistant, c'est-à-dire qu'il ne sera pas supprimé, même s'il n'est pas utilisé " .
+                                                   "pendant une période prolongée",
+    "CONFIRM_PASSWORD"                          => "Confirmation du mot de passe",
+    "PROTECT_ROOM_WITH_PASSWORD"                => "Si ce mot de passe est configuré, les participants devront le saisir avant de pouvoir " .
+                                                   "rejoindre le salon",
     "ERROR_COMMON_ROOM_NAME"                    => "Désolé, le nom de ce salon est trop commun pour être réservé",
     "AUTHENTICATE"                              => "Authentification",
     "AUTH_TO_MANAGE_THE_ROOM"                   => "Authentifiez-vous pour gérer le salon",

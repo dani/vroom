@@ -95,9 +95,16 @@ our %Lexicon = (
   "YOU_CAN_PASSWORD_PROTECT_JOIN"        => "You can protect this room with a password",
   "PASSWORD"                             => "Password",
   "PASSWORD_PROTECT"                     => "Password protect",
-  "REMOVE_PASSWORD"                      => "Remove the password",
   "PASSWORD_SET"                         => "Password updated",
   "PASSWORD_REMOVED"                     => "Password removed",
+  "PASSWORDS_DO_NOT_MATCH"               => "Passwords do not match",
+  "MAKE_THIS_ROOM_PERSISTENT"            => "Make this room persistent",
+  "SET_OWNER_PASS_PERSISTENT"            => "To make this room persistent, you must set a manager password. Keep it carefully, " .
+                                            "it'll let you access all the configuration menus next time you connect. Once this " .
+                                            "password is set, this room will be considered persistent, which means it won't be " .
+                                            "deleted even if it's not used for some time",
+  "CONFIRM_PASSWORD"                     => "Confirm password",
+  "PROTECT_ROOM_WITH_PASSWORD"           => "If this password is set, participants will have to type it before the system let them in",
   "ERROR_COMMON_ROOM_NAME"               => "Sorry, this room name is too comon to be reserved",
   "AUTHENTICATE"                         => "Authentication",
   "AUTH_TO_MANAGE_THE_ROOM"              => "Authenticate to manage the room",
