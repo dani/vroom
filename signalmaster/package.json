@@ -1,21 +1,17 @@
 {
   "name": "signal-master",
-  "version": "0.0.1",
-  "repository": {
-    "type": "git", 
-    "url": "git@github.com:andyet/signal-master.git"
-  },
-  "description": "Mind-meldification for teams",
+  "description": "Simple signaling server for SimpleWebRTC",
+  "version": "0.1.0",
   "dependencies": {
-    "async": "0.1.9",
+    "getconfig": "0.3.0",
     "node-uuid": "1.2.0",
-    "redis": "",
-    "underscore": "",
-    "precommit-hook": "",
-    "getconfig": "",
-    "socket.io": "",
-    "mysql":"",
-    "cookie":""
+    "socket.io": "0.9.16",
+    "mysql": "",
+    "cookie": ""
   },
-  "main": "server.js"
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:andyet/signal-master.git"
+  }
 }

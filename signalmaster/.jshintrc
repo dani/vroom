@@ -6,8 +6,9 @@
     "evil": true,
     "white": true,
     "undef": true,
-    "node": true,
+    "browser": true,
     "predef": [
+        "app",
         "$",
         "FormBot",
         "socket",
