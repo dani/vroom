@@ -358,11 +358,13 @@ function initVroom(room) {
       wait = 200;
       // Play all preview
       // the one in the mainVid was paused, with a reduced opacity
-      // This isn't working on FF for the moment
+      // Both preview and main vid freezes on FF when doing so :-/
       if ($.browser.webkit){
         $('#webRTCVideo video').each(function(){
-          $(this)[0].play();
-          $(this).css('opacity', '1');
+          if ($(this).get(0).paused){
+            $(this).get(0).play();
+            $(this).css('opacity', '1');
+          }
         });
       }
     }
@@ -390,9 +392,11 @@ function initVroom(room) {
         // On smaller screens, the main video is hidden
         if ($.browser.webkit && $(window).width() > 768){
           $('#webRTCVideo video').each(function(){
-            $(this)[0].play();
+            if ($(this).get(0).paused){
+              $(this).get(0).play();
+            }
           });
-          el[0].pause();
+          el.get(0).pause();
           el.css('opacity', '.3');
         }
         $('#mainVideo').show(200);
@@ -511,11 +515,11 @@ function initVroom(room) {
     });
     // And go full screen on double click
     // TODO: also handle double tap
-    $(video).dblclick(function() {
+    $(video).dblclick(function(){
       fullScreen(this);
     });
     // Simple click put this preview in the mainVideo div
-    $(video).click(function() {
+    $(video).click(function(){
       handlePreviewClick($(this), id);
     });
     // Now display the div
@@ -1595,11 +1599,11 @@ function initVroom(room) {
   window.onunload = window.onbeforeunload = hangupCall;
 
   // Go fullscreen on double click
-  $('#webRTCVideoLocal').dblclick(function() {
+  $('#webRTCVideoLocal').dblclick(function(){
     fullScreen(this);
   });
   // And put it in the main div on simple click
-  $('#webRTCVideoLocal').click(function() {
+  $('#webRTCVideoLocal').click(function(){
     handlePreviewClick($(this), 'self');
   });
 
