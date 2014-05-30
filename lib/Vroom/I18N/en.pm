@@ -100,9 +100,11 @@ our %Lexicon = (
   "PASSWORDS_DO_NOT_MATCH"               => "Passwords do not match",
   "MAKE_THIS_ROOM_PERSISTENT"            => "Make this room persistent",
   "SET_OWNER_PASS_PERSISTENT"            => "To make this room persistent, you must set a manager password. Keep it carefully, " .
-                                            "it'll let you access all the configuration menus next time you connect. Once this " .
-                                            "password is set, this room will be considered persistent, which means it won't be " .
-                                            "deleted even if it's not used for some time",
+                                            "it'll grant you access to the configuration menus next time you connect.",
+  "STANDARD_ROOMS_EXPIRE_AFTER_d"        => "A standard room will be deleted after %d hour(s) without activity",
+  "PERSISTENT_ROOMS"                     => "A persistant room",
+  "EXPIRE_AFTER_d"                       => "will be deleted after %d day(s) without activity",
+  "NEVER_EXPIRE"                         => "will be kept forever",
   "CONFIRM_PASSWORD"                     => "Confirm password",
   "PROTECT_ROOM_WITH_PASSWORD"           => "If this password is set, participants will have to type it before the system let them in",
   "ERROR_COMMON_ROOM_NAME"               => "Sorry, this room name is too comon to be reserved",

@@ -107,11 +107,12 @@ our %Lexicon = (
     "PASSWORDS_DO_NOT_MATCH"                    => "Les mots de passe ne correspondent pas",
     "MAKE_THIS_ROOM_PERSISTENT"                 => "Rendre ce salon persistant",
     "SET_OWNER_PASS_PERSISTENT"                 => "Pour rendre ce salon persistant, vous devez saisir un mot de passe " .
-                                                   "de gestionnaire. Conservez soigneusement ce mot de passe, il vous " .
-                                                   "permettra de retrouver l'accès aux menus de configuration si vous vous reconnectez " .
-                                                   "plus tard. Une fois ce mot de passe saisi, ce salon sera considéré comme un salon " .
-                                                   "persistant, c'est-à-dire qu'il ne sera pas supprimé, même s'il n'est pas utilisé " .
-                                                   "pendant une période prolongée",
+                                                   "de gestionnaire. Conservez le soigneusement, il vous permettra de retrouver " .
+                                                   "l'accès aux menus de configuration quand vous vous reconnectez.",
+    "STANDARD_ROOMS_EXPIRE_AFTER_d"             => "Un salon classique sera détruit après %d heure(s) sans activité",
+    "PERSISTENT_ROOMS"                          => "Un salon persistant",
+    "EXPIRE_AFTER_d"                            => "sera détruit après %d jour(s) sans activité",
+    "NEVER_EXPIRE"                              => "est conservé indéfiniement",
     "CONFIRM_PASSWORD"                          => "Confirmation du mot de passe",
     "PROTECT_ROOM_WITH_PASSWORD"                => "Si ce mot de passe est configuré, les participants devront le saisir avant de pouvoir " .
                                                    "rejoindre le salon",

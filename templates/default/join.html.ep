@@ -289,6 +289,17 @@
             <form class="form-horizontal" role="form" id="persistentForm">
               <p>
                 <%=l 'SET_OWNER_PASS_PERSISTENT' %>
+                <ul>
+                  <li><%= sprintf($self->l('STANDARD_ROOMS_EXPIRE_AFTER_d'), int($config->{inactivityTimeout}/3600)) %></li>
+                  <li>
+                    <%=l 'PERSISTENT_ROOMS' %>
+                    <% if ($config->{persistentInactivityTimeout} > 0){ %>
+                      <%= sprintf($self->l('EXPIRE_AFTER_d'), int($config->{persistentInactivityTimeout}/(3600*24))) %>
+                    <% } else{ %>
+                      <%=l 'WILL NEVER_EXPIRE' %>
+                    <% } %>
+                  </li>
+                </ul>
               </p>
               <div class="form-group">
                 <label for="ownerPass" class="col-sm-4 control-label">
