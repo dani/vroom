@@ -177,11 +177,16 @@
             </li>
           </ul>
         </div>
-        <div class="btn-group navbar-form navbar-right" data-toggle="buttons" >
-          <button class="btn btn-default help" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
-            <span class="glyphicon glyphicon-log-out">
-            </span>
-          </button>
+        <div class="navbar-form navbar-right" data-toggle="buttons" >
+          <div class="btn-group">
+            <div id="timeCounter" class="btn btn-default disabled"></div>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-default help" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
+              <span class="glyphicon glyphicon-log-out">
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </nav>

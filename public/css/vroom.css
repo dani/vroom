@@ -173,6 +173,9 @@
 #chromeExtMessage {
   text-align: center;
 }
+#timeCounter {
+  display: none;
+}
 #navBarLogo {
   padding-top: 2px;
   float: left;

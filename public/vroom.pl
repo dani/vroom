@@ -36,6 +36,9 @@ our $components = {
   "jquery-browser-plugin" => {
     url => 'https://github.com/gabceb/jquery-browser-plugin'
   },
+  "jquery-tinytimer" => {
+    url => 'https://github.com/odyniec/jQuery-tinyTimer'
+  },
   "sprintf.js" => {
     url => 'http://hexmen.com/blog/2007/03/printf-sprintf/'
   },
