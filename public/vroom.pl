@@ -935,15 +935,13 @@ post '/action' => sub {
         if (grep { $room eq $_ } @{$config->{commonRoomNames}}){
           $msg = $self->l('ERROR_COMMON_ROOM_NAME');
         }
-        else{
-          $res = $self->set_owner_pass($room,$pass);
+        elsif ($self->set_owner_pass($room,$pass)){
+          $msg = ($pass) ? $self->l('ROOM_NOW_PERSISTENT') : $self->l('ROOM_NO_MORE_PERSISTENT');
+          $status = 'success';
         }
       }
-      else{
-        $res = $self->set_join_pass($room,$pass);
-      }
-      if ($res){
-        $msg = ($pass) ? $self->l('PASSWORD_SET') : $self->l('PASSWORD_REMOVED');
+      elsif ($type eq 'join' && $self->set_join_pass($room,$pass)){
+        $msg = ($pass) ? $self->l('PASSWORD_PROTECT_SET') : $self->l('PASSWORD_PROTECT_UNSET');
         $status = 'success';
       }
     }
