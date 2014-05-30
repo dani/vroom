@@ -371,6 +371,7 @@ function initVroom(room) {
             return false;
           })
           .css('max-height', maxHeight())
+          .attr('id', el.attr('id') + '_main')
         );
         $('.selected').removeClass('selected');
         el.addClass('selected');
