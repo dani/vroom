@@ -220,13 +220,15 @@
             <h4 class="modal-title" id="chromeExtMessageTitle"><%=l 'EXTENSION_REQUIRED' %></h4>
           </div>
           <div clas="modal-body">
-            <p><%=l 'VROOM_CHROME_EXTENSION' %></p>
-            <a href="https://chrome.google.com/webstore/detail/<%= $config->{chromeExtensionId} %>" target="_blank">
-              <h1>
-                <span class="glyphicon glyphicon-download-alt bigIcon">
+            <p>
+              <%=l 'VROOM_CHROME_EXTENSION' %>
+            </p>
+            <p>
+              <a class="btn btn-default btn-lg" href="https://chrome.google.com/webstore/detail/<%= $config->{chromeExtensionId} %>" target="_blank">
+                <span class="glyphicon glyphicon-download-alt">
                 </span>
-              </h1>
-            </a>
+              </a>
+            </p>
           </div>
         </div>
       </div>
@@ -279,13 +281,15 @@
             <center>
               <img src="<%= $self->get_url('/') %>img/webcam.png" alt="Webcam"/>
               <br>
-              <p><%=l 'CLICK_IF_NO_WEBCAM' %><p>
-              <a href="<%= $self->get_url('/') . $room %>?video=false">
-                <h1>
-                  <span class="glyphicon glyphicon-headphones bigIcon">
+              <p>
+                <%=l 'CLICK_IF_NO_WEBCAM' %>
+              </p>
+              <p>
+                <a class="btn btn-default btn-lg" href="<%= $self->get_url('/') . $room %>?video=false">
+                  <span class="glyphicon glyphicon-headphones">
                   </span>
-                </h1>
-              </a>
+                </a>
+              </p>
             </center>
           </div>
         </div>
