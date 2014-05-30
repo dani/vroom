@@ -925,13 +925,14 @@ function initVroom(room) {
     if (data.roomType == 'screen' || peers[data.id].role != 'owner'){
       return;
     }
+    var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
     if (data.payload.action == 'set'){
-      $.notify(sprintf(locale.PASSWORD_PROTECT_ON_BY_s, stringEscape(peers[data.id].displayName)), 'info');
+      $.notify(sprintf(locale.PASSWORD_PROTECT_ON_BY_s, stringEscape(who)), 'info');
       $('#joinPassLabel').addClass('btn-danger active');
       $('#joinPassButton').prop('checked', true);
     }
     else{
-      $.notify(sprintf(locale.PASSWORD_PROTECT_OFF_BY_s, stringEscape(peers[data.id].displayName)), 'info');
+      $.notify(sprintf(locale.PASSWORD_PROTECT_OFF_BY_s, stringEscape(who)), 'info');
       $('#joinPassLabel').removeClass('btn-danger active');
       $('#joinPassButton').prop('checked', false);
     }
@@ -941,13 +942,14 @@ function initVroom(room) {
       return;
     }
     if (peers.local.role == 'owner'){
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
       if (data.payload.action == 'set'){
-        $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
+        $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(who)), 'warn');
         $('#persistentLabel').addClass('btn-danger active');
         $('#persistentButton').prop('checked', true);
       }
       else{
-        $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(peers[data.id].displayName)), 'warn');
+        $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(who)), 'warn');
         $('#persistentLabel').removeClass('btn-danger active');
         $('#persistentButton').prop('checked', false);
       }
