@@ -386,8 +386,9 @@ function initVroom(room) {
         el.addClass('selected');
         mainVid = el.attr('id');
         // Pause the corresponding preview
-        // and reduce opacity
-        if ($.browser.webkit){
+        // and reduce opacity, but only on screen > 768
+        // On smaller screens, the main video is hidden
+        if ($.browser.webkit && $(window).width() > 768){
           $('#webRTCVideo video').each(function(){
             $(this)[0].play();
           });
