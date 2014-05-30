@@ -101,8 +101,8 @@ our %Lexicon = (
   "MAKE_THIS_ROOM_PERSISTENT"            => "Make this room persistent",
   "SET_OWNER_PASS_PERSISTENT"            => "To make this room persistent, you must set a manager password. Keep it carefully, " .
                                             "it'll grant you access to the configuration menus next time you connect.",
-  "STANDARD_ROOMS_EXPIRE_AFTER_d"        => "A standard room will be deleted after %d hour(s) without activity",
-  "PERSISTENT_ROOMS"                     => "A persistant room",
+  "A_STANDARD_ROOM_EXPIRES_AFTER_d"      => "A standard room will be deleted after %d hour(s) without activity",
+  "A_PERSISTENT_ROOM"                    => "A persistant room",
   "EXPIRE_AFTER_d"                       => "will be deleted after %d day(s) without activity",
   "NEVER_EXPIRE"                         => "will be kept forever",
   "CONFIRM_PASSWORD"                     => "Confirm password",

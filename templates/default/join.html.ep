@@ -290,9 +290,9 @@
               <p>
                 <%=l 'SET_OWNER_PASS_PERSISTENT' %>
                 <ul>
-                  <li><%= sprintf($self->l('STANDARD_ROOMS_EXPIRE_AFTER_d'), int($config->{inactivityTimeout}/3600)) %></li>
+                  <li><%= sprintf($self->l('A_STANDARD_ROOM_EXPIRES_AFTER_d'), int($config->{inactivityTimeout}/3600)) %></li>
                   <li>
-                    <%=l 'PERSISTENT_ROOMS' %>
+                    <%=l 'A_PERSISTENT_ROOM' %>
                     <% if ($config->{persistentInactivityTimeout} > 0){ %>
                       <%= sprintf($self->l('EXPIRE_AFTER_d'), int($config->{persistentInactivityTimeout}/(3600*24))) %>
                     <% } else{ %>

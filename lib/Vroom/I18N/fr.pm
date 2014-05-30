@@ -109,8 +109,8 @@ our %Lexicon = (
     "SET_OWNER_PASS_PERSISTENT"                 => "Pour rendre ce salon persistant, vous devez saisir un mot de passe " .
                                                    "de gestionnaire. Conservez le soigneusement, il vous permettra de retrouver " .
                                                    "l'accès aux menus de configuration quand vous vous reconnectez.",
-    "STANDARD_ROOMS_EXPIRE_AFTER_d"             => "Un salon classique sera détruit après %d heure(s) sans activité",
-    "PERSISTENT_ROOMS"                          => "Un salon persistant",
+    "A_STANDARD_ROOM_EXPIRES_AFTER_d"           => "Un salon classique sera détruit après %d heure(s) sans activité",
+    "A_PERSISTENT_ROOM"                         => "Un salon persistant",
     "EXPIRE_AFTER_d"                            => "sera détruit après %d jour(s) sans activité",
     "NEVER_EXPIRE"                              => "est conservé indéfiniement",
     "CONFIRM_PASSWORD"                          => "Confirmation du mot de passe",
