@@ -733,6 +733,7 @@ post '/password/(:room)' => sub {
 get '/(*room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
+  my $video = $self->param('video') || '1';
   # Redirect to lower case
   if ($room ne lc $room){
     $self->redirect_to($self->get_url('/') . lc $room);
@@ -782,8 +783,9 @@ get '/(*room)' => sub {
   }
   # Now display the room page
   $self->render('join',
-    moh => $self->choose_moh(),
-    turnPassword => $data->{token}
+    moh          => $self->choose_moh(),
+    turnPassword => $data->{token},
+    video        => $video
   );
 };
 

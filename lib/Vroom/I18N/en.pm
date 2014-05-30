@@ -182,6 +182,7 @@ our %Lexicon = (
   "NO_WEBCAM"                            => "Cannot access your webcam",
   "CANT_ACCESS_WEBCAM"                   => "We couldn't access your webcam. Please check it's connected, powered on, and that you've ".
                                             "allowed the browser to access it, then reload this page",
+  "CLICK_IF_NO_WEBCAM"                   => "If you don't have a webcam, click the following link, you'll be able to join the room with audio only",
   "HOME"                                 => "Home",
   "HELP"                                 => "Help",
   "ABOUT"                                => "About",

@@ -223,7 +223,7 @@
             <p><%=l 'VROOM_CHROME_EXTENSION' %></p>
             <a href="https://chrome.google.com/webstore/detail/<%= $config->{chromeExtensionId} %>" target="_blank">
               <h1>
-                <span class="glyphicon glyphicon-download-alt">
+                <span class="glyphicon glyphicon-download-alt bigIcon">
                 </span>
               </h1>
             </a>
@@ -278,6 +278,14 @@
             <p><%=l 'CANT_ACCESS_WEBCAM' %></p>
             <center>
               <img src="<%= $self->get_url('/') %>img/webcam.png" alt="Webcam"/>
+              <br>
+              <p><%=l 'CLICK_IF_NO_WEBCAM' %><p>
+              <a href="<%= $self->get_url('/') . $room %>?video=false">
+                <h1>
+                  <span class="glyphicon glyphicon-headphones bigIcon">
+                  </span>
+                </h1>
+              </a>
             </center>
           </div>
         </div>
@@ -441,11 +449,15 @@
                      threshold: -20
                    },
                    media: {
+                     <% if ($video eq 'false'){ %>
+                     video: false,
+                     <% } else{ %>
                      video: {
                        mandatory: {
                          maxFrameRate: 15,
                        }
                      },
+                     <% } %>
                      audio: true
                    }
                  });

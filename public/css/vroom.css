@@ -176,6 +176,9 @@
 #timeCounter {
   display: none;
 }
+.bigIcon {
+  color: black;
+}
 #navBarLogo {
   padding-top: 2px;
   float: left;

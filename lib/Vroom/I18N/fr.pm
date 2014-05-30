@@ -195,6 +195,8 @@ our %Lexicon = (
     "NO_WEBCAM"                                 => "Impossible d'accéder à votre webcam",
     "CANT_ACCESS_WEBCAM"                        => "Nous n'avons pas pu accéder à votre webcam, vérifiez qu'elle soit bien connectée, allumée, et que ".
                                                    "vous avez autorisé le navigateur à y accéder, puis raffraichissez cette page",
+    "CLICK_IF_NO_WEBCAM"                        => "Vous n'avez pas de webcam, cliquez sur le lien ci-dessous, vous pourrez rejoindre la conférence " .
+                                                   "en audio uniquement",
     "HOME"                                      => "Accueil",
     "HELP"                                      => "Aide",
     "ABOUT"                                     => "À propos",
