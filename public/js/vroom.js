@@ -1200,7 +1200,7 @@ function initVroom(room) {
       },
       success: function(data) {
         if (data.status == 'success'){
-          $.notify(data.msg, 'info');
+          $.notify(data.msg, 'success');
           if (type === 'set'){
             $('#askForNameLabel').addClass('btn-danger active');
           }
