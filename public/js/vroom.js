@@ -356,6 +356,15 @@ function initVroom(room) {
     if ($('#mainVideo').html() != ''){
       $('#mainVideo').hide(200);
       wait = 200;
+      // Play all preview
+      // the one in the mainVid was paused, with a reduced opacity
+      // This isn't working on FF for the moment
+      if ($.browser.webkit){
+        $('#webRTCVideo video').each(function(){
+          $(this)[0].play();
+          $(this).css('opacity', '1');
+        });
+      }
     }
     setTimeout(function(){
       $('#mainVideo').html('');
@@ -376,6 +385,15 @@ function initVroom(room) {
         $('.selected').removeClass('selected');
         el.addClass('selected');
         mainVid = el.attr('id');
+        // Pause the corresponding preview
+        // and reduce opacity
+        if ($.browser.webkit){
+          $('#webRTCVideo video').each(function(){
+            $(this)[0].play();
+          });
+          el[0].pause();
+          el.css('opacity', '.3');
+        }
         $('#mainVideo').show(200);
       }
     }, wait);
