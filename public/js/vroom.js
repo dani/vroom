@@ -9,6 +9,14 @@ $.notify.defaults( { globalPosition: 'bottom left' } );
 // Enable tooltip on required elements
 $('.help').tooltip({container: 'body'});
 
+// Animation on dropdown menus
+$('.dropdown').on('show.bs.dropdown', function(e){
+  $(this).find('.dropdown-menu').first().stop(true, true).slideDown(150);
+});
+$('.dropdown').on('hide.bs.dropdown', function(e){
+  $(this).find('.dropdown-menu').first().stop(true, true).slideUp(150);
+});
+
 // Strings we need translated
 var locale = {
   ERROR_MAIL_INVALID: '',
