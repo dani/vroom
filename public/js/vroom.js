@@ -673,7 +673,8 @@ function initVroom(room) {
     setTimeout(function(){
       if (!moh && Object.keys(peers).length < 2){
         if (!$('#pauseMohButton').is(':checked')){
-          $('#mohPlayer')[0].play();
+          $('#mohPlayer').get(0).volume = .25;
+          $('#mohPlayer').get(0).play();
           moh = true;
         }
         $('.aloneEl').show(200);
