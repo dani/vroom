@@ -353,22 +353,24 @@ function initVroom(room) {
     var wait = 1;
     // There's already a main video, let's hide it
     // and delay the new one so the fade out as time to complete
-    if ($('#mainVideo').html() != ''){
+    if ($('#mainVideo video').length > 0){
       $('#mainVideo').hide(200);
       wait = 200;
       // Play all preview
-      // the one in the mainVid was paused, with a reduced opacity
-      // Both preview and main vid freezes on FF when doing so :-/
-      if ($.browser.webkit){
-        $('#webRTCVideo video').each(function(){
-          if ($(this).get(0).paused){
-            $(this).get(0).play();
-            $(this).css('opacity', '1');
-          }
-        });
-      }
+      // the one in the mainVid was muted
+      $('#webRTCVideo video').each(function(){
+        if ($(this).get(0).volume == 0){
+          $(this).get(0).volume= .7;
+        }
+      });
     }
     setTimeout(function(){
+      // To prevent a freeze, change the src before removing the video from the DOM
+      // See https://bugzilla-dev.allizom.org/show_bug.cgi?id=937110
+      if ($.browser.mozilla && $('#mainVideo video').length > 0){
+        $($('#mainVideo video').get(0)).attr('src', $($('#mohPlayer').get(0)).attr('src'));
+        $('#mainVideo video').get(0).pause();
+      }
       $('#mainVideo').html('');
       if (el.hasClass('selected')){
         el.removeClass('selected');
@@ -387,17 +389,17 @@ function initVroom(room) {
         $('.selected').removeClass('selected');
         el.addClass('selected');
         mainVid = el.attr('id');
-        // Pause the corresponding preview
-        // and reduce opacity, but only on screen > 768
+        // Cut the volume the corresponding preview
+        // but only on screen > 768
         // On smaller screens, the main video is hidden
-        if ($.browser.webkit && $(window).width() > 768){
+        if ($(window).width() > 768){
           $('#webRTCVideo video').each(function(){
             if ($(this).get(0).paused){
               $(this).get(0).play();
             }
           });
-          el.get(0).pause();
-          el.css('opacity', '.3');
+          el.get(0).volume = 0;
+          $('#mainVideo video').get(0).volume = 1;
         }
         $('#mainVideo').show(200);
       }
@@ -503,6 +505,7 @@ function initVroom(room) {
         // Get the role of this peer
         getPeerRole(peer.id);
       }, 3000);
+      video.volume = .7;
       // Stop moh, we're not alone anymore
       $('#mohPlayer')[0].pause();
       $('.aloneEl').hide(300);
