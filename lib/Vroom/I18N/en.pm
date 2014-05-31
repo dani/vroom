@@ -213,6 +213,11 @@ our %Lexicon = (
   "SUPPORTED_BROWSERS"                   => "Supported browsers",
   "HELP_BROWSERS_SUPPORTED"              => "VROOM works with any modern, standard compliant browsers, which means any " .
                                             "recent Mozilla Firefox, Google Chrome or Opera.",
+  "I_DONT_HAVE_A_WEBCAM"                 => "I don't have a webcam",
+  "HELP_I_DONT_HAVE_A_WEBCAM"            => "You'll still be able to participate. If no webcam is detected when you join a room " .
+                                            "you'll get a message. Click on the link at the bottom and you'll join with audio " .
+                                            "only. You'll be able to see others, and they will hear you, but will get a black " .
+                                            "screen instead of your video.",
   "SCREEN_SHARING"                       => "Screen Sharing",
   "HELP_SCREEN_SHARING"                  => "VROOM lets you share your screen (or a single window) with the other members of the room. For now " .
                                             "this feature is only available in Google Chrome, and you need to install an extension " .

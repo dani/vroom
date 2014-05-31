@@ -20,6 +20,20 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseNowebcam">
+            <%=l 'I_DONT_HAVE_A_WEBCAM' %>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseNowebcam" class="panel-collapse collapse">
+        <div class="panel-body">
+          <%=l 'HELP_I_DONT_HAVE_A_WEBCAM' %>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
           <a data-toggle="collapse" data-parent="#accordion" href="#collapseScreenShare">    
             <%=l 'SCREEN_SHARING' %>
           </a>

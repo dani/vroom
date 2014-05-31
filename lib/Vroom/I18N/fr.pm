@@ -231,6 +231,12 @@ our %Lexicon = (
                                                    "récentes de Mozilla Firefox, Google Chrome et Opéra fonctionnent pour l'instant. " .
                                                    "Les autres navigateurs (principalement Internet Explorer et Safari) devraient " .
                                                    "suivrent un jour, mais ne fonctionneront pas actuellement",
+    "I_DONT_HAVE_A_WEBCAM"                      => "Je n'ai pas de webcam",
+    "HELP_I_DONT_HAVE_A_WEBCAM"                 => "Vous pourrez quand même participer. Si aucune webcam n'est disponible au moment " .
+                                                   "de rejoindre un salon, un message apparaitra. Vous pouvez à ce moment cliquer " .
+                                                   "sur le lien en bas de cette fenêtre pour rejoindre le salon an audio uniquement. " .
+                                                   "Vous pourrez voir les autres participants, et ils pourront vous entendre, mais " .
+                                                   "verront un écran noir à la place de votre vidéo.",
     "SCREEN_SHARING"                            => "Partage d'écran",
     "HELP_SCREEN_SHARING"                       => "VROOM vous permet de partager votre écran (ou juste une fenêtre) avec les autres " .
                                                    "participants d'un salon. " .
