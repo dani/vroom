@@ -19,8 +19,8 @@ our %Lexicon = (
                                                    "Avant de le rejoindre, assurez vous de disposer de tout le nécessaire",
     "A_MODERN_BROWSER"                          => "Un navigateur web moderne, les versions récentes des navigateurs Mozilla " .
                                                    "Firefox, Google Chrome ou Opera fonctionneront",
-    "A_WEBCAM"                                  => "Une webcam",
-    "A_MIC"                                     => "Un micro",
+    "A_WEBCAM"                                  => "Une webcam (optionnelle mais recommandée)",
+    "A_MIC"                                     => "Un micro et des haut-parleurs (ou un casque)",
     "WHEN_YOU_ARE_READY"                        => "Quand vous êtes prêt, rendez-vous sur cette adresse pour joindre la conférence",
     "MESSAGE_FROM_ORGANIZER"                    => "Message de l'organisateur de la réunion",
     "HAVE_A_NICE_MEETING"                       => "Bonne réunion :-)",
@@ -272,7 +272,8 @@ our %Lexicon = (
                                                    "soucis d'H323 vs SIP vs ISDN. Tout ce qu'il vous faut désormais, c'est:" .
                                                    "<ul>" .
                                                    "  <li>Un poste (PC, MAC, tablette, peu importe)</li>" .
-                                                   "  <li>Une webcam et un micro</li>" .
+                                                   "  <li>Une webcam (optionnelle mais recommandée)</li>" .
+                                                   "  <li>Un micro et des haut-parleurs (ou un casque)</li>" .
                                                    "  <li>Un navigateur web moderne</li>" .
                                                    "</ul>",
     "HOW_IT_WORKS"                              => "Comment ça marche ?",

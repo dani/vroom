@@ -17,8 +17,8 @@ our %Lexicon = (
   "YOU_ARE_INVITED_TO_A_MEETING"         => "You are awaited on a video conferecing room. " .
                                             "Before joining it, make sure you have all the necessary",
   "A_MODERN_BROWSER"                     => "A modern web browser, recent versions of Mozilla Firefox, Google Chrome or Opera will work",
-  "A_WEBCAM"                             => "A webcam",
-  "A_MIC"                                => "A microphone",
+  "A_WEBCAM"                             => "A webcam (optional but recommanded)",
+  "A_MIC"                                => "A microphone and speakers (or headphones)",
   "WHEN_YOU_ARE_READY"                   => "When you are ready, go to this address to join the conference",
   "MESSAGE_FROM_ORGANIZER"               => "Message from the meeting organizer",
   "HAVE_A_NICE_MEETING"                  => "Have a nice meeting :-)",
@@ -245,7 +245,8 @@ our %Lexicon = (
                                             "streams cannot establish, H323 vs SIP vs ISDN issues. All you need now is:" .
                                             "<ul>" .
                                             "  <li>A device (PC, MAC, pad, doesn't matter)</li>" .
-                                            "  <li>A webcam and a microphone</li>" .
+                                            "  <li>A webcam (optional but recommanded)</li>" .
+                                            "  <li>A microphone and speakers (or headphones)</li>" .
                                             "  <li>A web browser</li>" .
                                             "</ul>",
   "HOW_IT_WORKS"                         => "How it works ?",
