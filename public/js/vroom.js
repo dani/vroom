@@ -683,8 +683,10 @@ function initVroom(room) {
           $('#mohPlayer').get(0).volume = .25;
           $('#mohPlayer').get(0).play();
         }
+        else{
+          $('#pauseMohButton').notify(locale.WAIT_WITH_MUSIC, 'info');
+        }
         $('.aloneEl').show(200);
-        $('#pauseMohButton').notify(locale.WAIT_WITH_MUSIC, 'info');
       }
     }, 3000);
   }
