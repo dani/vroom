@@ -97,6 +97,38 @@
             </ul>
           </div>
           <div class="btn-group dropdown ownerEl">
+            <button class="btn btn-default dropdown-toggle help" type="button" id="groupActionsButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'GROUP_ACTIONS' %>">
+              <span class="glyphicon glyphicon-flag"></span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="groupActionsButton" id="confMenu">
+              <li>
+                <center>
+                  <div class="navbar-form">
+                    <div class="btn-group" data-toggle="buttons">
+                      <button type="button" class="btn btn-default help" id="muteEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_EVERYONE' %>">
+                        <span class="glyphicon glyphicon-volume-off">
+                        </span>
+                      </button>
+                      <button type="button" class="btn btn-default help" id="unmuteEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'UNMUTE_EVERYONE' %>">
+                        <span class="glyphicon glyphicon-volume-up">
+                        </span>
+                      </buton>
+                      <button type="button" class="btn btn-default help" id="suspendEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUSPEND_EVERYONE' %>">
+                        <span class="glyphicon glyphicon-eye-close">
+                        </span>
+                      </button>
+                      <button type="button" class="btn btn-default help" id="resumeEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'RESUME_EVERYONE' %>">
+                        <span class="glyphicon glyphicon-eye-open">
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </center>
+              </li>
+            </ul>
+          </div>
+          <div class="btn-group dropdown ownerEl">
             <button class="btn btn-default dropdown-toggle help" type="button" id="confMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
               <span class="glyphicon glyphicon-wrench"></span>
               <span class="caret"></span>

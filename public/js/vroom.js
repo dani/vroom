@@ -603,34 +603,42 @@ function initVroom(room) {
   }
 
   // Mute a peer
-  function mutePeer(id){
+  function mutePeer(id,globalAction){
     if (peers[id] && peers[id].role != 'owner'){
-      var msg = locale.YOU_HAVE_MUTED_s;
-      var who = (peers[id].hasName) ? peers[id].displayName : locale.A_PARTICIPANT;
-      if (peers[id].micMuted){
-        msg = locale.YOU_HAVE_UNMUTED_s
+      if (!globalAction ||
+          (!peers[id].micMuted && globalAction == 'mute') ||
+          (peers[id].micMuted && globalAction == 'unmute')){
+        var msg = locale.YOU_HAVE_MUTED_s;
+        var who = (peers[id].hasName) ? peers[id].displayName : locale.A_PARTICIPANT;
+        if (peers[id].micMuted){
+          msg = locale.YOU_HAVE_UNMUTED_s
+        }
+        // notify everyone that we have muted this peer
+        webrtc.sendToAll('owner_toggle_mute', {peer: id});
+        $.notify(sprintf(msg, who), 'info');
       }
-      // notify everyone that we have muted this peer
-      webrtc.sendToAll('owner_toggle_mute', {peer: id});
-      $.notify(sprintf(msg, who), 'info');
     }
     // We cannot mute another owner
-    else{
+    else if (!globalAction){
       $.notify(locale.CANT_MUTE_OWNER, 'error');
     }
   }
   // Pause a peer
-  function pausePeer(id){
+  function pausePeer(id,globalAction){
     if (peers[id] && peers[id].role != 'owner'){
-      var msg    = locale.YOU_HAVE_SUSPENDED_s;
-      var who = (peers[id].hasName) ? peers[id].displayName : locale.A_PARTICIPANT;
-      if (peers[id].videoPaused){
-        msg    = locale.YOU_HAVE_RESUMED_s;
+      if (!globalAction ||
+          (!peers[id].videoPaused && globalAction == 'pause') ||
+          (peers[id].videoPaused && globalAction == 'resume')){
+        var msg    = locale.YOU_HAVE_SUSPENDED_s;
+        var who = (peers[id].hasName) ? peers[id].displayName : locale.A_PARTICIPANT;
+        if (peers[id].videoPaused){
+          msg    = locale.YOU_HAVE_RESUMED_s;
+        }
+        webrtc.sendToAll('owner_toggle_pause', {peer: id});
+        $.notify(sprintf(msg, who), 'info');
       }
-      webrtc.sendToAll('owner_toggle_pause', {peer: id});
-      $.notify(sprintf(msg, who), 'info');
     }
-    else{
+    else if (!globalAction){
       $.notify(locale.CANT_SUSPEND_OWNER, 'error');
     }
   }
@@ -1335,6 +1343,39 @@ function initVroom(room) {
       $('#suspendCamLabel').removeClass('btn-danger');
       $.notify(locale.CAM_RESUMED, 'info');
     }
+  });
+
+  // Mute all the peers
+  $('#muteEveryoneButton').click(function(){
+    $.each(peers, function(id){
+      if (id != 'local'){
+        mutePeer(id, 'mute');
+      }
+    });
+  });
+  // Unmute all the peers
+  $('#unmuteEveryoneButton').click(function(){
+    $.each(peers, function(id){
+      if (id != 'local'){
+        mutePeer(id, 'unmute');
+      }
+    });
+  });
+  // Suspend all the peers
+  $('#suspendEveryoneButton').click(function(){
+    $.each(peers, function(id){
+      if (id != 'local'){
+        pausePeer(id, 'pause');
+      }
+    });
+  });
+  // Resum all the peers
+  $('#resumeEveryoneButton').click(function(){
+    $.each(peers, function(id){
+      if (id != 'local'){
+        pausePeer(id, 'resume');
+      }
+    });
   });
 
   // Handle auth to become room owner
