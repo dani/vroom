@@ -1076,11 +1076,12 @@ post '/action' => sub {
   # New participant joined the room
   elsif ($action eq 'join'){
     my $name = $self->param('name') || '';
+    my $subj = ($name eq '') ? sprintf($self->l('s_JOINED_ROOM_s'), $self->l('SOMEONE'), $room) : sprintf($self->l('s_JOINED_ROOM_s'), $name, $room);
     # Send notifications
     foreach my $rcpt ($self->get_notification($room)){
       $self->email(
         header => [
-          Subject => encode("MIME-Header", $self->l("JOIN_NOTIFICATION")),
+          Subject => encode("MIME-Header", $subj),
           To => $rcpt
         ],
         data => [
