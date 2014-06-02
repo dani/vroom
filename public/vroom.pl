@@ -776,8 +776,8 @@ get '/(*room)' => sub {
   # Add this user to the participants table
   unless($self->add_participant($room,$self->session('name'))){
     return $self->render('error',
-      msg  => $self->l('ERROR_OCCURED'),
-      err  => 'ERROR_OCCURED',
+      msg  => $self->l('ERROR_OCCURRED'),
+      err  => 'ERROR_OCCURRED',
       room => $room
     );
   }
@@ -828,7 +828,7 @@ post '/action' => sub {
     my $rcpt    = $self->param('recipient');
     my $message = $self->param('message');
     my $status  = 'error';
-    my $msg     = $self->l('ERROR_OCCURED');
+    my $msg     = $self->l('ERROR_OCCURRED');
     if (!$self->session($room) || $self->session($room)->{role} ne 'owner'){
       $msg = 'NOT_ALLOWED';
     }
@@ -864,7 +864,7 @@ post '/action' => sub {
   # Handle room lock/unlock
   if ($action =~ m/(un)?lock/){
     my ($lock,$success);
-    my $msg = 'ERROR_OCCURED';
+    my $msg = 'ERROR_OCCURRED';
     my $status = 'error';
     # Only the owner can lock or unlock a room
     if (!$self->session($room) || $self->session($room)->{role} ne 'owner'){
@@ -884,7 +884,7 @@ post '/action' => sub {
   # Handle activity pings sent every minute by each participant
   elsif ($action eq 'ping'){
     my $status = 'error';
-    my $msg = $self->l('ERROR_OCCURED');
+    my $msg = $self->l('ERROR_OCCURRED');
     my $res = $self->ping_room($room);
     # Cleanup expired rooms every ~10 pings
     if ((int (rand 100)) <= 10){
@@ -931,7 +931,7 @@ post '/action' => sub {
     # Empty password is equivalent to no password at all
     $pass = undef if ($pass && $pass eq '');
     my $res = undef;
-    my $msg = $self->l('ERROR_OCCURED');
+    my $msg = $self->l('ERROR_OCCURRED');
     my $status = 'error';
     # Once again, only the owner can do this
     if ($self->session($room)->{role} eq 'owner'){
@@ -965,7 +965,7 @@ post '/action' => sub {
   elsif ($action eq 'authenticate'){
     my $pass = $self->param('password');
     my $res = undef;
-    my $msg = $self->l('ERROR_OCCURED');
+    my $msg = $self->l('ERROR_OCCURRED');
     my $status = 'error';
     # Auth succeed ? lets promote him to owner of the room
     if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
@@ -1028,7 +1028,7 @@ post '/action' => sub {
     my $email  = $self->param('email');
     my $type   = $self->param('type');
     my $status = 'error';
-    my $msg    = $self->l('ERROR_OCCURED');
+    my $msg    = $self->l('ERROR_OCCURRED');
     if ($self->session($room)->{role} ne 'owner'){
       $msg = $self->l('NOT_ALLOWED');
     }
@@ -1054,7 +1054,7 @@ post '/action' => sub {
   elsif ($action eq 'askForName'){
     my $type = $self->param('type');
     my $status = 'error';
-    my $msg    = $self->l('ERROR_OCCURED');
+    my $msg    = $self->l('ERROR_OCCURRED');
     if ($self->session($room)->{role} ne 'owner'){
       $msg = $self->l('NOT_ALLOWED');
     }

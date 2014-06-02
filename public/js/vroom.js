@@ -20,7 +20,7 @@ $('.dropdown').on('hide.bs.dropdown', function(e){
 // Strings we need translated
 var locale = {
   ERROR_MAIL_INVALID: '',
-  ERROR_OCCURED: '',
+  ERROR_OCCURRED: '',
   CANT_SHARE_SCREEN: '',
   SCREEN_SHARING_ONLY_FOR_CHROME: '',
   SCREEN_SHARING_CANCELLED: '',
@@ -120,7 +120,7 @@ function removeNotifiedEmail(email){
       room: roomName
     },
     error: function() {
-      $.notify(locale.ERROR_OCCURED, 'error');
+      $.notify(locale.ERROR_OCCURRED, 'error');
     },
     success: function(data) {
       if (data.status == 'success'){
@@ -279,7 +279,7 @@ function initVroom(room) {
       },
       async: false,
       error: function(data){
-        $.notify(locale.ERROR_OCCURED, 'error');
+        $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data){
         // Notify others if our role changed
@@ -337,7 +337,7 @@ function initVroom(room) {
         id: id
       },
       error: function(data){
-        $.notify(locale.ERROR_OCCURED, 'error');
+        $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data){
         if (peers[id]){
@@ -1029,7 +1029,7 @@ function initVroom(room) {
         name: (peers.local.hasName) ? peers.local.displayName : ''
       },
       error: function(data) {
-        $.notify(locale.ERROR_OCCURED, 'error');
+        $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data) {
         if (data.status == 'success' && data.msg){
@@ -1118,7 +1118,7 @@ function initVroom(room) {
         room: roomName
       },
       error: function(data) {
-        $.notify(locale.ERROR_OCCURED, 'error');
+        $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data) {
         $('#recipient').val('');
@@ -1199,7 +1199,7 @@ function initVroom(room) {
         room: roomName
       },
       error: function(data) {
-        $.notify(locale.ERROR_OCCURED, 'error');
+        $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data) {
         if (data.status == 'success'){
@@ -1232,7 +1232,7 @@ function initVroom(room) {
         room: roomName
       },
       error: function(data) {
-        $.notify(locale.ERROR_OCCURED, 'error');
+        $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data) {
         if (data.status == 'success'){
@@ -1352,7 +1352,7 @@ function initVroom(room) {
         room: roomName
       },
       error: function(data) {
-        $.notify(locale.ERROR_OCCURED, 'error');
+        $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data) {
         $('#authPass').val('');
@@ -1400,7 +1400,7 @@ function initVroom(room) {
           room: roomName
         },
         error: function() {
-          $.notify(locale.ERROR_OCCURED, 'error');
+          $.notify(locale.ERROR_OCCURRED, 'error');
         },
         success: function(data) {
           $('#joinPass').val('');
@@ -1433,7 +1433,7 @@ function initVroom(room) {
           room: roomName
         },
         error: function() {
-          $.notify(locale.ERROR_OCCURED, 'error');
+          $.notify(locale.ERROR_OCCURRED, 'error');
         },
         success: function(data) {
           $('#joinPass').val('');
@@ -1474,7 +1474,7 @@ function initVroom(room) {
           room: roomName
         },
         error: function() {
-          $.notify(locale.ERROR_OCCURED, 'error');
+          $.notify(locale.ERROR_OCCURRED, 'error');
         },
         success: function(data) {
           $('#ownerPass').val('');
@@ -1518,7 +1518,7 @@ function initVroom(room) {
           room: roomName
         },
         error: function() {
-          $.notify(locale.ERROR_OCCURED, 'error');
+          $.notify(locale.ERROR_OCCURRED, 'error');
           $('#persistentLabel').removeClass('btn-danger active');
         },
         success: function(data) {
@@ -1563,7 +1563,7 @@ function initVroom(room) {
         room: roomName
       },
       error: function() {
-        $.notify(locale.ERROR_OCCURED, 'error');
+        $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data) {
         if (data.status == 'success'){
@@ -1680,7 +1680,7 @@ function initVroom(room) {
         room: roomName
       },
       error: function(data) {
-        $.notify(locale.ERROR_OCCURED, 'error');
+        $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data) {
         if (data.status == 'success' && data.msg && data.msg != ''){
