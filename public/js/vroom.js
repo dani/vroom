@@ -67,7 +67,8 @@ var locale = {
   DISPLAY_NAME_REQUIRED: '',
   A_ROOM_ADMIN: '',
   A_PARTICIPANT: '',
-  PASSWORDS_DO_NOT_MATCH: ''
+  PASSWORDS_DO_NOT_MATCH: '',
+  WAIT_WITH_MUSIC: ''
 };
 
 // Localize the strings we need
@@ -248,8 +249,7 @@ function initVroom(room) {
   var mainVid = false,
       chatHistory = {},
       chatIndex = 0,
-      maxVol = -100,
-      moh = false;
+      maxVol = -100;
 
   $('#name_local').css('background-color', peers.local.color);
 
@@ -517,7 +517,6 @@ function initVroom(room) {
       // Stop moh, we're not alone anymore
       $('#mohPlayer')[0].pause();
       $('.aloneEl').hide(300);
-      moh = false;
     }
     $(div).attr('id', 'peer_' + id);
     // Disable context menu on the video
@@ -679,13 +678,13 @@ function initVroom(room) {
   // Check if MoH is needed
   function checkMoh(){
     setTimeout(function(){
-      if (!moh && Object.keys(peers).length < 2){
-        if (!$('#pauseMohButton').is(':checked')){
+      if (Object.keys(peers).length < 2){
+        if ($('#pauseMohButton').is(':checked')){
           $('#mohPlayer').get(0).volume = .25;
           $('#mohPlayer').get(0).play();
-          moh = true;
         }
         $('.aloneEl').show(200);
+        $('#pauseMohButton').notify(locale.WAIT_WITH_MUSIC, 'info');
       }
     }, 3000);
   }
@@ -1591,14 +1590,14 @@ function initVroom(room) {
     downloadContent('VROOM Tchat (' + room + ').html', $('#chatHistory').html());
   });
 
-  // Suspend MoH
+  // Suspend/Play MoH
   $('#pauseMohButton').change(function(){
     if ($(this).is(":checked")){
-      $('#mohPlayer')[0].pause();
+      $('#mohPlayer')[0].play();
       $('#pauseMohLabel').addClass('btn-danger');
     }
     else{
-      $('#mohPlayer')[0].play();
+      $('#mohPlayer')[0].pause();
       $('#pauseMohLabel').removeClass('btn-danger');
     }
   });
