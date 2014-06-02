@@ -1012,14 +1012,16 @@ function initVroom(room) {
   // When we joined the room
   webrtc.on('joinedRoom', function(){
     // Check if sound is detected and warn if it hasn't
-    setTimeout(function (){
-      if (maxVol < -60){
-        $.notify(locale.NO_SOUND_DETECTED, {
-          className: 'error',
-          autoHide: false
-        });
-      }
-    }, 10000);
+    if (window.webkitAudioContext || window.AudioContext){
+      setTimeout(function (){
+        if (maxVol < -80){
+          $.notify(locale.NO_SOUND_DETECTED, {
+            className: 'error',
+            autoHide: false
+          });
+        }
+      }, 10000);
+    }
     // Notify the server a new participant has joined (ourself)
     // If we were prompted for our display name before joining
     // we send it. Not that I like sending this kind of data to the server
