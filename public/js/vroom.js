@@ -1096,7 +1096,9 @@ function initVroom(room) {
       }, 500);
       mainVid = false;
     }
-    checkMoh();
+    if (id != 'local'){
+      checkMoh();
+    }
   });
 
   // Error sending something through dataChannel
