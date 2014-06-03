@@ -269,6 +269,18 @@ function initVroom(room) {
     $('#noWebrtcSupport').modal('show');
   }
 
+  // Return the number of peers in the room
+  function countPeers(){
+    var count = Object.keys(peers).length;
+    // Do not count ourself
+    count--;
+    // and do not count our local screen
+    if (peers.local.screenShared){
+      count--;
+    }
+    return count;
+  }
+
   // Get our role and other room settings from the server
   function getRoomInfo(){
     $.ajax({
@@ -291,7 +303,10 @@ function initVroom(room) {
         // Enable owner reserved menu
         if (data.role == 'owner'){
           $('.unauthEl').hide(500);
-          $('.ownerEl').show(500);
+          $('.ownerEl').not('.threePeersEl').show(500);
+          if (countPeers() > 1){
+            ('.threePeersEl').show(500);
+          }
           var notif = JSON.parse(data.notif);
           $.each(notif.email, function(index, val){
             addNotifiedEmail(val);
@@ -517,6 +532,14 @@ function initVroom(room) {
       // Stop moh, we're not alone anymore
       $('#mohPlayer')[0].pause();
       $('.aloneEl').hide(300);
+      if (countPeers() > 1){
+        if (peers.local.role == 'owner'){
+          $('.threePeersEl').show(500);
+        }
+        else{
+          $('.threePeersEl').not('.ownerEl').show(500);
+        }
+      }
     }
     $(div).attr('id', 'peer_' + id);
     // Disable context menu on the video
@@ -686,7 +709,7 @@ function initVroom(room) {
   // Check if MoH is needed
   function checkMoh(){
     setTimeout(function(){
-      if (Object.keys(peers).length < 2){
+      if (countPeers() < 1){
         if ($('#pauseMohButton').is(':checked')){
           $('#mohPlayer').get(0).volume = .25;
           $('#mohPlayer').get(0).play();

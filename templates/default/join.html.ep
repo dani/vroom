@@ -96,7 +96,7 @@
               </li>
             </ul>
           </div>
-          <div class="btn-group dropdown ownerEl">
+          <div class="btn-group dropdown ownerEl threePeersEl">
             <button class="btn btn-default dropdown-toggle help" type="button" id="groupActionsButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'GROUP_ACTIONS' %>">
               <span class="glyphicon glyphicon-flag"></span>
               <span class="caret"></span>

@@ -99,6 +99,9 @@
 .unauthEl{
   display: none;
 }
+.threePeersEl{
+  display: none;
+}
 .ownerActions {
   position: absolute;
   left: 15px;
