@@ -115,12 +115,14 @@ our %Lexicon = (
   "ADD_NOTIFICATION"                     => "Add a notification",
   "ADD_THIS_ADDRESS"                     => "Add this address",
   "REMOVE_THIS_ADDRESS"                  => "Remove this address",
-  "NOTIFICATION_ON_JOIN"                 => "You can set a list of email address which will receive a notification each time someone joins this room",
+  "NOTIFICATION_ON_JOIN"                 => "You can set a list of email address which will receive a notification each time " .
+                                            "someone joins this room",
   "s_WILL_BE_NOTIFIED"                   => "%s will receive a notification each time someone joins this room",
   "s_WONT_BE_NOTIFIED_ANYMORE"           => "%s won't be notified anymore",
   "s_JOINED_ROOM_s"                      => "%s joined room %s",
   "SOMEONE"                              => "Someone",
-  "SOMEONE_JOINED_A_ROOM"                => "Someone joined a video conference room, and your address is configured to receive this notifications",
+  "SOMEONE_JOINED_A_ROOM"                => "Someone joined a video conference room, and your address is configured to receive " .
+                                            "this notifications",
   "PARTICIPANT_NAME"                     => "The one who just joined your room is named",
   "AUTH_SUCCESS"                         => "You are now authenticated",
   "NOT_ALLOWED"                          => "You are not allowed to do this",
@@ -130,8 +132,9 @@ our %Lexicon = (
   "TRY_AGAIN"                            => "Try again",
   "AUTH_IF_OWNER"                        => "Authenticate if you are the room owner",
   "CREATE_THIS_ROOM"                     => "Create this room",
-  "HELP_SET_DISPLAY_NAME"                => "This field lets you type your name which will be displayed for other participants. It must be set " .
-                                            "before you can use the chat. no need to validate anything, the name will be sent to others as you type.",
+  "HELP_SET_DISPLAY_NAME"                => "This field lets you type your name which will be displayed for other participants. " .
+                                            "It must be set before you can use the chat. no need to validate anything, the name " .
+                                            "will be sent to others as you type.",
   "HELP_CHANGE_COLOR_BUTTON"             => "Randomly choose another color. Usefull when two peers have the same, are too close colors.",
   "HELP_CHAT_BUTTON"                     => "Display or hide the chat menu",
   "HELP_MUTE_BUTTON"                     => "Mute or unmute your microphone",
@@ -139,23 +142,23 @@ our %Lexicon = (
   "HELP_SHARE_SCREEN_BUTTON"             => "Share your screen, or just a window with others. Only available with Google Chrome for now.",
   "HELP_INVITE_MENU"                     => "This menu lets you invite other people",
   "HELP_EMAIL_INVITE_BUTTON"             => "This button send an invitation to the email adress you enterred",
-  "HELP_GROUP_ACTIONS"                   => "This menu contains global actions (which affects all the peers at once). It'll only be displayed if there's 3 " .
-                                            "or more participants in the room.",
+  "HELP_GROUP_ACTIONS"                   => "This menu contains global actions (which affects all the peers at once). It'll " .
+                                            "only be displayed if there's 3 or more participants in the room.",
   "HELP_MUTE_EVERYONE_BUTTON"            => "This button will mute all the microphones (peers already muted won't be affected)",
   "HELP_UNMUTE_EVERYONE_BUTTON"          => "This button will unmute all the microphones (peers already unmuted won't be affected)",
   "HELP_SUSPEND_EVERYONE_BUTTON"         => "This button will suspend all the webcams (peers already suspended won't be affected)",
   "HELP_RESUME_EVERYONE_BUTTON"          => "This button will resume all the webcam (peers already resumed wont be affected)",
   "HELP_CONF_MENU"                       => "This menu contains room configuration",
   "HELP_LOCK_BUTTON"                     => "This button will lock the room: nobody will be able to join it (except owners of the room)",
-  "HELP_PASSWORD_BUTTON"                 => "This button will protect access to this room with a password. Note that this password isn't asked it" .
-                                            "you join the room through an email invitation (in which case the authentication is done with a uniq " .
-                                            "token valid for two hours)",
+  "HELP_PASSWORD_BUTTON"                 => "This button will protect access to this room with a password. Note that this password " .
+                                            "isn't asked it you join the room through an email invitation (in which case the " .
+                                            "authentication is done with a uniq token valid for two hours)",
   "HELP_PERSISTENT_BUTTON"               => "Make this room persistent, you'll be able to leave, reconnecte, and get configuration menus back. " .
                                             "The room will also be kept much longer.",
   "HELP_ASK_FOR_NAME_BUTTON"             => "This will enforce participants to set their name before joining the room.",
   "HELP_LOGOUT_BUTTON"                   => "This will end the call and disconnect you from the room",
-  "HELP_PEER_ACTIONS_BUTTONS"            => "This menu will appear when you put the mouse over a video preview. It'll allow you to run actions which " .
-                                            "only affect this peer (mute/suspend/kick from the room)",
+  "HELP_PEER_ACTIONS_BUTTONS"            => "This menu will appear when you put the mouse over a video preview. It'll allow " .
+                                            "you to run actions which only affect this peer (mute/suspend/kick from the room)",
   "LOGOUT"                               => "Leave the room",
   "SET_YOUR_NAME_TO_CHAT"                => "You need to set your name to be able to chat",
   "SEND_MESSAGE"                         => "Send the message",

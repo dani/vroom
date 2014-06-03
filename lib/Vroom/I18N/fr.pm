@@ -126,7 +126,7 @@ our %Lexicon = (
     "NOTIFICATION_ON_JOIN"                      => "Ajouter des adresses email qui recevront une notification dès que quelqu'un rejoint ce salon",
     "s_WILL_BE_NOTIFIED"                        => "%s recevra une notification à chaque fois qu'une personne rejoint ce salon",
     "s_WONT_BE_NOTIFIED_ANYMORE"                => "%s ne recevra plus les notifications pour ce salon",
-    "s_JOINED_ROOM_s"                          => "%s a rejoint le salon %s",
+    "s_JOINED_ROOM_s"                           => "%s a rejoint le salon %s",
     "SOMEONE"                                   => "Quelqu'un",
     "SOMEONE_JOINED_A_ROOM"                     => "Quelqu'un a rejoint un salon de vidéo conférence, et votre adresse est configurée " .
                                                    "pour recevoir ces notifications",
@@ -139,36 +139,46 @@ our %Lexicon = (
     "TRY_AGAIN"                                 => "Essayer à nouveau",
     "AUTH_IF_OWNER"                             => "Authentifiez-vous si vous êtes le propriétaire du salon",
     "CREATE_THIS_ROOM"                          => "Créez ce salon",
-    "HELP_SET_DISPLAY_NAME"                     => "Ce champs vous permet de saisir le nom qui sera affiché pour les autres personnes. Il est obligatoire avant " .
-                                                   "de pouvoir utiliser le tchat. Pas besoin de valider quoi que ce soit, il est envoyé à tous les autres au fur et " .
-                                                   "à mesure que vous le tapez.",
-    "HELP_CHANGE_COLOR_BUTTON"                  => "Ce bouton vous permet de choisir une autre couleur aléatoirement. Utile si plusieurs personnes se retrouvent " .
-                                                   "avec des couleurs identiques ou trop proches.",
+    "HELP_SET_DISPLAY_NAME"                     => "Ce champs vous permet de saisir le nom qui sera affiché pour les autres personnes. " .
+                                                   "Il est obligatoire avant de pouvoir utiliser le tchat. Pas besoin de valider quoi " .
+                                                   "que ce soit, il est envoyé à tous les autres au fur et à mesure que vous le tapez.",
+    "HELP_CHANGE_COLOR_BUTTON"                  => "Ce bouton vous permet de choisir une autre couleur aléatoirement. Utile si " .
+                                                   "plusieurs personnes se retrouvent avec des couleurs identiques ou trop proches.",
     "HELP_CHAT_BUTTON"                          => "Affiche ou masque le menu du tchat",
     "HELP_MUTE_BUTTON"                          => "Coupe ou réactive votre micro.",
     "HELP_SUSPEND_CAM_BUTTON"                   => "Mettre en pause/réactiver la webcam. Les autres participants vous entendront toujours " .
                                                    "(sauf si vous avez également coupé votre micro).",
-    "HELP_SHARE_SCREEN_BUTTON"                  => "Ce bouton vous permet de partager votre écran, ou une application avec les autres personnes. Disponible uniquement " .
-                                                   "avec le navigateur Google Chrome actuellement.",
+    "HELP_SHARE_SCREEN_BUTTON"                  => "Ce bouton vous permet de partager votre écran, ou une application avec les autres " .
+                                                   "personnes. Disponible uniquement avec le navigateur Google Chrome actuellement.",
     "HELP_INVITE_MENU"                          => "Ce menu permet d'inviter d'autres personnes sur le salon.",
-    "HELP_EMAIL_INVITE_BUTTON"                  => "Ce bouton vous permet d'envoyer une invitation par email (après avoir remplis le champs demandant l'adresse email)",
-    "HELP_GROUP_ACTIONS"                        => "Ce menu permet d'effectuer des actions sur l'ensemble des participants. Il ne s'affiche que si le salon " .
-                                                   "compte 3 participants ou plus",
-    "HELP_MUTE_EVERYONE_BUTTON"                 => "Permet de couper le micro de tous les participants (ceux dont le micro est déjà coupé ne sont pas affectés)",
-    "HELP_UNMUTE_EVERYONE_BUTTON"               => "Permet de ré-activer le micro de tous les participants (ceux dont le micro est actif ne sont pas affectés)",
-    "HELP_SUSPEND_EVERYONE_BUTTON"              => "Permet de mettre toutes les webcams en pause (ceux dont la webcam est déjà en pause ne sont pas affectés)",
-    "HELP_RESUME_EVERYONE_BUTTON"               => "Permet de réactiver toutes les webcams (ceux dont la webcam est déjà active ne sont pas affectés)",
-    "HELP_CONF_MENU"                            => "Ce menu permet de configurer le salon. Il n'est accessible qu'aux propriétaires du salon",
-    "HELP_LOCK_BUTTON"                          => "Permet de verrouiller le salon: plus personne ne pourra le rejoindre (exceptés les propriétaires)",
-    "HELP_PASSWORD_BUTTON"                      => "Permet de protéger l'accès par un mot de passe. Notez que le mot de passe n'est pas demandé lorsque l'on " .
-                                                   "rejoint un salon suite à une invitation par email (l'authentification se fait par un jeton unique valide " .
-                                                   "pendant deux heures",
-    "HELP_PERSISTENT_BUTTON"                    => "Permet de rendre le salon persistent. Vous pourrez donc vous reconnecter et récupérer l'accès aux menus de configuration. " .
-                                                   "Le salon sera également conservé bien plus longtemps sur le système",
+    "HELP_EMAIL_INVITE_BUTTON"                  => "Ce bouton vous permet d'envoyer une invitation par email (après avoir remplis " .
+                                                   "le champs demandant l'adresse email)",
+    "HELP_GROUP_ACTIONS"                        => "Ce menu permet d'effectuer des actions sur l'ensemble des participants. Il ne " .
+                                                   "s'affiche que si le salon compte 3 participants ou plus",
+    "HELP_MUTE_EVERYONE_BUTTON"                 => "Permet de couper le micro de tous les participants (ceux dont le micro est " .
+                                                   "déjà coupé ne sont pas affectés)",
+    "HELP_UNMUTE_EVERYONE_BUTTON"               => "Permet de ré-activer le micro de tous les participants (ceux dont le micro " .
+                                                   "est actif ne sont pas affectés)",
+    "HELP_SUSPEND_EVERYONE_BUTTON"              => "Permet de mettre toutes les webcams en pause (ceux dont la webcam est déjà " .
+                                                   "en pause ne sont pas affectés)",
+    "HELP_RESUME_EVERYONE_BUTTON"               => "Permet de réactiver toutes les webcams (ceux dont la webcam est déjà active " .
+                                                   "ne sont pas affectés)",
+    "HELP_CONF_MENU"                            => "Ce menu permet de configurer le salon. Il n'est accessible qu'aux propriétaires " .
+                                                   "du salon",
+    "HELP_LOCK_BUTTON"                          => "Permet de verrouiller le salon: plus personne ne pourra le rejoindre (exceptés " .
+                                                   "les propriétaires)",
+    "HELP_PASSWORD_BUTTON"                      => "Permet de protéger l'accès par un mot de passe. Notez que le mot de passe n'est " .
+                                                   "pas demandé lorsque l'on " .
+                                                   "rejoint un salon suite à une invitation par email (l'authentification se fait " .
+                                                   "par un jeton unique valide pendant deux heures",
+    "HELP_PERSISTENT_BUTTON"                    => "Permet de rendre le salon persistent. Vous pourrez donc vous reconnecter et " .
+                                                   "récupérer l'accès aux menus de configuration. Le salon sera également conservé " .
+                                                   "bien plus longtemps sur le système",
     "HELP_ASK_FOR_NAME_BUTTON"                  => "Permet d'imposer la saisie du nom avant de pouvoir rejoindre le salon",
     "HELP_LOGOUT_BUTTON"                        => "Ce bouton vous déconnectera du système",
-    "HELP_PEER_ACTIONS_BUTTONS"                 => "Ce menu s'affiche en passant la souris au dessus d'une vignette vidéo. Il vous permet d'effectuer certaines actions " .
-                                                   "qui ne concerneront que cette personne (coupé le micro, mettre la webcam en pause, et bannir du salon)",
+    "HELP_PEER_ACTIONS_BUTTONS"                 => "Ce menu s'affiche en passant la souris au dessus d'une vignette vidéo. Il " .
+                                                   "vous permet d'effectuer certaines actions qui ne concerneront que cette " .
+                                                   "personne (coupé le micro, mettre la webcam en pause, et bannir du salon)",
     "LOGOUT"                                    => "Quitter le salon",
     "SET_YOUR_NAME_TO_CHAT"                     => "Vous devez saisir votre nom avant de pouvoir tchater",
     "SEND_MESSAGE"                              => "Envoyer le message",
