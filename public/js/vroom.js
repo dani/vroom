@@ -1122,6 +1122,9 @@ function initVroom(room) {
     if (id != 'local'){
       checkMoh();
     }
+    if (countPeers() < 2){
+      $('.threePeersEl').hide(500);
+    }
   });
 
   // Error sending something through dataChannel
