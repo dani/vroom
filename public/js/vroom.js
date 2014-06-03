@@ -1744,6 +1744,11 @@ function initVroom(room) {
     }
   });
 
+  // Remove the active class on the help button
+  $('#helpModal').on('hide.bs.modal',function(){
+    $('#helpButton').removeClass('active');
+  });
+
   // Ping the room every minutes
   // Used to detect inactive rooms
   setInterval(function pingRoom(){
