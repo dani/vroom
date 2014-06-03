@@ -20,8 +20,13 @@
   <%=l 'WHEN_YOU_ARE_READY' %>
   <center>
     <h1>
-      <a href="<%= $url . $room %>?token=<%= $inviteId %>">
-        <%= $url . $room %>?token=<%= $inviteId %>
+      <% my $roomAccess = $room;
+         if ($joinPass eq 'yes') {
+           $roomAccess .= '?token=' . $inviteId;
+         }
+      %>
+      <a href="<%= $url . $roomAccess %>">
+        <%= $url . $roomAccess %>
       </a>
     </h1>
   </center>
@@ -37,7 +42,7 @@
 <p>
   <%=l 'IF_YOU_CANNOT_JOIN' %>
     <h3>
-      <a style="color:red" href="<%= $url . 'invitation?id=' . $inviteId %>">
+      <a style="color:red" href="<%= $url . 'invitation?token=' . $inviteId %>">
         <%=l 'YOU_CAN_NOTIFY_THE_ORGANIZER' %>
       </a>
     </h3>

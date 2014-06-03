@@ -476,7 +476,7 @@ helper add_invitation => sub {
   my ($room,$email) = @_;
   my $from = $self->session('name') || return undef;
   my $data = $self->get_room($room);
-  my $id = $self->get_random(20);
+  my $id = $self->get_random(30);
   return undef unless ($data);
   my $sth = eval { $self->db->prepare("INSERT INTO `invitations` (`id`,`from`,`token`,`email`,`timestamp`) VALUES (?,?,?,?,?)") } || return undef;
   $sth->execute($data->{id},$from,$id,$email,time()) || return undef;
@@ -620,11 +620,12 @@ get '/kicked/(:room)' => sub {
 # Route for invitition response
 get '/invitation' => sub {
   my $self = shift;
-  my $inviteId = $self->param('id') || '';
-  my $response = $self->param('response') || 'decline';
+  my $inviteId = $self->param('token') || '';
+  # Delecte expired invitation now
+  $self->delete_invitations;
   my $invite = $self->get_invitation($inviteId);
   my $room = $self->get_room_by_id($invite->{id});
-  if (!$invite || !$room || $response !~ m/^(decline|later)$/){
+  if (!$invite || !$room){
     return $self->render('error',
       err  => 'ERROR_INVITATION_INVALID',
       msg  => $self->l('ERROR_INVITATION_INVALID'),
@@ -634,13 +635,12 @@ get '/invitation' => sub {
   $self->render('invitation',
     inviteId => $inviteId,
     room     => $room->{name},
-    response => $response
   );
 };
 
 post '/invitation' => sub {
   my $self = shift;
-  my $id = $self->param('id') || '';
+  my $id = $self->param('token') || '';
   my $response = $self->param('response') || 'decline';
   my $message = $self->param('message') || '';
   if ($response !~ m/^(later|decline)$/ || !$self->respond_invitation($id,$response,$message)){
@@ -755,6 +755,7 @@ get '/(*room)' => sub {
     $self->redirect_to($self->get_url('/') . lc $room);
   }
   $self->delete_rooms;
+  $self->delete_invitations;
   unless ($self->valid_room_name($room)){
     return $self->render('error',
       msg  => $self->l('ERROR_NAME_INVALID'),
@@ -782,6 +783,7 @@ get '/(*room)' => sub {
     );
   }
   # Now, if the room is password protected and we're not a participant, nor the owner, lets prompt for the password
+  # Email invitation have a token which can be used instead of password
   if ($data->{join_password} &&
      (!$self->session($room) || $self->session($room)->{role} !~ m/^participant|owner$/) &&
      !$self->check_invite_token($room,$token)){
@@ -864,7 +866,8 @@ post '/action' => sub {
           template => 'invite',
           room     => $room,
           message  => $message,
-          inviteId => $inviteId
+          inviteId => $inviteId,
+          joinPass => ($data->{join_password}) ? 'yes' : 'no'
         ],
       )){
         $self->app->log->info($self->session('name') . " sent an invitation for room $room to $rcpt");

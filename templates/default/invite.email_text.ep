@@ -10,7 +10,12 @@
 
 <%==l 'WHEN_YOU_ARE_READY' %>
 
-<%= $url . $room %>?token=<%= $inviteId %>
+<% my $roomAccess = $room;
+  if ($joinPass eq 'yes') {
+    $roomAccess .= '?token=' . $inviteId;
+  }
+%>
+<%== $url . $roomAccess %>
 
 <% if ($message && $message ne ''){ %>
 <%==l 'MESSAGE_FROM_ORGANIZER' %>:
@@ -20,7 +25,7 @@
 
 <%==l 'IF_YOU_CANNOT_JOIN' %> <%==l 'YOU_CAN_NOTIFY_THE_ORGANIZER' %>
 
-<%== $url . 'invitation?id=' . $inviteId %>
+<%== $url . 'invitation?token=' . $inviteId %>
 
 <%==l 'HAVE_A_NICE_MEETING' %>
 -- 
