@@ -211,7 +211,7 @@
         </div>
         <div class="navbar-form navbar-right" data-toggle="buttons" >
           <div class="btn-group">
-            <button id="changeColorButton" class="btn btn-default help" data-toggle="modal" data-target="#helpModal" rel="tooltip" data-placement="bottom" title="<%=l 'HELP' %>">
+            <button id="helpButton" class="btn btn-default help" data-toggle="modal" data-target="#helpModal" rel="tooltip" data-placement="bottom" title="<%=l 'HELP' %>">
               <span class="glyphicon glyphicon-question-sign">
               </span>
             </button>
@@ -432,7 +432,7 @@
                     </center>
                   </div>
                   <div class="col-md-9">
-                    <%=l 'HELP_BAN_BUTTON' %>
+                    <%=l 'HELP_LOCK_BUTTON' %>
                   </div>
                 </div>
                 <div class="list-group-item row ownerEl">
@@ -444,7 +444,7 @@
                     </center>
                   </div>
                   <div class="col-md-9">
-                    <%=l 'HELP_LOCK_BUTTON' %>
+                    <%=l 'HELP_PASSWORD_BUTTON' %>
                   </div>
                 </div>
                 <div class="list-group-item row ownerEl">
