@@ -211,6 +211,12 @@
         </div>
         <div class="navbar-form navbar-right" data-toggle="buttons" >
           <div class="btn-group">
+            <button id="changeColorButton" class="btn btn-default help" data-toggle="modal" data-target="#helpModal" rel="tooltip" data-placement="bottom" title="<%=l 'HELP' %>">
+              <span class="glyphicon glyphicon-question-sign">
+              </span>
+            </button>
+          </div>
+          <div class="btn-group">
             <div id="timeCounter" class="btn btn-default disabled"></div>
           </div>
           <div class="btn-group">
@@ -222,13 +228,293 @@
         </div>
       </div>
     </nav>
+    <div class="modal fade" role="dialog" id="helpModal" aria-labelledby="helpModal" aria-hidden="true">
+     <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title"><%=l 'HELP' %></h4>
+          </div>
+          <div class="modal-body">
+            <div class="list-group">
+              <div class="list-group-item row">
+                <div class="col-md-2">
+                  <center>
+                    <input type="text" class="form-control" placeholder="<%=l 'YOUR_NAME' %>">
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_SET_DISPLAY_NAME' %>
+                </div>
+              </div>
+              <div class="list-group-item row">
+                <div class="col-md-2">
+                  <center>
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-tag"></span>
+                    </div>
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_CHANGE_COLOR_BUTTON' %>
+                </div>
+              </div>
+              <div class="list-group-item row">
+                <div class="col-md-2">
+                  <center>
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-comment"></span>
+                    </div>
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_CHAT_BUTTON' %>
+                </div>
+              </div>
+              <div class="list-group-item row">
+                <div class="col-md-2">
+                  <center>
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-volume-off"></span>
+                    </div>
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_MUTE_BUTTON' %>
+                </div>
+              </div>
+              <div class="list-group-item row">
+                <div class="col-md-2">
+                  <center>
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-eye-close"></span>
+                    </div>
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_SUSPEND_CAM_BUTTON' %>
+                </div>
+              </div>
+              <div class="list-group-item row aloneEl">
+                <div class="col-md-2">
+                  <center>
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-music"></span>
+                    </div>
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_MOH_BUTTON' %>
+                </div>
+              </div>
+              <div class="list-group-item row">
+                <div class="col-md-2">
+                  <center>
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-expand"></span>
+                    </div>
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_SHARE_SCREEN_BUTTON' %>
+                </div>
+              </div>
+              <div class="list-group-item row ownerEl">
+                <div class="col-md-2">
+                  <center>
+                    <a data-toggle="collapse" href="#helpInviteMenuCollapse" class="btn btn-default">
+                      <span class="glyphicon glyphicon-user"></span>
+                      <span class="caret"></span>
+                    </a>
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_INVITE_MENU' %>
+                </div>
+              </div>
+              <div id="helpInviteMenuCollapse" class="collapse">
+                <div class="list-group-item row ownerEl">
+                  <div class="col-md-2 col-md-offset-1">
+                    <center>
+                      <div class="btn btn-default">
+                        <span class="glyphicon glyphicon-send"></span>
+                      </div>
+                    </center>
+                  </div>
+                  <div class="col-md-9">
+                    <%=l 'HELP_EMAIL_INVITE_BUTTON' %>
+                  </div>
+                </div>
+              </div>
+              <div class="list-group-item row ownerEl threePeersEl">
+                <div class="col-md-2">
+                  <center>
+                    <a data-toggle="collapse" href="#helpGroupActionsMenuCollapse" class="btn btn-default">
+                      <span class="glyphicon glyphicon-flag"></span>
+                      <span class="caret"></span>
+                    </a>
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_GROUP_ACTIONS' %>
+                </div>
+              </div>
+              <div id="helpGroupActionsMenuCollapse" class="collapse">
+                <div class="list-group-item row ownerEl threePeersEl">
+                  <div class="col-md-2 col-md-offset-1">
+                    <center>
+                      <div class="btn btn-default">
+                        <span class="glyphicon glyphicon-volume-off"></span>
+                      </div>
+                    </center>
+                  </div>
+                  <div class="col-md-9">
+                    <%=l 'HELP_MUTE_EVERYONE_BUTTON' %>
+                  </div>
+                </div>
+                <div class="list-group-item row ownerEl threePeersEl">
+                  <div class="col-md-2 col-md-offset-1">
+                    <center>
+                      <div class="btn btn-default">
+                        <span class="glyphicon glyphicon-volume-up"></span>
+                      </div>
+                    </center>
+                  </div>
+                  <div class="col-md-9">
+                    <%=l 'HELP_UNMUTE_EVERYONE_BUTTON' %>
+                  </div>
+                </div>
+                <div class="list-group-item row ownerEl threePeersEl">
+                  <div class="col-md-2 col-md-offset-1">
+                    <center>
+                      <div class="btn btn-default">
+                        <span class="glyphicon glyphicon-eye-close"></span>
+                      </div>
+                    </center>
+                  </div>
+                  <div class="col-md-9">
+                    <%=l 'HELP_SUSPEND_EVERYONE_BUTTON' %>
+                  </div>
+                </div>
+                <div class="list-group-item row ownerEl threePeersEl">
+                  <div class="col-md-2 col-md-offset-1">
+                    <center>
+                      <div class="btn btn-default">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                      </div>
+                    </center>
+                  </div>
+                  <div class="col-md-9">
+                    <%=l 'HELP_RESUME_EVERYONE_BUTTON' %>
+                  </div>
+                </div>
+              </div>
+              <div class="list-group-item row ownerEl">
+                <div class="col-md-2">
+                  <center>
+                    <a data-toggle="collapse" href="#helpConfMenuCollapse" class="btn btn-default">
+                      <span class="glyphicon glyphicon-wrench"></span>
+                      <span class="caret"></span>
+                    </a>
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_CONF_MENU' %>
+                </div>
+              </div>
+              <div id="helpConfMenuCollapse" class="collapse">
+                <div class="list-group-item row ownerEl">
+                  <div class="col-md-2 col-md-offset-1">
+                    <center>
+                      <div class="btn btn-default">
+                        <span class="glyphicon glyphicon-ban-circle"></span>
+                      </div>
+                    </center>
+                  </div>
+                  <div class="col-md-9">
+                    <%=l 'HELP_BAN_BUTTON' %>
+                  </div>
+                </div>
+                <div class="list-group-item row ownerEl">
+                  <div class="col-md-2 col-md-offset-1">
+                    <center>
+                      <div class="btn btn-default">
+                        <span class="glyphicon glyphicon-lock"></span>
+                      </div>
+                    </center>
+                  </div>
+                  <div class="col-md-9">
+                    <%=l 'HELP_LOCK_BUTTON' %>
+                  </div>
+                </div>
+                <div class="list-group-item row ownerEl">
+                  <div class="col-md-2 col-md-offset-1">
+                    <center>
+                      <div class="btn btn-default">
+                        <span class="glyphicon glyphicon-pushpin"></span>
+                      </div>
+                    </center>
+                  </div>
+                  <div class="col-md-9">
+                    <%=l 'HELP_PERSISTENT_BUTTON' %>
+                  </div>
+                </div>
+                <div class="list-group-item row ownerEl">
+                  <div class="col-md-2 col-md-offset-1">
+                    <center>
+                      <div class="btn btn-default">
+                        <span class="glyphicon glyphicon-leaf"></span>
+                      </div>
+                    </center>
+                  </div>
+                  <div class="col-md-9">
+                    <%=l 'HELP_ASK_FOR_NAME_BUTTON' %>
+                  </div>
+                </div>
+              </div>
+              <div class="list-group-item row">
+                <div class="col-md-2">
+                  <center>
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-log-out"></span>
+                    </div>
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_LOGOUT_BUTTON' %>
+                </div>
+              </div>
+              <div class="list-group-item row ownerEl">
+                <div class="col-md-2">
+                  <center>
+                    <div class="btn-group">
+                      <div class="btn btn-sm btn-default">
+                        <span class="glyphicon glyphicon-volume-off"></span>
+                      </div>
+                      <div class="btn btn-sm btn-default">
+                        <span class="glyphicon glyphicon-eye-close"></span>
+                      </div>
+                      <div class="btn btn-sm btn-default">
+                        <span class="glyphicon glyphicon-remove-circle"></span>
+                      </div>
+                  </center>
+                </div>
+                <div class="col-md-10">
+                  <%=l 'HELP_PEER_ACTIONS_BUTTONS' %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="modal fade" role="dialog" id="setDisplayName" aria-labelledby="setDisplayName" aria-hidden="true" data-keyboard="false" data-backdrop="static">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" id="setDisplayNameTitle"><%=l 'DISPLAY_NAME_REQUIRED' %></h4>
           </div>
-          <div clas="modal-body">
+          <div class="modal-body">
             <form role="form" class="well" id="displayNamePreForm">
               <label for="displayNamePre"><%=l 'SET_A_DISPLAY_NAME' %></label>
               <div class="input-group">
