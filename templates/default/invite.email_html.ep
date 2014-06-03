@@ -20,8 +20,8 @@
   <%=l 'WHEN_YOU_ARE_READY' %>
   <center>
     <h1>
-      <a href="<%= $url . $room %>">
-        <%= $url . $room %>
+      <a href="<%= $url . $room %>?token=<%= $inviteId %>">
+        <%= $url . $room %>?token=<%= $inviteId %>
       </a>
     </h1>
   </center>

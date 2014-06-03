@@ -10,7 +10,7 @@
 
 <%==l 'WHEN_YOU_ARE_READY' %>
 
-<%== $url . $room %>
+<%= $url . $room %>?token=<%= $inviteId %>
 
 <% if ($message && $message ne ''){ %>
 <%==l 'MESSAGE_FROM_ORGANIZER' %>:

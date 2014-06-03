@@ -533,6 +533,21 @@ helper delete_invitations => sub {
   return 1;
 };
 
+# Check an invitation token is valid
+helper check_invite_token => sub {
+  my $self = shift;
+  my ($room,$token) = @_;
+  my $ret = 0;
+  my $data = $self->get_room($room);
+  if (!$data || !$token){
+    return undef;
+  }
+  my $sth = eval { $self->db->prepare("SELECT * FROM `invitations` WHERE id=? AND token=? AND (`response` IS NULL OR `response`='later');") } || return undef;
+  $sth->execute($data->{id},$token) || return undef;
+  $ret = 1 if ($sth->rows == 1);
+  return $ret;
+};
+
 # Route / to the index page
 any '/' => 'index';
 
@@ -734,6 +749,7 @@ get '/(*room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
   my $video = $self->param('video') || '1';
+  my $token = $self->param('token') || undef;
   # Redirect to lower case
   if ($room ne lc $room){
     $self->redirect_to($self->get_url('/') . lc $room);
@@ -766,7 +782,9 @@ get '/(*room)' => sub {
     );
   }
   # Now, if the room is password protected and we're not a participant, nor the owner, lets prompt for the password
-  if ($data->{join_password} && (!$self->session($room) || $self->session($room)->{role} !~ m/^participant|owner$/)){
+  if ($data->{join_password} &&
+     (!$self->session($room) || $self->session($room)->{role} !~ m/^participant|owner$/) &&
+     !$self->check_invite_token($room,$token)){
     return $self->redirect_to($self->get_url('/password') . $room);
   }
   # Set this peer as a simple participant if he has no role yet (shouldn't happen)
