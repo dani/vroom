@@ -652,35 +652,34 @@ post '/invitation' => sub {
 # This handler creates a new room
 post '/create' => sub {
   my $self = shift;
-  $self->res->headers->cache_control('max-age=1, no-cache');
   # No name provided ? Lets generate one
   my $name = $self->param('roomName') || $self->get_random_name();
   # Create a session for this user, but don't set a role for now
   $self->login;
-  # Error if the name is invalid
-  unless ($self->valid_room_name($name)){
-    return $self->render('error',
-      room => $name,
-      msg  => $self->l('ERROR_NAME_INVALID'),
-      err  => 'ERROR_NAME_INVALID'
-    );
-  }
+  my $status = 'error';
+  my $err    = '';
+  my $msg    = $self->l('ERROR_OCCURRED');
   # Cleanup unused rooms before trying to create it
   $self->delete_rooms;
-  unless ($self->create_room($name,$self->session('name'))){
-    # If creation failed, it's most likly a name conflict
-    return $self->render('error',
-      room => $name,
-      msg  => $self->l('ERROR_NAME_CONFLICT'),
-      err  => 'ERROR_NAME_CONFLICT'
-    );
+
+  if (!$self->valid_room_name($name)){
+    $err = 'ERROR_NAME_INVALID';
+    $msg = $self->l('ERROR_NAME_INVALID');
   }
-  # Everything went fine, the room is created, lets mark this user owner of the room
-  # and redirect him on it.
-  else{
+  elsif ($self->get_room($name)){
+    $err = 'ERROR_NAME_CONFLICT';
+    $msg = $self->l('ERROR_NAME_CONFLICT');
+  }
+  elsif ($self->create_room($name,$self->session('name'))){
+    $status = 'success';
     $self->session($name => {role => 'owner'});
-    $self->redirect_to($name);
   }
+  $self->render(json => {
+    status => $status,
+    err    => $err,
+    msg    => $msg,
+    room   => $name
+  });
 };
 
 # Translation for JS resources

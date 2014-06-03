@@ -230,6 +230,58 @@ function maxHeight(){
   return $(window).height()-$('#toolbar').height()-25;
 }
 
+// Used on the index page
+function initIndex(){
+  var room;
+  // Submit the main form to create a room
+  $('#createRoom').submit(function(e){
+    e.preventDefault();
+    $.ajax({
+      url: rootUrl + 'create',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        roomName: $('#roomName').val(),
+      },
+      success: function(data) {
+        if (data.status == 'success'){
+          room = data.room;
+          window.location.assign(rootUrl + data.room);
+        }
+        else if (data.err && data.err == 'ERROR_NAME_CONFLICT' ){
+          room = data.room;
+          $('#conflictModal').modal('show');
+        }
+        else{
+          $('#roomName').notify(data.msg, 'error');
+        }
+      },
+      error: function(){
+        $.notify(locale.ERROR_OCCURRED, 'error');
+      }
+    });
+  });
+
+  // Handle join confirmation
+  $('#confirmJoinButton').click(function(){
+    window.location.assign(rootUrl + room);
+  });
+  // Handle cancel/choose another name
+  $('#chooseAnotherNameButton').click(function(){
+    $('#roomName').val('');
+    $('#conflictModal').modal('hide');
+  });
+
+  $('#roomName').on('input', function(){
+    if (!$('#roomName').val().match(/^[\w\-]{0,49}$/)){
+      $('#roomName').parent().addClass('has-error');
+    }
+    else{
+      $('#roomName').parent().removeClass('has-error');
+    }
+  });
+}
+
 // This is the main function called when you join a room
 function initVroom(room) {
 
