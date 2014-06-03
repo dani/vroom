@@ -236,30 +236,36 @@ function initIndex(){
   // Submit the main form to create a room
   $('#createRoom').submit(function(e){
     e.preventDefault();
-    $.ajax({
-      url: rootUrl + 'create',
-      type: 'POST',
-      dataType: 'json',
-      data: {
-        roomName: $('#roomName').val(),
-      },
-      success: function(data) {
-        if (data.status == 'success'){
-          room = data.room;
-          window.location.assign(rootUrl + data.room);
+    // Do not submit if we know the name is invalid
+    if (!$('#roomName').val().match(/^[\w\-]{0,49}$/)){
+      $('#roomName').notify('ERROR_NAME_INVALID', 'error');
+    }
+    else{
+      $.ajax({
+        url: rootUrl + 'create',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          roomName: $('#roomName').val(),
+        },
+        success: function(data) {
+          if (data.status == 'success'){
+            room = data.room;
+            window.location.assign(rootUrl + data.room);
+          }
+          else if (data.err && data.err == 'ERROR_NAME_CONFLICT' ){
+            room = data.room;
+            $('#conflictModal').modal('show');
+          }
+          else{
+            $('#roomName').notify(data.msg, 'error');
+          }
+        },
+        error: function(){
+          $.notify(locale.ERROR_OCCURRED, 'error');
         }
-        else if (data.err && data.err == 'ERROR_NAME_CONFLICT' ){
-          room = data.room;
-          $('#conflictModal').modal('show');
-        }
-        else{
-          $('#roomName').notify(data.msg, 'error');
-        }
-      },
-      error: function(){
-        $.notify(locale.ERROR_OCCURRED, 'error');
-      }
-    });
+      });
+    }
   });
 
   // Handle join confirmation
