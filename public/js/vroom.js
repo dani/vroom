@@ -21,6 +21,7 @@ $('.dropdown').on('hide.bs.dropdown', function(e){
 var locale = {
   ERROR_MAIL_INVALID: '',
   ERROR_OCCURRED: '',
+  ERROR_NAME_INVALID: '',
   CANT_SHARE_SCREEN: '',
   SCREEN_SHARING_ONLY_FOR_CHROME: '',
   SCREEN_SHARING_CANCELLED: '',
@@ -242,7 +243,7 @@ function initIndex(){
     e.preventDefault();
     // Do not submit if we know the name is invalid
     if (!$('#roomName').val().match(/^[\w\-]{0,49}$/)){
-      $('#roomName').notify('ERROR_NAME_INVALID', 'error');
+      $('#roomName').notify(locale.ERROR_NAME_INVALID, 'error');
     }
     else{
       $.ajax({
