@@ -322,8 +322,8 @@ function initVroom(room) {
     dataType: 'json',    
   });
 
-  // Screen sharing is only suported on chrome > 26
-  if ( !$.browser.webkit || $.browser.versionNumber < 26 ) {
+  // Screen sharing is only suported on chrome desktop > 26
+  if ( !$.browser.webkit || $.browser.android || $.browser.versionNumber < 26 ) {
     $('#shareScreenLabel').addClass('disabled');
   }
 
