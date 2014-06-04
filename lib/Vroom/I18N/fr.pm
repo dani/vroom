@@ -181,13 +181,17 @@ our %Lexicon = (
     "HELP_LOGOUT_BUTTON"                        => "Ce bouton vous déconnectera du système",
     "HELP_PEER_ACTIONS_BUTTONS"                 => "Ce menu s'affiche en passant la souris au dessus d'une vignette vidéo. Il " .
                                                    "vous permet d'effectuer certaines actions qui ne concerneront que cette " .
-                                                   "personne (coupé le micro, mettre la webcam en pause, et bannir du salon)",
+                                                   "personne (coupé le micro, mettre la webcam en pause, donner les droits " .
+                                                   "d'administration sur le salon et bannir du salon). Attention: donner les droits " .
+                                                   "d'administration à quelqu'un est irrévocable, et il pourra modifier tous les " .
+                                                   "paramètres (y compris les mots de passe).",
     "LOGOUT"                                    => "Quitter le salon",
     "SET_YOUR_NAME_TO_CHAT"                     => "Vous devez saisir votre nom avant de pouvoir tchater",
     "SEND_MESSAGE"                              => "Envoyer le message",
     "SAVE_HISTORY"                              => "Sauvegarder l'historique dans un fichier",
     "MUTE_PEER"                                 => "Couper ou réactiver le micro de ce participant",
     "SUSPEND_PEER"                              => "Mettre en pause ou réactiver la webcam de ce participant",
+    "PROMOTE_PEER"                              => "Donner les droits d'administration du salon à ce participant",
     "KICK_PEER"                                 => "Éjecter ce participant du salon",
     "s_IS_MUTING_YOU"                           => "%s a coupé votre micro",
     "s_IS_MUTING_s"                             => "%s a coupé le micro de %s",
@@ -197,6 +201,9 @@ our %Lexicon = (
     "s_IS_SUSPENDING_s"                         => "%s a mis la webcam de %s en pause",
     "s_IS_RESUMING_YOU"                         => "%s a réactivé votre webcam",
     "s_IS_RESUMING_s"                           => "%s a réactivé la webcam de %s",
+    "s_IS_PROMOTING_YOU"                        => "%s vous a donné les droits d'administration du salon",
+    "s_IS_PROMOTING_s"                          => "%s a donné les droits d'administration du salon à %s",
+    "PEER_PROMOTED"                             => "Vous avez donné les droits sur ce salon",
     "s_IS_KICKING_s"                            => "%s a éjecté %s du salon",
     "KICKED"                                    => "Éjecté",
     "YOU_HAVE_BEEN_KICKED"                      => "Vous avez été banni du salon",
@@ -209,6 +216,7 @@ our %Lexicon = (
     "CANT_SUSPEND_OWNER"                        => "Vous ne pouvez pas mettre la webcam de ce participant en pause",
     "YOU_HAVE_KICKED_s"                         => "Vous avez bani %s du salon",
     "CANT_KICK_OWNER"                           => "Vous ne pouvez pas bannir ce participant",
+    "CANT_PROMOTE_OWNER"                        => "Ce participant dispose déjà des droits d'administration",
     "A_ROOM_ADMIN"                              => "un administrateur du salon",
     "A_PARTICIPANT"                             => "un participant",
     "MIC_MUTED"                                 => "Votre micro est coupé",

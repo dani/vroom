@@ -125,6 +125,10 @@
   font-family: 'Glyphicons Halflings';
   content: "\e106";
 }
+.actionPromote:before{
+  font-family: 'Glyphicons Halflings';
+  content: "\e124";
+}
 .actionKick:before{
   font-family: 'Glyphicons Halflings';
   content: "\e083";

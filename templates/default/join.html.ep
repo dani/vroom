@@ -495,6 +495,9 @@
                         <span class="glyphicon glyphicon-eye-close"></span>
                       </div>
                       <div class="btn btn-sm btn-default">
+                        <span class="glyphicon glyphicon-certificate"></span>
+                      </div>
+                      <div class="btn btn-sm btn-default">
                         <span class="glyphicon glyphicon-remove-circle"></span>
                       </div>
                   </center>

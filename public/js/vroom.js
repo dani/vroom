@@ -51,9 +51,12 @@ var locale = {
   s_IS_SUSPENDING_s: '',
   s_IS_RESUMING_YOU: '',
   s_IS_RESUMING_s: '',
+  s_IS_PROMOTING_YOU: '',
+  s_IS_PROMOTING_s: '',
   s_IS_KICKING_s: '',
   MUTE_PEER: '',
   SUSPEND_PEER: '',
+  PROMOTE_PEER: '',
   KICK_PEER: '',
   YOU_HAVE_MUTED_s: '',
   YOU_HAVE_UNMUTED_s: '',
@@ -61,6 +64,7 @@ var locale = {
   YOU_HAVE_SUSPENDED_s: '',
   YOU_HAVE_RESUMED_s: '',
   CANT_SUSPEND_OWNER: '',
+  CANT_PROMOTE_OWNER: '',
   YOU_HAVE_KICKED_s: '',
   CANT_KICK_OWNER: '',
   REMOVE_THIS_ADDRESS: '',
@@ -539,6 +543,11 @@ function initVroom(room) {
            click: function() { pausePeer(id) },
          }).prop('title', locale.SUSPEND_PEER))
         .append($('<button></button>', {
+           class: 'actionPromote btn btn-default btn-sm',
+           id: 'actionPromote_' + id,
+           click: function() { promotePeer(id) },
+         }).prop('title', locale.PROMOTE_PEER))
+        .append($('<button></button>', {
            class: 'actionKick btn btn-default btn-sm',
            id: 'actionKick_' + id,
            click: function() { kickPeer(id) },
@@ -723,6 +732,34 @@ function initVroom(room) {
       $.notify(locale.CANT_SUSPEND_OWNER, 'error');
     }
   }
+  // Promote a peer (he will be owner)
+  function promotePeer(id){
+    if (peers[id] && peers[id].role != 'owner'){
+      $.ajax({
+        data: {
+          action: 'promote',
+          room: roomName,
+          peer: id
+        },
+        error: function(data) {
+          $.notify(locale.ERROR_OCCURRED, 'error');
+        },
+        success: function(data) {
+          if (data.status == 'success' && data.msg){
+            webrtc.sendToAll('owner_promoted', {peer: id});
+            $.notify(data.msg, 'success');
+          }
+          else if (data.msg){
+            $.notify(data.msg, 'error');
+          }
+        }
+      });
+      suspendButton($('#actionPromote_' + id));
+    }
+    else if (peers[id]){
+      $.notify(locale.CANT_PROMOTE_OWNER, 'error');
+    }
+  }
   // Kick a peer
   function kickPeer(id){
     if (peers[id] && peers[id].role != 'owner'){
@@ -848,6 +885,24 @@ function initVroom(room) {
       }
     }
   });
+
+  // An owner has just promoted a participant of the room to the owner role
+  webrtc.on('owner_promoted', function(data){
+    if (peers[data.id].role != 'owner' || data.roomType == 'screen'){
+      return;
+    }
+    if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
+      $.notify(sprintf(locale.s_IS_PROMOTING_YOU, who), 'success');
+      getRoomInfo();
+    }
+    else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
+      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : locale.A_PARTICIPANT;
+      $.notify(sprintf(locale.s_IS_PROMOTING_s, who, target), 'info');
+    }
+  });
+
   // An owner is kicking someone out of the room
   webrtc.on('owner_kick', function(data){
     if (peers[data.id].role != 'owner' || data.roomType == 'screen'){
