@@ -275,12 +275,9 @@ our %Lexicon = (
                                             "which will allow him, if he leaves the room, to recover its privileges when he connects again.",
   "PERSISTENT_ROOMS"                     => "Persistant rooms",
   "HELP_PERSISTENT_ROOMS"                => "By default, rooms are ephemeral, which means they are automatically deleted if they " .
-                                            "have no activity for a long time (default is one hour). The room's creator can define " .
-                                            "a manager's password, which will make the room persistent: it'll be kept indefinitly. " .
-                                            "In order to delete the room, the owner can simply unset the manager's password, which " .
-                                            "will make the room ephemeral again (it'll be deleted if no activity is detected). " .
-                                            "Note that a persistent room can still be deleted if it's not used for a very long period " .
-                                            "of time.",
+                                            "have no activity for a long time. The room's creator can define a manager's password, " .
+                                            "which will make the room persistent. Note that a persistent room can still be deleted " .
+                                            "if it's not used for a very long period of time.",
   "RESERVE_YOUR_ROOM"                    => "Reserve your room",
   "HELP_RESERVE_YOUR_ROOM"               => "Want to reserve your room name so it's always available for you (company name, ongoing project " .
                                             "etc.) ? Just set both a join password and the manager password. The room will be kept " .

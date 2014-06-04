@@ -174,7 +174,7 @@ our %Lexicon = (
                                                    "pas demandé lorsque l'on " .
                                                    "rejoint un salon suite à une invitation par email (l'authentification se fait " .
                                                    "par un jeton unique valide pendant deux heures",
-    "HELP_PERSISTENT_BUTTON"                    => "Permet de rendre le salon persistent. Vous pourrez donc vous reconnecter et " .
+    "HELP_PERSISTENT_BUTTON"                    => "Permet de rendre le salon persistant. Vous pourrez donc vous reconnecter et " .
                                                    "récupérer l'accès aux menus de configuration. Le salon sera également conservé " .
                                                    "bien plus longtemps sur le système",
     "HELP_ASK_FOR_NAME_BUTTON"                  => "Permet d'imposer la saisie du nom avant de pouvoir rejoindre le salon",
@@ -306,19 +306,17 @@ our %Lexicon = (
                                                    "de simples participants). Il peut par exemple protéger l'accès par un mot de passe, " .
                                                    "qui sera demandé avant de pouvoir rejoindre le salon. Il peut aussi définir le mot " .
                                                    "de passe du gestionnaire ce qui lui permettra, s'il quitte le salon, de retrouver " .
-                                                   "ses privilèges lorsqu'il se connecte à nouveau.",
+                                                   "ses privilèges lorsqu'il se connecte à nouveau. Ces privilèges peuvent aussi être " .
+                                                   "donnés à d'autres participants",
     "PERSISTENT_ROOMS"                          => "Salons persistants",
     "HELP_PERSISTENT_ROOMS"                     => "Par défaut, les salons sont éphémères, c'est à dire qu'ils sont automatiquement " .
-                                                   "supprimés si ils ne présentent aucune activité pendant une durée prolongée (une heure " .
-                                                   "par défaut). Le créateur du salon peut définir un mot de passe de gestionaire, ce qui " .
-                                                   "rendra le salon persistent: il sera conservé indéfiniement. Pour le supprimer, le " .
-                                                   "gestionnaire peut simplement supprimer le mot de passe de gestion, ce qui rendra le " .
-                                                   "salon éphémère à nouveau (il sera donc supprimé si aucune activité n'est détecté). " .
-                                                   "Notez qu'un salon persistent peut tout de même être supprimé si il n'est pas utilisé " .
-                                                   "pendant une très longue période.",
+                                                   "supprimés si ils ne présentent aucune activité pendant une durée prolongée. " .
+                                                   "Le créateur du salon peut définir un mot de passe de gestionaire, ce qui " .
+                                                   "rendra le salon persistant. Notez qu'un salon persistant peut tout de même " .
+                                                   "être supprimé si il n'est pas utilisé pendant une très longue période.",
     "RESERVE_YOUR_ROOM"                         => "Réservez votre salon",
     "HELP_RESERVE_YOUR_ROOM"                    => "Vous souhaitez réserver le nom de votre salon pour qu'il soit toujours disponible " .
-                                                   "pour vous (nom de votre entreprise, nom d'un projet en cours etc.) ? Entrez simplement " .
+                                                   "pour vous (nom de votre entreprise, nom d'un projet en cours etc.) ? Configurez simplement " .
                                                    "un mot de passe pour rejoindre le salon et un mot de passe de gestionnaire. Le " .
                                                    "salon sera conservé aussi longtemps que le mot de passe de gestionnaire est en place ".
                                                    "(du moment que vous vous en servez de temps en temps)",
