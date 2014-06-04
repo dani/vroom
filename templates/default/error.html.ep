@@ -14,15 +14,20 @@
       <% } elsif ($err eq 'ERROR_ROOM_s_LOCKED' && stash 'ownerPass'){ %>
       <a class="btn btn-default btn-lg" role="button" href="<%= $self->get_url('/password') . '/' . $room %>"><%=l 'AUTH_IF_OWNER' %></a>
       <% } elsif ($err eq 'ERROR_ROOM_s_DOESNT_EXIST'){ %>
-      <button class="btn btn-default btn-lg" role="submit" form="createRoomForm"><%=l 'CREATE_THIS_ROOM' %></button>
+      <button class="btn btn-default btn-lg" type="submit" form="createRoom"><%=l 'CREATE_THIS_ROOM' %></button>
       <% } %>
     </div>
     <% if ($err eq 'ERROR_ROOM_s_DOESNT_EXIST'){ %>
-    <form id="createRoomForm" action="<%= $self->get_url('/create') %>" method="post">
-      <input type="text" name="roomName" value="<%= $room %>" hidden/>
+    <form id="createRoom" action="<%= $self->get_url('/create') %>" method="post">
+      <input type="text" id="roomName" name="roomName" value="<%= $room %>" hidden/>
     </form>
     <% } %>
   </div>
 </div>
 %= include 'js_common'
+    <script>
+      $(document).ready(function() {
+        initIndex();
+      });
+    </script>
 %= include 'footer'
