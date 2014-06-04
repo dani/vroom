@@ -1,8 +1,12 @@
   </div>
   <div id="footerContainer">
     <div class="container-fluid footer">
-      <p class="text-muted pull-left"><%=l 'VROOM_IS_FREE_SOFTWARE' %></p>
-      <p class="text-muted pull-right brand"><%=l 'POWERED_BY' %> <%== $config->{poweredBy} %></p>
+      <div class="col-xs-6">
+        <p class="text-muted pull-left"><%=l 'VROOM_IS_FREE_SOFTWARE' %></p>
+      </div>
+      <div class="col-xs-6">
+        <p class="text-muted pull-right brand"><%=l 'POWERED_BY' %> <%== $config->{poweredBy} %></p>
+      </div>
     </div>
   </div>
 </body>
