@@ -549,6 +549,8 @@ helper delete_invitations => sub {
 helper check_invite_token => sub {
   my $self = shift;
   my ($room,$token) = @_;
+  # Expire invitations before checking if it's valid
+  $self->delete_invitations;
   my $ret = 0;
   my $data = $self->get_room($room);
   if (!$data || !$token){
