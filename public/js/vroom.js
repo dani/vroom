@@ -266,7 +266,10 @@ function initIndex(){
             $('#conflictModal').modal('show');
           }
           else{
-            $('#roomName').parent().parent().notify(data.msg, 'error');
+            $('#roomName').parent().parent().notify(data.msg, {
+               class: 'error',
+               position: 'bottom center'
+            });
           }
         },
         error: function(){
