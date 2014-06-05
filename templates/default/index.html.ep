@@ -11,23 +11,23 @@
     </h2>
     <form id="createRoom" class="form-inline" action="<%= $self->get_url('/create') %>" method="post">
       <fieldset>
-        <div class="control-group">
-          <div class="input-group input-group-lg">
-            <span class="input-group-addon hidden-xs">
-              <strong class="text-muted">
-                <%
-                  my $url = $self->url_for('/')->to_abs;
-                  $url =~ s/^https?:\/\///;
-                  $url .= ($url =~ m/\/$/)? '':'/';
-                %>
-                <%= $url %>
-              </strong>
-            </span>
-            <input id="roomName" name="roomName" type="text" placeholder="<%=l 'ROOM_NAME' %>" class="form-control help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'RANDOM_IF_EMPTY' %>" autofocus>
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span></button>
-            </span>
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon hidden-xs">
+            <strong class="text-muted">
+              <%
+                my $url = $self->url_for('/')->to_abs;
+                $url =~ s/^https?:\/\///;
+                $url .= ($url =~ m/\/$/)? '':'/';
+              %>
+              <%= $url %>
+            </strong>
+          </span>
+          <div class="control-group">
+            <input id="roomName" name="roomName" type="text" placeholder="<%=l 'ROOM_NAME' %>" class="form-control input-lg help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'RANDOM_IF_EMPTY' %>" autofocus>
           </div>
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span></button>
+          </span>
         </div>
       </fieldset>
     </form>

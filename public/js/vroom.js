@@ -243,7 +243,10 @@ function initIndex(){
     e.preventDefault();
     // Do not submit if we know the name is invalid
     if (!$('#roomName').val().match(/^[\w\-]{0,49}$/)){
-      $('#roomName').notify(locale.ERROR_NAME_INVALID, 'error');
+      $('#roomName').parent().parent().notify(locale.ERROR_NAME_INVALID, {
+         class: 'error',
+         position: 'bottom center'
+      });
     }
     else{
       $.ajax({
@@ -263,7 +266,7 @@ function initIndex(){
             $('#conflictModal').modal('show');
           }
           else{
-            $('#roomName').notify(data.msg, 'error');
+            $('#roomName').parent().parent().notify(data.msg, 'error');
           }
         },
         error: function(){
