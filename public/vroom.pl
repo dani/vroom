@@ -344,7 +344,7 @@ helper valid_room_name => sub {
   my ($name) = @_;
   my $ret = undef;
   # A few names are reserved
-  my @reserved = qw(about help feedback goodbye admin create localize action missing dies password kicked invitation);
+  my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize action missing dies password kicked invitation);
   if ($name =~ m/^[\w\-]{1,49}$/ && !grep { $name eq $_ }  @reserved){
     $ret = 1;
   }
