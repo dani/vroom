@@ -665,7 +665,7 @@ function initVroom(room) {
       var displayName = from;
     }
     // Create the new msg
-    var newmsg = $('<div class="chatMsg ' + cl + '">' + time + ' ' + stringEscape(displayName) + '<p>' + linkify(stringEscape(message)) + '</p></div>').css('background-color', color);
+    var newmsg = $('<div class="chatMsg ' + cl + '"><b>' + time + ' ' + stringEscape(displayName) + '</b><p>' + linkify(stringEscape(message)) + '</p></div>').css('background-color', color);
     // Add it in the history
     $('<div class="row chatMsgContainer"></div>').append(newmsg).appendTo('#chatHistory');
     // Move the scroller down
