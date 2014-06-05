@@ -1827,6 +1827,10 @@ function initVroom(room) {
     }
   });
 
+  // Fix height in Firefox
+  if ($.browser.mozilla){
+    $('#saveChat,#sendChat').css('height', '47px');
+  }
   // Adapt the chat input (textarea) size
   $('#chatBox').on('input', function(){
     var h = parseInt($(this).css('height'));
@@ -1851,6 +1855,8 @@ function initVroom(room) {
         }
       }
     }
+    // In any case, adapt height of the buttons
+    $('#saveChat,#sendChat').css('height', $(this).css('height'));
   });
   // Chat: send to other peers
   $('#chatForm').submit(function (e){
@@ -1861,6 +1867,7 @@ function initVroom(room) {
       newChatMessage('local',$('#chatBox').val());
       // reset the input box
       $('#chatBox').val('').prop('rows', 1);
+      $('#saveChat,#sendChat').css('height', $('#chatBox').css('height'));
     }
   });
 
