@@ -375,7 +375,7 @@ function initVroom(room) {
           $('.unauthEl').hide(500);
           $('.ownerEl').not('.threePeersEl').show(500);
           if (countPeers() > 1){
-            ('.threePeersEl').show(500);
+            $('.threePeersEl').show(500);
           }
           var notif = JSON.parse(data.notif);
           $.each(notif.email, function(index, val){
