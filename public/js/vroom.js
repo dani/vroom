@@ -32,14 +32,12 @@ var locale = {
   CAM_SUSPENDED: '',
   CAM_RESUMED: '',
   SET_YOUR_NAME_TO_CHAT: '',
-  ONE_OF_THE_PEERS: '',
   ROOM_LOCKED_BY_s: '',
   ROOM_UNLOCKED_BY_s: '',
   PASSWORD_PROTECT_ON_BY_s: '',
   PASSWORD_PROTECT_OFF_BY_s: '',
   OWNER_PASSWORD_CHANGED_BY_s: '',
   OWNER_PASSWORD_REMOVED_BY_s: '',
-  CANT_SEND_TO_s: '',
   SCREEN_s: '',
   TO_INVITE_SHARE_THIS_URL: '',
   NO_SOUND_DETECTED: '',
@@ -1259,14 +1257,6 @@ function initVroom(room) {
     }
     if (countPeers() < 2){
       $('.threePeersEl').hide(500);
-    }
-  });
-
-  // Error sending something through dataChannel
-  webrtc.on('cantsend', function (peer, message){
-    if (message.type == 'textChat'){
-      var who = (peers[peer.id].hasName) ? stringEscape(peers[peer.id].displayName) : locale.ONE_OF_THE_PEERS;
-      $.notify(sprintf(locale.CANT_SEND_TO_s, who), 'error');
     }
   });
 
