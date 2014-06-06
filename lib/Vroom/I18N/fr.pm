@@ -151,6 +151,8 @@ our %Lexicon = (
     "HELP_MUTE_BUTTON"                          => "Coupe ou réactive votre micro.",
     "HELP_SUSPEND_CAM_BUTTON"                   => "Mettre en pause/réactiver la webcam. Les autres participants vous entendront toujours " .
                                                    "(sauf si vous avez également coupé votre micro).",
+    "HELP_MOH_BUTTON"                           => "Ce bouton n'apparait que si vous êtes seul dans le salon. Il vous permet " .
+                                                   "de jouer/arrêter la musique d'attente.",
     "HELP_SHARE_SCREEN_BUTTON"                  => "Ce bouton vous permet de partager votre écran, ou une application avec les autres " .
                                                    "personnes. Disponible uniquement avec le navigateur Google Chrome actuellement.",
     "HELP_INVITE_MENU"                          => "Ce menu permet d'inviter d'autres personnes sur le salon.",

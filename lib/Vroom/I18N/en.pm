@@ -142,6 +142,7 @@ our %Lexicon = (
   "HELP_CHAT_BUTTON"                     => "Display or hide the chat menu",
   "HELP_MUTE_BUTTON"                     => "Mute or unmute your microphone",
   "HELP_SUSPEND_CAM_BUTTON"              => "Suspend or resum your webcam. Others will still hear you (unless you also muted your mic)",
+  "HELP_MOH_BUTTON"                      => "This button only appears when you're alone in the room. It lets you play/stop music on hold.",
   "HELP_SHARE_SCREEN_BUTTON"             => "Share your screen, or just a window with others. Only available with Google Chrome for now.",
   "HELP_INVITE_MENU"                     => "This menu lets you invite other people",
   "HELP_EMAIL_INVITE_BUTTON"             => "This button send an invitation to the email adress you enterred",
