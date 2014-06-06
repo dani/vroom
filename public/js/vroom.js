@@ -857,7 +857,7 @@ function initVroom(room) {
       var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
       var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : locale.A_PARTICIPANT;
       if (peers[data.payload.peer].micMuted){
-        $.notify(sprintf(locale.s_IS_UNMUTING_s, peers[data.id].who, target), 'info');
+        $.notify(sprintf(locale.s_IS_UNMUTING_s, who, target), 'info');
       }
       else{
         $.notify(sprintf(locale.s_IS_MUTING_s, who, target), 'info');
