@@ -913,8 +913,10 @@ function initVroom(room) {
     }
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
       var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
-      $.notify(sprintf(locale.s_IS_PROMOTING_YOU, who), 'success');
       getRoomInfo();
+      if (peers.local.role == 'owner'){
+        $.notify(sprintf(locale.s_IS_PROMOTING_YOU, who), 'success');
+      }
     }
     else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
       var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
