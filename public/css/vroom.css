@@ -67,6 +67,18 @@
   font-size: 2em;
   content: "\e124";
 }
+.noWebcam{
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  margin-left: -25px;
+}
+.noWebcam:before{
+  font-family: 'Glyphicons Halflings';
+  color: grey;
+  font-size: 4em;
+  content: "\e008";
+}
 .displayName {
   text-align: center;
   font-weight: bold;

@@ -311,7 +311,8 @@ function initVroom(room) {
       videoPaused: false,
       displayName: '',
       color: chooseColor(),
-      role: 'participant'
+      role: 'participant',
+      hasVideo: true
     }
   };
   var roomInfo;
@@ -582,6 +583,7 @@ function initVroom(room) {
         color: color,
         micMuted: false,
         videoPaused: false,
+        hasVideo: true,
         dc: peer.getDataChannel('vroom'),
         obj: peer
       };
@@ -595,6 +597,8 @@ function initVroom(room) {
         }
         // color can be sent through the signaling channel
         peer.send('peer_color', {color: peers.local.color});
+        // if we don't have a video, just signal it to this peer
+        peer.send('media_info', {video: !!videoConstraints});
         // We don't have chat history yet ? Lets ask to this new peer
         if(!peers.local.hasHistory && chatIndex == 0){
           peer.sendDirectly('vroom', 'getHistory', '');
@@ -890,6 +894,15 @@ function initVroom(room) {
       else{
         $.notify(sprintf(locale.s_IS_SUSPENDING_s, who, target), 'info');
       }
+    }
+  });
+
+  // This peer indicates he has no webcam
+  webrtc.on('media_info', function(data){
+    if (!data.payload.video){
+      $('#overlay_' + data.id).append('<div id="noWebcam_' + data.id + '" class="noWebcam"></div>');
+      $('#actionPause_' + data.id).addClass('disabled');
+      peers[data.id].hasVideo = false;
     }
   });
 
@@ -1478,6 +1491,12 @@ function initVroom(room) {
     }
   });
 
+  // Disable suspend webcam button if no webcam
+  if (!videoConstraints){
+    $('#suspendCamButton').attr('disabled', true);
+    $('#suspendCamLabel').addClass('disabled');
+  }
+
   // Suspend the webcam
   $('#suspendCamButton').change(function() {
     var action = ($(this).is(':checked')) ? 'pause':'resume';
@@ -1512,7 +1531,7 @@ function initVroom(room) {
   // Suspend all the peers
   $('#suspendEveryoneButton').click(function(){
     $.each(peers, function(id){
-      if (id != 'local'){
+      if (id != 'local' && peers[id].hasVideo){
         pausePeer(id, 'pause');
       }
     });
@@ -1520,7 +1539,7 @@ function initVroom(room) {
   // Resum all the peers
   $('#resumeEveryoneButton').click(function(){
     $.each(peers, function(id){
-      if (id != 'local'){
+      if (id != 'local' && peers[id].hasVideo){
         pausePeer(id, 'resume');
       }
     });

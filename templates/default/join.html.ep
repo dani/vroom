@@ -754,6 +754,15 @@
       var roomName = '<%= $room %>';
       $( document ).ready(function() {
         setTimeout(function(){
+          <% if ($video eq 'false'){ %>
+          videoConstraints = false;
+          <% } else{ %>
+          videoConstraints = {
+            mandatory: {
+              maxFrameRate: 15,
+            }
+          };
+          <% } %>
           webrtc = new SimpleWebRTC({
                    url: "<%= $config->{signalingServer} %>",
                    peerConnectionConfig: {
@@ -774,15 +783,7 @@
                      threshold: -20
                    },
                    media: {
-                     <% if ($video eq 'false'){ %>
-                     video: false,
-                     <% } else{ %>
-                     video: {
-                       mandatory: {
-                         maxFrameRate: 15,
-                       }
-                     },
-                     <% } %>
+                     video: videoConstraints,
                      audio: true
                    }
                  });
