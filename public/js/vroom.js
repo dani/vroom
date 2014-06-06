@@ -1693,7 +1693,7 @@ function initVroom(room) {
         success: function(data) {
           $('#ownerPass').val('');
           if (data.status == 'success'){
-            $.notify(data.msg, 'success');
+            $.notify(data.msg, 'warn');
             webrtc.sendToAll('owner_password', {action: 'remove'});
             $('#persistentLabel').removeClass('btn-danger active');
           }
