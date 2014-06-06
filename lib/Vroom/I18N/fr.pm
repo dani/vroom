@@ -21,7 +21,7 @@ our %Lexicon = (
                                                    "Firefox, Google Chrome ou Opera fonctionneront",
     "A_WEBCAM"                                  => "Une webcam (optionnelle mais recommandée)",
     "A_MIC"                                     => "Un micro et des haut-parleurs (ou un casque)",
-    "WHEN_YOU_ARE_READY"                        => "Quand vous êtes prêt, rendez-vous sur cette adresse pour joindre la conférence",
+    "WHEN_YOU_ARE_READY"                        => "Quand vous êtes prêt(e), rendez-vous sur cette adresse pour joindre la conférence",
     "MESSAGE_FROM_ORGANIZER"                    => "Message de l'organisateur de la réunion",
     "HAVE_A_NICE_MEETING"                       => "Bonne réunion :-)",
     "EMAIL_SIGN"                                => "VROOM! Et la visio conférence devient libre, simple et sûr",
@@ -56,9 +56,9 @@ our %Lexicon = (
     "JOIN_THIS_ROOM"                            => "Rejoindre ce salon",
     "CREATE_ROOM"                               => "Créer un salon",
     "ROOM_NAME"                                 => "Nom du salon",
-    "RANDOM_IF_EMPTY"                           => "Si vous laissez ce champs vide, un nom aléatoire sera donné au salon",
+    "RANDOM_IF_EMPTY"                           => "Si vous laissez ce champs vide, un nom aléatoire sera choisi",
     "THIS_ROOM_ALREADY_EXISTS"                  => "Ce salon existe déjà",
-    "CONFIRM_OR_CHOOSE_ANOTHER_NAME"            => "Vouslez-vous le rejoindre ou choisir un autre nom ?",
+    "CONFIRM_OR_CHOOSE_ANOTHER_NAME"            => "Voulez-vous le rejoindre ou choisir un autre nom ?",
     "CHOOSE_ANOTHER_NAME"                       => "Choisir un autre nom",
     "ROOM_s"                                    => "Salon %s",
     "INVITE_PEOPLE"                             => "Inviter des participants",
@@ -110,13 +110,13 @@ our %Lexicon = (
     "ROOM_NO_MORE_PERSISTENT"                   => "Ce salon n'est plus persistant",
     "PASSWORDS_DO_NOT_MATCH"                    => "Les mots de passe ne correspondent pas",
     "MAKE_THIS_ROOM_PERSISTENT"                 => "Rendre ce salon persistant",
-    "SET_OWNER_PASS_PERSISTENT"                 => "Pour rendre ce salon persistant, vous devez saisir un mot de passe " .
-                                                   "de gestionnaire. Conservez le soigneusement, il vous permettra de retrouver " .
-                                                   "l'accès aux menus de configuration quand vous vous reconnectez.",
+    "SET_OWNER_PASS_PERSISTENT"                 => "Pour rendre ce salon persistant, vous devez saisir un mot de passe. " .
+                                                   "Conservez le soigneusement, il vous permettra de retrouver " .
+                                                   "l'accès aux menus de configuration quand vous vous reconnecterez.",
     "A_STANDARD_ROOM_EXPIRES_AFTER_d"           => "Un salon classique sera détruit après %d heure(s) sans activité",
     "A_PERSISTENT_ROOM"                         => "Un salon persistant",
     "EXPIRE_AFTER_d"                            => "sera détruit après %d jour(s) sans activité",
-    "NEVER_EXPIRE"                              => "est conservé indéfiniement",
+    "NEVER_EXPIRE"                              => "sera conservé indéfiniement",
     "CONFIRM_PASSWORD"                          => "Confirmation du mot de passe",
     "PROTECT_ROOM_WITH_PASSWORD"                => "Si ce mot de passe est configuré, les participants devront le saisir avant de pouvoir " .
                                                    "rejoindre le salon",
