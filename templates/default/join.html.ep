@@ -559,29 +559,42 @@
           </div>
           <div class="modal-body">
             <p><%=l 'NO_WEBRTC_SUPPORT' %></p>
+            <% if ($ua !~ m/iphone|ipad|ipod/i){ %>
+            <p><%=l 'DOWNLOAD_ONE_OF_THESE_BROWSERS' %></p>
             <div class="row">
+              <%
+                my $ffurl = "http://www.mozilla.org/firefox/";
+                my $churl = "http://www.google.com/chrome/";
+                my $opurl = "http://www.opera.com";
+                if ($ua =~ m/android/i){
+                  $ffurl = "https://play.google.com/store/apps/details?id=org.mozilla.firefox";
+                  $churl = "https://play.google.com/store/apps/details?id=com.android.chrome";
+                  $opurl = "https://play.google.com/store/apps/details?id=com.opera.browser";
+                }
+              %>
               <div class="col-xs-4">
-                <a href="http://www.mozilla.org/firefox/" target="_blank">
+                <a href="<%= $ffurl %>" target="_blank">
                   <center>
                     <img class="img-responsive" src="<%= $self->get_url('/') %>img/firefox.png" alt="Mozilla Firefox"/>
                   </center>
                 </a>
               </div>
               <div class="col-xs-4">
-                <a href="http://www.google.com/chrome/" target="_blank">
+                <a href="<%= $churl %>" target="_blank">
                   <center>
                     <img class="img-responsive" src="<%= $self->get_url('/') %>img/chrome.png" alt="Google Chrome"/>
                   </center>
                 </a>
               </div>
               <div class="col-xs-4">
-                <a href="http://www.opera.com" target="_blank">
+                <a href="<%= $opurl %>" target="_blank">
                   <center>
                     <img class="img-responsive" src="<%= $self->get_url('/') %>img/opera.png" alt="Opera"/>
                   </center>
                 </a>
               </div>
             </div>
+            <% } %>
           </div>
         </div>
       </div>

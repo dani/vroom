@@ -818,7 +818,8 @@ get '/(*room)' => sub {
   $self->render('join',
     moh          => $self->choose_moh(),
     turnPassword => $data->{token},
-    video        => $video
+    video        => $video,
+    ua           => $self->req->headers->user_agent
   );
 };
 

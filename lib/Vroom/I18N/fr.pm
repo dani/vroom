@@ -246,9 +246,9 @@ our %Lexicon = (
     "SCREEN_s"                                  => "Écran de %s",
     "BROWSER_NOT_SUPPORTED"                     => "Navigateur non supporté",
     "NO_WEBRTC_SUPPORT"                         => "Désolé, la vidéo conférence ne fonctionnera pas (ou pas correctement) car votre navigateur " .
-                                                   "ne dispose pas des fonctions nécessaires. Nous recommandons de télécharger " .
-                                                   "un des navigateurs suivants, qui supportent les dernières technologies nécessaires " .
-                                                   "à l'utilisation de VROOM",
+                                                   "ne dispose pas des fonctions nécessaires.",
+    "DOWNLOAD_ONE_OF_THESE_BROWSERS"            => "Nous recommandons de télécharger un des navigateurs suivants, qui supportent les dernières " .
+                                                   "technologies nécessaires à l'utilisation de VROOM",
     "NO_WEBCAM"                                 => "Impossible d'accéder à votre webcam",
     "CANT_ACCESS_WEBCAM"                        => "Nous n'avons pas pu accéder à votre webcam, vérifiez qu'elle soit bien connectée, allumée, et que ".
                                                    "vous avez autorisé le navigateur à y accéder, puis raffraichissez cette page",

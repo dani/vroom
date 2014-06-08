@@ -222,8 +222,9 @@ our %Lexicon = (
   "SCREEN_s"                             => "%s's screen",
   "BROWSER_NOT_SUPPORTED"                => "Browser not supported",
   "NO_WEBRTC_SUPPORT"                    => "Sorry, but the video conference will not work because your web browser doesn't have the " .
-                                            "required functionnalities. We recommand you download one of the following browsers " .
-                                            "which support the latest web technologies required to use VROOM",
+                                            "required functionnalities.",
+  "DOWNLOAD_ONE_OF_THESE_BROWSERS"       => "We recommand you download one of the following browsers which support the latest web " .
+                                            "technologies required to use VROOM",
   "NO_WEBCAM"                            => "Cannot access your webcam",
   "CANT_ACCESS_WEBCAM"                   => "We couldn't access your webcam. Please check it's connected, powered on, and that you've ".
                                             "allowed the browser to access it, then reload this page",
