@@ -560,24 +560,24 @@
           <div class="modal-body">
             <p><%=l 'NO_WEBRTC_SUPPORT' %></p>
             <div class="row">
-              <div class="col-sm-4">
+              <div class="col-xs-4">
                 <a href="http://www.mozilla.org/firefox/" target="_blank">
                   <center>
-                    <img src="<%= $self->get_url('/') %>img/firefox.png" alt="Mozilla Firefox"/>
+                    <img class="img-responsive" src="<%= $self->get_url('/') %>img/firefox.png" alt="Mozilla Firefox"/>
                   </center>
                 </a>
               </div>
-              <div class="col-sm-4">
+              <div class="col-xs-4">
                 <a href="http://www.google.com/chrome/" target="_blank">
                   <center>
-                    <img src="<%= $self->get_url('/') %>img/chrome.png" alt="Google Chrome"/>
+                    <img class="img-responsive" src="<%= $self->get_url('/') %>img/chrome.png" alt="Google Chrome"/>
                   </center>
                 </a>
               </div>
-              <div class="col-sm-4">
+              <div class="col-xs-4">
                 <a href="http://www.opera.com" target="_blank">
                   <center>
-                    <img src="<%= $self->get_url('/') %>img/opera.png" alt="Opera"/>
+                    <img class="img-responsive" src="<%= $self->get_url('/') %>img/opera.png" alt="Opera"/>
                   </center>
                 </a>
               </div>
