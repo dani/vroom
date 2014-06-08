@@ -96,13 +96,7 @@
 #roomToolBar {
   overflow: visible !important;
 }
-#inviteMenu {
-  min-width: 400px;
-}
-#confMenu {
-  min-width: 400px;
-}
-#authMenu {
+.dropdown-menu {
   min-width: 400px;
 }
 .ownerEl {
