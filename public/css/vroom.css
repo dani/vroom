@@ -15,7 +15,7 @@
   text-align: center;
 }
 #mainVideo video {
-  width: 90% !important;
+  width: 100% !important;
   height: auto;
 }
 .previewContainer{
@@ -95,6 +95,9 @@
 }
 #roomToolBar {
   overflow: visible !important;
+}
+#toolbar{
+  margin-bottom: 8px !important;
 }
 .dropdown-menu {
   min-width: 400px;
