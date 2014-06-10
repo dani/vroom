@@ -475,6 +475,7 @@ function initVroom(room) {
             return false;
           })
           .css('max-height', maxHeight())
+          .removeClass('latencyUnknown latencyGood latencyMedium latencyWarn latencyPoor')
           .attr('id', el.attr('id') + '_main')
         );
         $('.selected').removeClass('selected');
@@ -515,6 +516,7 @@ function initVroom(room) {
       id = 'local';
       $('<div></div>').addClass('displayName').attr('id', 'name_local_screen').appendTo(div);
       updateDisplayName(id);
+      $(video).addClass('latencyUnknown');
     }
     // video id contains screen ? it's a peer sharing it's screen
     else if (video.id.match(/screen/)){
@@ -582,6 +584,7 @@ function initVroom(room) {
         micMuted: false,
         videoPaused: false,
         hasVideo: true,
+        lastPong: +new Date,
         dc: peer.getDataChannel('vroom'),
         obj: peer
       };
@@ -605,6 +608,7 @@ function initVroom(room) {
         getPeerRole(peer.id);
       }, 3000);
       video.volume = .7;
+      $(video).addClass('latencyUnknown');
       // Stop moh, we're not alone anymore
       $('#mohPlayer')[0].pause();
       $('.aloneEl').hide(300);
@@ -650,6 +654,24 @@ function initVroom(room) {
     else {
       el.css('height', Math.floor((volume + 100) * 100 / 25 - 220) + '%');
     }
+  }
+
+  // Feedback for latency with this peer
+  function updatePeerLatency(id,time){
+    if (!peers[id]){
+      return;
+    }
+    var cl = 'latencyPoor';
+    if (time < 60){
+      cl = 'latencyGood';
+    }
+    else if (time < 150){
+      cl = 'latencyMedium';
+    }
+    else if (time < 250){
+      cl = 'latencyWarn';
+    }
+    $('#' + id + '_video_incoming').removeClass('latencyUnknown latencyGood latencyMedium latencyWarn latencyPoor').addClass(cl);
   }
 
   // Add a new message to the chat history
@@ -968,6 +990,16 @@ function initVroom(room) {
     // We only want to act on data received from the vroom channel
     if (label !== 'vroom'){
       return;
+    }
+    // Ping from the peer, lets just respond
+    else if (data.type == 'ping'){
+      peers[peer.id].obj.sendDirectly('vroom', 'pong', data.payload);
+    }
+    // Pong from the peer, lets compute reponse time
+    else if (data.type == 'pong'){
+      var diff = +new Date - parseInt(data.payload);
+      peers[peer.id].lastPong = +new Date;
+      updatePeerLatency(peer.id,diff);
     }
     // The peer sets a displayName, record this in our peers object
     else if (data.type == 'setDisplayName'){
@@ -1908,6 +1940,18 @@ function initVroom(room) {
       }
     });
   }, 60000);
+
+  // Ping all the peers every 5 sec to measure latency
+  // Do this through dataChannel
+  setInterval(function(){
+    $.each(peers, function(id){
+      // No response from last ping ? mark latency as poor
+      if (parseInt(peers[id].lastPong)+5000 > +new Date){
+        $('#' + id + '_video_incoming').removeClass('latencyUnknown latencyGood latencyMedium latencyWarn').addClass('latencyPoor');
+      }
+    });
+    webrtc.sendDirectlyToAll('vroom', 'ping', +new Date);
+  }, 5000);
 
   window.onresize = function (){
     $('#webRTCVideo').css('max-height', maxHeight());

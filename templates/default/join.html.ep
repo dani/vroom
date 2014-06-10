@@ -736,7 +736,7 @@
       <div id="view" class="view row-fluid">
         <div id="webRTCVideo" class="col-xs-12 col-sm-4">
           <div class="col-xs-6 col-sm-12 col-lg-6 previewContainer" id="videoLocalContainer">
-            <video id="webRTCVideoLocal" class="webRTCVideo" muted oncontextmenu="return false;">
+            <video id="webRTCVideoLocal" class="webRTCVideo latencyUnknown" muted oncontextmenu="return false;">
             </video>
             <div id="localVolume" class="volumeBar">
             </div>
