@@ -731,6 +731,7 @@
         </div>
       </div>
     </div>
+%= include 'noscript'
     <div class="frame">
       <div id="chatMenu" class="nav-collapse collapse">
         <div id="chatHistory" class="form-control">

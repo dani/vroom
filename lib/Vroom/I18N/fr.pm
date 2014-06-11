@@ -14,6 +14,7 @@ our %Lexicon = (
     "ERROR_ROOM_s_LOCKED"                       => "Le salon %s est verrouillé, vous ne pouvez pas le rejoindre",
     "ERROR_OCCURRED"                            => "Une erreur est survenue",
     "ERROR_NOT_LOGGED_IN"                       => "Désolé, vous n'êtes pas identifié",
+    "JS_REQUIRED"                               => "VROOM nécessite l'activation du javascript",
     "EMAIL_INVITATION"                          => "Invitation à une conférence vidéo",
     "YOU_ARE_INVITED_TO_A_MEETING"              => "Vous êtes attendu sur un salon de vidéo conférence. " .
                                                    "Avant de le rejoindre, assurez vous de disposer de tout le nécessaire",

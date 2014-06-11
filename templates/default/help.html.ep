@@ -2,6 +2,7 @@
 %= include 'header'
 %= include 'public_toolbar'
 <div class="container-fluid">
+%= include 'noscript'
   <div class="panel-group" id="accordion">
     <div class="panel panel-default">
       <div class="panel-heading">

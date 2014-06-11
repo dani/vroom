@@ -3,6 +3,7 @@
 %= include 'public_toolbar'
 
 <div class="container-fluid">
+%= include 'noscript'
   <div class="well publicForm">
     <h2>
       <center>

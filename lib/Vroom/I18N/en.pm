@@ -12,6 +12,7 @@ our %Lexicon = (
   "ERROR_ROOM_s_LOCKED"                  => "The room %s is locked, you cannot join it",
   "ERROR_OCCURRED"                       => "An error occurred",
   "ERROR_NOT_LOGGED_IN"                  => "Sorry, your not logged in",
+  "JS_REQUIRED"                          => "VROOM needs javascript to work properly",
   "EMAIL_INVITATION"                     => "Video conference invitation",
   "INVITE_SENT_TO_s"                     => "An invitation was sent to %s",
   "YOU_ARE_INVITED_TO_A_MEETING"         => "You are awaited on a video conferecing room. " .
