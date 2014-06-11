@@ -240,6 +240,11 @@ SimpleWebRTC.prototype.leaveRoom = function () {
     }
 };
 
+SimpleWebRTC.prototype.disconnect = function () {
+    this.connection.disconnect();
+    delete this.connection;
+};
+
 SimpleWebRTC.prototype.handlePeerStreamAdded = function (peer) {
     var self = this;
     var container = this.getRemoteVideoContainer();
@@ -7476,6 +7481,10 @@ LocalMedia.prototype.stop = function (stream) {
             self.localStreams = self.localStreams.splice(idx, 1);
         }
     } else {
+        if (this.audioMonitor) {
+            this.audioMonitor.stop();
+            delete this.audioMonitor;
+        }
         this.localStreams.forEach(function (stream) {
             stream.stop();
             self.emit('localStreamStopped', stream);
@@ -7536,7 +7545,7 @@ LocalMedia.prototype.unmute = function () {
 
 LocalMedia.prototype.setupAudioMonitor = function (stream, harkOptions) {
     this._log('Setup audio');
-    var audio = hark(stream, harkOptions);
+    var audio = this.audioMonitor = hark(stream, harkOptions);
     var self = this;
     var timeout;
 
@@ -8019,7 +8028,7 @@ module.exports = function (constraints, cb) {
     if (window.navigator.userAgent.match('Chrome')) { 
         var chromever = parseInt(window.navigator.userAgent.match(/Chrome\/(.*) /)[1], 10);
         var maxver = 33;
-        // "known" bug in chrome 34 on linux
+        // "known" crash in chrome 34 on linux
         if (window.navigator.userAgent.match('Linux')) maxver = 34;
         if (chromever >= 26 && chromever <= maxver) {
             // chrome 26 - chrome 33 way to do it -- requires bad chrome://flags
@@ -8586,7 +8595,7 @@ function getMaxVolume (analyser, fftBins) {
   var maxVolume = -Infinity;
   analyser.getFloatFrequencyData(fftBins);
 
-  for(var i=0, ii=fftBins.length; i < ii; i++) {
+  for(var i=4, ii=fftBins.length; i < ii; i++) {
     if (fftBins[i] > maxVolume && fftBins[i] < 0) {
       maxVolume = fftBins[i];
     }
@@ -8608,10 +8617,11 @@ module.exports = function(stream, options) {
 
   //Config
   var options = options || {},
-      smoothing = (options.smoothing || 0.5),
-      interval = (options.interval || 100),
+      smoothing = (options.smoothing || 0.1),
+      interval = (options.interval || 50),
       threshold = options.threshold,
       play = options.play,
+      history = options.history || 10,
       running = true;
 
   //Setup Audio Context
@@ -8626,15 +8636,15 @@ module.exports = function(stream, options) {
   fftBins = new Float32Array(analyser.fftSize);
 
   if (stream.jquery) stream = stream[0];
-  if (stream instanceof HTMLAudioElement) {
+  if (stream instanceof HTMLAudioElement || stream instanceof HTMLVideoElement) {
     //Audio Tag
     sourceNode = audioContext.createMediaElementSource(stream);
     if (typeof play === 'undefined') play = true;
-    threshold = threshold || -65;
+    threshold = threshold || -50;
   } else {
     //WebRTC Stream
     sourceNode = audioContext.createMediaStreamSource(stream);
-    threshold = threshold || -45;
+    threshold = threshold || -50;
   }
 
   sourceNode.connect(analyser);
@@ -8658,6 +8668,10 @@ module.exports = function(stream, options) {
       harker.emit('stopped_speaking');
     }
   };
+  harker.speakingHistory = [];
+  for (var i = 0; i < history; i++) {
+      harker.speakingHistory.push(0);
+  }
 
   // Poll the analyser node to determine if speaking
   // and emit events if changed
@@ -8673,17 +8687,27 @@ module.exports = function(stream, options) {
 
       harker.emit('volume_change', currentVolume, threshold);
 
-      if (currentVolume > threshold) {
-        if (!harker.speaking) {
+      var history = 0;
+      if (currentVolume > threshold && !harker.speaking) {
+        // trigger quickly, short history
+        for (var i = harker.speakingHistory.length - 3; i < harker.speakingHistory.length; i++) {
+          history += harker.speakingHistory[i];
+        }
+        if (history >= 2) {
           harker.speaking = true;
           harker.emit('speaking');
         }
-      } else {
-        if (harker.speaking) {
+      } else if (currentVolume < threshold && harker.speaking) {
+        for (var i = 0; i < harker.speakingHistory.length; i++) {
+          history += harker.speakingHistory[i];
+        }
+        if (history == 0) {
           harker.speaking = false;
           harker.emit('stopped_speaking');
         }
       }
+      harker.speakingHistory.shift();
+      harker.speakingHistory.push(0 + (currentVolume > threshold));
 
       looper();
     }, interval);
