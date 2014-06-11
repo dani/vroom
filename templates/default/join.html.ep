@@ -625,6 +625,25 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" role="dialog" id="disconnected" aria-labelledby="disconnected" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title"><%=l 'CONNECTION_LOST' %></h4>
+          </div>
+          <div class="modal-body">
+            <center>
+              <img src="<%= $self->get_url('/') %>img/flash.png" alt="<%=l 'CONNECTION_LOST' %>"/>
+              <br>
+              <p>
+                <%=l 'CHECK_INTERNET_ACCESS' %>
+              </p>
+            </center>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="modal fade" role="dialog" id="persistentModal" aria-labelledby="persistentModal" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">

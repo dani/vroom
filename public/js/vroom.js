@@ -1292,6 +1292,11 @@ function initVroom(room) {
     }
   });
 
+  // Detect connection lost
+  webrtc.connection.socket.on('disconnect', function(){
+    $('#disconnected').modal('show');
+  });
+
   // Do not close the dropdown menus (invite/conf) when filling fields
   $('.dropdown-menu').on('click', 'li', function(e){
     e.stopPropagation();

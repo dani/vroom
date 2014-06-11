@@ -254,6 +254,8 @@ our %Lexicon = (
                                                    "vous avez autorisé le navigateur à y accéder, puis raffraichissez cette page",
     "CLICK_IF_NO_WEBCAM"                        => "Si vous n'avez pas de webcam, cliquez sur le lien ci-dessous, vous pourrez rejoindre la conférence " .
                                                    "en audio uniquement",
+    "CONNECTION_LOST"                           => "Vous avez été déconnecté",
+    "CHECK_INTERNET_ACCESS"                     => "Vérifiez votre connexion, et raffraîchissez cette page ensuite",
     "HOME"                                      => "Accueil",
     "HELP"                                      => "Aide",
     "ABOUT"                                     => "À propos",
