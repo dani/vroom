@@ -665,7 +665,7 @@ function initVroom(room) {
     if (time < 60){
       cl = 'latencyGood';
     }
-    else if (time < 150){
+    else if (time < 120){
       cl = 'latencyMedium';
     }
     else if (time < 250){
