@@ -9,19 +9,19 @@
   opacity: 0.7;
 }
 .latencyUnknown{
-  box-shadow: 0px 0px 2pt 3pt grey;
+  box-shadow: 0px 0px 2pt 2pt grey;
 }
 .latencyGood {
-  box-shadow: 0px 0px 2pt 3pt #5CB85C;
+  box-shadow: 0px 0px 2pt 2pt #5CB85C;
 }
 .latencyMedium {
-  box-shadow: 0px 0px 2pt 3pt #428BCA;
+  box-shadow: 0px 0px 2pt 2pt #428BCA;
 }
 .latencyWarn {
-  box-shadow: 0px 0px 3pt 3pt #F0AD4E;
+  box-shadow: 0px 0px 2pt 2pt #F0AD4E;
 }
 .latencyPoor {
-  box-shadow: 0px 0px 3pt 3pt #D9534F;
+  box-shadow: 0px 0px 2pt 2pt #D9534F;
 }
 #mainVideo{
   margin-right: auto;
