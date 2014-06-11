@@ -286,7 +286,7 @@ our %Lexicon = (
   "HELP_BE_NOTIFIED"                     => "You can be notified by email as soon as someone joins one of your rooms. For example, " .
                                             "create a room, add a password to make it persistent and add the link in your email signature. " .
                                             "When someone wants to talk with you, you'll get the notification",
-  "ABOUT_VROOM"                          => "VROOM is a free spftware using the latest web technologies and lets you " .
+  "ABOUT_VROOM"                          => "VROOM is a free software using the latest web technologies and lets you " .
                                             "to easily organize video meetings. Forget all the pain with installing " .
                                             "a client on your computer in a hury, compatibility issues between MAC OS " .
                                             "or GNU/Linux, port redirection problems, calls to the helpdesk because " .
