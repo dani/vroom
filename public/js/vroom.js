@@ -1294,7 +1294,9 @@ function initVroom(room) {
 
   // Detect connection lost
   webrtc.connection.socket.on('disconnect', function(){
-    $('#disconnected').modal('show');
+    setTimeout(function(){
+      $('#disconnected').modal('show');
+    }, 2000);
   });
 
   // Do not close the dropdown menus (invite/conf) when filling fields
