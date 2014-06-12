@@ -9,6 +9,7 @@ CREATE TABLE `rooms` (
   `ask_for_name` tinyint(1) DEFAULT '0',
   `join_password` varchar(160) DEFAULT NULL,
   `owner_password` varchar(160) DEFAULT NULL,
+  `etherpad_group` varchar(40) DEFAULT NULL,
   `token` varchar(160) DEFAULT NULL,
   `realm` varchar(160) DEFAULT NULL,
   `persistent` tinyint(1) DEFAULT '0',

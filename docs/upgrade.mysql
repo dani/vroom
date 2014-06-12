@@ -21,3 +21,4 @@ CREATE TABLE IF NOT EXISTS `invitations` (
   `timestamp` int(20) DEFAULT NULL,
   PRIMARY KEY (`token`)
 ) DEFAULT CHARSET=utf8;
+ALTER TABLE `rooms` ADD COLUMN `etherpad_group` varchar(40) DEFAULT NULL AFTER `owner_password`;
