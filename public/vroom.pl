@@ -18,6 +18,7 @@ use Email::Sender::Transport::Sendmail;
 use Encode;
 use File::stat;
 use File::Basename;
+use Etherpad::API;
 
 # List The different components we rely on.
 # Used to generate thanks on the about template
@@ -126,6 +127,15 @@ our $config = plugin Config => {
   }
 };
 
+# Create etherpad api client if required
+our $ec = undef;
+if ($config->{etherpadUri} =~ m/https?:\/\/.*/ && $config->{etherpadApiKey} ne ''){
+  $ec = Etherpad::API->new({
+    url => $config->{etherpadUri},
+    apikey => $config->{etherpadApiKey}
+  });
+}
+
 app->log->level($config->{logLevel});
 
 # Load I18N, and declare supported languages
@@ -165,6 +175,11 @@ helper login => sub {
 # Expire the cookie
 helper logout => sub {
   my $self = shift;
+  my ($room) = @_;
+  # Logout from etherpad
+  if ($ec && $self->session($room)->{etherpadSessionId}){
+    $ec->delete_session($self->session($room)->{etherpadSessionId});
+  }
   $self->session( expires => 1 );
   $self->app->log->info($self->session('name') . " logged out");
 };
@@ -181,6 +196,15 @@ helper create_room => sub {
   my $tp = $self->get_random(49);
   $sth->execute($name,time(),time(),$owner,$tp,$config->{realm}) || return undef;
   $self->app->log->info("Room $name created by " . $self->session('name'));
+  # therpad integration ?
+  if ($ec){
+    my $group = $ec->create_group() || undef;
+    return undef unless ($group);
+    $sth = eval { $self->db->prepare("UPDATE `rooms` SET `etherpad_group`=? WHERE `name`='$name';") } || return undef;
+    $sth->execute($group);
+    $ec->create_group_pad($group,$name) || return undef;
+    $self->app->log->debug("Etherpad group $group created for room $name");
+  }
   return 1;
 };
 
@@ -616,7 +640,7 @@ get '/goodby/(:room)' => sub {
     );
   }
   $self->remove_participant($room,$self->session('name'));
-  $self->logout;
+  $self->logout($room);
 } => 'goodby';
 
 # Route for the kicked page
@@ -632,7 +656,7 @@ get '/kicked/(:room)' => sub {
     );
   }
   $self->remove_participant($room,$self->session('name'));
-  $self->logout;
+  $self->logout($room);
 } => 'kicked';
 
 # Route for invitition response
@@ -808,6 +832,14 @@ get '/(*room)' => sub {
   }
   # Set this peer as a simple participant if he has no role yet (shouldn't happen)
   $self->session($room => {role => 'participant'}) if (!$self->session($room) || !$self->session($room)->{role});
+  # Create etherpad session if needed
+  if ($ec && !$self->session($room)->{etherpadSession}){
+    my $id = $ec->create_author_if_not_exists_for($self->session('name'));
+    $self->session($room => {etherpadAuthorId => $id});
+    my $etherpadSession = $ec->create_session($data->{etherpad_group}, $id, time+86400);
+    $self->session($room => {etherpadSessionId => $etherpadSession});
+    $self->cookie(sessionID => $etherpadSession);
+  }
   # Short life cookie to negociate a session with the signaling server
   $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60, path => '/'});
   # Add this user to the participants table
