@@ -1280,6 +1280,10 @@ function initVroom(room) {
     if (mainVid == id + '_video_incoming' || mainVid == id + '_incoming' || mainVid == id + 'Screen'){
       $('#mainVideo').hide(500);
       setTimeout(function(){
+        if ($.browser.mozilla && $('#mainVideo video').length > 0){
+          $($('#mainVideo video').get(0)).attr('src', $($('#mohPlayer').get(0)).attr('src'));
+          $('#mainVideo video').get(0).pause();
+        }
         $('#mainVideo').html('');
       }, 500);
       mainVid = false;
