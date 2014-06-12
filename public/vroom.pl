@@ -120,6 +120,8 @@ our $config = plugin Config => {
     commonRoomNames               => [ qw() ],
     logLevel                      => 'info',
     chromeExtensionId             => 'ecicdpoejfllflombfanbhfpgcimjddn',
+    etherpadUri                   => '',
+    etherpadApiKey                => '',
     sendmail                      => '/sbin/sendmail'
   }
 };

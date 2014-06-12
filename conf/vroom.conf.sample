@@ -39,6 +39,11 @@ logLevel => 'info',
 # ID of the Chrome extension for screen sharing
 chromeExtensionId => 'ecicdpoejfllflombfanbhfpgcimjddn',
 
+# For etherpad integration, set the etherpad base url
+# and API Key
+etherpadUri => '',
+etherpadApiKey => '',
+
 # Various
 sendmail => '/sbin/sendmail'
 };
