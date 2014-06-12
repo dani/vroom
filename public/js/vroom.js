@@ -2,6 +2,7 @@
 This file is part of the VROOM project
 released under the MIT licence
 Copyright 2014 Firewall Services
+Daniel Berteaud <daniel@firewall-services.com>
 */
 
 // Default notifications
