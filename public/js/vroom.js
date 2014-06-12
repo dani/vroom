@@ -1269,7 +1269,7 @@ function initVroom(room) {
       id = id + '_screen';
     }
     // Or the peer itself
-    else if (peer && peers[peer.id]){
+    else if (peer && peers[peer.id] && id != 'local'){
       delete peers[peer.id];
     }
     $("#peer_" + id).hide(300);
@@ -1504,10 +1504,10 @@ function initVroom(room) {
       });
     }
     else{
+      peers.local.screenShared = false;
       webrtc.stopScreenShare();
       $('#shareScreenLabel').removeClass('btn-danger');
       $.notify(locale.SCREEN_UNSHARED, 'success');
-      peers.local.screenShared = false;
     }
   });
 
