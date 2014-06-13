@@ -850,6 +850,19 @@ function initVroom(room) {
     }, 3000);
   }
 
+  // Load etherpad in its iFrame
+  function loadEtherpadIframe(){
+    $('#etherpadContainer').pad({
+      host: etherpad.uri,
+      padId: etherpad.group + '$' + room,
+      showControls: true,
+      showLineNumbers: false,
+      height: maxHeight()-7 + 'px',
+      border: 2,
+      userColor: peers.local.color
+    });
+  }
+
   // An owner is muting/unmuting someone
   webrtc.on('owner_toggle_mute', function(data){
     // Ignore this if the remote peer isn't the owner of the room
@@ -1831,7 +1844,10 @@ function initVroom(room) {
   // Choose another color. Useful if two peers have the same
   $('#changeColorButton').click(function(){
     peers.local.color = chooseColor();
-    colorChanged = true;
+    // Reload etherpadiFrame if required
+    if (etherpad.enabled){
+      loadEtherpadIframe();
+    }
     webrtc.sendToAll('peer_color', {color: peers.local.color});
     updateDisplayName('local');
   });
@@ -1937,27 +1953,16 @@ function initVroom(room) {
     $('#etherpadButton').change(function(){
       var action = ($(this).is(':checked')) ? 'show':'hide';
       if (action == 'show'){
-        // If not already loaded, or our color changed, load etherpad in the iFrame
-        if ($('#etherpadContainer').html() == '' || colorChanged){
-          $('#etherpadContainer').pad({
-            host: etherpad.uri,
-            padId: etherpad.group + '$' + room,
-            showControls: true,
-            showLineNumbers: false,
-            height: maxHeight()-7 + 'px',
-            border: 2,
-            userColor: peers.local.color
-          });
-          colorChanged = false;
+        // If not already loaded, load etherpad in the iFrame
+        if ($('#etherpadContainer').html() == ''){
+          loadEtherpadIframe();
         }
         $('#etherpadLabel').addClass('btn-danger');
         $('#etherpadContainer').slideDown('200');
-        $('#changeColorButton').addClass('disabled');
       }
       else{
         $('#etherpadLabel').removeClass('btn-danger');
         $('#etherpadContainer').slideUp('200');
-        $('#changeColorButton').removeClass('disabled');
       }
     });
   }
