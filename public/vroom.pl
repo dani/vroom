@@ -41,6 +41,9 @@ our $components = {
   "jquery-tinytimer" => {
     url => 'https://github.com/odyniec/jQuery-tinyTimer'
   },
+  "jquery-etherpad-lite" => {
+    url => 'https://github.com/ether/etherpad-lite-jquery-plugin'
+  },
   "sprintf.js" => {
     url => 'http://hexmen.com/blog/2007/03/printf-sprintf/'
   },
