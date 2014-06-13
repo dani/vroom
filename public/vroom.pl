@@ -334,21 +334,35 @@ helper has_joined => sub {
 helper delete_rooms => sub {
   my $self = shift;
   $self->app->log->debug('Removing unused rooms');
-  eval {
-    my $timeout = time()-$config->{inactivityTimeout};
-    $self->db->do("DELETE FROM `participants` WHERE `id` IN (SELECT `id` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='0');");
-    $self->db->do("DELETE FROM `notifications` WHERE `id` IN (SELECT `id` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='0');");
-    $self->db->do("DELETE FROM `invitations` WHERE `id` IN (SELECT `id` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='0');");
-    $self->db->do("DELETE FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='0';");
-  } || return undef;
-  if ($config->{persistentInactivityTimeout} && $config->{persistentInactivityTimeout} > 0){
-    eval {
-      my $timeout = time()-$config->{persistentInactivityTimeout};
-      $self->db->do("DELETE FROM `participants` WHERE `id` IN (SELECT `id` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='1');");
-      $self->db->do("DELETE FROM `notifications` WHERE `id` IN (SELECT `id` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='1');");
-      $self->db->do("DELETE FROM `invitations` WHERE `id` IN (SELECT `id` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='1');");
-      $self->db->do("DELETE FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='1';");
-    } || return undef;
+  my $timeout = time()-$config->{inactivityTimeout};
+  my $sth = eval { $self->db->prepare("SELECT `id` FROM rooms WHERE `activity_timestamp` < $timeout AND `persistent`='0';") } || return undef;
+  $sth->execute();
+  my @toDelete = $sth->fetchrow_array;
+  if ($config->{persistentInactivityTimeout} > 0){
+    $timeout = time()-$config->{persistentInactivityTimeout};
+    $sth = eval { $self->db->prepare("SELECT `id` FROM rooms WHERE `activity_timestamp` < $timeout AND `persistent`='1';") } || return undef;
+    $sth->execute();
+    push @toDelete, $sth->fetchrow_array;
+  }
+  foreach my $room (@toDelete){
+    my $data = $self->get_room($room);
+    $self->app->log->debug("Room " . $data->{name} . " will be deleted");
+    # Remove Etherpad group
+    if ($ec){
+      $ec->delete_group($data->{etherpad_group});
+    }
+  }
+  # Now remove rooms
+  if (scalar @toDelete > 0){
+    foreach my $table (qw(participants notifications invitations rooms)){
+      $sth = eval {
+        $self->db->prepare("DELETE FROM `$table` WHERE `id` IN (" . join( ",", map { "?" } @toDelete ) . ")");
+      } || return undef;
+      $sth->execute(@toDelete) || return undef;
+    }
+  }
+  else{
+    $self->app->log->debug('No rooms deleted, as none has expired');
   }
   return 1;
 };
@@ -835,9 +849,9 @@ get '/(*room)' => sub {
   # Create etherpad session if needed
   if ($ec && !$self->session($room)->{etherpadSession}){
     my $id = $ec->create_author_if_not_exists_for($self->session('name'));
-    $self->session($room => {etherpadAuthorId => $id});
-    my $etherpadSession = $ec->create_session($data->{etherpad_group}, $id, time+86400);
-    $self->session($room => {etherpadSessionId => $etherpadSession});
+    $self->session($room)->{etherpadAuthorId} = $id;
+    my $etherpadSession = $ec->create_session($data->{etherpad_group}, $id, time + 86400);
+    $self->session($room)->{etherpadSessionId} = $etherpadSession;
     $self->cookie(sessionID => $etherpadSession);
   }
   # Short life cookie to negociate a session with the signaling server
