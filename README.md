@@ -5,6 +5,7 @@ Video conf based on [SimpleWebRTC.js](https://github.com/HenrikJoreteg/SimpleWeb
 
 * Multi party audio+video
 * Text Chat
+* Optional Etherpad-Lite integration
 * Screen Sharing (only on Chrome for now)
 * Persistent rooms
 * Email notifications and invitations
@@ -17,6 +18,6 @@ Video conf based on [SimpleWebRTC.js](https://github.com/HenrikJoreteg/SimpleWeb
 
 You can try our demo instance here: https://vroom.im
 
-Check documentation here: https://wikit.firewall-services.com/doku.php/projets/vroom
+Check documentation [here](https://wikit.firewall-services.com/doku.php/projets/vroom)
 
 You can also subscribe to the dev mailing list [here](http://list.vroom.im/mailman/listinfo/vroom-dev)
