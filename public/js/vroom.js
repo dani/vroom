@@ -1937,7 +1937,7 @@ function initVroom(room) {
       padId: etherpad.group + '$' + room,
       showControls: true,
       showLineNumbers: true,
-      height: maxHeight() + 'px',
+      height: maxHeight()-7 + 'px',
       border: 2,
       userColor: peers.local.color
     });
@@ -1991,10 +1991,11 @@ function initVroom(room) {
   window.onresize = function (){
     $('#webRTCVideo').css('max-height', maxHeight());
     $('#mainVideo>video').css('max-height', maxHeight());
-    $('#epframetherpadContainer').css('max-height', maxHeight());
+    $('#etherpadContainer').css('max-height', maxHeight());
   };  
   // Preview heigh is limited to the windows heigh, minus the navbar, minus 25px
   $('#webRTCVideo').css('max-height', maxHeight());
+  $('#etherpadContainer').css('max-height', maxHeight());
 
 };
 

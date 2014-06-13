@@ -163,6 +163,7 @@
 #etherpadContainer {
   display: none;
   height: auto;
+  overflow-y: scroll;
 }
 #chatBox {
   max-height:300px;
