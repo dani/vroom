@@ -200,6 +200,15 @@ helper create_room => sub {
   my $tp = $self->get_random(49);
   $sth->execute($name,time(),time(),$owner,$tp,$config->{realm}) || return undef;
   $self->app->log->info("Room $name created by " . $self->session('name'));
+  # therpad integration ?
+  if ($ec){
+    my $group = $ec->create_group() || undef;
+    return undef unless ($group);
+    $sth = eval { $self->db->prepare("UPDATE `rooms` SET `etherpad_group`=? WHERE `name`='$name';") } || return undef;
+    $sth->execute($group);
+    $ec->create_group_pad($group,$name) || return undef;
+    $self->app->log->debug("Etherpad group $group created for room $name");
+  }
   return 1;
 };
 
