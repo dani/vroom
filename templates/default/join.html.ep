@@ -31,6 +31,12 @@
               0
             </span>
           </button>
+          <% if ($etherpad eq 'true'){ %>
+          <button id="etherpad" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OPEN_ETHERPAD' %>">
+            <span class="glyphicon glyphicon-pencil">
+            </span>
+          </button>
+          <% } %>
         </div>
         <div class="btn-group navbar-form navbar-left" data-toggle="buttons">
           <label class="btn btn-default help" id="muteMicLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_MIC' %>">
@@ -783,6 +789,7 @@
       var roomName = '<%= $room %>';
       $( document ).ready(function() {
         setTimeout(function(){
+          etherpad = <%= $etherpad %>;
           <% if ($video eq 'false'){ %>
           videoConstraints = false;
           <% } else{ %>
