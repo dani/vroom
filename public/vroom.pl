@@ -126,6 +126,7 @@ our $config = plugin Config => {
     chromeExtensionId             => 'ecicdpoejfllflombfanbhfpgcimjddn',
     etherpadUri                   => '',
     etherpadApiKey                => '',
+    etherpadBaseDomain            => '',
     sendmail                      => '/sbin/sendmail'
   }
 };
@@ -862,7 +863,11 @@ get '/(*room)' => sub {
     $self->session($room)->{etherpadAuthorId} = $id;
     my $etherpadSession = $ec->create_session($data->{etherpad_group}, $id, time + 86400);
     $self->session($room)->{etherpadSessionId} = $etherpadSession;
-    $self->cookie(sessionID => $etherpadSession);
+    my $etherpadCookieParam = {};
+    if ($config->{etherpadBaseDomain} && $config->{etherpadBaseDomain} ne ''){
+      $etherpadCookieParam->{domain} = $config->{etherpadBaseDomain};
+    }
+    $self->cookie(sessionID => $etherpadSession, $etherpadCookieParam);
   }
   # Short life cookie to negociate a session with the signaling server
   $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60, path => '/'});
