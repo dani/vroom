@@ -24,7 +24,9 @@
           </div>
         </div>
         <div class="btn-group navbar-form navbar-left">
+          <% if ($etherpad eq 'true'){ %>
           <div class="btn-group">
+          <% } %>
             <button id="chatDropdown" class="btn btn-default collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
               <span class="glyphicon glyphicon-comment">
               </span>
@@ -42,8 +44,8 @@
               </button>
             </label>
           </div>
-          <% } %>
         </div>
+        <% } %>
         <div class="btn-group navbar-form navbar-left" data-toggle="buttons">
           <label class="btn btn-default help" id="muteMicLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_MIC' %>">
             <input type="checkbox" id="muteMicButton">
