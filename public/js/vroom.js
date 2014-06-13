@@ -1952,10 +1952,12 @@ function initVroom(room) {
         }
         $('#etherpadLabel').addClass('btn-danger');
         $('#etherpadContainer').slideDown('200');
+        $('#changeColorButton').addClass('disabled');
       }
       else{
         $('#etherpadLabel').removeClass('btn-danger');
         $('#etherpadContainer').slideUp('200');
+        $('#changeColorButton').removeClass('disabled');
       }
     });
   }
