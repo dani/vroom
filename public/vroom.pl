@@ -335,30 +335,32 @@ helper delete_rooms => sub {
   my $self = shift;
   $self->app->log->debug('Removing unused rooms');
   my $timeout = time()-$config->{inactivityTimeout};
-  my $sth = eval { $self->db->prepare("SELECT `id` FROM rooms WHERE `activity_timestamp` < $timeout AND `persistent`='0';") } || return undef;
+  my $sth = eval { $self->db->prepare("SELECT `name` FROM rooms WHERE `activity_timestamp` < $timeout AND `persistent`='0';") } || return undef;
   $sth->execute();
-  my @toDelete = $sth->fetchrow_array;
+  my @toDeleteName = $sth->fetchrow_array;
+  my @toDeleteId = ();
   if ($config->{persistentInactivityTimeout} > 0){
     $timeout = time()-$config->{persistentInactivityTimeout};
-    $sth = eval { $self->db->prepare("SELECT `id` FROM rooms WHERE `activity_timestamp` < $timeout AND `persistent`='1';") } || return undef;
+    $sth = eval { $self->db->prepare("SELECT `name` FROM rooms WHERE `activity_timestamp` < $timeout AND `persistent`='1';") } || return undef;
     $sth->execute();
-    push @toDelete, $sth->fetchrow_array;
+    push @toDeleteName, $sth->fetchrow_array;
   }
-  foreach my $room (@toDelete){
+  foreach my $room (@toDeleteName){
     my $data = $self->get_room($room);
     $self->app->log->debug("Room " . $data->{name} . " will be deleted");
     # Remove Etherpad group
     if ($ec){
       $ec->delete_group($data->{etherpad_group});
     }
+    push @toDeleteId, $data->{id};
   }
   # Now remove rooms
-  if (scalar @toDelete > 0){
+  if (scalar @toDeleteId > 0){
     foreach my $table (qw(participants notifications invitations rooms)){
       $sth = eval {
-        $self->db->prepare("DELETE FROM `$table` WHERE `id` IN (" . join( ",", map { "?" } @toDelete ) . ")");
+        $self->db->prepare("DELETE FROM `$table` WHERE `id` IN (" . join( ",", map { "?" } @toDeleteId ) . ")");
       } || return undef;
-      $sth->execute(@toDelete) || return undef;
+      $sth->execute(@toDeleteId) || return undef;
     }
   }
   else{
@@ -869,6 +871,7 @@ get '/(*room)' => sub {
     moh          => $self->choose_moh(),
     turnPassword => $data->{token},
     video        => $video,
+    etherpad     => ($ec) ? 'true' : 'false',
     ua           => $self->req->headers->user_agent
   );
 };
