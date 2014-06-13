@@ -260,6 +260,8 @@ our %Lexicon = (
   "TEXT_CHAT"                            => "Chat Included",
   "SECURED_TEXT_CHAT"                    => "Video and audio are not enough ? You can also use the included text chat, and fully secured: " .
                                             "your discussions are done directly between members and will never be sent on our servers.",
+  "COLLABORATIVE_NOTETAKING"             => "Realtime notetaking",
+  "TAKE_NOTE_IN_REALTIME"                => "Write your meating notes with others, all in real time with the included editor",
   "SUPPORTED_BROWSERS"                   => "Supported browsers",
   "HELP_BROWSERS_SUPPORTED"              => "VROOM works with any modern, standard compliant browsers, which means any " .
                                             "recent Mozilla Firefox, Google Chrome or Opera.",

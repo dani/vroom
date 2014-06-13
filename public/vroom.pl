@@ -610,7 +610,12 @@ helper check_invite_token => sub {
 };
 
 # Route / to the index page
-any '/' => 'index';
+any '/' => sub {
+  my $self = shift;
+  $self->stash(
+    etherpad => ($ec) ? 'true' : 'false'
+  );
+} => 'index';
 
 # Route for the about page
 get '/about' => sub {

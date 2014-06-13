@@ -68,6 +68,9 @@
           <li data-target="#carouselIndex" data-slide-to="4"></li>
           <li data-target="#carouselIndex" data-slide-to="5"></li>
           <li data-target="#carouselIndex" data-slide-to="6"></li>
+          <% if ($etherpad eq 'true'){ %>
+          <li data-target="#carouselIndex" data-slide-to="7"></li>
+          <% } %>
         </ol>
         <div id="carouselIndexContent" class="carousel-inner">
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
@@ -147,6 +150,19 @@
               </h2>
             </div>
           </div>
+          <% if ($etherpad eq 'true') { %>
+          <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
+            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/note.png" alt="<%=l 'COLLABORATIVE_NOTETAKING' %>">
+            <p>
+              <%=l 'TAKE_NOTE_IN_REALTIME' %>
+            </p>
+            <div class="carousel-caption hidden-xs carouselIndexCaption">
+              <h2>
+                <%=l 'COLLABORATIVE_NOTETAKING' %>
+              </h2>
+            </div>
+          </div>
+          <% } %>
         </div>
         <a class="left carousel-control" href="#carouselIndex" data-slide="prev">
           <span class="glyphicon glyphicon-chevron-left"></span>

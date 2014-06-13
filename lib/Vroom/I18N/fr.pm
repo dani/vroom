@@ -286,6 +286,8 @@ our %Lexicon = (
     "SECURED_TEXT_CHAT"                         => "La vidéo et le son ne vous suffisent pas ? Vous pouvez aussi utiliser le tchat intégré et " .
                                                    "entièrement sécurisé: vos discussions se font directement entre les membres, et ne passent " .
                                                    "à aucun moment par nos serveurs.",
+    "COLLABORATIVE_NOTETAKING"                  => "Prise de notes collaborative",
+    "TAKE_NOTE_IN_REALTIME"                     => "Prenez des notes tous ensembles, en temps réel grâce à l'éditeur collaboratif intégré",
     "SUPPORTED_BROWSERS"                        => "Navigateurs supportés",
     "HELP_BROWSERS_SUPPORTED"                   => "VROOM fonctionne avec tous les navigateurs modernes et respectueux des standards. " .
                                                    "Les technologies employées (WebRTC) étant encore jeunes, seules les versions " .
