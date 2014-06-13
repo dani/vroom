@@ -345,6 +345,7 @@ helper delete_rooms => sub {
     $self->app->log->debug("Room " . $data->{name} . " will be deleted");
     # Remove Etherpad group
     if ($ec){
+      $ec->delete_pad($data->{etherpad_group} . '$' . $room);
       $ec->delete_group($data->{etherpad_group});
     }
     push @toDeleteId, $data->{id};
