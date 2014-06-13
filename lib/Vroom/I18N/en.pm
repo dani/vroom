@@ -90,6 +90,7 @@ our %Lexicon = (
   "NAME_WONT_BE_ASKED"                   => "Participant won't have to type their name before they can join the room",
   "CHANGE_COLOR"                         => "Change your color",
   "CLICK_TO_CHAT"                        => "Click to access the chat",
+  "OPEN_ETHERPAD"                        => "Collaborative notetaking",
   "PREVENT_TO_JOIN"                      => "Prevent other participants to join this room",
   "MUTE_MIC"                             => "Turn off your microphone",
   "NO_SOUND_DETECTED"                    => "No sound detected, please check your microphone (input level might be too low)",

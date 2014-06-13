@@ -160,6 +160,10 @@
   padding-right: 12px;
   padding-left: 12px;
 }
+#etherpadContainer {
+  display: none;
+  height: auto;
+}
 #chatBox {
   max-height:300px;
   resize:none;

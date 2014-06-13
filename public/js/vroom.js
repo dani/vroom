@@ -1931,6 +1931,29 @@ function initVroom(room) {
     $('#helpButton').removeClass('active');
   });
 
+  if (etherpad.enabled){
+    $('#etherpadContainer').pad({
+      host: etherpad.uri,
+      padId: etherpad.group + '$' + room,
+      showControls: true,
+      showLineNumbers: true,
+      height: maxHeight() + 'px',
+      border: 2,
+      userColor: peers.local.color
+    });
+    $('#etherpadButton').change(function(){
+      var action = ($(this).is(':checked')) ? 'show':'hide';
+      if (action == 'show'){
+        $('#etherpadLabel').addClass('btn-danger');
+        $('#etherpadContainer').slideDown('200');
+      }
+      else{
+        $('#etherpadLabel').removeClass('btn-danger');
+        $('#etherpadContainer').slideUp('200');
+      }
+    });
+  }
+
   // Ping the room every minutes
   // Used to detect inactive rooms
   setInterval(function pingRoom(){
@@ -1968,6 +1991,7 @@ function initVroom(room) {
   window.onresize = function (){
     $('#webRTCVideo').css('max-height', maxHeight());
     $('#mainVideo>video').css('max-height', maxHeight());
+    $('#epframetherpadContainer').css('max-height', maxHeight());
   };  
   // Preview heigh is limited to the windows heigh, minus the navbar, minus 25px
   $('#webRTCVideo').css('max-height', maxHeight());

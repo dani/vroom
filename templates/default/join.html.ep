@@ -24,18 +24,24 @@
           </div>
         </div>
         <div class="btn-group navbar-form navbar-left">
-          <button id="chatDropdown" class="btn btn-default collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
-            <span class="glyphicon glyphicon-comment">
-            </span>
-            <span class="badge" id="unreadMsg">
-              0
-            </span>
-          </button>
+          <div class="btn-group">
+            <button id="chatDropdown" class="btn btn-default collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
+              <span class="glyphicon glyphicon-comment">
+              </span>
+              <span class="badge" id="unreadMsg">
+                0
+              </span>
+            </button>
+          </div>
           <% if ($etherpad eq 'true'){ %>
-          <button id="etherpad" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OPEN_ETHERPAD' %>">
-            <span class="glyphicon glyphicon-pencil">
-            </span>
-          </button>
+          <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default help" id="etherpadLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OPEN_ETHERPAD' %>">
+              <input type = "checkbox" id="etherpadButton">
+                <span class="glyphicon glyphicon-pencil">
+                </span>
+              </button>
+            </label>
+          </div>
           <% } %>
         </div>
         <div class="btn-group navbar-form navbar-left" data-toggle="buttons">
@@ -771,6 +777,9 @@
           </div>
         </div>
         <div id="mainView" class="col-sm-8 hidden-xs">
+          <% if ($etherpad eq 'true'){ %>
+          <div id="etherpadContainer"></div>
+          <% } %>
           <div id="mainVideo">
           </div>
           <div id="aloneMsg" class="aloneEl">
@@ -789,7 +798,11 @@
       var roomName = '<%= $room %>';
       $( document ).ready(function() {
         setTimeout(function(){
-          etherpad = <%= $etherpad %>;
+          etherpad = {
+            enabled: <%= $etherpad %>,
+            uri: "<%= $config->{etherpadUri} %>",
+            group: "<%= $etherpadGroup %>"
+          };
           <% if ($video eq 'false'){ %>
           videoConstraints = false;
           <% } else{ %>

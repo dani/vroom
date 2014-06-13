@@ -871,11 +871,12 @@ get '/(*room)' => sub {
   }
   # Now display the room page
   $self->render('join',
-    moh          => $self->choose_moh(),
-    turnPassword => $data->{token},
-    video        => $video,
-    etherpad     => ($ec) ? 'true' : 'false',
-    ua           => $self->req->headers->user_agent
+    moh           => $self->choose_moh(),
+    turnPassword  => $data->{token},
+    video         => $video,
+    etherpad      => ($ec) ? 'true' : 'false',
+    etherpadGroup => $data->{etherpad_group},
+    ua            => $self->req->headers->user_agent
   );
 };
 

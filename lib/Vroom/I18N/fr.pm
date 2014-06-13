@@ -96,6 +96,7 @@ our %Lexicon = (
     "NAME_WONT_BE_ASKED"                        => "La saisie du nom ne sera plus obligatoire pour rejoindre ce salon",
     "CHANGE_COLOR"                              => "Changer de couleur",
     "CLICK_TO_CHAT"                             => "Accéder au tchat",
+    "OPEN_ETHERPAD"                             => "Prise de notes collaborative",
     "PREVENT_TO_JOIN"                           => "Empêcher d'autres participants de rejoindre ce salon",
     "MUTE_MIC"                                  => "Couper le micro",
     "NO_SOUND_DETECTED"                         => "Aucun son n'a été détecté. Vérifiez votre micro (son volume est peut-être trop faible)",
