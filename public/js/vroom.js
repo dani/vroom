@@ -318,7 +318,8 @@ function initVroom(room) {
   var mainVid = false,
       chatHistory = {},
       chatIndex = 0,
-      maxVol = -100;
+      maxVol = -100,
+      colorChanged = false;
 
   $('#name_local').css('background-color', peers.local.color);
 
@@ -1830,6 +1831,7 @@ function initVroom(room) {
   // Choose another color. Useful if two peers have the same
   $('#changeColorButton').click(function(){
     peers.local.color = chooseColor();
+    colorChanged = true;
     webrtc.sendToAll('peer_color', {color: peers.local.color});
     updateDisplayName('local');
   });
@@ -1932,18 +1934,22 @@ function initVroom(room) {
   });
 
   if (etherpad.enabled){
-    $('#etherpadContainer').pad({
-      host: etherpad.uri,
-      padId: etherpad.group + '$' + room,
-      showControls: true,
-      showLineNumbers: true,
-      height: maxHeight()-7 + 'px',
-      border: 2,
-      userColor: peers.local.color
-    });
     $('#etherpadButton').change(function(){
       var action = ($(this).is(':checked')) ? 'show':'hide';
       if (action == 'show'){
+        // If not already loaded, or our color changed, load etherpad in the iFrame
+        if ($('#etherpadContainer').html() == '' || colorChanged){
+          $('#etherpadContainer').pad({
+            host: etherpad.uri,
+            padId: etherpad.group + '$' + room,
+            showControls: true,
+            showLineNumbers: false,
+            height: maxHeight()-7 + 'px',
+            border: 2,
+            userColor: peers.local.color
+          });
+          colorChanged = false;
+        }
         $('#etherpadLabel').addClass('btn-danger');
         $('#etherpadContainer').slideDown('200');
       }
