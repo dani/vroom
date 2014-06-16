@@ -202,12 +202,7 @@ helper create_room => sub {
   $self->app->log->info("Room $name created by " . $self->session('name'));
   # therpad integration ?
   if ($ec){
-    my $group = $ec->create_group() || undef;
-    return undef unless ($group);
-    $sth = eval { $self->db->prepare("UPDATE `rooms` SET `etherpad_group`=? WHERE `name`='$name';") } || return undef;
-    $sth->execute($group);
-    $ec->create_group_pad($group,$name) || return undef;
-    $self->app->log->debug("Etherpad group $group created for room $name");
+    $self->create_pad($name);
   }
   return 1;
 };
@@ -611,6 +606,25 @@ helper check_invite_token => sub {
   return $ret;
 };
 
+# Create a pad (and the group if needed)
+helper create_pad => sub {
+  my $self = shift;
+  my ($room) = @_;
+  return undef unless ($ec);
+  my $data = $self->get_room($room);
+  return undef unless ($data);
+  if (!$data->{etherpad_group}){
+    my $group = $ec->create_group() || undef;
+    return undef unless ($group);
+    my $sth = eval { $self->db->prepare("UPDATE `rooms` SET `etherpad_group`=? WHERE `name`='$room';") } || return undef;
+    $sth->execute($group) || return undef;
+    $data = $self->get_room($room);
+  }
+  $ec->create_group_pad($data->{etherpad_group},$room) || return undef;
+  $self->app->log->debug("Pad for room $room created (group " . $data->{etherpad_group} . ")");
+  return 1;
+};
+
 # Route / to the index page
 any '/' => sub {
   my $self = shift;
@@ -862,12 +876,7 @@ get '/(*room)' => sub {
   if ($ec && !$self->session($room)->{etherpadSession}){
     # pad doesn't exist yet ?
     if (!$data->{etherpad_group}){
-      my $group = $ec->create_group() || undef;
-      return undef unless ($group);
-      my $sth = eval { $self->db->prepare("UPDATE `rooms` SET `etherpad_group`=? WHERE `name`='$room';") } || return undef;
-      $sth->execute($group);
-      $ec->create_group_pad($group,$room) || return undef;
-      $self->app->log->debug("Etherpad group $group created for room $room");
+      $self->create_pad($room);
     }
     my $id = $ec->create_author_if_not_exists_for($self->session('name'));
     $self->session($room)->{etherpadAuthorId} = $id;
