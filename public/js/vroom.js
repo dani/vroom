@@ -872,6 +872,34 @@ function initVroom(room) {
     });
   }
 
+  // Wipe data
+  function wipeRoomData(){
+    if (etherpad.enabled){
+      $.ajax({
+        data: {
+          action: 'wipeData',
+          room: roomName
+        },
+        async: false,
+        error: function(data){
+          $.notify(locale.ERROR_OCCURRED, 'error');
+        },
+        success: function(data){
+          if (data.status && data.status == 'success'){
+            loadEtherpadIframe();
+          }
+          else if (data.msg){
+            $.notify(data.msg, 'error');
+          }
+        }
+      });
+    }
+    webrtc.sendToAll('wipe_data', {});
+    wipeChatHistory();
+    $('#wipeModal').modal('hide');
+    $.notify(locale.DATA_WIPED, 'info');
+  }
+
   // An owner is muting/unmuting someone
   webrtc.on('owner_toggle_mute', function(data){
     // Ignore this if the remote peer isn't the owner of the room
@@ -1909,7 +1937,20 @@ function initVroom(room) {
   });
 
   // Handle hangup/close window
-  $('#logoutButton').click(function() {
+  $('#logoutButton').click(function(){
+    $('#quitModal').modal('show');
+  });
+  // Remove the active class on the logout button if
+  // the modal is closed
+  $('#quitModal').on('hide.bs.modal',function(){
+    $('#logoutButton').removeClass('active');
+  });
+  $('#confirmQuitButton').click(function() {
+    hangupCall;
+    window.location.assign(rootUrl + 'goodby/' + roomName);
+  });
+  $('#confirmWipeAndQuitButton').click(function(){
+    wipeRoomData();
     hangupCall;
     window.location.assign(rootUrl + 'goodby/' + roomName);
   });
@@ -1995,29 +2036,7 @@ function initVroom(room) {
   });
   // Really wipe data
   $('#confirmWipeButton').click(function(){
-    if (etherpad.enabled){
-      $.ajax({
-        data: {
-          action: 'wipeData',
-          room: roomName
-        },
-        error: function(data){
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        },
-        success: function(data){
-          if (data.status && data.status == 'success'){
-            loadEtherpadIframe();
-          }
-          else if (data.msg){
-            $.notify(data.msg, 'error');
-          }
-        }
-      });
-    }
-    webrtc.sendToAll('wipe_data', {});
-    wipeChatHistory();
-    $('#wipeModal').modal('hide');
-    $.notify(locale.DATA_WIPED, 'info');
+    wipeRoomData();
   });
 
   if (etherpad.enabled){

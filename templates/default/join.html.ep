@@ -605,6 +605,39 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" role="dialog" id="quitModal" aria-labelledby="quitModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title">
+              <%=l 'LEAVE_THIS_ROOM' %>
+            </h4>
+          </div>
+          <div class="modal-body">
+            <p>
+              <%=l 'ARE_YOU_SURE_YOU_WANT_TO_LEAVE' %>
+            </p>
+            <p class="ownerEl">
+              <%=l 'YOU_CAN_WIPE_DATA_BEFORE_LEAVING' %>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button id="confirmWipeAndQuitButton" class="btn btn-danger ownerEl">
+              <%=l 'WIPE_AND_QUIT' %>
+            </button>
+            <button id="confirmQuitButton" class="btn btn-primary">
+              <%=l 'QUIT' %>
+            </button>
+            <button class="btn btn-default" data-dismiss="modal" data-target="#quitModal">
+              <%=l 'CANCEL' %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="modal fade" role="dialog" id="chromeExtMessage" aria-labelledby="chromeExtMessage" aria-hidden="true">
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
