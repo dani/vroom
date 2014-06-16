@@ -130,7 +130,7 @@ function removeNotifiedEmail(email){
     },
     success: function(data) {
       if (data.status == 'success'){
-        $.notify(data.msg, 'success');
+        $.notify(data.msg, 'info');
         $('#emailNotification_' + id).remove();
         webrtc.sendToAll('notif_change', {});
       }
@@ -1201,12 +1201,12 @@ function initVroom(room) {
     if (peers.local.role == 'owner'){
       var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
       if (data.payload.action == 'set'){
-        $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(who)), 'warn');
+        $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(who)), 'info');
         $('#persistentLabel').addClass('btn-danger active');
         $('#persistentButton').prop('checked', true);
       }
       else{
-        $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(who)), 'warn');
+        $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(who)), 'info');
         $('#persistentLabel').removeClass('btn-danger active');
         $('#persistentButton').prop('checked', false);
       }
@@ -1244,7 +1244,7 @@ function initVroom(room) {
       });
     }
     var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
-    $.notify(sprintf(locale.ROOM_DATA_WIPED_BY_s, stringEscape(who)), 'warn');
+    $.notify(sprintf(locale.ROOM_DATA_WIPED_BY_s, stringEscape(who)), 'info');
   });
 
   // Handle the readyToCall event: join the room
@@ -1499,7 +1499,7 @@ function initVroom(room) {
       },
       success: function(data) {
         if (data.status == 'success'){
-          $.notify(data.msg, 'success');
+          $.notify(data.msg, 'info');
           if (type === 'set'){
             $('#askForNameLabel').addClass('btn-danger active');
           }
@@ -1554,7 +1554,7 @@ function initVroom(room) {
         else{
           $("#shareScreenLabel").addClass('btn-danger');
           peers.local.screenShared = true;
-          $.notify(locale.EVERYONE_CAN_SEE_YOUR_SCREEN, 'warn');
+          $.notify(locale.EVERYONE_CAN_SEE_YOUR_SCREEN, 'info');
         }
       });
     }
@@ -1562,7 +1562,7 @@ function initVroom(room) {
       peers.local.screenShared = false;
       webrtc.stopScreenShare();
       $('#shareScreenLabel').removeClass('btn-danger');
-      $.notify(locale.SCREEN_UNSHARED, 'success');
+      $.notify(locale.SCREEN_UNSHARED, 'info');
     }
   });
 
@@ -1708,7 +1708,7 @@ function initVroom(room) {
           $('#joinPass').val('');
           $('#joinPassConfirm').val('');
           if (data.status == 'success'){
-            $.notify(data.msg, 'success');
+            $.notify(data.msg, 'info');
             $('#joinPassLabel').removeClass('btn-danger active');
             webrtc.sendToAll('password_protect', {action: 'unset'});
           }
@@ -1741,7 +1741,7 @@ function initVroom(room) {
           $('#joinPass').val('');
           $('#joinPassConfirm').val('');
           if (data.status == 'success'){
-            $.notify(data.msg, 'success');
+            $.notify(data.msg, 'info');
             $('#joinPassModal').modal('hide');
             $('#joinPassLabel').addClass('btn-danger active');
             $('#joinPassButton').prop('checked', true);
@@ -1781,7 +1781,7 @@ function initVroom(room) {
         success: function(data) {
           $('#ownerPass').val('');
           if (data.status == 'success'){
-            $.notify(data.msg, 'warn');
+            $.notify(data.msg, 'info');
             webrtc.sendToAll('owner_password', {action: 'remove'});
             $('#persistentLabel').removeClass('btn-danger active');
           }
@@ -1830,7 +1830,7 @@ function initVroom(room) {
             $('#persistentModal').modal('hide');
             $('#persistentLabel').addClass('btn-danger active');
             $('#persistentButton').prop('checked', true);
-            $.notify(data.msg, 'success');
+            $.notify(data.msg, 'info');
             webrtc.sendToAll('owner_password', {action: 'set'});
           }
           else{
@@ -1869,7 +1869,7 @@ function initVroom(room) {
       },
       success: function(data) {
         if (data.status == 'success'){
-          $.notify(data.msg, 'success');
+          $.notify(data.msg, 'info');
           addNotifiedEmail($('#newEmailNotification').val());
           webrtc.sendToAll('notif_change', {});
           $('#newEmailNotification').val('');
@@ -2017,7 +2017,7 @@ function initVroom(room) {
     webrtc.sendToAll('wipe_data', {});
     wipeChatHistory();
     $('#wipeModal').modal('hide');
-    $.notify(locale.DATA_WIPED, 'success');
+    $.notify(locale.DATA_WIPED, 'info');
   });
 
   if (etherpad.enabled){
