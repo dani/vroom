@@ -36,7 +36,7 @@
             </button>
           </div>
           <% if ($etherpad eq 'true'){ %>
-          <div class="btn-group" data-toggle="buttons">
+          <div class="btn-group hidden-xs" data-toggle="buttons">
             <label class="btn btn-default help" id="etherpadLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OPEN_ETHERPAD' %>">
               <input type = "checkbox" id="etherpadButton">
                 <span class="glyphicon glyphicon-pencil">
