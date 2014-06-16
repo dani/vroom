@@ -625,6 +625,24 @@ helper create_pad => sub {
   return 1;
 };
 
+# Create an etherpad session for a user
+helper create_etherpad_session => sub {
+  my $self = shift;
+  my ($room) = @_;
+  return undef unless ($ec);
+  my $data = $self->get_room($room);
+  return undef unless ($data && $data->{etherpad_group});
+  my $id = $ec->create_author_if_not_exists_for($self->session('name'));
+  $self->session($room)->{etherpadAuthorId} = $id;
+  my $etherpadSession = $ec->create_session($data->{etherpad_group}, $id, time + 86400);
+  $self->session($room)->{etherpadSessionId} = $etherpadSession;
+  my $etherpadCookieParam = {};
+  if ($config->{etherpadBaseDomain} && $config->{etherpadBaseDomain} ne ''){
+    $etherpadCookieParam->{domain} = $config->{etherpadBaseDomain};
+  }
+  $self->cookie(sessionID => $etherpadSession, $etherpadCookieParam);
+};
+
 # Route / to the index page
 any '/' => sub {
   my $self = shift;
@@ -878,15 +896,7 @@ get '/(*room)' => sub {
     if (!$data->{etherpad_group}){
       $self->create_pad($room);
     }
-    my $id = $ec->create_author_if_not_exists_for($self->session('name'));
-    $self->session($room)->{etherpadAuthorId} = $id;
-    my $etherpadSession = $ec->create_session($data->{etherpad_group}, $id, time + 86400);
-    $self->session($room)->{etherpadSessionId} = $etherpadSession;
-    my $etherpadCookieParam = {};
-    if ($config->{etherpadBaseDomain} && $config->{etherpadBaseDomain} ne ''){
-      $etherpadCookieParam->{domain} = $config->{etherpadBaseDomain};
-    }
-    $self->cookie(sessionID => $etherpadSession, $etherpadCookieParam);
+    $self->create_etherpad_session($room);
   }
   # Short life cookie to negociate a session with the signaling server
   $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60, path => '/'});
