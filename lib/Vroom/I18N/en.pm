@@ -180,6 +180,11 @@ our %Lexicon = (
                                             "from the room). Warning: grating admin rights to someone is irrevocable, and he will " .
                                             "be able to change configuration parameters (including passwords).",
   "LOGOUT"                               => "Leave the room",
+  "LEAVE_THIS_ROOM"                      => "Leave the room",
+  "ARE_YOU_SURE_YOU_WANT_TO_LEAVE"       => "Are you sure you want to leave this room ?",
+  "YOU_CAN_WIPE_DATA_BEFORE_LEAVING"     => "You can wipe room data before you leave",
+  "WIPE_AND_QUIT"                        => "Wipe data and leave",
+  "QUIT"                                 => "Leave the room",
   "SET_YOUR_NAME_TO_CHAT"                => "You need to set your name to be able to chat",
   "SEND_MESSAGE"                         => "Send the message",
   "SAVE_HISTORY"                         => "Save history to a file",

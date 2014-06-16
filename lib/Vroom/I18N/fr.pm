@@ -202,6 +202,11 @@ our %Lexicon = (
                                                    "d'administration à quelqu'un est irrévocable, et il pourra modifier tous les " .
                                                    "paramètres (y compris les mots de passe).",
     "LOGOUT"                                    => "Quitter le salon",
+    "LEAVE_THIS_ROOM"                           => "Quitter le salon",
+    "ARE_YOU_SURE_YOU_WANT_TO_LEAVE"            => "Êtes-vous sûr de vouloir quitter le salon ?",
+    "YOU_CAN_WIPE_DATA_BEFORE_LEAVING"          => "Vous pouvez supprimer les données du salon avant de le quitter",
+    "WIPE_AND_QUIT"                             => "Supprimer les données et quitter",
+    "QUIT"                                      => "Quitter le salon",
     "SET_YOUR_NAME_TO_CHAT"                     => "Vous devez saisir votre nom avant de pouvoir tchater",
     "SEND_MESSAGE"                              => "Envoyer le message",
     "SAVE_HISTORY"                              => "Sauvegarder l'historique dans un fichier",
