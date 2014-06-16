@@ -47,6 +47,9 @@ our %Lexicon = (
     "PASSWORD_PROTECT_OFF_BY_s"                 => "%s a supprimé la protection par mot de passe",
     "OWNER_PASSWORD_CHANGED_BY_s"               => "%s a modifié le mot de passe de gestionnaire du salon",
     "OWNER_PASSWORD_REMOVED_BY_s"               => "%s a supprimé le mot de passe de gestionnaire du salon. Ce salon n'est donc plus persistant",
+    "DATA_WIPED"                                => "Les données ont été supprimées",
+    "ROOM_DATA_WIPED_BY_s"                      => "Les données du salon (historique du tchat, prise de notes) ont été supprimées par %s",
+    "NOT_ENABLED"                               => "Cette fonctionalité n'est pas activée",
     "OOOPS"                                     => "Oups",
     "GOODBY"                                    => "Au revoir",
     "THANKS_SEE_YOU_SOON"                       => "Merci et à bientôt",
@@ -94,6 +97,15 @@ our %Lexicon = (
     "SET_A_DISPLAY_NAME"                        => "Merci de saisir votre nom avant de pouvoir rejoindre le salon",
     "FORCE_DISPLAY_NAME"                        => "Les participants doivent saisir leur nom avant de rejoindre le salon",
     "NAME_WONT_BE_ASKED"                        => "La saisie du nom ne sera plus obligatoire pour rejoindre ce salon",
+    "WIPE_CHAT_AND_PAD"                         => "Supprimer l'historique du tchat et les prises de notes",
+    "WIPE_CHAT"                                 => "Supprimer l'historique du tchat",
+    "WIPE_ROOM_DATA"                            => "Suppression des données du salon",
+    "YOU_ARE_ABOUT_TO_WIPE_DATA"                => "Vous êtes sur le point de supprimer certaines données du salon",
+    "THIS_INCLUDE"                              => "Celà inclus",
+    "CHAT_HISTORY"                              => "L'historique du tchat",
+    "PAD_CONTENT"                               => "Le contenu du bloc note collaboratif",
+    "CONFIRM_WIPE"                              => "Supprimer",
+    "CANCEL"                                    => "Annuler",
     "CHANGE_COLOR"                              => "Changer de couleur",
     "CLICK_TO_CHAT"                             => "Accéder au tchat",
     "OPEN_ETHERPAD"                             => "Prise de notes collaborative",
@@ -181,6 +193,7 @@ our %Lexicon = (
                                                    "récupérer l'accès aux menus de configuration. Le salon sera également conservé " .
                                                    "bien plus longtemps sur le système",
     "HELP_ASK_FOR_NAME_BUTTON"                  => "Permet d'imposer la saisie du nom avant de pouvoir rejoindre le salon",
+    "HELP_WIPE_DATA_BUTTON"                     => "Supprime les données du salon (historique du tchat, prise de notes)",
     "HELP_LOGOUT_BUTTON"                        => "Ce bouton vous déconnectera du système",
     "HELP_PEER_ACTIONS_BUTTONS"                 => "Ce menu s'affiche en passant la souris au dessus d'une vignette vidéo. Il " .
                                                    "vous permet d'effectuer certaines actions qui ne concerneront que cette " .

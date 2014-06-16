@@ -507,7 +507,7 @@
                     </center>
                   </div>
                   <div class="col-md-10">
-                    <%=l 'HELP_WIPE_DATA' %>
+                    <%=l 'HELP_WIPE_DATA_BUTTON' %>
                   </div>
                 </div>
               </div>
