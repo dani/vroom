@@ -1265,7 +1265,7 @@ post '/action' => sub {
     }
     elsif ($ec->delete_pad($data->{etherpad_group} . '$' . $room) && $self->create_pad($room) && $self->create_etherpad_session($room)){
       $status = 'success';
-      $msg = $self->l('PAD_DELETED_NEW_CREATED');
+      $msg = '';
     }
     return $self->render(
       json => {
