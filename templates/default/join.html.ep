@@ -180,6 +180,23 @@
               </li>
               <li>
                 <center>
+                  <div class="navbar-form">
+                    <div class="btn-group" data-toggle="buttons">
+                      <%
+                        my $wipeTitle = ($etherpad) ? 'WIPE_CHAT_AND_PAD' : 'WIPE_CHAT';
+                      %>
+                      <button class="btn btn-default help" id="wipeData" data-toggle="tooltip" data-placement="bottom" title="<%=l $wipeTitle %>">
+                        <span class="glyphicon glyphicon-fire">
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </center>
+              </li>
+              <li class="divider">
+              </li>
+              <li>
+                <center>
                   <p><%=l 'NOTIFICATION_ON_JOIN' %></p>
                 </center>
                 <ul class="list-inline" id="emailNotificationList">
