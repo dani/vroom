@@ -181,11 +181,11 @@
               <li>
                 <center>
                   <div class="navbar-form">
-                    <div class="btn-group" data-toggle="buttons">
+                    <div class="btn-group">
                       <%
                         my $wipeTitle = ($etherpad) ? 'WIPE_CHAT_AND_PAD' : 'WIPE_CHAT';
                       %>
-                      <button class="btn btn-default help" id="wipeData" data-toggle="tooltip" data-placement="bottom" title="<%=l $wipeTitle %>">
+                      <button id="wipeDataButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l $wipeTitle %>">
                         <span class="glyphicon glyphicon-fire">
                         </span>
                       </button>
@@ -556,6 +556,41 @@
                 </span>
               </div>
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" role="dialog" id="wipeModal" aria-labelledby="wipeModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title"><%=l 'WIPE_ROOM_DATA' %></h4>
+          </div>
+          <div class="modal-body">
+            <p>
+              <%=l 'YOU_ARE_ABOUT_TO_WIPE_DATA' %>
+              <%=l 'THIS_INCLUDE' %>
+              <ul>
+                <li>
+                  <%=l 'CHAT_HISTORY' %>
+                </li>
+                <% if ($etherpad) { %>
+                <li>
+                  <%=l 'PAD_CONTENT' %>
+                </li>
+                <% } %>
+              </ul>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <div class="btn-group">
+              <button id="confirmWipeButton" class="btn btn-danger">
+                <%=l 'CONFIRM_WIPE' %>
+              </button>
+              <button class="btn btn-primary" data-dismiss="modal" data-target="#wipeModal">
+                <%=l 'CANCEL' %>
+              </button>
+            </div>
           </div>
         </div>
       </div>

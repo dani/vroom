@@ -72,7 +72,9 @@ var locale = {
   A_ROOM_ADMIN: '',
   A_PARTICIPANT: '',
   PASSWORDS_DO_NOT_MATCH: '',
-  WAIT_WITH_MUSIC: ''
+  WAIT_WITH_MUSIC: '',
+  DATA_WIPED: '',
+  ROOM_DATA_WIPED_BY_s: ''
 };
 
 // Localize the strings we need
@@ -713,6 +715,13 @@ function initVroom(room) {
     chatIndex++;
   }
 
+  // Wipe the history
+  function wipeChatHistory(){
+    $('#chatHistory').html('');
+    chatHistory = {};
+    chatIndex = 0;
+  }
+
   // Update the displayName of the peer
   // and its screen if any
   function updateDisplayName(id){
@@ -1205,6 +1214,37 @@ function initVroom(room) {
     else{
       getRoomInfo();
     }
+  });
+  // An owner has wiped data
+  webrtc.on('wipe_data', function(data){
+    if (data.roomType == 'screen' || peers[data.id].role != 'owner'){
+      return;
+    }
+    wipeChatHistory();
+    if (etherpad.enabled){
+      $.ajax({
+        data: {
+          action: 'padSession',
+          room: roomName,
+        },
+        error: function(data) {
+          $.notify(locale.ERROR_OCCURRED, 'error');
+        },
+        success: function(data) {
+          if (data.status == 'success'){
+            if (data.msg){
+              $.notify(data.msg, 'success');
+            }
+            loadEtherpadIframe();
+          }
+          else if (data.msg){
+            $.notify(data.msg, 'error');
+          }
+        }
+      });
+    }
+    var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
+    $.notify(sprintf(locale.ROOM_DATA_WIPED_BY_s, stringEscape(who)), 'warn');
   });
 
   // Handle the readyToCall event: join the room
@@ -1947,6 +1987,37 @@ function initVroom(room) {
   // Remove the active class on the help button
   $('#helpModal').on('hide.bs.modal',function(){
     $('#helpButton').removeClass('active');
+  });
+
+  // Display the wipe data modal
+  $('#wipeDataButton').click(function(){
+    $('#wipeModal').modal('show');
+  });
+  // Really wipe data
+  $('#confirmWipeButton').click(function(){
+    if (etherpad.enabled){
+      $.ajax({
+        data: {
+          action: 'wipeData',
+          room: roomName
+        },
+        error: function(data){
+          $.notify(locale.ERROR_OCCURRED, 'error');
+        },
+        success: function(data){
+          if (data.status && data.status == 'success'){
+            loadEtherpadIframe();
+          }
+          else if (data.msg){
+            $.notify(data.msg, 'error');
+          }
+        }
+      });
+    }
+    webrtc.sendToAll('wipe_data', {});
+    wipeChatHistory();
+    $('#wipeModal').modal('hide');
+    $.notify(locale.DATA_WIPED, 'success');
   });
 
   if (etherpad.enabled){

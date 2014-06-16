@@ -1253,6 +1253,47 @@ post '/action' => sub {
       }
     );
   }
+  # Wipe etherpad data
+  elsif ($action eq 'wipeData'){
+    my $status = 'error';
+    my $msg    = $self->l('ERROR_OCCURRED');
+    if ($self->session($room)->{role} ne 'owner'){
+      $msg = $self->l('NOT_ALLOWED');
+    }
+    elsif (!$ec){
+      $msg = 'NOT_ENABLED';
+    }
+    elsif ($ec->delete_pad($data->{etherpad_group} . '$' . $room) && $self->create_pad($room) && $self->create_etherpad_session($room)){
+      $status = 'success';
+      $msg = $self->l('PAD_DELETED_NEW_CREATED');
+    }
+    return $self->render(
+      json => {
+        msg    => $msg,
+        status => $status
+      }
+    );
+  }
+  elsif ($action eq 'padSession'){
+    my $status = 'error';
+    my $msg    = $self->l('ERROR_OCCURRED');
+    if ($self->session($room)->{role} !~ m/^owner|participant$/){
+      $msg = $self->l('NOT_ALLOWED');
+    }
+    elsif (!$ec){
+      $msg = 'NOT_ENABLED';
+    }
+    elsif ($self->create_etherpad_session($room)){
+      $status = 'success';
+      $msg = '';
+    }
+    return $self->render(
+      json => {
+        msg    => $msg,
+        status => $status
+      }
+    );
+  }
 };
 
 # use the templates defined in the config
