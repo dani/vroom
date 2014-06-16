@@ -498,6 +498,18 @@
                     <%=l 'HELP_ASK_FOR_NAME_BUTTON' %>
                   </div>
                 </div>
+                <div class="list-group-item row ownerEl">
+                  <div class="col-md-1 col-md-offset-1">
+                    <center>
+                      <div class="btn btn-default">
+                        <span class="glyphicon glyphicon-fire"></span>
+                      </div>
+                    </center>
+                  </div>
+                  <div class="col-md-10">
+                    <%=l 'HELP_WIPE_DATA' %>
+                  </div>
+                </div>
               </div>
               <div class="list-group-item row">
                 <div class="col-md-1">
