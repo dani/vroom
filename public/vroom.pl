@@ -181,7 +181,7 @@ helper logout => sub {
   my $self = shift;
   my ($room) = @_;
   # Logout from etherpad
-  if ($ec && $self->session($room)->{etherpadSessionId}){
+  if ($ec && $self->session($room) && $self->session($room)->{etherpadSessionId}){
     $ec->delete_session($self->session($room)->{etherpadSessionId});
   }
   $self->session( expires => 1 );
