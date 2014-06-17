@@ -18,7 +18,8 @@
         <a class="btn btn-default btn-lg btn-full" role="button" href="<%= $self->get_url('/password') . '/' . $room %>"><%=l 'AUTH_IF_OWNER' %></a>
         <% } elsif ($err eq 'ERROR_ROOM_s_DOESNT_EXIST'){ %>
         <button class="btn btn-default btn-lg btn-full" style="width: 100%" type="submit" form="createRoom"><%=l 'CREATE_THIS_ROOM' %></button>
-      <% } %>
+        <% } %>
+      </div>
     </div>
     <% if ($err eq 'ERROR_ROOM_s_DOESNT_EXIST'){ %>
     <form id="createRoom" action="<%= $self->get_url('/create') %>" method="post">
