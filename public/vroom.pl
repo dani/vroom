@@ -286,7 +286,7 @@ helper set_peer_role => sub {
   return undef if ($sth->rows > 0);
   $sth = eval { $self->db->prepare("UPDATE `participants` SET `peer_id`=?,`role`=? WHERE `participant`=? AND `id` IN (SELECT `id` FROM `rooms` WHERE `name`=?)") } || return undef;
   $sth->execute($id,$role,$name,$room) || return undef;
-  $self->app->log->info("User $id has now the $role role in room $name");
+  $self->app->log->info("User $name (peer id $id) has now the $role role in room $room");
   return 1;
 };
 
