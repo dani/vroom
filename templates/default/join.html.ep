@@ -36,7 +36,7 @@
             </button>
           </div>
           <% if ($etherpad eq 'true'){ %>
-          <div class="btn-group hidden-xs" data-toggle="buttons">
+          <div class="btn-group" data-toggle="buttons">
             <label class="btn btn-default help" id="etherpadLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OPEN_ETHERPAD' %>">
               <input type = "checkbox" id="etherpadButton">
                 <span class="glyphicon glyphicon-pencil">
@@ -869,7 +869,7 @@
       <audio id="mohPlayer" src="<%= $self->get_url('/') %>snd/moh/<%= $moh %>" loop></audio>
       <div id="view" class="view row-fluid">
         <div id="webRTCVideo" class="col-xs-12 col-sm-4">
-          <div class="col-xs-6 col-sm-12 col-lg-6 previewContainer" id="videoLocalContainer">
+          <div class="col-xs-3 col-sm-12 col-lg-6 previewContainer" id="videoLocalContainer">
             <video id="webRTCVideoLocal" class="webRTCVideo latencyUnknown" muted oncontextmenu="return false;">
             </video>
             <div id="localVolume" class="volumeBar">
@@ -878,7 +878,7 @@
             </div>
           </div>
         </div>
-        <div id="mainView" class="col-sm-8 hidden-xs">
+        <div id="mainView" class="col-xs-12 col-sm-8">
           <% if ($etherpad eq 'true'){ %>
           <div id="etherpadContainer"></div>
           <% } %>

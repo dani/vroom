@@ -513,7 +513,7 @@ function initVroom(room) {
     playSound('join.mp3');
     // The div continer of this new video
     // will contain the video preview plus all other info like displayName, overlay and volume bar
-    var div = $('<div></div>').addClass('col-xs-6 col-sm-12 col-lg-6 previewContainer').append(video).appendTo('#webRTCVideo');
+    var div = $('<div></div>').addClass('col-xs-3 col-sm-12 col-lg-6 previewContainer').append(video).appendTo('#webRTCVideo');
     var id;
     // Peer isn't defined ? it's our own local screen
     if (!peer){

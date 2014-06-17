@@ -39,8 +39,15 @@
   margin-bottom: 5px;
   display: none;
 }
-.previewContainer:nth-child(2n+1){
-  clear: left;
+@media screen and (min-width: 768px) {
+  .previewContainer:nth-child(2n+1){
+    clear: left;
+  }
+}
+@media screen and (max-width: 767px) {
+  .previewContainer:nth-child(4n+1){
+    clear: left;
+  }
 }
 .volumeBar {
   position: absolute;
