@@ -5,10 +5,8 @@
   width: 100%;
   height: auto;
 }
-@media screen and (min-width: 768px) {
-  #webRTCVideo .selected {
-    opacity: 0.7;
-  }
+#webRTCVideo .selected {
+  opacity: 0.7;
 }
 .latencyUnknown{
   box-shadow: 0px 0px 2pt 2pt grey;
