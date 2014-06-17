@@ -257,6 +257,9 @@
   text-align: justify;
   text-justify: inter-word;
 }
+.btn-full {
+  width: 100% !important;
+}
 html,
 body {
   height: 100%;
