@@ -384,7 +384,7 @@ helper delete_room => sub {
     $ec->delete_group($data->{etherpad_group});
   }
   foreach my $table (qw(participants notifications invitations rooms)){
-    $sth = eval {
+    my $sth = eval {
         $self->db->prepare("DELETE FROM `$table` WHERE `id`=?;");
     } || return undef;
     $sth->execute($data->{id}) || return undef;
@@ -713,14 +713,9 @@ get 'feedback_thanks' => 'feedback_thanks';
 get '/goodby/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
-  if (!$self->get_room($room)){
-    return $self->render('error',
-      err  => 'ERROR_ROOM_s_DOESNT_EXIST',
-      msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
-      room => $room
-    );
+  if ($self->get_room($room)){
+    $self->remove_participant($room,$self->session('name'));
   }
-  $self->remove_participant($room,$self->session('name'));
   $self->logout($room);
 } => 'goodby';
 
@@ -1309,6 +1304,24 @@ post '/action' => sub {
     elsif ($self->create_etherpad_session($room)){
       $status = 'success';
       $msg = '';
+    }
+    return $self->render(
+      json => {
+        msg    => $msg,
+        status => $status
+      }
+    );
+  }
+  # delete the room
+  elsif ($action eq 'deleteRoom'){
+    my $status = 'error';
+    my $msg    = $self->l('ERROR_OCCURRED');
+    if ($self->session($room)->{role} ne 'owner'){
+      $msg = $self->l('NOT_ALLOWED');
+    }
+    elsif ($self->delete_room($room)){
+      $msg = $self->l('ROOM_DELETED');
+      $status = 'success';
     }
     return $self->render(
       json => {
