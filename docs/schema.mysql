@@ -24,6 +24,7 @@ CREATE TABLE `participants` (
   `participant` varchar(60) NOT NULL,
   `peer_id` varchar(40) DEFAULT NULL,
   `role` varchar(20) DEFAULT 'participant',
+  `activity_timestamp` int(20) DEFAULT NULL,
   PRIMARY KEY (`id`,`participant`)
 ) DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS `notifications`;

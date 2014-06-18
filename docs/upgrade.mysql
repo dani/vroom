@@ -22,3 +22,4 @@ CREATE TABLE IF NOT EXISTS `invitations` (
   PRIMARY KEY (`token`)
 ) DEFAULT CHARSET=utf8;
 ALTER TABLE `rooms` ADD COLUMN `etherpad_group` varchar(40) DEFAULT NULL AFTER `owner_password`;
+ALTER TABLE `participants` ADD COLUMN `activity_timestamp` int(20) DEFAULT NULL AFTER `role`;
