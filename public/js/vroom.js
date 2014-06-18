@@ -504,7 +504,7 @@ function initVroom(room) {
 
   // Logout
   function hangupCall(){
-    webrtc.connection.disconnect();
+    webrtc.leaveRoom();
   }
 
   // Handle a new video (either another peer, or a screen
