@@ -245,8 +245,8 @@ helper add_participant => sub {
   my $self = shift;
   my ($name,$participant) = @_;
   my $room = $self->get_room($name) || return undef;
-  my $sth = eval { $self->db->prepare("INSERT IGNORE INTO `participants` (`id`,`participant`) VALUES (?,?);") } || return undef;
-  $sth->execute($room->{id},$participant) || return undef;
+  my $sth = eval { $self->db->prepare("INSERT IGNORE INTO `participants` (`id`,`participant`,`activity_timestamp`) VALUES (?,?,?);") } || return undef;
+  $sth->execute($room->{id},$participant,time()) || return undef;
   $self->app->log->info($self->session('name') . " joined the room $name");
   return 1;
 };
