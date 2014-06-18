@@ -629,6 +629,17 @@
             <p>
               <%=l 'YOU_ARE_ABOUT_TO_TERMINATE_ROOM' %>
             </p>
+            <ul>
+              <li>
+                <%=l 'ALL_PEERS_WILL_HANGUP' %>
+              </li>
+              <li>
+                <%=l 'ALL_DATA_WILL_BE_WIPED' %>
+              </li>
+              <li>
+                <%=l 'ROOM_WILL_BE_DELETED' %>
+              </li>
+            </ul>
           </div>
           <div class="modal-footer">
             <button id="confirmTerminateButton" class="btn btn-danger">
