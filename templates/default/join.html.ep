@@ -799,7 +799,12 @@
               </div>
               <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-8">
-                  <button id="setOwnerPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUBMIT' %>"><%=l 'SUBMIT' %></button>
+                  <button id="setOwnerPassButton" type="submit" class="btn btn-primary help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUBMIT' %>">
+                    <%=l 'SUBMIT' %>
+                  </button>
+                  <button class="btn btn-default help" data-dismiss="modal" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CANCEL' %>">
+                    <%=l 'CANCEL' %>
+                  </button>
                 </div>
               </div>
             </form>
@@ -837,7 +842,12 @@
               </div>
               <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-8">
-                  <button id="setJoinPassButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUBMIT' %>"><%=l 'SUBMIT' %></button>
+                  <button id="setJoinPassButton" type="submit" class="btn btn-default btn-primary help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUBMIT' %>">
+                    <%=l 'SUBMIT' %>
+                  </button>
+                  <button class="btn btn-default help" data-dismiss="modal" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CANCEL' %>">
+                    <%=l 'CANCEL' %>
+                  </button>
                 </div>
               </div>
             </form>
