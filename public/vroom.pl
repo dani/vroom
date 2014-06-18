@@ -397,9 +397,12 @@ helper delete_room => sub {
 helper ping_room => sub {
   my $self = shift;
   my ($name) = @_;
-  return undef unless ( %{ $self->get_room($name) });
-  my $sth = eval { $self->db->prepare("UPDATE `rooms` SET `activity_timestamp`=? WHERE `name`=?;") } || return undef;
-  $sth->execute(time(),$name) || return undef;
+  my $data = $self->get_room($name);
+  return undef unless ($data);
+  my $sth = eval { $self->db->prepare("UPDATE `rooms` SET `activity_timestamp`=? WHERE `id`=?;") } || return undef;
+  $sth->execute(time(),$data->{id}) || return undef;
+  $sth = eval { $self->db->prepare("UPDATE `participants` SET `activity_timestamp`=? WHERE `id`=? AND `participant`=?;") } || return undef;
+  $sth->execute(time(),$data->{id},$self->session('name')) || return undef;
   $self->app->log->debug($self->session('name') . " pinged the room $name");
   return 1;
 };
