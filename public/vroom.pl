@@ -369,6 +369,29 @@ helper delete_rooms => sub {
   return 1;
 };
 
+# delete just a specific room
+helper delete_room => sub {
+  my $self = shift;
+  my ($room) = @_;
+  $self->app->log->debug("Removing room $room");
+  my $data = $self->get_room($room);
+  if (!$data){
+    $self->app->log->debug("Error: room $room doesn't exist");
+    return undef;
+  }
+  if ($ec && $data->{etherpad_group}){
+    $ec->delete_pad($data->{etherpad_group} . '$' . $room);
+    $ec->delete_group($data->{etherpad_group});
+  }
+  foreach my $table (qw(participants notifications invitations rooms)){
+    $sth = eval {
+        $self->db->prepare("DELETE FROM `$table` WHERE `id`=?;");
+    } || return undef;
+    $sth->execute($data->{id}) || return undef;
+  }
+  return 1;
+};
+
 # Just update the activity timestamp
 # so we can detect unused rooms
 helper ping_room => sub {
