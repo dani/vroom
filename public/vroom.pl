@@ -329,6 +329,15 @@ helper has_joined => sub {
   return $ret;
 };
 
+# Purge disconnected participants from the DB
+helper delete_participants => sub {
+  my $self = shift;
+  $self->app->log->debug('Removing inactive participants from the database');
+  my $sth = eval { $self->db->prepare("DELETE FROM participants WHERE (`activity_timestamp` < 7200 OR `activity_timestamp` IS NULL);") } || return undef;
+  $sth->execute() || return undef;
+  return 1;
+};
+
 # Purge unused rooms
 helper delete_rooms => sub {
   my $self = shift;
@@ -1045,6 +1054,10 @@ post '/action' => sub {
     # And same for expired invitation links
     if ((int (rand 100)) <= 10){
       $self->delete_invitations;
+    }
+    # And also remove inactive participants
+    if ((int (rand 100)) <= 10){
+      $self->delete_participants;
     }
     if ($res){
       $status = 'success';
