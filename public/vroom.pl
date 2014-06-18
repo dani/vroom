@@ -710,14 +710,14 @@ post '/feedback' => sub {
 get 'feedback_thanks' => 'feedback_thanks';
 
 # Route for the goodbye page, displayed when someone leaves a room
-get '/goodby/(:room)' => sub {
+get '/goodbye/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
   if ($self->get_room($room)){
     $self->remove_participant($room,$self->session('name'));
   }
   $self->logout($room);
-} => 'goodby';
+} => 'goodbye';
 
 # Route for the kicked page
 # Should be merged with the goodby route

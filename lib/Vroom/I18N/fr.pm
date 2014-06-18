@@ -51,7 +51,7 @@ our %Lexicon = (
     "ROOM_DATA_WIPED_BY_s"                      => "Les données du salon (historique du tchat, prise de notes) ont été supprimées par %s",
     "NOT_ENABLED"                               => "Cette fonctionalité n'est pas activée",
     "OOOPS"                                     => "Oups",
-    "GOODBY"                                    => "Au revoir",
+    "GOODBYE"                                   => "Au revoir",
     "THANKS_SEE_YOU_SOON"                       => "Merci et à bientôt",
     "THANKS_FOR_USING"                          => "Nous vous remmercions de votre confiance, et espérons que " .
                                                    "vous avez passé une agréable réunion.",

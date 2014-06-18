@@ -1,4 +1,4 @@
-% title $self->l('GOODBY');
+% title $self->l('GOODBYE');
 %= include 'header'
 %= include 'public_toolbar'
 <div class="container-fluid">
