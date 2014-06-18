@@ -189,6 +189,10 @@
                         <span class="glyphicon glyphicon-fire">
                         </span>
                       </button>
+                      <button id="terminateRoomButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'TERMINATE_ROOM' %>">
+                        <span class="glyphicon glyphicon-trash">
+                        </span>
+                      </button>
                     </div>
                   </div>
                 </center>
@@ -604,6 +608,33 @@
               <%=l 'CONFIRM_WIPE' %>
             </button>
             <button class="btn btn-default" data-dismiss="modal" data-target="#wipeModal">
+              <%=l 'CANCEL' %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" role="dialog" id="terminateModal" aria-labelledby="terminateModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title">
+              <%=l 'TERMINATE_ROOM' %>
+            </h4>
+          </div>
+          <div class="modal-body">
+            <p>
+              <%=l 'YOU_ARE_ABOUT_TO_TERMINATE_ROOM' %>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button id="confirmTerminateButton" class="btn btn-danger">
+              <%=l 'CONFIRM_TERMINATE' %>
+            </button>
+            <button class="btn btn-default" data-dismiss="modal" data-target="#terminateModal">
               <%=l 'CANCEL' %>
             </button>
           </div>
