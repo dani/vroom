@@ -514,6 +514,7 @@ helper add_notification => sub {
   return undef unless ($data);
   my $sth = eval { $self->db->prepare("INSERT INTO `notifications` (`id`,`email`) VALUES (?,?)") } || return undef;
   $sth->execute($data->{id},$email) || return undef;
+  $self->app->log->debug($self->session('name') . " has added $email to the list of email which will be notified when someone joins room $room");
   return 1;
 };
 
@@ -539,6 +540,7 @@ helper remove_notification => sub {
   return undef unless ($data);
   my $sth = eval { $self->db->prepare("DELETE FROM `notifications` WHERE `id`=? AND `email`=?") } || return undef;
   $sth->execute($data->{id},$email) || return undef;
+  $self->app->log->debug($self->session('name') . " has removed $email from the list of email which are notified when someone joins room $room");
   return 1;
 };
 
@@ -551,6 +553,7 @@ helper ask_for_name => sub {
   return undef unless ($data);
   my $sth = eval { $self->db->prepare("UPDATE `rooms` SET `ask_for_name`=? WHERE `name`=?") } || return undef;
   $sth->execute($set,$room) || return undef;
+  $self->app->log->debug($self->session('name') . " has configured room $room to ask for a name before joining it");
   return 1;
 };
 
@@ -571,6 +574,7 @@ helper add_invitation => sub {
   return undef unless ($data);
   my $sth = eval { $self->db->prepare("INSERT INTO `invitations` (`id`,`from`,`token`,`email`,`timestamp`) VALUES (?,?,?,?,?)") } || return undef;
   $sth->execute($data->{id},$from,$id,$email,time()) || return undef;
+  $self->app->log->debug($self->session('name') . " has invited $email to join room $room");
   return $id;
 };
 
@@ -630,6 +634,7 @@ helper check_invite_token => sub {
   my ($room,$token) = @_;
   # Expire invitations before checking if it's valid
   $self->delete_invitations;
+  $self->app->log->debug("Checking if invitation with token $token is valid for room $room");
   my $ret = 0;
   my $data = $self->get_room($room);
   if (!$data || !$token){
@@ -637,7 +642,13 @@ helper check_invite_token => sub {
   }
   my $sth = eval { $self->db->prepare("SELECT * FROM `invitations` WHERE id=? AND token=? AND (`response` IS NULL OR `response`='later');") } || return undef;
   $sth->execute($data->{id},$token) || return undef;
-  $ret = 1 if ($sth->rows == 1);
+  if ($sth->rows == 1){
+    $ret = 1;
+    $self->app->log->debug("Invitation is valid");
+  }
+  else{
+    $self->app->log->debug("Invitation is invalid");
+  }
   return $ret;
 };
 
