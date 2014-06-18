@@ -1019,6 +1019,14 @@ function initVroom(room) {
       }, 2000);
     }
   });
+  // An owner is terminating the call, obey and leave the room now
+  webrtc.on('terminate_room', function(data){
+    if (peers[data.id].role != 'owner' || data.roomType == 'screen'){
+      return;
+    }
+    hangupCall;
+    window.location.assign(rootUrl + 'goodbye/' + roomName);
+  });
 
   // Handle volume changes from our own mic
   webrtc.on('volumeChange', function (volume, treshold){
@@ -1947,12 +1955,12 @@ function initVroom(room) {
   });
   $('#confirmQuitButton').click(function() {
     hangupCall;
-    window.location.assign(rootUrl + 'goodby/' + roomName);
+    window.location.assign(rootUrl + 'goodbye/' + roomName);
   });
   $('#confirmWipeAndQuitButton').click(function(){
     wipeRoomData();
     hangupCall;
-    window.location.assign(rootUrl + 'goodby/' + roomName);
+    window.location.assign(rootUrl + 'goodbye/' + roomName);
   });
   window.onunload = window.onbeforeunload = hangupCall;
 
@@ -2042,6 +2050,34 @@ function initVroom(room) {
   // Really wipe data
   $('#confirmWipeButton').click(function(){
     wipeRoomData();
+  });
+
+  // Display terminate room modal
+  $('#terminateRoomButton').click(function(){
+    $('#terminateModal').modal('show');
+  });
+  // Really terminate the room now
+  $('#confirmTerminateButton').click(function(){
+    // Ask all the peers to quit now
+    webrtc.sendToAll('terminate_room', {});
+    wipeRoomData();
+    $.ajax({
+      data: {
+        action: 'deleteRoom',
+        room: roomName
+      },
+      async: false,
+      error: function(data) {
+        $.notify(locale.ERROR_OCCURRED, 'error');
+      },
+      success: function(data) {
+        if (data.status == 'success' && data.msg && data.msg != ''){
+          $.notify(data.msg, 'info');
+        }
+      }
+    });
+    hangupCall;
+    window.location.assign(rootUrl + 'goodbye/' + roomName);
   });
 
   if (etherpad.enabled){
