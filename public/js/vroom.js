@@ -2025,6 +2025,11 @@ function initVroom(room) {
     }
   });
 
+  // Empty password fields on modal dismiss
+  $('#joinPassModal,#persistentModal').on('hide.bs.modal',function(){
+    $(this).find(':input').val('');
+  });
+
   // Remove the active class on the help button
   $('#helpModal').on('hide.bs.modal',function(){
     $('#helpButton').removeClass('active');
