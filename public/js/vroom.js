@@ -868,7 +868,8 @@ function initVroom(room) {
       showLineNumbers: false,
       height: maxHeight()-7 + 'px',
       border: 2,
-      userColor: peers.local.color
+      userColor: peers.local.color,
+      userName: peers.local.displayName
     });
   }
 
@@ -1455,6 +1456,16 @@ function initVroom(room) {
     peers.local.displayName = name;
     updateDisplayName('local');
     webrtc.sendDirectlyToAll('vroom', 'setDisplayName', name);
+    lastNameChange = +new Date;
+    // Should we reload etherpad iFrame with this new name ?
+    if (etherpad.enabled){
+      // Wait ~3 sec and reload etherpad
+      setTimeout(function(){
+        if (lastNameChange && lastNameChange + 3000 < +new Date){
+          loadEtherpadIframe();
+        }
+      }, 3100);
+    }
   });
   // This is the displayName input before joining the room
   $('#displayNamePre').on('input', function() {
