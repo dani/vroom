@@ -1958,11 +1958,23 @@ function initVroom(room) {
   // Handle hangup/close window
   $('#logoutButton').click(function(){
     $('#quitModal').modal('show');
+    if (!$('#muteMicButton').is(':checked')){
+      muteMic();
+    }
+    if (!$('#suspendCamButton').is(':checked')){
+      suspendCam();
+    }
   });
   // Remove the active class on the logout button if
   // the modal is closed
   $('#quitModal').on('hide.bs.modal',function(){
     $('#logoutButton').removeClass('active');
+    if (!$('#muteMicButton').is(':checked')){
+      unmuteMic();
+    }
+    if (!$('#suspendCamButton').is(':checked')){
+      resumeCam();
+    }
   });
   $('#confirmQuitButton').click(function() {
     hangupCall;
