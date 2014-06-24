@@ -37,15 +37,21 @@ function safeCb(cb) {
     }
 }
 
-function checkRoom(room,token,user) {
-   var q = "SELECT participant FROM participants WHERE participant='" + user + "' AND id IN (SELECT id FROM rooms WHERE name='" + room + "' AND token='" + token + "');";
+function checkRoom(room,token,user,cb) {
+   var q = "SELECT `participant` FROM `participants` WHERE `participant`=" + sql.escape(user) + " AND `id` IN (SELECT `id` FROM `rooms` WHERE `name`=" + sql.escape(room) + " AND `token`=" + sql.escape(token) + ");";
    console.log('Checking if ' + user + ' is allowed to join room ' + room + ' using token ' + token);
    sql.query(q, function(err, rows, fields) {
-      if (err) throw err;
+      if (err){
+        throw err;
+      }
       // No result ? This user hasn't joined this room through our frontend
-      if (rows.length < 1) return false;
+      if (rows.length > 0){
+        cb(true);
+      }
+      else{
+        cb(false);
+      }
    });
-   return true;
 }
 
 io.configure(function(){
@@ -58,7 +64,7 @@ io.configure(function(){
       var session = data.cookie['vroomsession'];
       if (typeof session != 'string'){
         console.log('Cookie vroomsession not found, access unauthorized');
-        return ('error', false);
+        accept('vroomsession cookie not found', false);
       }
       // vroomsession is base64(user:room:token) so let's decode this !
       session = new Buffer(session, encoding='base64');
@@ -69,17 +75,22 @@ io.configure(function(){
       // sanitize user input, we don't want to pass random junk to MySQL do we ?
       if (!user.match(/^[\w\@\.\-]{1,40}$/i) || !room.match(/^[\w\-]{1,50}$/) || !token.match(/^[a-zA-Z0-9]{50}$/)){
         console.log('Forbidden chars found in either participant session, room name or token, sorry, cannot allow this');
-        return ('error', false);
+        accept('Forbidden characters found', false);
       }
       // Ok, now check if this user has joined the room (with the correct token) through vroom frontend
-      if (checkRoom(room,token,user) == false){
-        console.log('Sorry, but ' + participant + ' is not allowed to join room ' + name);
-        return ('error', false);
-      }
-      return accept(null, true);
+      checkRoom(room,token,user, function(res){
+        if (res){
+          accept(null, true);
+        }
+        else{
+          console.log('User' + user + ' is not allowed to join room ' + room + ' with token ' + tohen);
+          accept('not allowed', false);
+        }
+      });
     }
-    console.log('No cookies were found, access unauthorized');
-    return accept('error', false);
+    else{
+      accept('No cookie found', false);
+    }
   });
 });
 
