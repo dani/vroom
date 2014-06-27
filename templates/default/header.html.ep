@@ -3,6 +3,7 @@
 <head>
   <title><%= $title %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content=" <%=l 'VROOM_DESC' %>" />
   <%
     foreach my $css (qw(bootstrap.min.css vroom.css)){
   %>

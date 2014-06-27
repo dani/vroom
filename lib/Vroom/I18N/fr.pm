@@ -6,6 +6,7 @@ use utf8;
 our %Lexicon = (
     _AUTO                                       => 1,
     "WELCOME"                                   => "Bienvenue sur VROOM !!",
+    "VROOM_DESC"                                => "VROOM est une solution simple de vidéo conférence",
     "VROOM_IS_FREE_SOFTWARE"                    => "VROOM est un logiciel libre diffusé sous licence MIT",
     "POWERED_BY"                                => "Fièrement propulsé par",
     "ERROR_NAME_INVALID"                        => "Ce nom n'est pas valide",
