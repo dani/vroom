@@ -1461,7 +1461,7 @@ function initVroom(room) {
     if (etherpad.enabled){
       // Wait ~3 sec and reload etherpad
       setTimeout(function(){
-        if (lastNameChange && lastNameChange + 3000 < +new Date){
+        if (lastNameChange && lastNameChange + 3000 < +new Date && $('#etherpadContainer').html() != ''){
           loadEtherpadIframe();
         }
       }, 3100);
