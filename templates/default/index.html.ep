@@ -10,7 +10,7 @@
         <%=l 'CREATE_ROOM' %>
       </center>
     </h2>
-    <form id="createRoom" class="form-inline" action="<%= $self->get_url('/create') %>" method="post">
+    <form id="createRoom" class="form-horizontal" action="<%= $self->get_url('/create') %>" method="post">
       <fieldset>
         <div class="input-group input-group-lg">
           <span class="input-group-addon hidden-xs">
