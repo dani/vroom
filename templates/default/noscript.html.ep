@@ -1,9 +1,9 @@
   <noscript>
     <div class="row">
       <div class="col-md-6 col-md-offset-3 alert alert-danger">
-        <center>
+        <p class="text-center">
           <%=l 'JS_REQUIRED' %>
-        </center>
+        </p>
       </div>
     </div>
   </noscript>

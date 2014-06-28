@@ -5,10 +5,8 @@
 <div class="container-fluid">
 %= include 'noscript'
   <div class="well publicForm">
-    <h1>
-      <center>
-        <%=l 'CREATE_ROOM' %>
-      </center>
+    <h1 class="text-center">
+      <%=l 'CREATE_ROOM' %>
     </h1>
     <form id="createRoom" class="form-horizontal" action="<%= $self->get_url('/create') %>" method="post">
       <fieldset>

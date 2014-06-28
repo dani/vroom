@@ -4,10 +4,14 @@
     <nav id="toolbar" class="navbar navbar-default" role="toolbar">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#roomToolBar">
-          <span class="sr-only"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
+          <span class="sr-only">
+          </span>
+          <span class="icon-bar">
+          </span>
+          <span class="icon-bar">
+          </span>
+          <span class="icon-bar">
+          </span>
         </button>
       </div>
       <input id="roomName" name="roomName" type="hidden" value="<%= $room %>"/>
@@ -75,21 +79,26 @@
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="inviteMenuButton" id="inviteMenu">
-              <li>
-                <center>
-                  <p><%=l 'TO_INVITE_SHARE_THIS_URL' %></p>
-                  <% my $url = $self->url_for('/')->to_abs;
-                     $url .= ($url =~ m/\/$/) ? '':'/';
-                  %>
-                  <h4><a href="javascript:void(0)" onclick="inviteUrlPopup();"><%= $url . $room %></a></h4>
-                </center>
+              <li class="text-center">
+                <p>
+                  <%=l 'TO_INVITE_SHARE_THIS_URL' %>
+                </p>
+                <% my $url = $self->url_for('/')->to_abs;
+                   $url .= ($url =~ m/\/$/) ? '':'/';
+                %>
+                <h4>
+                  <a href="javascript:void(0)" onclick="inviteUrlPopup();">
+                    <%= $url . $room %>
+                  </a>
+                </h4>
               </li>
-              <li class="divider"></li>
+              <li class="divider">
+              </li>
               <li>
                 <form class="navbar-form" id="inviteEmail" action="" method="post">
-                  <center>
-                    <p><%=l 'YOU_CAN_INVITE_BY_MAIL' %></p>
-                  </center>
+                  <p class="text-center">
+                    <%=l 'YOU_CAN_INVITE_BY_MAIL' %>
+                  </p>
                   <div class="input-group">
                     <input type="email" id="recipient" class="form-control help" placeholder="<%=l 'EMAIL_PLACEHOLDER' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SEND_INVITE' %>"/>
                     <span class="input-group-btn">
@@ -112,97 +121,95 @@
           </div>
           <div class="btn-group dropdown ownerEl threePeersEl">
             <button class="btn btn-default dropdown-toggle help" type="button" id="groupActionsButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'GROUP_ACTIONS' %>">
-              <span class="glyphicon glyphicon-flag"></span>
-              <span class="caret"></span>
+              <span class="glyphicon glyphicon-flag">
+              </span>
+              <span class="caret">
+              </span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="groupActionsButton" id="confMenu">
-              <li>
-                <center>
-                  <div class="navbar-form">
-                    <div class="btn-group" data-toggle="buttons">
-                      <button type="button" class="btn btn-default help" id="muteEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_EVERYONE' %>">
-                        <span class="glyphicon glyphicon-volume-off">
-                        </span>
-                      </button>
-                      <button type="button" class="btn btn-default help" id="unmuteEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'UNMUTE_EVERYONE' %>">
-                        <span class="glyphicon glyphicon-volume-up">
-                        </span>
-                      </buton>
-                      <button type="button" class="btn btn-default help" id="suspendEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUSPEND_EVERYONE' %>">
-                        <span class="glyphicon glyphicon-eye-close">
-                        </span>
-                      </button>
-                      <button type="button" class="btn btn-default help" id="resumeEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'RESUME_EVERYONE' %>">
-                        <span class="glyphicon glyphicon-eye-open">
-                        </span>
-                      </button>
-                    </div>
+              <li class="text-center">
+                <div class="navbar-form">
+                  <div class="btn-group" data-toggle="buttons">
+                    <button type="button" class="btn btn-default help" id="muteEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_EVERYONE' %>">
+                      <span class="glyphicon glyphicon-volume-off">
+                      </span>
+                    </button>
+                    <button type="button" class="btn btn-default help" id="unmuteEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'UNMUTE_EVERYONE' %>">
+                      <span class="glyphicon glyphicon-volume-up">
+                      </span>
+                    </buton>
+                    <button type="button" class="btn btn-default help" id="suspendEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUSPEND_EVERYONE' %>">
+                      <span class="glyphicon glyphicon-eye-close">
+                      </span>
+                    </button>
+                    <button type="button" class="btn btn-default help" id="resumeEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'RESUME_EVERYONE' %>">
+                      <span class="glyphicon glyphicon-eye-open">
+                      </span>
+                    </button>
                   </div>
-                </center>
+                </div>
               </li>
             </ul>
           </div>
           <div class="btn-group dropdown ownerEl">
             <button class="btn btn-default dropdown-toggle help" type="button" id="confMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
-              <span class="glyphicon glyphicon-wrench"></span>
-              <span class="caret"></span>
+              <span class="glyphicon glyphicon-wrench">
+              </span>
+              <span class="caret">
+              </span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="confMenuButton" id="confMenu">
-              <li>
-                <center>
-                  <div class="navbar-form">
-                    <div class="btn-group" data-toggle="buttons">
-                      <label class="btn btn-default help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
-                        <input type="checkbox" id="lockButton">
-                        <span class="glyphicon glyphicon-ban-circle">
-                        </span>
-                      </label>
-                      <label class="btn btn-default help" id="joinPassLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>">
-                        <input type="checkbox" id="joinPassButton">
-                        <span class="glyphicon glyphicon-lock">
-                        </span>
-                      </label>
-                      <label class="btn btn-default help" id="persistentLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MAKE_THIS_ROOM_PERSISTENT' %>">
-                        <input type="checkbox" id="persistentButton">
-                        <span class="glyphicon glyphicon-pushpin">
-                        </span>
-                      </label>
-                      <label class="btn btn-default help" id="askForNameLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'FORCE_DISPLAY_NAME' %>">
-                        <input type="checkbox" id="askForNameButton">
-                        <span class="glyphicon glyphicon-leaf">
-                        </span>
-                      </label>
-                    </div>
+              <li class="text-center">
+                <div class="navbar-form">
+                  <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
+                      <input type="checkbox" id="lockButton">
+                      <span class="glyphicon glyphicon-ban-circle">
+                      </span>
+                    </label>
+                    <label class="btn btn-default help" id="joinPassLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>">
+                      <input type="checkbox" id="joinPassButton">
+                      <span class="glyphicon glyphicon-lock">
+                      </span>
+                    </label>
+                    <label class="btn btn-default help" id="persistentLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MAKE_THIS_ROOM_PERSISTENT' %>">
+                      <input type="checkbox" id="persistentButton">
+                      <span class="glyphicon glyphicon-pushpin">
+                      </span>
+                    </label>
+                    <label class="btn btn-default help" id="askForNameLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'FORCE_DISPLAY_NAME' %>">
+                      <input type="checkbox" id="askForNameButton">
+                      <span class="glyphicon glyphicon-leaf">
+                      </span>
+                    </label>
                   </div>
-                </center>
+                </div>
+              </li>
+              <li class="divider">
+              </li>
+              <li class="text-center">
+                <div class="navbar-form">
+                  <div class="btn-group">
+                    <%
+                      my $wipeTitle = ($etherpad) ? 'WIPE_CHAT_AND_PAD' : 'WIPE_CHAT';
+                    %>
+                    <button id="wipeDataButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l $wipeTitle %>">
+                      <span class="glyphicon glyphicon-fire">
+                      </span>
+                    </button>
+                    <button id="terminateRoomButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'TERMINATE_ROOM' %>">
+                      <span class="glyphicon glyphicon-trash">
+                      </span>
+                    </button>
+                  </div>
+                </div>
               </li>
               <li class="divider">
               </li>
               <li>
-                <center>
-                  <div class="navbar-form">
-                    <div class="btn-group">
-                      <%
-                        my $wipeTitle = ($etherpad) ? 'WIPE_CHAT_AND_PAD' : 'WIPE_CHAT';
-                      %>
-                      <button id="wipeDataButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l $wipeTitle %>">
-                        <span class="glyphicon glyphicon-fire">
-                        </span>
-                      </button>
-                      <button id="terminateRoomButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'TERMINATE_ROOM' %>">
-                        <span class="glyphicon glyphicon-trash">
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                </center>
-              </li>
-              <li class="divider">
-              </li>
-              <li>
-                <center>
-                  <p><%=l 'NOTIFICATION_ON_JOIN' %></p>
-                </center>
+                <p class="text-center">
+                  <%=l 'NOTIFICATION_ON_JOIN' %>
+                </p>
                 <ul class="list-inline" id="emailNotificationList">
                 </ul>
                 <form class="navbar-form" id="newEmailNotificationForm">
@@ -222,15 +229,17 @@
         </div>
         <div class="btn-group navbar-form navbar-left">
           <button class="btn btn-default dropdown-toggle help unauthEl" type="button" id="authMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>">
-            <span class="glyphicon glyphicon-log-in"></span>
-            <span class="caret"></span>
+            <span class="glyphicon glyphicon-log-in">
+            </span>
+            <span class="caret">
+            </span>
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="authMenuButton" id="authMenu">
             <li>
               <form class="navbar-form" id="authForm">
-                <center>
-                  <p><%=l 'AUTH_TO_MANAGE_THE_ROOM' %></p>
-                </center>
+                <p class="text-center">
+                  <%=l 'AUTH_TO_MANAGE_THE_ROOM' %>
+                </p>
                 <div class="input-group">
                   <input type="password" id="authPass" class="form-control help" placeholder="<%=l 'PASSWORD' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>"/>
                   <span class="input-group-btn">
@@ -250,7 +259,8 @@
               <span class="glyphicon glyphicon-question-sign">
               </span>
             </button>
-            <div id="timeCounter" class="btn btn-default disabled"></div>
+            <div id="timeCounter" class="btn btn-default disabled">
+            </div>
             <button class="btn btn-default help" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
               <span class="glyphicon glyphicon-log-out">
               </span>
@@ -263,64 +273,62 @@
      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title"><%=l 'HELP' %></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title">
+              <%=l 'HELP' %>
+            </h4>
           </div>
           <div class="modal-body">
             <div class="list-group">
               <div class="list-group-item row">
-                <div class="col-md-3">
-                  <center>
-                    <input type="text" class="form-control" placeholder="<%=l 'YOUR_NAME' %>">
-                  </center>
+                <div class="col-md-3 text-center">
+                  <input type="text" class="form-control" placeholder="<%=l 'YOUR_NAME' %>">
                 </div>
                 <div class="col-md-9">
                   <%=l 'HELP_SET_DISPLAY_NAME' %>
                 </div>
               </div>
               <div class="list-group-item row">
-                <div class="col-md-1">
-                  <center>
-                    <div class="btn btn-default">
-                      <span class="glyphicon glyphicon-tag"></span>
-                    </div>
-                  </center>
+                <div class="col-md-1 text-center">
+                  <div class="btn btn-default">
+                    <span class="glyphicon glyphicon-tag">
+                    </span>
+                  </div>
                 </div>
                 <div class="col-md-11">
                   <%=l 'HELP_CHANGE_COLOR_BUTTON' %>
                 </div>
               </div>
               <div class="list-group-item row">
-                <div class="col-md-1">
-                  <center>
-                    <div class="btn btn-default">
-                      <span class="glyphicon glyphicon-comment"></span>
-                    </div>
-                  </center>
+                <div class="col-md-1 text-center">
+                  <div class="btn btn-default">
+                    <span class="glyphicon glyphicon-comment">
+                    </span>
+                  </div>
                 </div>
                 <div class="col-md-11">
                   <%=l 'HELP_CHAT_BUTTON' %>
                 </div>
               </div>
               <div class="list-group-item row">
-                <div class="col-md-1">
-                  <center>
-                    <div class="btn btn-default">
-                      <span class="glyphicon glyphicon-volume-off"></span>
-                    </div>
-                  </center>
+                <div class="col-md-1 text-center">
+                  <div class="btn btn-default">
+                    <span class="glyphicon glyphicon-volume-off">
+                    </span>
+                  </div>
                 </div>
                 <div class="col-md-11">
                   <%=l 'HELP_MUTE_BUTTON' %>
                 </div>
               </div>
               <div class="list-group-item row">
-                <div class="col-md-1">
-                  <center>
-                    <div class="btn btn-default">
-                      <span class="glyphicon glyphicon-eye-close"></span>
-                    </div>
-                  </center>
+                <div class="col-md-1 text-center">
+                  <div class="btn btn-default">
+                    <span class="glyphicon glyphicon-eye-close">
+                    </span>
+                  </div>
                 </div>
                 <div class="col-md-11">
                   <%=l 'HELP_SUSPEND_CAM_BUTTON' %>
@@ -328,36 +336,34 @@
               </div>
               <div class="list-group-item row aloneEl">
                 <div class="col-md-1">
-                  <center>
-                    <div class="btn btn-default">
-                      <span class="glyphicon glyphicon-music"></span>
-                    </div>
-                  </center>
+                  <div class="btn btn-default">
+                    <span class="glyphicon glyphicon-music">
+                    </span>
+                  </div>
                 </div>
                 <div class="col-md-11">
                   <%=l 'HELP_MOH_BUTTON' %>
                 </div>
               </div>
               <div class="list-group-item row">
-                <div class="col-md-1">
-                  <center>
-                    <div class="btn btn-default">
-                      <span class="glyphicon glyphicon-expand"></span>
-                    </div>
-                  </center>
+                <div class="col-md-1 text-center">
+                  <div class="btn btn-default">
+                    <span class="glyphicon glyphicon-expand">
+                    </span>
+                  </div>
                 </div>
                 <div class="col-md-11">
                   <%=l 'HELP_SHARE_SCREEN_BUTTON' %>
                 </div>
               </div>
               <div class="list-group-item row ownerEl">
-                <div class="col-md-1">
-                  <center>
-                    <a data-toggle="collapse" href="#helpInviteMenuCollapse" class="btn btn-default">
-                      <span class="glyphicon glyphicon-user"></span>
-                      <span class="caret"></span>
-                    </a>
-                  </center>
+                <div class="col-md-1 text-center">
+                  <a data-toggle="collapse" href="#helpInviteMenuCollapse" class="btn btn-default">
+                    <span class="glyphicon glyphicon-user">
+                    </span>
+                    <span class="caret">
+                    </span>
+                  </a>
                 </div>
                 <div class="col-md-11">
                   <%=l 'HELP_INVITE_MENU' %>
@@ -365,12 +371,11 @@
               </div>
               <div id="helpInviteMenuCollapse" class="collapse">
                 <div class="list-group-item row ownerEl">
-                  <div class="col-md-1 col-md-offset-1">
-                    <center>
-                      <div class="btn btn-default">
-                        <span class="glyphicon glyphicon-send"></span>
-                      </div>
-                    </center>
+                  <div class="col-md-1 col-md-offset-1 text-center">
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-send">
+                      </span>
+                    </div>
                   </div>
                   <div class="col-md-10">
                     <%=l 'HELP_EMAIL_INVITE_BUTTON' %>
@@ -378,13 +383,13 @@
                 </div>
               </div>
               <div class="list-group-item row ownerEl threePeersEl">
-                <div class="col-md-1">
-                  <center>
-                    <a data-toggle="collapse" href="#helpGroupActionsMenuCollapse" class="btn btn-default">
-                      <span class="glyphicon glyphicon-flag"></span>
-                      <span class="caret"></span>
-                    </a>
-                  </center>
+                <div class="col-md-1 text-center">
+                  <a data-toggle="collapse" href="#helpGroupActionsMenuCollapse" class="btn btn-default">
+                    <span class="glyphicon glyphicon-flag">
+                    </span>
+                    <span class="caret">
+                    </span>
+                  </a>
                 </div>
                 <div class="col-md-11">
                   <%=l 'HELP_GROUP_ACTIONS' %>
@@ -392,48 +397,44 @@
               </div>
               <div id="helpGroupActionsMenuCollapse" class="collapse">
                 <div class="list-group-item row ownerEl threePeersEl">
-                  <div class="col-md-1 col-md-offset-1">
-                    <center>
-                      <div class="btn btn-default">
-                        <span class="glyphicon glyphicon-volume-off"></span>
-                      </div>
-                    </center>
+                  <div class="col-md-1 col-md-offset-1 text-center">
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-volume-off">
+                      </span>
+                    </div>
                   </div>
                   <div class="col-md-10">
                     <%=l 'HELP_MUTE_EVERYONE_BUTTON' %>
                   </div>
                 </div>
                 <div class="list-group-item row ownerEl threePeersEl">
-                  <div class="col-md-1 col-md-offset-1">
-                    <center>
-                      <div class="btn btn-default">
-                        <span class="glyphicon glyphicon-volume-up"></span>
-                      </div>
-                    </center>
+                  <div class="col-md-1 col-md-offset-1 text-center">
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-volume-up">
+                      </span>
+                    </div>
                   </div>
                   <div class="col-md-10">
                     <%=l 'HELP_UNMUTE_EVERYONE_BUTTON' %>
                   </div>
                 </div>
                 <div class="list-group-item row ownerEl threePeersEl">
-                  <div class="col-md-1 col-md-offset-1">
-                    <center>
-                      <div class="btn btn-default">
-                        <span class="glyphicon glyphicon-eye-close"></span>
-                      </div>
-                    </center>
+                  <div class="col-md-1 col-md-offset-1 text-center">
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-eye-close">
+                      </span>
+                    </div>
                   </div>
                   <div class="col-md-10">
                     <%=l 'HELP_SUSPEND_EVERYONE_BUTTON' %>
                   </div>
                 </div>
                 <div class="list-group-item row ownerEl threePeersEl">
-                  <div class="col-md-1 col-md-offset-1">
-                    <center>
-                      <div class="btn btn-default">
-                        <span class="glyphicon glyphicon-eye-open"></span>
-                      </div>
-                    </center>
+                  <div class="col-md-1 col-md-offset-1 text-center">
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-eye-open">
+                      </span>
+                    </div>
                   </div>
                   <div class="col-md-10">
                     <%=l 'HELP_RESUME_EVERYONE_BUTTON' %>
@@ -441,13 +442,13 @@
                 </div>
               </div>
               <div class="list-group-item row ownerEl">
-                <div class="col-md-1">
-                  <center>
-                    <a data-toggle="collapse" href="#helpConfMenuCollapse" class="btn btn-default">
-                      <span class="glyphicon glyphicon-wrench"></span>
-                      <span class="caret"></span>
-                    </a>
-                  </center>
+                <div class="col-md-1 text-center">
+                  <a data-toggle="collapse" href="#helpConfMenuCollapse" class="btn btn-default">
+                    <span class="glyphicon glyphicon-wrench">
+                    </span>
+                    <span class="caret">
+                    </span>
+                  </a>
                 </div>
                 <div class="col-md-11">
                   <%=l 'HELP_CONF_MENU' %>
@@ -455,60 +456,55 @@
               </div>
               <div id="helpConfMenuCollapse" class="collapse">
                 <div class="list-group-item row ownerEl">
-                  <div class="col-md-1 col-md-offset-1">
-                    <center>
-                      <div class="btn btn-default">
-                        <span class="glyphicon glyphicon-ban-circle"></span>
-                      </div>
-                    </center>
+                  <div class="col-md-1 col-md-offset-1 text-center">
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-ban-circle">
+                      </span>
+                    </div>
                   </div>
                   <div class="col-md-10">
                     <%=l 'HELP_LOCK_BUTTON' %>
                   </div>
                 </div>
                 <div class="list-group-item row ownerEl">
-                  <div class="col-md-1 col-md-offset-1">
-                    <center>
-                      <div class="btn btn-default">
-                        <span class="glyphicon glyphicon-lock"></span>
-                      </div>
-                    </center>
+                  <div class="col-md-1 col-md-offset-1 text-center">
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-lock">
+                      </span>
+                    </div>
                   </div>
                   <div class="col-md-10">
                     <%=l 'HELP_PASSWORD_BUTTON' %>
                   </div>
                 </div>
                 <div class="list-group-item row ownerEl">
-                  <div class="col-md-1 col-md-offset-1">
-                    <center>
-                      <div class="btn btn-default">
-                        <span class="glyphicon glyphicon-pushpin"></span>
-                      </div>
-                    </center>
+                  <div class="col-md-1 col-md-offset-1 text-center">
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-pushpin">
+                      </span>
+                    </div>
                   </div>
                   <div class="col-md-10">
                     <%=l 'HELP_PERSISTENT_BUTTON' %>
                   </div>
                 </div>
                 <div class="list-group-item row ownerEl">
-                  <div class="col-md-1 col-md-offset-1">
-                    <center>
-                      <div class="btn btn-default">
-                        <span class="glyphicon glyphicon-leaf"></span>
-                      </div>
-                    </center>
+                  <div class="col-md-1 col-md-offset-1 text-center">
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-leaf">
+                      </span>
+                    </div>
                   </div>
                   <div class="col-md-10">
                     <%=l 'HELP_ASK_FOR_NAME_BUTTON' %>
                   </div>
                 </div>
                 <div class="list-group-item row ownerEl">
-                  <div class="col-md-1 col-md-offset-1">
-                    <center>
-                      <div class="btn btn-default">
-                        <span class="glyphicon glyphicon-fire"></span>
-                      </div>
-                    </center>
+                  <div class="col-md-1 col-md-offset-1 text-center">
+                    <div class="btn btn-default">
+                      <span class="glyphicon glyphicon-fire">
+                      </span>
+                    </div>
                   </div>
                   <div class="col-md-10">
                     <%=l 'HELP_WIPE_DATA_BUTTON' %>
@@ -516,34 +512,36 @@
                 </div>
               </div>
               <div class="list-group-item row">
-                <div class="col-md-1">
-                  <center>
-                    <div class="btn btn-default">
-                      <span class="glyphicon glyphicon-log-out"></span>
-                    </div>
-                  </center>
+                <div class="col-md-1 text-center">
+                  <div class="btn btn-default">
+                    <span class="glyphicon glyphicon-log-out">
+                    </span>
+                  </div>
                 </div>
                 <div class="col-md-11">
                   <%=l 'HELP_LOGOUT_BUTTON' %>
                 </div>
               </div>
               <div class="list-group-item row ownerEl">
-                <div class="col-md-3">
-                  <center>
-                    <div class="btn-group">
-                      <div class="btn btn-sm btn-default">
-                        <span class="glyphicon glyphicon-volume-off"></span>
-                      </div>
-                      <div class="btn btn-sm btn-default">
-                        <span class="glyphicon glyphicon-eye-close"></span>
-                      </div>
-                      <div class="btn btn-sm btn-default">
-                        <span class="glyphicon glyphicon-certificate"></span>
-                      </div>
-                      <div class="btn btn-sm btn-default">
-                        <span class="glyphicon glyphicon-remove-circle"></span>
-                      </div>
-                  </center>
+                <div class="col-md-3 text-center">
+                  <div class="btn-group">
+                    <div class="btn btn-sm btn-default">
+                      <span class="glyphicon glyphicon-volume-off">
+                      </span>
+                    </div>
+                    <div class="btn btn-sm btn-default">
+                      <span class="glyphicon glyphicon-eye-close">
+                      </span>
+                    </div>
+                    <div class="btn btn-sm btn-default">
+                      <span class="glyphicon glyphicon-certificate">
+                      </span>
+                    </div>
+                    <div class="btn btn-sm btn-default">
+                      <span class="glyphicon glyphicon-remove-circle">
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-md-9">
                   <%=l 'HELP_PEER_ACTIONS_BUTTONS' %>
@@ -558,16 +556,21 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title" id="setDisplayNameTitle"><%=l 'DISPLAY_NAME_REQUIRED' %></h4>
+            <h4 class="modal-title" id="setDisplayNameTitle">
+              <%=l 'DISPLAY_NAME_REQUIRED' %>
+            </h4>
           </div>
           <div class="modal-body">
             <form role="form" class="well" id="displayNamePreForm">
-              <label for="displayNamePre"><%=l 'SET_A_DISPLAY_NAME' %></label>
+              <label for="displayNamePre">
+                <%=l 'SET_A_DISPLAY_NAME' %>
+              </label>
               <div class="input-group">
                 <input type="text" class="form-control" id="displayNamePre" name="displayNamePre" placeholder="<%=l 'YOUR_NAME' %>">
                 <span class="input-group-btn">
                   <button type="submit" id="displayNamePreButton" class="btn btn-default disabled">
-                    <span class="glyphicon glyphicon-log-in"></span>
+                    <span class="glyphicon glyphicon-log-in">
+                    </span>
                   </button>
                 </span>
               </div>
@@ -689,8 +692,12 @@
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="chromeExtMessageTitle"><%=l 'EXTENSION_REQUIRED' %></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="chromeExtMessageTitle">
+              <%=l 'EXTENSION_REQUIRED' %>
+            </h4>
           </div>
           <div clas="modal-body">
             <p>
@@ -710,13 +717,21 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="noWebrtcSupportTitle"><%=l 'BROWSER_NOT_SUPPORTED' %></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="noWebrtcSupportTitle">
+              <%=l 'BROWSER_NOT_SUPPORTED' %>
+            </h4>
           </div>
           <div class="modal-body">
-            <p><%=l 'NO_WEBRTC_SUPPORT' %></p>
+            <p>
+              <%=l 'NO_WEBRTC_SUPPORT' %>
+            </p>
             <% if ($ua !~ m/iphone|ipad|ipod/i){ %>
-            <p><%=l 'DOWNLOAD_ONE_OF_THESE_BROWSERS' %></p>
+            <p>
+              <%=l 'DOWNLOAD_ONE_OF_THESE_BROWSERS' %>
+            </p>
             <div class="row">
               <%
                 my $ffurl = "http://www.mozilla.org/firefox/";
@@ -730,23 +745,17 @@
               %>
               <div class="col-xs-4">
                 <a href="<%= $ffurl %>" target="_blank">
-                  <center>
-                    <img class="img-responsive" src="<%= $self->get_url('/') %>img/firefox.png" alt="Mozilla Firefox"/>
-                  </center>
+                  <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/firefox.png" alt="Mozilla Firefox"/>
                 </a>
               </div>
               <div class="col-xs-4">
                 <a href="<%= $churl %>" target="_blank">
-                  <center>
-                    <img class="img-responsive" src="<%= $self->get_url('/') %>img/chrome.png" alt="Google Chrome"/>
-                  </center>
+                  <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/chrome.png" alt="Google Chrome"/>
                 </a>
               </div>
               <div class="col-xs-4">
                 <a href="<%= $opurl %>" target="_blank">
-                  <center>
-                    <img class="img-responsive" src="<%= $self->get_url('/') %>img/opera.png" alt="Opera"/>
-                  </center>
+                  <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/opera.png" alt="Opera"/>
                 </a>
               </div>
             </div>
@@ -759,24 +768,28 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="noWebcamTitle"><%=l 'NO_WEBCAM' %></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="noWebcamTitle">
+              <%=l 'NO_WEBCAM' %>
+            </h4>
           </div>
           <div class="modal-body">
-            <p><%=l 'CANT_ACCESS_WEBCAM' %></p>
-            <center>
-              <img src="<%= $self->get_url('/') %>img/webcam.png" alt="Webcam"/>
-              <br>
-              <p>
-                <%=l 'CLICK_IF_NO_WEBCAM' %>
-              </p>
-              <p>
-                <a class="btn btn-default btn-lg" href="<%= $self->get_url('/') . $room %>?video=false">
-                  <span class="glyphicon glyphicon-headphones">
-                  </span>
-                </a>
-              </p>
-            </center>
+            <p class="text-center">
+              <%=l 'CANT_ACCESS_WEBCAM' %>
+            </p>
+            <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/webcam.png" alt="Webcam"/>
+            <br>
+            <p class="text-center">
+              <%=l 'CLICK_IF_NO_WEBCAM' %>
+            </p>
+            <p class="text-center">
+              <a class="btn btn-default btn-lg" href="<%= $self->get_url('/') . $room %>?video=false">
+                <span class="glyphicon glyphicon-headphones">
+                </span>
+              </a>
+            </p>
           </div>
         </div>
       </div>
@@ -785,17 +798,19 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title"><%=l 'CONNECTION_LOST' %></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title">
+              <%=l 'CONNECTION_LOST' %>
+            </h4>
           </div>
-          <div class="modal-body">
-            <center>
-              <img src="<%= $self->get_url('/') %>img/flash.png" alt="<%=l 'CONNECTION_LOST' %>"/>
-              <br>
-              <p>
-                <%=l 'CHECK_INTERNET_ACCESS' %>
-              </p>
-            </center>
+          <div class="modal-body text-center">
+            <img src="<%= $self->get_url('/') %>img/flash.png" alt="<%=l 'CONNECTION_LOST' %>"/>
+            <br>
+            <p>
+              <%=l 'CHECK_INTERNET_ACCESS' %>
+            </p>
           </div>
         </div>
       </div>
@@ -804,15 +819,21 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="persistentTitle"><%=l 'MAKE_THIS_ROOM_PERSISTENT' %></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="persistentTitle">
+              <%=l 'MAKE_THIS_ROOM_PERSISTENT' %>
+            </h4>
           </div>
           <div class="modal-body">
             <form class="form-horizontal" role="form" id="persistentForm">
               <p>
                 <%=l 'SET_OWNER_PASS_PERSISTENT' %>
                 <ul>
-                  <li><%= sprintf($self->l('A_STANDARD_ROOM_EXPIRES_AFTER_d'), int($config->{inactivityTimeout}/3600)) %></li>
+                  <li>
+                    <%= sprintf($self->l('A_STANDARD_ROOM_EXPIRES_AFTER_d'), int($config->{inactivityTimeout}/3600)) %>
+                  </li>
                   <li>
                     <%=l 'A_PERSISTENT_ROOM' %>
                     <% if ($config->{persistentInactivityTimeout} > 0){ %>
@@ -858,8 +879,12 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="joinPassTitle"><%=l 'PASSWORD_PROTECT' %></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="joinPassTitle">
+              <%=l 'PASSWORD_PROTECT' %>
+            </h4>
           </div>
           <div class="modal-body">
             <form class="form-horizontal" role="form" id="joinPassForm">
@@ -932,16 +957,15 @@
         </div>
         <div id="mainView" class="col-xs-12 col-sm-8">
           <% if ($etherpad eq 'true'){ %>
-          <div id="etherpadContainer"></div>
+          <div id="etherpadContainer">
+          </div>
           <% } %>
           <div id="mainVideo">
           </div>
           <div id="aloneMsg" class="aloneEl">
-            <center>
-              <h2>
-                <%=l 'ALONE_IN_ROOM' %>
-              </h2>
-            </center>
+            <h2 class="text-center">
+              <%=l 'ALONE_IN_ROOM' %>
+            </h2>
           </div>
         </div>
       </div>

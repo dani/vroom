@@ -4,10 +4,8 @@
 <div class="container-fluid">
   <div class="well publicForm">
     <form role="form" action="<%= $self->get_url('/feedback') %>" method="post">
-      <legend>
-        <center>
-          <%=l 'GIVE_US_YOUR_FEEDBACK' %>
-        </center>
+      <legend class=text-center">
+        <%=l 'GIVE_US_YOUR_FEEDBACK' %>
       </legend>
       <center>
         <%=l 'YOUR_FEEDBACK_HELPS_US' %>
@@ -18,10 +16,14 @@
         <input type="email" class="form-control" id="email" name="email" placeholder="<%=l 'EMAIL_PLACEHOLDER' %>">
       </div>
       <div class="form-group">
-        <label for="comment"><%=l 'COMMENT' %></label>
+        <label for="comment">
+          <%=l 'COMMENT' %>
+        </label>
         <textarea id="comment" name="comment" class="form-control" rows="10" placeholder="<%=l 'VROOM_IS_AWESOME' %>" required></textarea>
       </div>
-      <button type="submit" class="btn btn-default"><%=l 'SUBMIT' %></button>
+      <button type="submit" class="btn btn-default">
+        <%=l 'SUBMIT' %>
+      </button>
     </form>
   </div>
 </div>
