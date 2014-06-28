@@ -69,6 +69,7 @@ our %Lexicon = (
     "TO_INVITE_SHARE_THIS_URL"                  => "Envoyez cette adresse à d'autres personnes pour qu'elles vous rejoignent",
     "YOU_CAN_INVITE_BY_MAIL"                    => "Vous pouvez aussi envoyer une invitation par email",
     "SEND_INVITE"                               => "Envoyer une invitation par mail",
+    "RECIPIENT"                                 => "Destinataire",
     "EMAIL_PLACEHOLDER"                         => "j.smith\@exemple.com",
     "ERROR_INVITATION_INVALID"                  => "Ce lien est invalide, votre invitation a probablement expiré, ou vous y avez déjà répondu",
     "MESSAGE_SENT"                              => "Message transmis",

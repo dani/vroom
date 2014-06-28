@@ -2066,6 +2066,10 @@ function initVroom(room) {
     $('#helpButton').removeClass('active');
   });
 
+  // Show the invite by email dialog
+  $('#showEmailInvite').click(function(){
+    $('#emailInviteModal').modal('show');
+  });
   // Display the wipe data modal
   $('#wipeDataButton').click(function(){
     $('#wipeModal').modal('show');

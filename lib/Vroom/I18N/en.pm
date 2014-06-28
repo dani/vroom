@@ -82,6 +82,7 @@ our %Lexicon = (
   "HE_WILL_TRY_TO_JOIN_LATER"            => "This person will tryu to join later",
   "HE_WONT_JOIN"                         => "This person won't be able to join the conference",
   "SEND_INVITE"                          => "Send an email invitation",
+  "RECIPIENT"                            => "Recipient",
   "MESSAGE"                              => "Message",
   "SEND_CUSTOM_MESSAGE"                  => "You can add a custom message",
   "DISPLAY_NAME"                         => "Display name",
