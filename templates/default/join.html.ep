@@ -957,8 +957,7 @@
         </div>
         <div id="mainView" class="col-xs-12 col-sm-8">
           <% if ($etherpad eq 'true'){ %>
-          <div id="etherpadContainer">
-          </div>
+          <div id="etherpadContainer"></div>
           <% } %>
           <div id="mainVideo">
           </div>
