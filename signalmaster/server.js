@@ -55,8 +55,8 @@ function checkRoom(room,token,user,cb) {
 }
 
 io.configure(function(){
-  io.set('close timeout', 20);
-  io.set('heartbeat timeout', 10);
+  io.set('close timeout', 30);
+  io.set('heartbeat timeout', 15);
   io.set('heartbeat interval', 5);
   io.set('authorization', function(data, accept){
     if(data.headers.cookie){
