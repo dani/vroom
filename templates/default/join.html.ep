@@ -805,10 +805,10 @@
               <%=l 'CONNECTION_LOST' %>
             </h4>
           </div>
-          <div class="modal-body text-center">
-            <img src="<%= $self->get_url('/') %>img/flash.png" alt="<%=l 'CONNECTION_LOST' %>"/>
+          <div class="modal-body">
+            <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/flash.png" alt="<%=l 'CONNECTION_LOST' %>"/>
             <br>
-            <p>
+            <p class="text-center">
               <%=l 'CHECK_INTERNET_ACCESS' %>
             </p>
           </div>
