@@ -85,7 +85,7 @@ io.configure(function(){
               accept(null, true);
             }
             else{
-              console.log('User' + user + ' is not allowed to join room ' + room + ' with token ' + tohen);
+              console.log('User' + user + ' is not allowed to join room ' + room + ' with token ' + token);
               accept('not allowed', false);
             }
           });
