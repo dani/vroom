@@ -66,27 +66,31 @@ io.configure(function(){
         console.log('Cookie vroomsession not found, access unauthorized');
         accept('vroomsession cookie not found', false);
       }
-      // vroomsession is base64(user:room:token) so let's decode this !
-      session = new Buffer(session, encoding='base64');
-      var tab = session.toString().split(':');
-      var user  = tab[0],
-          room  = tab[1],
-          token = tab[2];
-      // sanitize user input, we don't want to pass random junk to MySQL do we ?
-      if (!user.match(/^[\w\@\.\-]{1,40}$/i) || !room.match(/^[\w\-]{1,50}$/) || !token.match(/^[a-zA-Z0-9]{50}$/)){
-        console.log('Forbidden chars found in either participant session, room name or token, sorry, cannot allow this');
-        accept('Forbidden characters found', false);
-      }
-      // Ok, now check if this user has joined the room (with the correct token) through vroom frontend
-      checkRoom(room,token,user, function(res){
-        if (res){
-          accept(null, true);
+      else{
+        // vroomsession is base64(user:room:token) so let's decode this !
+        session = new Buffer(session, encoding='base64');
+        var tab = session.toString().split(':');
+        var user  = tab[0],
+            room  = tab[1],
+            token = tab[2];
+        // sanitize user input, we don't want to pass random junk to MySQL do we ?
+        if (!user.match(/^[\w\@\.\-]{1,40}$/i) || !room.match(/^[\w\-]{1,50}$/) || !token.match(/^[a-zA-Z0-9]{50}$/)){
+          console.log('Forbidden chars found in either participant session, room name or token, sorry, cannot allow this');
+          accept('Forbidden characters found', false);
         }
         else{
-          console.log('User' + user + ' is not allowed to join room ' + room + ' with token ' + tohen);
-          accept('not allowed', false);
+          // Ok, now check if this user has joined the room (with the correct token) through vroom frontend
+          checkRoom(room,token,user, function(res){
+            if (res){
+              accept(null, true);
+            }
+            else{
+              console.log('User' + user + ' is not allowed to join room ' + room + ' with token ' + tohen);
+              accept('not allowed', false);
+            }
+          });
         }
-      });
+      }
     }
     else{
       accept('No cookie found', false);
