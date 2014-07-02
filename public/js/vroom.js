@@ -886,7 +886,7 @@ function initVroom(room) {
           $.notify(locale.ERROR_OCCURRED, 'error');
         },
         success: function(data){
-          if (data.status && data.status == 'success'){
+          if (data.status && data.status == 'success' && $('#etherpadContainer').html() != ''){
             loadEtherpadIframe();
           }
           else if (data.msg){
