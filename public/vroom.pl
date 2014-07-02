@@ -10,7 +10,6 @@ use Mojolicious::Lite;
 use Mojolicious::Plugin::Mailer;
 use Mojo::JSON;
 use DBI;
-use Data::GUID qw(guid_string);
 use Digest::MD5 qw(md5_hex);
 use Crypt::SaltedHash;
 use MIME::Base64;
@@ -170,7 +169,7 @@ helper db => sub {
 helper login => sub {
   my $self = shift;
   return if $self->session('name');
-  my $login = $ENV{'REMOTE_USER'} || lc guid_string();
+  my $login = $ENV{'REMOTE_USER'} || lc $self->get_random(29);
   $self->session( name => $login,
                   ip   => $self->tx->remote_address );
   $self->app->log->info($self->session('name') . " logged in from " . $self->tx->remote_address);
