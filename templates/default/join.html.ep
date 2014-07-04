@@ -552,15 +552,15 @@
               <label for="displayNamePre">
                 <%=l 'SET_A_DISPLAY_NAME' %>
               </label>
-              <div class="input-group">
+              <div class="form-group">
                 <input type="text" class="form-control" id="displayNamePre" name="displayNamePre" placeholder="<%=l 'YOUR_NAME' %>">
-                <span class="input-group-btn">
-                  <button type="submit" id="displayNamePreButton" class="btn btn-default disabled">
-                    <span class="glyphicon glyphicon-log-in">
-                    </span>
-                  </button>
-                </span>
               </div>
+              <button id="displayNamePreButton" class="btn btn-primary disabled" type="submit">
+                <%=l 'SUBMIT' %>
+              </button>
+              <a class="btn btn-default" href="<%= $self->get_url('/') %>">
+                <%=l 'CANCEL' %>
+              </a>
             </form>
           </div>
         </div>
