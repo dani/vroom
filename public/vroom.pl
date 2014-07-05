@@ -192,6 +192,7 @@ helper logout => sub {
 helper create_room => sub {
   my $self = shift;
   my ($name,$owner) = @_;
+  $name = lc $name unless ($name eq lc $name);
   # Exit if the name isn't valid or already taken
   return undef if ( $self->get_room($name) || !$self->valid_room_name($name));
   my $sth = eval { $self->db->prepare("INSERT INTO `rooms` (`name`,`create_timestamp`,`activity_timestamp`,`owner`,`token`,`realm`) VALUES (?,?,?,?,?,?);") } || return undef;
