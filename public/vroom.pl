@@ -736,7 +736,7 @@ get 'feedback_thanks' => 'feedback_thanks';
 get '/goodbye/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
-  if ($self->get_room($room)){
+  if ($self->get_room($room) && $self->session('name')){
     $self->remove_participant($room,$self->session('name'));
   }
   $self->logout($room);
