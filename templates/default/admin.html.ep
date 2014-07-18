@@ -1,4 +1,50 @@
-% title $self->l('Administration');
-%= include 'header'
+% title $self->l('ADMINISTRATION');
+%=include 'header'
+%=include 'public_toolbar'
+<div class="container-fluid">
+%= include 'noscript'
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%=l 'EXISTING_ROOMS' %>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>
+            <%=l 'ROOM_ID' %>
+          </th>
+          <th>
+            <%=l 'ROOM_NAME' %>
+          </th>
+          <th>
+            <%=l 'MANAGE' %>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <%
+          my @rooms = $self->get_all_rooms();
+          foreach my $room (@rooms){
+            my $data = $self->get_room($room);
+        %>
+        <tr>
+          <td>
+            <%= $data->{id} %>
+          </td>
+          <td>
+            <%= $room %>
+          </td>
+          <td>
+            <a class="btn btn-primary" href="<%= $self->get_url('/admin/') . $room %>">
+              <%=l 'MANAGE' %>
+            </a>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
 
+%=include 'js_common'
 %=include 'footer'
