@@ -55,7 +55,7 @@
             <%=l 'ASK_FOR_NAME' %>
           </th>
           <th>
-            <input class="bs-switch" type="checkbox" id="askfForName" data-room="<%= $room %>" <%= ($data->{ask_for_name} eq '1') ? 'checked':''%>>
+            <input class="bs-switch" type="checkbox" id="askForName" data-room="<%= $room %>" <%= ($data->{ask_for_name} eq '1') ? 'checked':''%>>
           </th>
         </tr>
         </tr>
