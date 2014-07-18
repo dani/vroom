@@ -66,6 +66,9 @@ our $components = {
   },
   "WPZOOM Developer Icon Set" => {
     url => 'https://www.iconfinder.com/search/?q=iconset%3Awpzoom-developer-icon-set'
+  },
+  "Bootstrap Switch" => {
+    url => 'http://www.bootstrap-switch.org/'
   }
 };
 

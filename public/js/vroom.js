@@ -9,6 +9,8 @@ Daniel Berteaud <daniel@firewall-services.com>
 $.notify.defaults( { globalPosition: 'bottom left' } );
 // Enable tooltip on required elements
 $('.help').tooltip({container: 'body'});
+// Enable bootstrap-swicth
+$('.bs-switch').bootstrapSwitch();
 
 // Animation on dropdown menus
 $('.dropdown').on('show.bs.dropdown', function(e){

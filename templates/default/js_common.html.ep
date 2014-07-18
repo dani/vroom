@@ -1,7 +1,7 @@
     <script type="text/javascript">
       var rootUrl = '<%= $self->get_url('/'); %>';
     </script>
-    <% foreach my $js (qw(jquery-1.11.1.min.js bootstrap.min.js notify-combined.min.js vroom.js)){
+    <% foreach my $js (qw(jquery-1.11.1.min.js bootstrap.min.js notify-combined.min.js bootstrap-switch.min.js vroom.js)){
     %>
     <script type="text/javascript" src="<%= $self->get_url('/') %><%= $self->get_mtime("js/$js") %>/js/<%= $js %>"></script>
     <% } %>
