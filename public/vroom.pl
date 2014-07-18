@@ -401,6 +401,20 @@ helper delete_room => sub {
   return 1;
 };
 
+# Retrieve the list of rooms
+helper get_all_rooms => sub {
+  my $self = shift;
+  my @rooms;
+  my $sth = eval {
+    $self->db->prepare("SELECT `name` FROM `rooms`;");
+  } || return undef;
+  $sth->execute() || return undef;
+  while (my $name = $sth->fetchrow_array){
+    push @rooms, $name;
+  }
+  return @rooms;
+};
+
 # Just update the activity timestamp
 # so we can detect unused rooms
 helper ping_room => sub {
@@ -709,7 +723,10 @@ get '/about' => sub {
 get '/help' => 'help';
 
 # Route for the admin page
-get 'admin' => 'admin';
+get '/admin' => sub {
+  my $self = shift;
+  $self->delete_rooms;
+} => 'admin';
 
 # Routes for feedback. One get to display the form
 # and one post to get data from it
