@@ -997,12 +997,13 @@ get '/(*room)' => sub {
 };
 
 # Route for various room actions
-post '/action' => sub {
+post '/*action' => [action => [qw/action admin\/action/]] => sub {
   my $self = shift;
   my $action = $self->param('action');
+  my $prefix = ($self->stash('action') eq 'admin/action') ? 'admin':'room';
   my $room = $self->param('room') || "";
   # Refuse any action from non members of the room
-  if (!$self->session('name') || !$self->has_joined($self->session('name'), $room) || !$self->session($room) || !$self->session($room)->{role}){
+  if ($prefix ne 'admin' && (!$self->session('name') || !$self->has_joined($self->session('name'), $room) || !$self->session($room) || !$self->session($room)->{role})){
     return $self->render(
              json => {
                msg    => $self->l('ERROR_NOT_LOGGED_IN'),
@@ -1036,7 +1037,7 @@ post '/action' => sub {
     my $message = $self->param('message');
     my $status  = 'error';
     my $msg     = $self->l('ERROR_OCCURRED');
-    if (!$self->session($room) || $self->session($room)->{role} ne 'owner'){
+    if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
       $msg = 'NOT_ALLOWED';
     }
     elsif ($rcpt !~ m/\S+@\S+\.\S+$/){
@@ -1075,7 +1076,7 @@ post '/action' => sub {
     my $msg = 'ERROR_OCCURRED';
     my $status = 'error';
     # Only the owner can lock or unlock a room
-    if (!$self->session($room) || $self->session($room)->{role} ne 'owner'){
+    if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
       $msg = $self->l('NOT_ALLOWED');
     }
     elsif ($self->lock_room($room,($action eq 'lock') ? '1':'0')){
@@ -1146,7 +1147,7 @@ post '/action' => sub {
     my $msg = $self->l('ERROR_OCCURRED');
     my $status = 'error';
     # Once again, only the owner can do this
-    if ($self->session($room)->{role} eq 'owner'){
+    if ($prefix eq 'admin' || $self->session($room)->{role} eq 'owner'){
       if ($type eq 'owner'){
         # Forbid a few common room names to be reserved
         if (grep { $room eq $_ } @{$config->{commonRoomNames}}){
@@ -1244,7 +1245,7 @@ post '/action' => sub {
     my $type   = $self->param('type');
     my $status = 'error';
     my $msg    = $self->l('ERROR_OCCURRED');
-    if ($self->session($room)->{role} ne 'owner'){
+    if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
       $msg = $self->l('NOT_ALLOWED');
     }
     elsif ($email !~ m/^\S+@\S+\.\S+$/){
@@ -1270,7 +1271,7 @@ post '/action' => sub {
     my $type = $self->param('type');
     my $status = 'error';
     my $msg    = $self->l('ERROR_OCCURRED');
-    if ($self->session($room)->{role} ne 'owner'){
+    if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
       $msg = $self->l('NOT_ALLOWED');
     }
     elsif($type eq 'set' && $self->ask_for_name($room,'1')){
@@ -1379,7 +1380,7 @@ post '/action' => sub {
   elsif ($action eq 'deleteRoom'){
     my $status = 'error';
     my $msg    = $self->l('ERROR_OCCURRED');
-    if ($self->session($room)->{role} ne 'owner'){
+    if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
       $msg = $self->l('NOT_ALLOWED');
     }
     elsif ($self->delete_room($room)){
