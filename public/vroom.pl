@@ -708,6 +708,9 @@ get '/about' => sub {
 # Route for the help page
 get '/help' => 'help';
 
+# Route for the admin page
+get 'admin' => 'admin';
+
 # Routes for feedback. One get to display the form
 # and one post to get data from it
 get '/feedback' => 'feedback';
