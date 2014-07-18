@@ -1,0 +1,95 @@
+% title $self->l('ADMINISTRATION');
+%=include 'header'
+%=include 'public_toolbar'
+<div class="container-fluid">
+%= include 'noscript'
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%=l 'ROOM_DETAILS' %>
+    </div>
+    <% my $data = $self->get_room($room); %>
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <th>
+            <%=l 'ROOM_ID' %>
+          </th>
+          <th>
+            <%= $data->{id} %>
+          </th>
+        </tr>
+        </tr>
+          <th>
+            <%=l 'CREATION_DATE' %>
+          </th>
+          <th class="timeStamp">
+            <%= $data->{create_timestamp} %>
+          </th>
+        </tr>
+        </tr>
+          <th>
+            <%=l 'LAST_ACTIVITY' %>
+          </th>
+          <th class="timeStamp">
+            <%= $data->{activity_timestamp} %>
+          </th>
+        </tr>
+        </tr>
+          <th>
+            <%=l 'AUTH_TOKEN' %>
+          </th>
+          <th>
+            <%= $data->{token} %>
+          </th>
+        </tr>
+        </tr>
+          <th>
+            <%=l 'LOCKED' %>
+          </th>
+          <th>
+            <input class="bs-switch" type="checkbox" id="lock" data-room="<%= $room %>" <%= ($data->{locked} eq '1') ? 'checked':''%>>
+          </th>
+        </tr>
+        </tr>
+          <th>
+            <%=l 'ASK_FOR_NAME' %>
+          </th>
+          <th>
+            <input class="bs-switch" type="checkbox" id="askfForName" data-room="<%= $room %>" <%= ($data->{ask_for_name} eq '1') ? 'checked':''%>>
+          </th>
+        </tr>
+        </tr>
+          <th>
+            <%=l 'PASSWORD_PROTECTED' %>
+          </th>
+          <th>
+            <input class="bs-switch" type="checkbox" id="joinPass" data-room="<%= $room %>" <%= ($data->{join_password}) ? 'checked':''%>>
+          </th>
+        </tr>
+        </tr>
+          <th>
+            <%=l 'OWNER_PASSWORD' %>
+          </th>
+          <th>
+            <input class="bs-switch" type="checkbox" id="joinPass" data-room="<%= $room %>" <%= ($data->{owner_password}) ? 'checked':''%>>
+          </th>
+        </tr>
+        </tr>
+          <th>
+            <%=l 'PERSISTENT_ROOM' %>
+          </th>
+          <th>
+            <input class="bs-switch" type="checkbox" id="persistent" data-room="<%= $room %>" <%= ($data->{persistent} eq '1') ? 'checked':''%>>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+%=include 'js_common'
+<script>
+$(document).ready(function(){
+  initManage();
+});
+</script>
+%=include 'footer'
