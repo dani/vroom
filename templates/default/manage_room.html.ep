@@ -2,6 +2,8 @@
 %=include 'header'
 %=include 'public_toolbar'
 <div class="container-fluid">
+%= include 'owner_password_modal'
+%= include 'join_password_modal'
 %= include 'noscript'
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -60,10 +62,10 @@
         </tr>
         <tr>
           <th>
-            <%=l 'OWNER_PASSWORD' %>
+            <%=l 'PERSISTENT' %>
           </th>
           <th>
-            <input class="bs-switch" type="checkbox" id="joinPass" data-room="<%= $room %>" <%= ($data->{owner_password}) ? 'checked':''%>>
+            <input class="bs-switch" type="checkbox" id="ownerPass" data-room="<%= $room %>" <%= ($data->{owner_password}) ? 'checked':''%>>
           </th>
         </tr>
       </tbody>
