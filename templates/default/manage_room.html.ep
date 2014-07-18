@@ -18,7 +18,7 @@
             <%= $data->{id} %>
           </th>
         </tr>
-        </tr>
+        <tr>
           <th>
             <%=l 'CREATION_DATE' %>
           </th>
@@ -34,15 +34,7 @@
             <%= $data->{activity_timestamp} %>
           </th>
         </tr>
-        </tr>
-          <th>
-            <%=l 'AUTH_TOKEN' %>
-          </th>
-          <th>
-            <%= $data->{token} %>
-          </th>
-        </tr>
-        </tr>
+        <tr>
           <th>
             <%=l 'LOCKED' %>
           </th>
@@ -50,7 +42,7 @@
             <input class="bs-switch" type="checkbox" id="lock" data-room="<%= $room %>" <%= ($data->{locked} eq '1') ? 'checked':''%>>
           </th>
         </tr>
-        </tr>
+        <tr>
           <th>
             <%=l 'ASK_FOR_NAME' %>
           </th>
@@ -58,7 +50,7 @@
             <input class="bs-switch" type="checkbox" id="askForName" data-room="<%= $room %>" <%= ($data->{ask_for_name} eq '1') ? 'checked':''%>>
           </th>
         </tr>
-        </tr>
+        <tr>
           <th>
             <%=l 'PASSWORD_PROTECTED' %>
           </th>
@@ -66,20 +58,12 @@
             <input class="bs-switch" type="checkbox" id="joinPass" data-room="<%= $room %>" <%= ($data->{join_password}) ? 'checked':''%>>
           </th>
         </tr>
-        </tr>
+        <tr>
           <th>
             <%=l 'OWNER_PASSWORD' %>
           </th>
           <th>
             <input class="bs-switch" type="checkbox" id="joinPass" data-room="<%= $room %>" <%= ($data->{owner_password}) ? 'checked':''%>>
-          </th>
-        </tr>
-        </tr>
-          <th>
-            <%=l 'PERSISTENT_ROOM' %>
-          </th>
-          <th>
-            <input class="bs-switch" type="checkbox" id="persistent" data-room="<%= $room %>" <%= ($data->{persistent} eq '1') ? 'checked':''%>>
           </th>
         </tr>
       </tbody>
