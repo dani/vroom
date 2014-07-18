@@ -723,6 +723,19 @@ get '/about' => sub {
 get '/help' => 'help';
 
 # Route for the admin page
+get '/admin/(:room)' => sub {
+  my $self = shift;
+  my $room = $self->stash('room');
+  my $data = $self->get_room($room);
+  unless ($data){
+    return $self->render('error',
+      err  => 'ERROR_ROOM_s_DOESNT_EXIST',
+      msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
+      room => $room
+    );
+  }
+  $self->stash(room => $room);
+} => 'manage_room';
 get '/admin' => sub {
   my $self = shift;
   $self->delete_rooms;
