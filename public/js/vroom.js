@@ -224,6 +224,12 @@ function getTime(){
   return hours + ':' + minutes + ':' + seconds;
 }
 
+// Convert a timestamp to readable date
+function timeStamp2Date(sec){
+  var d = new Date(sec*1000);
+  return d.toLocaleString();
+}
+
 // Temporarily suspend a button, prevent abuse
 function suspendButton(el){
   $(el).attr('disabled', true);
@@ -299,6 +305,14 @@ function initIndex(){
     else{
       $('#roomName').parent().removeClass('has-error');
     }
+  });
+}
+
+// Used on the management page
+function initManage(){
+  // Replace timestamps with a readable date
+  $('.timeStamp').each(function(){
+    $(this).html(timeStamp2Date(parseInt($(this).html())));
   });
 }
 
