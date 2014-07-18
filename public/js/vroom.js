@@ -92,6 +92,13 @@ $.ajax({
   }
 });
 
+// Default ajax setup
+$.ajaxSetup({
+  url: rootUrl + 'action',
+  type: 'POST',
+  dataType: 'json',
+});
+
 //
 // Define a few functions
 //
@@ -310,9 +317,53 @@ function initIndex(){
 
 // Used on the management page
 function initManage(){
+
+  function ajaxifySwitch(sw,data){
+    $.ajax({
+      url: rootUrl + 'admin/action',
+      data: data,
+      error: function(data) {
+        $.notify(locale.ERROR_OCCURRED, 'error');
+        sw.bootstrapSwitch('toggleState', true);
+      },
+      success: function(data) {
+        if (data.status === 'success'){
+          $.notify(data.msg, 'success');
+        }
+        else{
+          $.notify(data.msg, 'error');
+          sw.bootstrapSwitch('toggleState', true);
+        }
+      }
+    });
+  }
+
   // Replace timestamps with a readable date
   $('.timeStamp').each(function(){
     $(this).html(timeStamp2Date(parseInt($(this).html())));
+  });
+
+  $('.bs-switch').on('switchChange.bootstrapSwitch', function(event, state) {
+    var sw = $(this);
+    var param = $(this).prop('id');
+    var room = $(this).data('room');
+    var data = {room: room};
+    if (param === 'lock'){
+      data.action = (state) ? 'lock' : 'unlock';
+      ajaxifySwitch(sw,data);
+    }
+    else if (param === 'askForName'){
+      data.action = 'askForName';
+      data.type = (state) ? 'set' : 'unset';
+      ajaxifySwitch(sw,data);
+    }
+    // Something isn't implemented yet ?
+    else{
+      $.notify(locale.ERROR_OCCURRED, 'error');
+      setTimeout(function(){
+        sw.bootstrapSwitch('toggleState', true);
+      }, 500);
+    }
   });
 }
 
@@ -340,12 +391,6 @@ function initVroom(room) {
       colorChanged = false;
 
   $('#name_local').css('background-color', peers.local.color);
-
-  $.ajaxSetup({
-    url: rootUrl + 'action',
-    type: 'POST',
-    dataType: 'json',    
-  });
 
   // Screen sharing is only suported on chrome desktop > 26
   if ( !$.browser.webkit || $.browser.android || $.browser.versionNumber < 26 ) {
