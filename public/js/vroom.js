@@ -251,6 +251,29 @@ function maxHeight(){
   return $(window).height()-$('#toolbar').height()-25;
 }
 
+// Handle owner/join password confirm
+$('#ownerPassConfirm').on('input', function() {
+  if ($('#ownerPassConfirm').val() == $('#ownerPass').val() &&
+      $('#ownerPassConfirm').val() != ''){
+    $('#setOwnerPassButton').removeClass('disabled');
+    $('#ownerPassConfirm').parent().removeClass('has-error');
+  }
+  else{
+    $('#setOwnerPassButton').addClass('disabled');
+    $('#ownerPassConfirm').parent().addClass('has-error');
+  }
+});
+$('#joinPassConfirm').on('input', function() {
+  if ($('#joinPass').val() == $('#joinPassConfirm').val() &&
+      $('#joinPass').val() != ''){
+    $('#setJoinPassButton').removeClass('disabled');
+    $('#joinPassConfirm').parent().removeClass('has-error');
+  }
+  else{
+    $('#setJoinPassButton').addClass('disabled');
+    $('#joinPassConfirm').parent().addClass('has-error');
+  }
+});
 // Used on the index page
 function initIndex(){
   var room;
@@ -318,6 +341,8 @@ function initIndex(){
 // Used on the management page
 function initManage(){
 
+  var data = {};
+
   function ajaxifySwitch(sw,data){
     $.ajax({
       url: rootUrl + 'admin/action',
@@ -347,15 +372,38 @@ function initManage(){
     var sw = $(this);
     var param = $(this).prop('id');
     var room = $(this).data('room');
-    var data = {room: room};
-    if (param === 'lock'){
+    data = {room: room};
+    if (param === 'lockSwitch'){
       data.action = (state) ? 'lock' : 'unlock';
       ajaxifySwitch(sw,data);
     }
-    else if (param === 'askForName'){
+    else if (param === 'askForNameSwitch'){
       data.action = 'askForName';
       data.type = (state) ? 'set' : 'unset';
       ajaxifySwitch(sw,data);
+    }
+    else if (param === 'joinPassSwitch'){
+      if (state){
+        $('#joinPassModal').modal('show');
+        // switch back to off in case it's cancelled
+        sw.bootstrapSwitch('toggleState', true);
+      }
+      else{
+        data.action = 'setPassword';
+        data.type = 'join';
+        ajaxifySwitch(sw,data);
+      }
+    }
+    else if (param === 'ownerPassSwitch'){
+      if (state){
+        $('#persistentModal').modal('show');
+        sw.bootstrapSwitch('toggleState', true);
+      }
+      else{
+        data.action = 'setPassword';
+        data.type = 'owner';
+        ajaxifySwitch(sw,data);
+      }
     }
     // Something isn't implemented yet ?
     else{
@@ -365,6 +413,47 @@ function initManage(){
       }, 500);
     }
   });
+
+  $('#joinPassForm').submit(function(event) {
+    event.preventDefault();
+    var pass  = $('#joinPass').val();
+    var pass2 = $('#joinPassConfirm').val();
+    if (pass == pass2 && pass != ''){
+      $('#setJoinPassButton').addClass('disabled');
+      $('#joinPass').val('');
+      $('#joinPassConfirm').val('');
+      data.action = 'setPassword';
+      data.type = 'join';
+      data.password = pass
+      ajaxifySwitch($('#joinPassSwitch'), data);
+      $('#joinPassSwitch').bootstrapSwitch('toggleState', true);
+      $('#joinPassModal').modal('hide');
+    }
+    else{
+      $('#joinPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
+    }
+  });
+
+  $('#persistentForm').submit(function(event) {
+    event.preventDefault();
+    var pass  = $('#ownerPass').val();
+    var pass2 = $('#ownerPassConfirm').val();
+    if (pass == pass2 && pass != ''){
+      $('#setOwnerPassButton').addClass('disabled');
+      $('#ownerPass').val('');
+      $('#ownerPassConfirm').val('');
+      data.action = 'setPassword';
+      data.type = 'owner';
+      data.password = pass
+      ajaxifySwitch($('#ownerPassSwitch'), data);
+      $('#ownerPassSwitch').bootstrapSwitch('toggleState', true);
+      $('#persistentModal').modal('hide');
+    }
+    else{
+      $('#ownerPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
+    }
+  });
+
 }
 
 // This is the main function called when you join a room
@@ -1779,19 +1868,6 @@ function initVroom(room) {
     });
   });
 
-  // Enable the submit button when the corresponding input is filled
-  $('#joinPassConfirm').on('input', function() {
-    if ($('#joinPass').val() == $('#joinPassConfirm').val() &&
-        $('#joinPass').val() != ''){
-      $('#setJoinPassButton').removeClass('disabled');
-      $('#joinPassConfirm').parent().removeClass('has-error');
-    }
-    else{
-      $('#setJoinPassButton').addClass('disabled');
-      $('#joinPassConfirm').parent().addClass('has-error');
-    }
-  });
-
   $('#joinPassButton').change(function(){
     var action = ($(this).is(':checked')) ? 'set':'unset';
     if (action == 'set'){
@@ -1902,18 +1978,6 @@ function initVroom(room) {
     }
   });
 
-  // Set owner password
-  $('#ownerPassConfirm').on('input', function() {
-    if ($('#ownerPassConfirm').val() == $('#ownerPass').val() &&
-        $('#ownerPassConfirm').val() != ''){
-      $('#setOwnerPassButton').removeClass('disabled');
-      $('#ownerPassConfirm').parent().removeClass('has-error');
-    }
-    else{
-      $('#setOwnerPassButton').addClass('disabled');
-      $('#ownerPassConfirm').parent().addClass('has-error');
-    }
-  });
   $('#persistentForm').submit(function(event) {
     event.preventDefault();
     var pass  = $('#ownerPass').val();
