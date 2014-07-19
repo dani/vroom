@@ -12,7 +12,7 @@
             &times;
           </button>
           <h4 class="modal-title">
-            <%=l 'DELETE_ROOM' %>
+            <%=l 'DELETE_THIS_ROOM' %>
           </h4>
         </div>
         <div class="modal-body">
