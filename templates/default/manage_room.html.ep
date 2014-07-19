@@ -41,7 +41,7 @@
             <%=l 'LOCKED' %>
           </th>
           <th>
-            <input class="bs-switch" type="checkbox" id="lock" data-room="<%= $room %>" <%= ($data->{locked} eq '1') ? 'checked':''%>>
+            <input class="bs-switch" type="checkbox" id="lockSwitch" data-room="<%= $room %>" <%= ($data->{locked} eq '1') ? 'checked':''%>>
           </th>
         </tr>
         <tr>
@@ -49,7 +49,7 @@
             <%=l 'ASK_FOR_NAME' %>
           </th>
           <th>
-            <input class="bs-switch" type="checkbox" id="askForName" data-room="<%= $room %>" <%= ($data->{ask_for_name} eq '1') ? 'checked':''%>>
+            <input class="bs-switch" type="checkbox" id="askForNameSwitch" data-room="<%= $room %>" <%= ($data->{ask_for_name} eq '1') ? 'checked':''%>>
           </th>
         </tr>
         <tr>
@@ -57,7 +57,7 @@
             <%=l 'PASSWORD_PROTECTED' %>
           </th>
           <th>
-            <input class="bs-switch" type="checkbox" id="joinPass" data-room="<%= $room %>" <%= ($data->{join_password}) ? 'checked':''%>>
+            <input class="bs-switch" type="checkbox" id="joinPassSwitch" data-room="<%= $room %>" <%= ($data->{join_password}) ? 'checked':''%>>
           </th>
         </tr>
         <tr>
@@ -65,7 +65,7 @@
             <%=l 'PERSISTENT' %>
           </th>
           <th>
-            <input class="bs-switch" type="checkbox" id="ownerPass" data-room="<%= $room %>" <%= ($data->{owner_password}) ? 'checked':''%>>
+            <input class="bs-switch" type="checkbox" id="ownerPassSwitch" data-room="<%= $room %>" <%= ($data->{owner_password}) ? 'checked':''%>>
           </th>
         </tr>
       </tbody>
