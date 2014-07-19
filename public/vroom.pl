@@ -354,7 +354,9 @@ helper delete_rooms => sub {
     $timeout = time()-$config->{persistentInactivityTimeout};
     $sth = eval { $self->db->prepare("SELECT `name` FROM rooms WHERE `activity_timestamp` < $timeout AND `persistent`='1';") } || return undef;
     $sth->execute();
-    push @toDeleteName, $sth->fetchrow_array;
+    while (my $room = $sth->fetchrow_array){
+      push @toDeleteName, $room;
+    }
   }
   foreach my $room (@toDeleteName){
     my $data = $self->get_room($room);
