@@ -11,9 +11,6 @@
       <thead>
         <tr>
           <th>
-            <%=l 'ROOM_ID' %>
-          </th>
-          <th>
             <%=l 'ROOM_NAME' %>
           </th>
           <th>
@@ -29,14 +26,14 @@
         %>
         <tr>
           <td>
-            <%= $data->{id} %>
-          </td>
-          <td>
             <%= $room %>
           </td>
           <td>
             <a class="btn btn-primary" href="<%= $self->get_url('/admin/') . $room %>">
               <%=l 'MANAGE' %>
+            </a>
+            <a class="btn btn-default" href="<%= $self->get_url('/') . $room %>">
+              <%=l 'JOIN_THIS_ROOM' %>
             </a>
           </td>
         </tr>
