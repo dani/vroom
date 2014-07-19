@@ -17,7 +17,7 @@
         </div>
         <div class="modal-body">
           <p>
-            <%=l 'YOU_ARE_ABOUT_TO_DELETE_ROOM' %>
+            <%=l 'ROOM_WILL_BE_DELETED' %>
           </p>
         </div>
         <div class="modal-footer">
