@@ -343,13 +343,15 @@ function initManage(){
 
   var data = {};
 
-  function ajaxifySwitch(sw,data){
+  function sendAction(data,sw){
     $.ajax({
       url: rootUrl + 'admin/action',
       data: data,
       error: function(data) {
         $.notify(locale.ERROR_OCCURRED, 'error');
-        sw.bootstrapSwitch('toggleState', true);
+        if (typeof(sw) == 'object'){
+          sw.bootstrapSwitch('toggleState', true);
+        }
       },
       success: function(data) {
         if (data.status === 'success'){
@@ -357,7 +359,9 @@ function initManage(){
         }
         else{
           $.notify(data.msg, 'error');
-          sw.bootstrapSwitch('toggleState', true);
+          if (typeof(sw) == 'object'){
+            sw.bootstrapSwitch('toggleState', true);
+          }
         }
       }
     });
@@ -375,12 +379,12 @@ function initManage(){
     data = {room: room};
     if (param === 'lockSwitch'){
       data.action = (state) ? 'lock' : 'unlock';
-      ajaxifySwitch(sw,data);
+      sendAction(data,sw);
     }
     else if (param === 'askForNameSwitch'){
       data.action = 'askForName';
       data.type = (state) ? 'set' : 'unset';
-      ajaxifySwitch(sw,data);
+      sendAction(data,sw);
     }
     else if (param === 'joinPassSwitch'){
       if (state){
@@ -391,7 +395,7 @@ function initManage(){
       else{
         data.action = 'setPassword';
         data.type = 'join';
-        ajaxifySwitch(sw,data);
+        sendAction(data,sw);
       }
     }
     else if (param === 'ownerPassSwitch'){
@@ -402,7 +406,7 @@ function initManage(){
       else{
         data.action = 'setPassword';
         data.type = 'owner';
-        ajaxifySwitch(sw,data);
+        sendAction(data,sw);
       }
     }
     // Something isn't implemented yet ?
@@ -425,7 +429,7 @@ function initManage(){
       data.action = 'setPassword';
       data.type = 'join';
       data.password = pass
-      ajaxifySwitch($('#joinPassSwitch'), data);
+      sendAction(data, $('#joinPassSwitch'));
       $('#joinPassSwitch').bootstrapSwitch('toggleState', true);
       $('#joinPassModal').modal('hide');
     }
@@ -445,13 +449,27 @@ function initManage(){
       data.action = 'setPassword';
       data.type = 'owner';
       data.password = pass
-      ajaxifySwitch($('#ownerPassSwitch'), data);
+      sendAction(data, $('#ownerPassSwitch'));
       $('#ownerPassSwitch').bootstrapSwitch('toggleState', true);
       $('#persistentModal').modal('hide');
     }
     else{
       $('#ownerPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
     }
+  });
+
+  // Handle room deletion
+  $('#deleteRoomButton').click(function(){
+    $('#deleteRoomModal').modal('show');
+    data.room = $(this).data('room');
+  });
+  $('#confirmDeleteButton').click(function(){
+    data.action = 'deleteRoom';
+    sendAction(data);
+    $('#deleteRoomModal').modal('hide');
+    setTimeout(function(){
+      window.location.assign(rootUrl + 'admin');
+    }, 2000);
   });
 
 }

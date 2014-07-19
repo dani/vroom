@@ -4,6 +4,33 @@
 <div class="container-fluid">
 %= include 'owner_password_modal'
 %= include 'join_password_modal'
+  <div class="modal fade" role="dialog" id="deleteRoomModal" aria-labelledby="terminateModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            &times;
+          </button>
+          <h4 class="modal-title">
+            <%=l 'DELETE_ROOM' %>
+          </h4>
+        </div>
+        <div class="modal-body">
+          <p>
+            <%=l 'YOU_ARE_ABOUT_TO_DELETE_ROOM' %>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button id="confirmDeleteButton" class="btn btn-danger">
+            <%=l 'CONFIRM_DELETE' %>
+          </button>
+          <button class="btn btn-default" data-dismiss="modal" data-target="#terminateModal">
+            <%=l 'CANCEL' %>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 %= include 'noscript'
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -70,6 +97,18 @@
         </tr>
       </tbody>
     </table>
+  </div>
+  <div class='row'>
+    <div class="col-sm-6 col-lg-4 col-xl-3 col-sm-offset-3 col-lg-offset-2">
+      <a class="btn btn-primary btn-lg btn-full" role="button" href="<%= $self->get_url('/') . $room %>">
+        <%=l 'JOIN_THIS_ROOM' %>
+      </a>
+    </div>
+    <div class="col-sm-6 col-lg-4 col-xl-3 col-sm-offset-3 col-lg-offset-0">
+      <button class="btn btn-danger btn-lg btn-full" id="deleteRoomButton" data-room="<%= $room %>">
+        <%=l 'DELETE_THIS_ROOM' %>
+      </button>
+    </div>
   </div>
 </div>
 %=include 'js_common'
