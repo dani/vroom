@@ -789,8 +789,9 @@ any '/' => sub {
 # Route for the about page
 get '/about' => sub {
   my $self = shift;
-  $self->stash( components => $components,
-                musics     => $musics
+  $self->stash(
+    components => $components,
+    musics     => $musics
   );
 } => 'about';
 
