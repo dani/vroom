@@ -169,6 +169,7 @@ our %Lexicon = (
   "ASK_FOR_NAME"                         => "Require to enter a name",
   "PASSWORD_PROTECTED"                   => "Password protection",
   "PERSISTENT"                           => "Persistent",
+  "EMAIL_INVITE"                         => "Email invitation",
   "DELETE_THIS_ROOM"                     => "Delete this room",
   "CONFIRM_DELETE"                       => "Confirm delation",
   "HELP_SET_DISPLAY_NAME"                => "This field lets you type your name which will be displayed for other participants. " .

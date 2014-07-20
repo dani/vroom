@@ -176,6 +176,7 @@ our %Lexicon = (
     "ASK_FOR_NAME"                              => "Exige de saisir un nom",
     "PASSWORD_PROTECTED"                        => "Protection par mot de passe",
     "PERSISTENT"                                => "Persistant",
+    "EMAIL_INVITE"                              => "Invitation par email",
     "DELETE_THIS_ROOM"                          => "Supprimer ce salon",
     "CONFIRM_DELETE"                            => "Confirmer la suppression",
     "HELP_SET_DISPLAY_NAME"                     => "Ce champs vous permet de saisir le nom qui sera affiché pour les autres personnes. " .

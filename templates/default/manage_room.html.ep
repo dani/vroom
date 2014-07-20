@@ -4,6 +4,7 @@
 <div class="container-fluid">
 %= include 'owner_password_modal'
 %= include 'join_password_modal'
+%= include 'invite_modal'
   <div class="modal fade" role="dialog" id="deleteRoomModal" aria-labelledby="terminateModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -101,6 +102,17 @@
           </th>
           <th>
             <input class="bs-switch" type="checkbox" id="ownerPassSwitch" data-room="<%= $room %>" <%= ($data->{owner_password}) ? 'checked':''%>>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <%=l 'EMAIL_INVITE' %>
+          </th>
+          <th>
+            <button type="button" class="btn btn-default help" id="showEmailInvite" data-room="<%= $room %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'YOU_CAN_INVITE_BY_MAIL' %>">
+              <span class="glyphicon glyphicon-envelope">
+              </span>
+            </button>
           </th>
         </tr>
       </tbody>

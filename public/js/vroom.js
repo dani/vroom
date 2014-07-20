@@ -472,6 +472,29 @@ function initManage(){
     }, 2000);
   });
 
+  // Show the invite by email dialog
+  $('#showEmailInvite').click(function(){
+    $('#emailInviteModal').modal('show');
+    data.room = $(this).data('room');
+  });
+
+  // Handle Email Invitation
+  $('#inviteEmail').submit(function(event) {
+    event.preventDefault();
+    var rcpt    = $('#recipient').val();
+        message = $('#message').val();
+    // Simple email address verification
+    // not fullproof, but email validation is a real nightmare
+    if (!rcpt.match(/\S+@\S+\.\S+/)){
+      $.notify(locale.ERROR_MAIL_INVALID, 'error');
+      return;
+    }
+    data.action = 'invite';
+    data.recipient = rcpt;
+    data.message = message
+    sendAction(data);
+  });
+
 }
 
 // This is the main function called when you join a room
