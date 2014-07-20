@@ -28,19 +28,19 @@ our $components = {
   "Mojolicious" => {
     url => 'http://mojolicio.us/'
   },
-  "Jquery" => {
+  "jQuery" => {
     url => 'http://jquery.com/'
   },
   "notify.js" => {
     url => 'http://notifyjs.com/'
   },
-  "jquery-browser-plugin" => {
+  "jQuery-browser-plugin" => {
     url => 'https://github.com/gabceb/jquery-browser-plugin'
   },
-  "jquery-tinytimer" => {
+  "jQuery-tinytimer" => {
     url => 'https://github.com/odyniec/jQuery-tinyTimer'
   },
-  "jquery-etherpad-lite" => {
+  "jQuery-etherpad-lite" => {
     url => 'https://github.com/ether/etherpad-lite-jquery-plugin'
   },
   "sprintf.js" => {
@@ -49,7 +49,7 @@ our $components = {
   "node.js" => {
     url => 'http://nodejs.org/'
   },
-  "bootstrap" => {
+  "Bootstrap" => {
     url => 'http://getbootstrap.com/'
   },
   "MariaDB" => {
