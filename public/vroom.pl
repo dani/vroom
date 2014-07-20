@@ -367,7 +367,7 @@ helper delete_participants => sub {
   my $self = shift;
   $self->app->log->debug('Removing inactive participants from the database');
   my $sth = eval {
-    $self->db->prepare("DELETE FROM `participants` WHERE (`activity_timestamp` < 7200 OR `activity_timestamp` IS NULL);")
+    $self->db->prepare("DELETE FROM `participants` WHERE (`activity_timestamp` < 600 OR `activity_timestamp` IS NULL);")
   } || return undef;
   $sth->execute() || return undef;
   return 1;
