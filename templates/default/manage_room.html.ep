@@ -65,6 +65,14 @@
         </tr>
         <tr>
           <th>
+            <%=l 'NUMBER_OF_PARTICIPANTS' %>
+          </th>
+          <th>
+            <%= $participants %>
+          </th>
+        </tr>
+        <tr>
+          <th>
             <%=l 'LOCKED' %>
           </th>
           <th>

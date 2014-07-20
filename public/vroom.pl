@@ -802,6 +802,7 @@ get '/help' => 'help';
 get '/admin/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
+  $self->delete_participants;
   my $data = $self->get_room($room);
   unless ($data){
     return $self->render('error',
@@ -810,7 +811,11 @@ get '/admin/(:room)' => sub {
       room => $room
     );
   }
-  $self->stash(room => $room);
+  my $num = scalar $self->get_participants($room);
+  $self->stash(
+    room         => $room,
+    participants => $num
+  );
 } => 'manage_room';
 # And this one displays the list of existing rooms
 get '/admin' => sub {

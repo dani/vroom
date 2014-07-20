@@ -164,6 +164,7 @@ our %Lexicon = (
   "ROOM_ID"                              => "ID",
   "CREATION_DATE"                        => "Creation date",
   "LAST_ACTIVITY"                        => "Last activity",
+  "NUMBER_OF_PARTICIPANTS"               => "Number of participants",
   "LOCKED"                               => "Locked",
   "ASK_FOR_NAME"                         => "Require to enter a name",
   "PASSWORD_PROTECTED"                   => "Password protection",
