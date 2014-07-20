@@ -2083,7 +2083,8 @@ function initVroom(room) {
   });
 
   $('#saveChat').click(function(){
-    downloadContent('VROOM Tchat (' + room + ').html', $('#chatHistory').html());
+    var d = new Date;
+    downloadContent('VROOM Tchat (' + room + ') ' + d.toLocaleString() + '.html', $('#chatHistory').html());
   });
 
   // Suspend/Play MoH
