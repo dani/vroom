@@ -122,7 +122,7 @@ our $config = plugin Config => {
     poweredBy                     => '<a href="http://www.firewall-services.com" target="_blank">Firewall Services</a>',
     template                      => 'default',
     inactivityTimeout             => 3600,
-    persistentInactivityTimeout   => 0,
+    reservedInactivityTimeout     => 5184000,
     commonRoomNames               => [ qw() ],
     logLevel                      => 'info',
     chromeExtensionId             => 'ecicdpoejfllflombfanbhfpgcimjddn',
@@ -380,7 +380,7 @@ helper delete_rooms => sub {
   $self->app->log->debug('Removing unused rooms');
   my $timeout = time()-$config->{inactivityTimeout};
   my $sth = eval {
-    $self->db->prepare("SELECT `name` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='0';")
+    $self->db->prepare("SELECT `name` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='0' AND `owner_password` IS NULL;")
    } || return undef;
   $sth->execute();
   my @toDeleteName = ();
@@ -388,10 +388,10 @@ helper delete_rooms => sub {
     push @toDeleteName, $room;
   }
   my @toDeleteId = ();
-  if ($config->{persistentInactivityTimeout} > 0){
-    $timeout = time()-$config->{persistentInactivityTimeout};
+  if ($config->{reservedInactivityTimeout} > 0){
+    $timeout = time()-$config->{reservedInactivityTimeout};
     $sth = eval {
-      $self->db->prepare("SELECT `name` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='1';")
+      $self->db->prepare("SELECT `name` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='0' AND `owner_password` IS NOT NULL;")
     } || return undef;
     $sth->execute();
     while (my $room = $sth->fetchrow_array){
@@ -560,19 +560,38 @@ helper set_owner_pass => sub {
   # Might be separated in the future
   if ($pass){
     my $sth = eval {
-      $self->db->prepare("UPDATE `rooms` SET `owner_password`=?,`persistent`='1' WHERE `name`=?;")
+      $self->db->prepare("UPDATE `rooms` SET `owner_password`=? WHERE `name`=?;")
     } || return undef;
     my $pass = Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($pass)->generate;
     $sth->execute($pass,$room) || return undef;
-    $self->app->log->debug($self->session('name') . " has set an owner password on room $room, which is now persistent");
+    $self->app->log->debug($self->session('name') . " has set an owner password on room $room");
   }
   else{
     my $sth = eval {
-      $self->db->prepare("UPDATE `rooms` SET `owner_password`=?,`persistent`='0' WHERE `name`=?;")
+      $self->db->prepare("UPDATE `rooms` SET `owner_password`=? WHERE `name`=?;")
     } || return undef;
     $sth->execute(undef,$room) || return undef;
-    $self->app->log->debug($self->session('name') . " has removed the owner password on room $room, which is not persistent anymore");
+    $self->app->log->debug($self->session('name') . " has removed the owner password on room $room");
   }
+};
+
+# Make the room persistent
+helper set_persistent => sub {
+  my $self = shift;
+  my ($room,$set) = @_;
+  my $data = $self->get_room($room);
+  return undef unless ($data);
+  my $sth = eval {
+    $self->db->prepare("UPDATE `rooms` SET `persistent`=? WHERE `name`=?")
+  } || return undef;
+  $sth->execute($set,$room) || return undef;
+  if ($set eq '1'){
+    $self->app->log->debug("Room $room is now persistent");
+  }
+  else{
+    $self->app->log->debug("Room $room isn't persistent anymore");
+  }
+  return 1;
 };
 
 # Add an email address to the list of notifications
@@ -1238,7 +1257,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
           $msg = $self->l('ERROR_COMMON_ROOM_NAME');
         }
         elsif ($self->set_owner_pass($room,$pass)){
-          $msg = ($pass) ? $self->l('ROOM_NOW_PERSISTENT') : $self->l('ROOM_NO_MORE_PERSISTENT');
+          $msg = ($pass) ? $self->l('ROOM_NOW_RESERVED') : $self->l('ROOM_NO_MORE_RESERVED');
           $status = 'success';
         }
       }
@@ -1257,6 +1276,30 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
                status => $status
              }
            );
+  }
+  # Handle persistence
+  elsif ($action eq 'setPersistent'){
+    my $type = $self->param('type');
+    my $status = 'error';
+    my $msg    = $self->l('ERROR_OCCURRED');
+    # Only possible through /admin/action
+    if ($prefix ne 'admin'){
+      $msg = $self->l('NOT_ALLOWED');
+    }
+    elsif($type eq 'set' && $self->set_persistent($room,'1')){
+      $status = 'success';
+      $msg = $self->l('ROOM_NOW_PERSISTENT');
+    }
+    elsif($type eq 'unset' && $self->set_persistent($room,'0')){
+      $status = 'success';
+      $msg = $self->l('ROOM_NO_MORE_PERSISTENT');
+    }
+    return $self->render(
+      json => {
+        msg    => $msg,
+        status => $status
+      }
+    );
   }
   # A participant is trying to auth as an owner, lets check that
   elsif ($action eq 'authenticate'){

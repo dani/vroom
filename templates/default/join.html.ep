@@ -159,8 +159,8 @@
                       <span class="glyphicon glyphicon-lock">
                       </span>
                     </label>
-                    <label class="btn btn-default help" id="persistentLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MAKE_THIS_ROOM_PERSISTENT' %>">
-                      <input type="checkbox" id="persistentButton">
+                    <label class="btn btn-default help" id="ownerPassLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'RESERVE_THIS_ROOM' %>">
+                      <input type="checkbox" id="ownerPassButton">
                       <span class="glyphicon glyphicon-pushpin">
                       </span>
                     </label>
@@ -472,7 +472,7 @@
                     </div>
                   </div>
                   <div class="col-md-10">
-                    <%=l 'HELP_PERSISTENT_BUTTON' %>
+                    <%=l 'HELP_RESERVE_BUTTON' %>
                   </div>
                 </div>
                 <div class="list-group-item row ownerEl">

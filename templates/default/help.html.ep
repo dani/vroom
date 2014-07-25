@@ -64,13 +64,13 @@
       <div class="panel-heading">
         <h4 class="panel-title">
           <a data-toggle="collapse" data-parent="#accordion" href="#collapsePersistentRooms">
-            <%=l 'PERSISTENT_ROOMS' %>
+            <%=l 'RESERVED_ROOMS' %>
           </a>
         </h4>
       </div>
       <div id="collapsePersistentRooms" class="panel-collapse collapse">
         <div class="panel-body">
-          <%==l 'HELP_PERSISTENT_ROOMS' %>
+          <%==l 'HELP_RESERVED_ROOMS' %>
         </div>
       </div>
     </div>

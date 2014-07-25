@@ -122,16 +122,16 @@ our %Lexicon = (
   "PASSWORD_PROTECT"                     => "Password protect",
   "PASSWORD_PROTECT_SET"                 => "A password will be needed to join this room",
   "PASSWORD_PROTECT_UNSET"               => "No password will be asked to join this room",
-  "ROOM_NOW_PERSISTENT"                  => "This room is now persistent",
-  "ROOM_NO_MORE_PERSISTENT"              => "This room isn't persistent anymore",
+  "ROOM_NOW_RESERVED"                    => "This room is now reserved",
+  "ROOM_NO_MORE_RESERVED"                => "This room isn't reserved anymore",
   "PASSWORDS_DO_NOT_MATCH"               => "Passwords do not match",
-  "MAKE_THIS_ROOM_PERSISTENT"            => "Make this room persistent",
-  "SET_OWNER_PASS_PERSISTENT"            => "To make this room persistent, you must set a manager password. Keep it carefully, " .
+  "RESERVE_THIS_ROOM"                    => "Reserve this room",
+  "SET_OWNER_PASS"                       => "To reserve this room, you must set an owner password. Keep it carefully, " .
                                             "it'll grant you access to the configuration menus next time you connect.",
   "A_STANDARD_ROOM_EXPIRES_AFTER_d"      => "A standard room will be deleted after %d hour(s) without activity",
-  "A_PERSISTENT_ROOM"                    => "A persistant room",
+  "A_RESERVED_ROOM"                      => "A reserved room",
   "EXPIRE_AFTER_d"                       => "will be deleted after %d day(s) without activity",
-  "NEVER_EXPIRE"                         => "will be kept forever",
+  "WILL_NEVER_EXPIRE"                    => "will be kept forever",
   "CONFIRM_PASSWORD"                     => "Confirm password",
   "PROTECT_ROOM_WITH_PASSWORD"           => "If this password is set, participants will have to type it before the system let them in",
   "ERROR_COMMON_ROOM_NAME"               => "Sorry, this room name is too comon to be reserved",
@@ -167,8 +167,11 @@ our %Lexicon = (
   "NUMBER_OF_PARTICIPANTS"               => "Number of participants",
   "LOCKED"                               => "Locked",
   "ASK_FOR_NAME"                         => "Require to enter a name",
-  "PASSWORD_PROTECTED"                   => "Password protection",
+  "JOIN_PASSWORD"                        => "Password to join the room",
+  "OWNER_PASSWORD"                       => "Password to manage the room",
   "PERSISTENT"                           => "Persistent",
+  "ROOM_NOW_PERSISTENT"                  => "This room is now persistent",
+  "ROOM_NO_MORE_PERSISTENT"              => "This rooms isn't persistent anymore",
   "EMAIL_INVITE"                         => "Email invitation",
   "DELETE_THIS_ROOM"                     => "Delete this room",
   "CONFIRM_DELETE"                       => "Confirm delation",
@@ -194,7 +197,7 @@ our %Lexicon = (
   "HELP_PASSWORD_BUTTON"                 => "This button will protect access to this room with a password. Note that this password " .
                                             "isn't asked it you join the room through an email invitation (in which case the " .
                                             "authentication is done with a uniq token valid for two hours)",
-  "HELP_PERSISTENT_BUTTON"               => "Make this room persistent, you'll be able to leave, reconnecte, and get configuration menus back. " .
+  "HELP_RESERVE_BUTTON"                  => "Reserve this room, you'll be able to leave, reconnect, and get configuration menus back. " .
                                             "The room will also be kept much longer.",
   "HELP_ASK_FOR_NAME_BUTTON"             => "This will enforce participants to set their name before joining the room.",
   "HELP_WIPE_DATA_BUTTON"                => "This will wipe room data (chat history and collaborative pad content)",
@@ -321,15 +324,15 @@ our %Lexicon = (
                                             "later, which are simple participants). For example, he can protect access with a password " .
                                             "which will be required before you can join the room. He also can set the manager's password " .
                                             "which will allow him, if he leaves the room, to recover its privileges when he connects again.",
-  "PERSISTENT_ROOMS"                     => "Persistant rooms",
-  "HELP_PERSISTENT_ROOMS"                => "By default, rooms are ephemeral, which means they are automatically deleted if they " .
-                                            "have no activity for a long time. The room's creator can define a manager's password, " .
-                                            "which will make the room persistent. Note that a persistent room can still be deleted " .
-                                            "if it's not used for a very long period of time.",
+  "RESERVED_ROOMS"                       => "Reserved rooms",
+  "HELP_RESERVED_ROOMS"                  => "By default, rooms are ephemeral, which means they are automatically deleted if they " .
+                                            "have no activity for some time. The room's creator can define an owner's password, " .
+                                            "which will make the room reserved. A reserved room can still be deleted " .
+                                            "if it's not used for a very long period of time, but will last longuer on the system",
   "RESERVE_YOUR_ROOM"                    => "Reserve your room",
   "HELP_RESERVE_YOUR_ROOM"               => "Want to reserve your room name so it's always available for you (company name, ongoing project " .
-                                            "etc.) ? Just set both a join password and the manager password. The room will be kept " .
-                                            "as long as the manager password is set (and as long as you use it from time to time)",
+                                            "etc.) ? Just set both a join password and the owner password. The room will be kept " .
+                                            "as long as the owner password is set (and as long as you use it from time to time)",
   "BE_NOTIFIED"                          => "Notifications",
   "HELP_BE_NOTIFIED"                     => "You can be notified by email as soon as someone joins one of your rooms. For example, " .
                                             "create a room, add a password to make it persistent and add the link in your email signature. " .

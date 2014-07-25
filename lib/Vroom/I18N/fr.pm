@@ -128,17 +128,17 @@ our %Lexicon = (
     "PASSWORD_PROTECT"                          => "Protéger par mot de passe",
     "PASSWORD_PROTECT_SET"                      => "Un mot de passe sera demandé pour rejoindre ce salon",
     "PASSWORD_PROTECT_UNSET"                    => "Aucun mot de passe ne sera demandé pour rejoindre ce salon",
-    "ROOM_NOW_PERSISTENT"                       => "Ce salon est maintenant persistant",
-    "ROOM_NO_MORE_PERSISTENT"                   => "Ce salon n'est plus persistant",
+    "ROOM_NOW_RESERVED"                         => "Ce salon est maintenant réservé",
+    "ROOM_NO_MORE_RESERVED"                     => "Ce salon ne vous est plus réservé",
     "PASSWORDS_DO_NOT_MATCH"                    => "Les mots de passe ne correspondent pas",
-    "MAKE_THIS_ROOM_PERSISTENT"                 => "Rendre ce salon persistant",
-    "SET_OWNER_PASS_PERSISTENT"                 => "Pour rendre ce salon persistant, vous devez saisir un mot de passe. " .
+    "RESERVE_THIS_ROOM"                         => "Réserver ce salon",
+    "SET_OWNER_PASS"                            => "Pour réserver ce salon, vous devez saisir un mot de passe. " .
                                                    "Conservez le soigneusement, il vous permettra de retrouver " .
                                                    "l'accès aux menus de configuration quand vous vous reconnecterez.",
     "A_STANDARD_ROOM_EXPIRES_AFTER_d"           => "Un salon classique sera détruit après %d heure(s) sans activité",
-    "A_PERSISTENT_ROOM"                         => "Un salon persistant",
+    "A_RESERVED_ROOM"                           => "Un salon réservé",
     "EXPIRE_AFTER_d"                            => "sera détruit après %d jour(s) sans activité",
-    "NEVER_EXPIRE"                              => "sera conservé indéfiniement",
+    "WILL_NEVER_EXPIRE"                         => "sera conservé indéfiniement",
     "CONFIRM_PASSWORD"                          => "Confirmation du mot de passe",
     "PROTECT_ROOM_WITH_PASSWORD"                => "Si ce mot de passe est configuré, les participants devront le saisir avant de pouvoir " .
                                                    "rejoindre le salon",
@@ -174,8 +174,11 @@ our %Lexicon = (
     "NUMBER_OF_PARTICIPANTS"                    => "Nombre de participants",
     "LOCKED"                                    => "Verrouillé",
     "ASK_FOR_NAME"                              => "Exige de saisir un nom",
-    "PASSWORD_PROTECTED"                        => "Protection par mot de passe",
+    "JOIN_PASSWORD"                             => "Mot de passe d'accès au salon",
+    "OWNER_PASSWORD"                            => "Mot de passe de gestionnaire",
     "PERSISTENT"                                => "Persistant",
+    "ROOM_NOW_PERSISTENT"                       => "Ce salon est maintenant persistant",
+    "ROOM_NO_MORE_PERSISTENT"                   => "Ce salon n'est plus persistant",
     "EMAIL_INVITE"                              => "Invitation par email",
     "DELETE_THIS_ROOM"                          => "Supprimer ce salon",
     "CONFIRM_DELETE"                            => "Confirmer la suppression",
@@ -213,7 +216,7 @@ our %Lexicon = (
                                                    "pas demandé lorsque l'on " .
                                                    "rejoint un salon suite à une invitation par email (l'authentification se fait " .
                                                    "par un jeton unique valide pendant deux heures",
-    "HELP_PERSISTENT_BUTTON"                    => "Permet de rendre le salon persistant. Vous pourrez donc vous reconnecter et " .
+    "HELP_RESERVE_BUTTON"                       => "Permet de réserver le salon. Vous pourrez donc vous reconnecter et " .
                                                    "récupérer l'accès aux menus de configuration. Le salon sera également conservé " .
                                                    "bien plus longtemps sur le système",
     "HELP_ASK_FOR_NAME_BUTTON"                  => "Permet d'imposer la saisie du nom avant de pouvoir rejoindre le salon",
@@ -356,12 +359,13 @@ our %Lexicon = (
                                                    "de passe du gestionnaire ce qui lui permettra, s'il quitte le salon, de retrouver " .
                                                    "ses privilèges lorsqu'il se connecte à nouveau. Ces privilèges peuvent aussi être " .
                                                    "donnés à d'autres participants",
-    "PERSISTENT_ROOMS"                          => "Salons persistants",
-    "HELP_PERSISTENT_ROOMS"                     => "Par défaut, les salons sont éphémères, c'est à dire qu'ils sont automatiquement " .
-                                                   "supprimés si ils ne présentent aucune activité pendant une durée prolongée. " .
+    "RESERVED_ROOMS"                            => "Salons réservés",
+    "HELP_RESERVED_ROOMS"                       => "Par défaut, les salons sont éphémères, c'est à dire qu'ils sont automatiquement " .
+                                                   "supprimés si ils ne présentent aucune activité pendant un certains temps. " .
                                                    "Le créateur du salon peut définir un mot de passe de gestionaire, ce qui " .
-                                                   "rendra le salon persistant. Notez qu'un salon persistant peut tout de même " .
-                                                   "être supprimé si il n'est pas utilisé pendant une très longue période.",
+                                                   "rendra réservera le salon. Un salon réservé peut tout de même " .
+                                                   "être supprimé si il n'est pas utilisé pendant une très longue période, mais le " .
+                                                   "délais sera bien plus long.",
     "RESERVE_YOUR_ROOM"                         => "Réservez votre salon",
     "HELP_RESERVE_YOUR_ROOM"                    => "Vous souhaitez réserver le nom de votre salon pour qu'il soit toujours disponible " .
                                                    "pour vous (nom de votre entreprise, nom d'un projet en cours etc.) ? Configurez simplement " .

@@ -23,10 +23,11 @@ secret => 'ChangeMe!',
 # App
 # Rooms without any activity for that long (in seconds) will be destroyed
 inactivityTimeout => 3600,
-# Inactivity timeout (in seconds) for persistent rooms
+# Inactivity timeout (in seconds) for rooms which have an owner password
 # 0 means they are not deleted. You can use a high number
-# so that persistent rooms are kept long enough, but deleted when not used
-persistentInactivityTimeout => 0,
+# so that those rooms are kept long enough, but deleted when really not used
+# The admin interface lets you flag some room as persistent, meaning they will never be deleted
+reservedInactivityTimeout => 0,
 # A list of room names which are valid but too common to allow reservation
 # with an owner password
 commonRoomNames => [

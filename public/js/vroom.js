@@ -400,7 +400,7 @@ function initManage(){
     }
     else if (param === 'ownerPassSwitch'){
       if (state){
-        $('#persistentModal').modal('show');
+        $('#ownerPassModal').modal('show');
         sw.bootstrapSwitch('toggleState', true);
       }
       else{
@@ -408,6 +408,11 @@ function initManage(){
         data.type = 'owner';
         sendAction(data,sw);
       }
+    }
+    else if (param === 'persistentSwitch'){
+      data.action = 'setPersistent';
+      data.type = (state) ? 'set' : 'unset';
+      sendAction(data,sw);
     }
     // Something isn't implemented yet ?
     else{
@@ -438,7 +443,7 @@ function initManage(){
     }
   });
 
-  $('#persistentForm').submit(function(event) {
+  $('#ownerPassForm').submit(function(event) {
     event.preventDefault();
     var pass  = $('#ownerPass').val();
     var pass2 = $('#ownerPassConfirm').val();
@@ -451,7 +456,7 @@ function initManage(){
       data.password = pass
       sendAction(data, $('#ownerPassSwitch'));
       $('#ownerPassSwitch').bootstrapSwitch('toggleState', true);
-      $('#persistentModal').modal('hide');
+      $('#ownerPassModal').modal('hide');
     }
     else{
       $('#ownerPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
@@ -599,8 +604,8 @@ function initVroom(room) {
           $('#joinPassButton').prop('checked', true);
         }
         if (data.owner_auth == 'yes'){
-          $('#persistentLabel').addClass('btn-danger active');
-          $('#persistentButton').prop('checked', true);
+          $('#ownerPassLabel').addClass('btn-danger active');
+          $('#ownerPassButton').prop('checked', true);
         }
       }
     });
@@ -1430,13 +1435,13 @@ function initVroom(room) {
       var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
       if (data.payload.action == 'set'){
         $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(who)), 'info');
-        $('#persistentLabel').addClass('btn-danger active');
-        $('#persistentButton').prop('checked', true);
+        $('#ownerPassLabel').addClass('btn-danger active');
+        $('#ownerPassButton').prop('checked', true);
       }
       else{
         $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(who)), 'info');
-        $('#persistentLabel').removeClass('btn-danger active');
-        $('#persistentButton').prop('checked', false);
+        $('#ownerPassLabel').removeClass('btn-danger active');
+        $('#ownerPassButton').prop('checked', false);
       }
     }
     else{
@@ -1983,15 +1988,15 @@ function initVroom(room) {
     }
   });
 
-  $('#persistentButton').change(function(){
+  $('#ownerPassButton').change(function(){
     var action = ($(this).is(':checked')) ? 'set':'unset';
     if (action == 'set'){
-      $('#persistentModal').modal('show');
+      $('#ownerPassModal').modal('show');
       // Uncheck the button now
       // so it's not inconsistent if we just close the modal dialog
       // submitting the form will recheck it
-      $('#persistentButton').prop('checked', false);
-      $('#persistentLabel').removeClass('active');
+      $('#ownerPassButton').prop('checked', false);
+      $('#ownerPassLabel').removeClass('active');
     }
     else{
       $.ajax({
@@ -2008,7 +2013,7 @@ function initVroom(room) {
           if (data.status == 'success'){
             $.notify(data.msg, 'info');
             webrtc.sendToAll('owner_password', {action: 'remove'});
-            $('#persistentLabel').removeClass('btn-danger active');
+            $('#ownerPassLabel').removeClass('btn-danger active');
           }
           else{
             $.notify(data.msg, 'error');
@@ -2019,7 +2024,7 @@ function initVroom(room) {
     }
   });
 
-  $('#persistentForm').submit(function(event) {
+  $('#ownerPassForm').submit(function(event) {
     event.preventDefault();
     var pass  = $('#ownerPass').val();
     var pass2 = $('#ownerPassConfirm').val();
@@ -2034,15 +2039,15 @@ function initVroom(room) {
         },
         error: function() {
           $.notify(locale.ERROR_OCCURRED, 'error');
-          $('#persistentLabel').removeClass('btn-danger active');
+          $('#ownerPassLabel').removeClass('btn-danger active');
         },
         success: function(data) {
           $('#ownerPass').val('');
           $('#ownerPassConfirm').val('');
           if (data.status == 'success'){
-            $('#persistentModal').modal('hide');
-            $('#persistentLabel').addClass('btn-danger active');
-            $('#persistentButton').prop('checked', true);
+            $('#ownerPassModal').modal('hide');
+            $('#ownerPassLabel').addClass('btn-danger active');
+            $('#ownerPassButton').prop('checked', true);
             $.notify(data.msg, 'info');
             webrtc.sendToAll('owner_password', {action: 'set'});
           }
@@ -2224,7 +2229,7 @@ function initVroom(room) {
   });
 
   // Empty password fields on modal dismiss
-  $('#joinPassModal,#persistentModal').on('hide.bs.modal',function(){
+  $('#joinPassModal,#ownerPassModal').on('hide.bs.modal',function(){
     $(this).find(':input').val('');
   });
 

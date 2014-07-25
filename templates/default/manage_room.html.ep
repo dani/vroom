@@ -90,7 +90,7 @@
         </tr>
         <tr>
           <th>
-            <%=l 'PASSWORD_PROTECTED' %>
+            <%=l 'JOIN_PASSWORD' %>
           </th>
           <th>
             <input class="bs-switch" type="checkbox" id="joinPassSwitch" data-room="<%= $room %>" <%= ($data->{join_password}) ? 'checked':''%>>
@@ -98,10 +98,18 @@
         </tr>
         <tr>
           <th>
-            <%=l 'PERSISTENT' %>
+            <%=l 'OWNER_PASSWORD' %>
           </th>
           <th>
             <input class="bs-switch" type="checkbox" id="ownerPassSwitch" data-room="<%= $room %>" <%= ($data->{owner_password}) ? 'checked':''%>>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <%=l 'PERSISTENT' %>
+          </th>
+          <th>
+            <input class="bs-switch" type="checkbox" id="persistentSwitch" data-room="<%= $room %>" <%= ($data->{persistent}) ? 'checked':''%>>
           </th>
         </tr>
         <tr>
