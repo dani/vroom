@@ -307,7 +307,7 @@ our %Lexicon = (
     "HELP"                                      => "Aide",
     "ABOUT"                                     => "À propos",
     "SECURE"                                    => "Sécurisé",
-    "P2P_COMMUNICATION"                         => "Avec VROOM, vos communications se font de pair à pair (directement enre utilisateurs), " .
+    "P2P_COMMUNICATION"                         => "Avec VROOM, vos communications se font de pair à pair (directement entre utilisateurs), " .
                                                    "et sont sécurisées",
     "WORKS_EVERYWHERE"                          => "Universel",
     "MODERN_BROWSERS"                           => "VROOM fonctionne avec les navigateurs modernes (Google Chrome, Mozilla Firefox, Opera), " .
@@ -319,13 +319,13 @@ our %Lexicon = (
                                                    "En général, vous pouvez discuter à 5~6 personnes sans problème.",
     "NO_SIGNIN"                                 => "Pas d'inscription",
     "YOU_DONT_HAVE_TO_REGISTER"                 => "Vous en avez marre de créer un compte sur tous les services possibles et imaginables, " .
-                                                   "de devoir vérifier que ceux avec qui vous voulez parler ont eux aussi créer un compte ? " .
+                                                   "de devoir vérifier que ceux avec qui vous voulez parler ont eux aussi créé un compte ? " .
                                                    "Ça tombe bien, avec VROOM, vous n'en avez pas besoin: aucun compte à créer",
     "QUICK"                                     => "Rapide",
     "STOP_WASTING_TIME"                         => "Ne perdez plus votre temps à vérifier, installer, expliquer. Cliquez, envoyez un lien " .
                                                    "à qui vous voulez, et discutez. On ne peut pas faire plus simple ou plus rapide.",
     "SHARE_DESKTOP_OR_WINDOW"                   => "Partagez votre écran entier, ou seulement une fenêtre en un clique avec une qualité " .
-                                                   "exceptionnelle. Grâce à cette fonctionnalité, diffusez n'importe quel contenue " .
+                                                   "exceptionnelle. Grâce à cette fonctionnalité, diffusez n'importe quel contenu " .
                                                    "(images, présentations, documents etc...)",
     "TEXT_CHAT"                                 => "Tchat intégré",
     "SECURED_TEXT_CHAT"                         => "La vidéo et le son ne vous suffisent pas ? Vous pouvez aussi utiliser le tchat intégré et " .
