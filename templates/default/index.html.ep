@@ -94,7 +94,7 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/share.png" alt="<%=l 'MULTI_USER' %>">
+            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/multi.png" alt="<%=l 'MULTI_USER' %>">
             <p>
               <%=l 'THE_LIMIT_IS_YOUR_PIPE' %>
             </p>
