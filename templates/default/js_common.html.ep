@@ -1,5 +1,6 @@
     <script type="text/javascript">
       var rootUrl = '<%= $self->get_url('/'); %>';
+      var currentLang = '<%= $self->languages %>';
     </script>
     <% foreach my $js (qw(jquery-1.11.1.min.js bootstrap.min.js notify-combined.min.js bootstrap-switch.min.js vroom.js)){
     %>

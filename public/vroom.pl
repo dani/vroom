@@ -133,6 +133,64 @@ our $config = plugin Config => {
   }
 };
 
+our @js_locales = qw(
+  ERROR_MAIL_INVALID
+  ERROR_OCCURRED
+  ERROR_NAME_INVALID
+  CANT_SHARE_SCREEN
+  SCREEN_SHARING_ONLY_FOR_CHROME
+  SCREEN_SHARING_CANCELLED
+  EVERYONE_CAN_SEE_YOUR_SCREEN
+  SCREEN_UNSHARED
+  MIC_MUTED
+  MIC_UNMUTED
+  CAM_SUSPENDED
+  CAM_RESUMED
+  SET_YOUR_NAME_TO_CHAT
+  ROOM_LOCKED_BY_s
+  ROOM_UNLOCKED_BY_s
+  PASSWORD_PROTECT_ON_BY_s
+  PASSWORD_PROTECT_OFF_BY_s
+  OWNER_PASSWORD_CHANGED_BY_s
+  OWNER_PASSWORD_REMOVED_BY_s
+  SCREEN_s
+  TO_INVITE_SHARE_THIS_URL
+  NO_SOUND_DETECTED
+  DISPLAY_NAME_TOO_LONG
+  s_IS_MUTING_YOU
+  s_IS_MUTING_s
+  s_IS_UNMUTING_YOU
+  s_IS_UNMUTING_s
+  s_IS_SUSPENDING_YOU
+  s_IS_SUSPENDING_s
+  s_IS_RESUMING_YOU
+  s_IS_RESUMING_s
+  s_IS_PROMOTING_YOU
+  s_IS_PROMOTING_s
+  s_IS_KICKING_s
+  MUTE_PEER
+  SUSPEND_PEER
+  PROMOTE_PEER
+  KICK_PEER
+  YOU_HAVE_MUTED_s
+  YOU_HAVE_UNMUTED_s
+  CANT_MUTE_OWNER
+  YOU_HAVE_SUSPENDED_s
+  YOU_HAVE_RESUMED_s
+  CANT_SUSPEND_OWNER
+  CANT_PROMOTE_OWNER
+  YOU_HAVE_KICKED_s
+  CANT_KICK_OWNER
+  REMOVE_THIS_ADDRESS
+  DISPLAY_NAME_REQUIRED
+  A_ROOM_ADMIN
+  A_PARTICIPANT
+  PASSWORDS_DO_NOT_MATCH
+  WAIT_WITH_MUSIC
+  DATA_WIPED
+  ROOM_DATA_WIPED_BY_s
+);
+
 # Create etherpad api client if required
 our $ec = undef;
 if ($config->{etherpadUri} =~ m/https?:\/\/.*/ && $config->{etherpadApiKey} ne ''){
@@ -964,14 +1022,15 @@ post '/create' => sub {
 
 # Translation for JS resources
 # As there's no way to list all the available translated strings
-# JS sends us the list it wants as a JSON object
-# and we sent it back once localized
-post '/localize' => sub {
+# we just maintain a list of strings needed
+get '/localize/:lang' => { lang => 'en' } => sub {
   my $self = shift;
-  my $strings = Mojo::JSON->new->decode($self->param('strings'));
-  foreach my $string (keys %$strings){
+  my $strings = {};
+  foreach my $string (@js_locales){
     $strings->{$string} = $self->l($string);
   }
+  # Cache the translation
+  $self->res->headers->cache_control('private,max-age=3600');
   return $self->render(json => $strings);
 };
 
