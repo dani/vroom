@@ -1164,6 +1164,16 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
   my $action = $self->param('action');
   my $prefix = ($self->stash('action') eq 'admin/action') ? 'admin':'room';
   my $room = $self->param('room') || "";
+  if ($action eq 'langSwitch'){
+    my $new_lang = $self->param('lang') || 'en';
+    $self->app->log->debug("switching to lang $new_lang");
+    $self->session(language => $new_lang);
+    return $self->render(
+      json => {
+        status => 'success',
+      }
+    );
+  }
   # Refuse any action from non members of the room
   if ($prefix ne 'admin' && (!$self->session('name') || !$self->has_joined($self->session('name'), $room) || !$self->session($room) || !$self->session($room)->{role})){
     return $self->render(
@@ -1588,6 +1598,13 @@ push @{app->renderer->paths}, '../templates/'.$config->{template};
 app->secret($config->{secret});
 app->sessions->secure(1);
 app->sessions->cookie_name('vroom');
+app->hook(before_dispatch => sub {
+  my $self = shift;
+  # Switch to the desired language
+  if ($self->session('language')){
+    $self->languages($self->session('language'));
+  }
+});
 # And start, lets VROOM !!
 app->start;
 

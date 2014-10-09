@@ -26,6 +26,15 @@
           <li>
             <a href="<%= $self->get_url('/feedback') %>"><%=l 'FEEDBACK' %></a>
           </li>
+          <li>
+            <select class="form-control navbar-btn" id="langSwitch">
+              <% foreach my $lang (qw(en fr)){ %>
+              <option value="<%= $lang %>" <%= ($self->languages eq $lang) ? 'selected="selected"' : '' %>>
+                <%= $lang %>
+              </option>
+              <% } %>
+            </select>
+          </li>
         </ul>
       </div>
     </div>

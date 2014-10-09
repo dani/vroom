@@ -40,6 +40,27 @@ $.ajaxSetup({
   dataType: 'json',
 });
 
+// Handle lang switch
+$('#langSwitch').change(function(){
+    $.ajax({
+    data: {
+      action: 'langSwitch',
+      lang: $('#langSwitch').val()
+    },
+    error: function() {
+      $.notify(locale.ERROR_OCCURRED, 'error');
+    },
+    success: function(data){
+      if (data.status === 'success'){
+        window.location.reload();
+      }
+      else{
+        $.notify(locale.ERROR_OCCURED, 'error');
+      }
+    }
+  });
+});
+
 //
 // Define a few functions
 //
