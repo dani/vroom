@@ -8,12 +8,9 @@
 use lib '../lib';
 use Mojolicious::Lite;
 use Mojolicious::Plugin::Mail;
-use Mojo::JSON;
 use DBI;
-use Digest::MD5 qw(md5_hex);
 use Crypt::SaltedHash;
 use MIME::Base64;
-use Encode;
 use File::stat;
 use File::Basename;
 use Etherpad::API;
