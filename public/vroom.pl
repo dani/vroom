@@ -7,13 +7,12 @@
 
 use lib '../lib';
 use Mojolicious::Lite;
-use Mojolicious::Plugin::Mailer;
+use Mojolicious::Plugin::Mail;
 use Mojo::JSON;
 use DBI;
 use Digest::MD5 qw(md5_hex);
 use Crypt::SaltedHash;
 use MIME::Base64;
-use Email::Sender::Transport::Sendmail;
 use Encode;
 use File::stat;
 use File::Basename;
@@ -208,12 +207,10 @@ plugin I18N => {
   support_url_langs => [qw(en fr)]
 };
 
-# Load mailer plugin with its default values
-plugin Mailer => {
-  from      => $config->{emailFrom},
-  transport => Email::Sender::Transport::Sendmail->new({
-     sendmail => $config->{sendmail}
-  })
+# Load mail plugin with its default values
+plugin mail => {
+  from => $config->{emailFrom},
+  type => 'text/html',
 };
 
 # Wrapper arround DBI
@@ -912,16 +909,13 @@ post '/feedback' => sub {
   my $self = shift;
   my $email = $self->param('email') || '';
   my $comment = $self->param('comment');
-  $self->email(
-    header => [
-      Subject => encode("MIME-Header", $self->l("FEEDBACK_FROM_VROOM")),
-      To => $config->{feedbackRecipient}
-    ],
-    data => [
-      template => 'feedback',
-      email    => $email,
-      comment  => $comment
-    ],
+  my $sent = $self->mail(
+    to => $config->{feedbackRecipient},
+    subject => $self->l("FEEDBACK_FROM_VROOM"),
+    data => $self->render_mail('feedback',
+              email   => $email,
+              comment => $comment
+            )
   );
   $self->redirect_to($self->get_url('feedback_thanks'));
 };
@@ -1217,19 +1211,17 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     }
     else{
       my $inviteId = $self->add_invitation($room,$rcpt);
-      if ($inviteId && $self->email(
-        header => [
-          Subject => encode("MIME-Header", $self->l("EMAIL_INVITATION")),
-          To => $rcpt
-        ],
-        data => [
-          template => 'invite',
-          room     => $room,
-          message  => $message,
-          inviteId => $inviteId,
-          joinPass => ($data->{join_password}) ? 'yes' : 'no'
-        ],
-      )){
+      my $sent = $self->mail(
+                   to      => $rcpt,
+                   subject => $self->l("EMAIL_INVITATION"),
+                   data    => $self->render_mail('invite', 
+                                room     => $room,
+                                message  => $message,
+                                inviteId => $inviteId,
+                                joinPass => ($data->{join_password}) ? 'yes' : 'no'
+                              )
+                 );
+      if ($inviteId && $sent){
         $self->app->log->info($self->session('name') . " sent an invitation for room $room to $rcpt");
         $status = 'success';
         $msg = sprintf($self->l('INVITE_SENT_TO_s'), $rcpt);
@@ -1491,17 +1483,14 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     my $subj = ($name eq '') ? sprintf($self->l('s_JOINED_ROOM_s'), $self->l('SOMEONE'), $room) : sprintf($self->l('s_JOINED_ROOM_s'), $name, $room);
     # Send notifications
     foreach my $rcpt ($self->get_notification($room)){
-      $self->email(
-        header => [
-          Subject => encode("MIME-Header", $subj),
-          To => $rcpt
-        ],
-        data => [
-          template => 'notification',
-          room     => $room,
-          name     => $name
-        ],
-      );
+      my $sent = $self->mail(
+                   to      => $rcpt,
+                   subject => $subj,
+                   data    => $self->render_mail('notification',
+                                room => $room,
+                                name => $name
+                               )
+                 );
     }
     return $self->render(
         json => {
