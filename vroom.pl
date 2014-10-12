@@ -8,7 +8,7 @@
 use lib '../lib';
 use Mojolicious::Lite;
 use Mojolicious::Plugin::Mail;
-use DBI;
+use Mojolicious::Plugin::Database;
 use Crypt::SaltedHash;
 use MIME::Base64;
 use File::stat;
@@ -205,22 +205,18 @@ plugin I18N => {
   support_url_langs => [qw(en fr)]
 };
 
+# Connect to the database
+plugin database => {
+  dsn      => $config->{dbi},
+  username => $config->{dbUser},
+  password => $config->{dbPassword},
+  options  => { mysql_enable_utf8 => 1 }
+};
+
 # Load mail plugin with its default values
 plugin mail => {
   from => $config->{emailFrom},
   type => 'text/html',
-};
-
-# Wrapper arround DBI
-helper db => sub { 
-  my $dbh = DBI->connect($config->{dbi},
-                         $config->{dbUser},
-                         $config->{dbPassword},
-                         {
-                           mysql_enable_utf8 => 1,
-                         }
-  ) || die "Could not connect";
-  $dbh
 };
 
 # Create a cookie based session
@@ -850,6 +846,7 @@ helper create_etherpad_session => sub {
   my $etherpadCookieParam = {};
   if ($config->{etherpadBaseDomain} && $config->{etherpadBaseDomain} ne ''){
     $etherpadCookieParam->{domain} = $config->{etherpadBaseDomain};
+    $self->app->log->debug("Creating an etherpad SesionID cookie for domaine " . $config->{etherpadBaseDomain});
   }
   $self->cookie(sessionID => $etherpadSession, $etherpadCookieParam);
 };
