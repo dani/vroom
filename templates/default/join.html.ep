@@ -700,7 +700,7 @@
               <%=l 'VROOM_CHROME_EXTENSION' %>
             </p>
             <p>
-              <a class="btn btn-default btn-lg" href="https://chrome.google.com/webstore/detail/<%= $config->{chromeExtensionId} %>" target="_blank">
+              <a class="btn btn-default btn-lg" href="https://chrome.google.com/webstore/detail/<%= $config->{'interface.chrome_extension_id'} %>" target="_blank">
                 <span class="glyphicon glyphicon-download-alt">
                 </span>
               </a>
@@ -869,7 +869,7 @@
         setTimeout(function(){
           etherpad = {
             enabled: <%= $etherpad %>,
-            uri: "<%= $config->{etherpadUri} %>",
+            uri: "<%= $config->{'etherpad.uri'} %>",
             group: "<%= $etherpadGroup %>"
           };
           <% if ($video eq 'false'){ %>
@@ -882,11 +882,11 @@
           };
           <% } %>
           webrtc = new SimpleWebRTC({
-                   url: "<%= $config->{signalingServer} %>",
+                   url: "<%= $config->{'signaling.uri'} %>",
                    peerConnectionConfig: {
                      iceServers: [
-                       {"url":"stun:<%= $config->{stunServer} %>"},
-                       <%== ($config->{turnServer} && $config->{turnServer} ne '') ? "{\"url\":\"turn:$config->{turnServer}\", \"username\":\"$room\", \"credential\":\"$turnPassword\"}":'' %>
+                       {"url":"stun:<%= $config->{'turn.stun_server'} %>"},
+                       <%== ($config->{'turn.turn_server'} && $config->{'turn.turn_server'} ne '') ? "{\"url\":\"turn:$config->{'turn.turn_server'}\", \"username\":\"$room\", \"credential\":\"$turnPassword\"}":'' %>
                      ]
                    },
                    localVideoEl: 'webRTCVideoLocal',

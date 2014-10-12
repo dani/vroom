@@ -1,0 +1,66 @@
+[database]
+; Database access settings
+;dsn = 'DBI:mysql:database=devroom;host=localhost'
+;user = 'vroom'
+;password = 'password'
+
+[signaling]
+; URI sent to clients where they can find the signaling server
+;uri = 'https://vroom.exmple.com'
+
+[turn]
+; The stun server sent to client. You can set it to your own stun server
+;stun_server = 'stun.l.google.com:19302'
+; The turn server sent to cliet, you should set it to your own server
+;turn_server = ''
+; the realm used for turn accounts. You shouldn't have to change it
+;turn_realm = 'vroom'
+
+[email]
+; Address set in the From field of email sent by VROOM
+;from = 'no-reply@example.com'
+; Recipient of the feedback messages
+;contact = 'admin@example.com'
+; Path to a sendmail compatible binary used to send emails
+;sendmail = '/sbin/sendmail'
+
+[interface]
+; You can customize the "powered by" at the bottom
+;powered_by = '<a href="http://www.firewall-services.com" target="_blank">Firewall Services</a>'
+; Template to use. Must be a directory under the templates dir
+;template = 'default'
+; ID of the chrome extension which will be proposed when sharing screen on Chrome
+;chrome_extension_id = 'ecicdpoejfllflombfanbhfpgcimjddn'
+
+[cookie]
+; Secret passphrase used to sign cookies. You must set this
+;secret = '1zEewX24ZD%2RvtF%e'
+; Cookie name, You shouldn't have to change this
+;name = 'vroom'
+
+[rooms]
+; After this amount of time in minutes, rooms without any activity will be purged
+;inactivity_timeout = '3600'
+; You can also purge reserved rooms
+;reserved_inactivity_imeout = '5184000'
+; A comma separated list of room names you don't want to be reservable
+;common_names = 'test,test1,test123,0,1,2,3,4,5,6,7,8,9,123,1234,12345,a,aa,abc,azerty,qwerty,vroom,foo,bar,baz'
+
+[log]
+; Verbosity of the web interface. Can be debug, info, warn, error or fatal
+;level = 'warn'
+
+[etherpad]
+; If you want to enabled etherpad-lite integratio, you must set
+; the uri of your instance, and the API key
+;uri = 'https://pad.example.com'
+;api_key = 'be0f90cfc412b03c13e956e77d7944352c06a44e5d94da44ebfa79fb63d7e998'
+; If you run vroom and etherpad-llite on different subdomains, you have to set the common part here
+; For exmple, if you use vroom.domain.tld and pad.domain.tld, set domain.tld here
+;base_domain = 'example.com'
+
+[daemon]
+; IP the hypnotoad daemon will listen on. You can use * to bind on every IP/Interface
+;listen_ip = '127.0.0.1'
+; Port used by the hypnotoad daemon
+;listen_port = '8090'

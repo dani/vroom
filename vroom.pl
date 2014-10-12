@@ -15,6 +15,7 @@ use File::stat;
 use File::Basename;
 use Etherpad::API;
 use Session::Token;
+use Config::Simple;
 
 # List The different components we rely on.
 # Used to generate thanks on the about template
@@ -105,30 +106,37 @@ our $musics = {
 
 app->log->level('info');
 # Read conf file, and set default values
-our $config = plugin Config => {
-  file     => 'conf/vroom.conf',
-  default  => {
-    dbi                           => 'DBI:mysql:database=vroom;host=localhost',
-    dbUser                        => 'vroom',
-    dbPassword                    => 'vroom',
-    signalingServer               => 'https://vroom.example.com/',
-    stunServer                    => 'stun.l.google.com:19302',
-    realm                         => 'vroom',
-    emailFrom                     => 'vroom@example.com',
-    feedbackRecipient             => 'admin@example.com',
-    poweredBy                     => '<a href="http://www.firewall-services.com" target="_blank">Firewall Services</a>',
-    template                      => 'default',
-    inactivityTimeout             => 3600,
-    reservedInactivityTimeout     => 5184000,
-    commonRoomNames               => [ qw() ],
-    logLevel                      => 'info',
-    chromeExtensionId             => 'ecicdpoejfllflombfanbhfpgcimjddn',
-    etherpadUri                   => '',
-    etherpadApiKey                => '',
-    etherpadBaseDomain            => '',
-    sendmail                      => '/sbin/sendmail'
-  }
-};
+my $cfg = new Config::Simple();
+$cfg->read('conf/settings.ini');
+our $config = $cfg->vars();
+
+$config->{'database.dsn'}                      ||= 'DBI:mysql:database=vroom;host=localhost';
+$config->{'database.user'}                     ||= 'vroom';
+$config->{'database.password'}                 ||= 'vroom';
+$config->{'signaling.uri'}                     ||= 'https://vroom.example.com/';
+$config->{'turn.stun_server'}                  ||= 'stun.l.google.com:19302';
+$config->{'turn.turn_server'}                  ||= '';
+$config->{'turn.realm'}                        ||= 'vroom';
+$config->{'email.from '}                       ||= 'vroom@example.com';
+$config->{'email.contact'}                     ||= 'admin@example.com';
+$config->{'email.sendmail'}                    ||= '/sbin/sendmail';
+$config->{'interface.powered_by'}              ||= '<a href="http://www.firewall-services.com" target="_blank">Firewall Services</a>';
+$config->{'interface.template'}                ||= 'default';
+$config->{'interface.chrome_extension_id'}     ||= 'ecicdpoejfllflombfanbhfpgcimjddn';
+$config->{'cookie.secret'}                     ||= 'secret';
+$config->{'cookie.name'}                       ||= 'vroom';
+$config->{'rooms.inactivity_timeout'}          ||= 3600;
+$config->{'rooms.reserved_inactivity_timeout'} ||= 5184000;
+$config->{'rooms.common_names'}                ||= '';
+$config->{'log.level'}                         ||= 'info';
+$config->{'etherpad.uri'}                      ||= '';
+$config->{'etherpad.api_key'}                  ||= '';
+$config->{'etherpad.base_domain'}              ||= '';
+$config->{'daemon.listen_ip'}                  ||= '127.0.0.1';
+$config->{'daemon.listen_port'}                ||= '8090';
+
+# Set log level
+app->log->level($config->{'log.level'});
 
 our @js_locales = qw(
   ERROR_MAIL_INVALID
@@ -190,14 +198,12 @@ our @js_locales = qw(
 
 # Create etherpad api client if required
 our $ec = undef;
-if ($config->{etherpadUri} =~ m/https?:\/\/.*/ && $config->{etherpadApiKey} ne ''){
+if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key'} ne ''){
   $ec = Etherpad::API->new({
-    url => $config->{etherpadUri},
-    apikey => $config->{etherpadApiKey}
+    url => $config->{'etherpad.uri'},
+    apikey => $config->{'etherpad.api_key'}
   });
 }
-
-app->log->level($config->{logLevel});
 
 # Load I18N, and declare supported languages
 plugin I18N => {
@@ -207,15 +213,15 @@ plugin I18N => {
 
 # Connect to the database
 plugin database => {
-  dsn      => $config->{dbi},
-  username => $config->{dbUser},
-  password => $config->{dbPassword},
+  dsn      => $config->{'database.dsn'},
+  username => $config->{'database.user'},
+  password => $config->{'database.password'},
   options  => { mysql_enable_utf8 => 1 }
 };
 
 # Load mail plugin with its default values
 plugin mail => {
-  from => $config->{emailFrom},
+  from => $config->{'email.from'},
   type => 'text/html',
 };
 
@@ -256,7 +262,7 @@ helper create_room => sub {
   } || return undef;
   # Gen a random token. Will be used as a turnPassword
   my $tp = $self->get_random(256);
-  $sth->execute($name,time(),time(),$owner,$tp,$config->{realm}) || return undef;
+  $sth->execute($name,time(),time(),$owner,$tp,$config->{'turn.realm'}) || return undef;
   $self->app->log->info("Room $name created by " . $self->session('name'));
   # Etherpad integration ?
   if ($ec){
@@ -427,7 +433,7 @@ helper delete_participants => sub {
 helper delete_rooms => sub {
   my $self = shift;
   $self->app->log->debug('Removing unused rooms');
-  my $timeout = time()-$config->{inactivityTimeout};
+  my $timeout = time()-$config->{'rooms.inactivity_timeout'};
   my $sth = eval {
     $self->db->prepare("SELECT `name` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='0' AND `owner_password` IS NULL;")
    } || return undef;
@@ -437,8 +443,8 @@ helper delete_rooms => sub {
     push @toDeleteName, $room;
   }
   my @toDeleteId = ();
-  if ($config->{reservedInactivityTimeout} > 0){
-    $timeout = time()-$config->{reservedInactivityTimeout};
+  if ($config->{'rooms.reserved_inactivity_timeout'} > 0){
+    $timeout = time()-$config->{'rooms.reserved_inactivity_timeout'};
     $sth = eval {
       $self->db->prepare("SELECT `name` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='0' AND `owner_password` IS NOT NULL;")
     } || return undef;
@@ -844,9 +850,8 @@ helper create_etherpad_session => sub {
   my $etherpadSession = $ec->create_session($data->{etherpad_group}, $id, time + 86400);
   $self->session($room)->{etherpadSessionId} = $etherpadSession;
   my $etherpadCookieParam = {};
-  if ($config->{etherpadBaseDomain} && $config->{etherpadBaseDomain} ne ''){
-    $etherpadCookieParam->{domain} = $config->{etherpadBaseDomain};
-    $self->app->log->debug("Creating an etherpad SesionID cookie for domaine " . $config->{etherpadBaseDomain});
+  if ($config->{'etherpad.base_domain'} && $config->{'etherpad.base_domain'} ne ''){
+    $etherpadCookieParam->{domain} = $config->{'etherpad.base_domain'};
   }
   $self->cookie(sessionID => $etherpadSession, $etherpadCookieParam);
 };
@@ -905,7 +910,7 @@ post '/feedback' => sub {
   my $email = $self->param('email') || '';
   my $comment = $self->param('comment');
   my $sent = $self->mail(
-    to => $config->{feedbackRecipient},
+    to => $config->{'email.contact'},
     subject => $self->l("FEEDBACK_FROM_VROOM"),
     data => $self->render_mail('feedback',
               email   => $email,
@@ -1309,7 +1314,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     if ($prefix eq 'admin' || $self->session($room)->{role} eq 'owner'){
       if ($type eq 'owner'){
         # Forbid a few common room names to be reserved
-        if (grep { $room eq $_ } @{$config->{commonRoomNames}}){
+        if (grep { $room eq $_ } (split /[,;]/, $config->{'rooms.common_names'})){
           $msg = $self->l('ERROR_COMMON_ROOM_NAME');
         }
         elsif ($self->set_owner_pass($room,$pass)){
@@ -1577,22 +1582,24 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
 };
 
 # use the templates defined in the config
-push @{app->renderer->paths}, 'templates/'.$config->{template};
+push @{app->renderer->paths}, 'templates/'.$config->{'interface.template'};
 # Set the secret used to sign cookies
-app->secret($config->{secret});
+app->secret($config->{'cookie.secret'});
 app->sessions->secure(1);
-app->sessions->cookie_name('vroom');
+app->sessions->cookie_name($config->{'cookie.name'});
 app->hook(before_dispatch => sub {
   my $self = shift;
   # Switch to the desired language
   if ($self->session('language')){
     $self->languages($self->session('language'));
   }
+  # Stash the configuration hashref
+  $self->stash(config => $config);
 });
 # Are we running in hypnotoad ?
 app->config(
   hypnotoad => {
-    listen   => ['http://127.0.0.1:8090'],
+    listen   => ['http://' . $config->{'daemon.listen_ip'} . ':' . $config->{'daemon.listen_port'}],
     pid_file => '/tmp/vroom.pid',
     proxy    => 1
   }
