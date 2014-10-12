@@ -257,11 +257,13 @@ helper create_room => sub {
   # Exit if the name isn't valid or already taken
   return undef if ($self->get_room_by_name($name) || !$self->valid_room_name($name));
   my $sth = eval {
-    $self->db->prepare("INSERT INTO `rooms` (`name`,`create_timestamp`,`activity_timestamp`,`owner`,`token`,`realm`) VALUES (?,?,?,?,?,?);")
+    $self->db->prepare('INSERT INTO `rooms`
+                          (`name`,`create_date`,`last_activity`,`owner`,`token`,`realm`)
+                          VALUES (?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),?,?,?)')
   } || return undef;
   # Gen a random token. Will be used as a turnPassword
   my $tp = $self->get_random(256);
-  $sth->execute($name,time(),time(),$owner,$tp,$config->{'turn.realm'}) || return undef;
+  $sth->execute($name,$owner,$tp,$config->{'turn.realm'}) || return undef;
   $self->app->log->info("Room $name created by " . $self->session('name'));
   # Etherpad integration ?
   if ($ec){
@@ -270,12 +272,14 @@ helper create_room => sub {
   return 1;
 };
 
-# Read room param in the DB and return a perl hash
-helper get_room => sub {
+# Read room param in the DB and return a perl hashref
+helper get_room_by_name => sub {
   my $self = shift;
   my ($name) = @_;
   my $sth = eval {
-    $self->db->prepare("SELECT * FROM `rooms` WHERE `name`=?;")
+    $self->db->prepare('SELECT *
+                          FROM `rooms`
+                          WHERE `name`=?')
   } || return undef;
   $sth->execute($name) || return undef;
   return $sth->fetchall_hashref('name')->{$name};
@@ -286,7 +290,9 @@ helper get_room_by_id => sub {
   my $self = shift;
   my ($id) = @_;
   my $sth = eval {
-    $self->db->prepare("SELECT * FROM `rooms` WHERE `id`=?;")
+    $self->db->prepare("SELECT *
+                          FROM `rooms`
+                          WHERE `id`=?;")
   } || return undef;
   $sth->execute($id) || return undef;
   return $sth->fetchall_hashref('id')->{$id};
@@ -300,7 +306,9 @@ helper lock_room => sub {
   return undef unless ( %{ $self->get_room_by_name($name) });
   return undef unless ($lock =~ m/^0|1$/);
   my $sth = eval {
-    $self->db->prepare("UPDATE `rooms` SET `locked`=? WHERE `name`=?;")
+    $self->db->prepare('UPDATE `rooms`
+                          SET `locked`=?
+                          WHERE `name`=?')
   } || return undef;
   $sth->execute($lock,$name) || return undef;
   my $action = ($lock eq '1') ? 'locked':'unlocked';
@@ -315,7 +323,9 @@ helper add_participant => sub {
   my ($name,$participant) = @_;
   my $room = $self->get_room_by_name($name) || return undef;
   my $sth = eval {
-    $self->db->prepare("INSERT IGNORE INTO `participants` (`id`,`participant`,`activity_timestamp`) VALUES (?,?,?);")
+    $self->db->prepare('INSERT IGNORE INTO `participants`
+                          (`id`,`room_id`,`participant`,`last_activity`)
+                          VALUES (?,?,?,?)')
   } || return undef;
   $sth->execute($room->{id},$participant,time()) || return undef;
   $self->app->log->info($self->session('name') . " joined the room $name");
@@ -328,7 +338,9 @@ helper remove_participant => sub {
   my ($name,$participant) = @_;
   my $room = $self->get_room_by_name($name) || return undef;
   my $sth = eval {
-    $self->db->prepare("DELETE FROM `participants` WHERE `id`=? AND `participant`=?;")
+    $self->db->prepare('DELETE FROM `participants`
+                          WHERE `id`=?
+                            AND `participant`=?')
   } || return undef;
   $sth->execute($room->{id},$participant) || return undef;
   $self->app->log->info($self->session('name') . " leaved the room $name");
@@ -341,7 +353,9 @@ helper get_participants => sub {
   my ($name) = @_;
   my $room = $self->get_room_by_name($name) || return undef;
   my $sth = eval {
-    $self->db->prepare("SELECT `participant` FROM `participants` WHERE `id`=?;")
+    $self->db->prepare('SELECT `participant`
+                          FROM `participants`
+                          WHERE `id`=?')
   } || return undef;
   $sth->execute($room->{id}) || return undef;
   my @res;
@@ -355,16 +369,27 @@ helper get_participants => sub {
 helper set_peer_role => sub {
   my $self = shift;
   my ($room,$name,$id,$role) = @_;
+  my $data = $self->get_room_by_name($room);
+  if (!$data){
+    return undef;
+  }
   # Check if this ID isn't the one from another peer first
   my $sth = eval {
-    $self->db->prepare("SELECT * FROM `participants` WHERE `peer_id`=? AND `participant`!=? AND `id` IN (SELECT `id` FROM `rooms` WHERE `name`=?)")
+    $self->db->prepare('SELECT COUNT(`id`)
+                          FROM `participants`
+                          WHERE `peer_id`=?
+                            AND `participant`!=?
+                            AND `room_id`=?')
   } || return undef;
-  $sth->execute($id,$name,$room) || return undef;
+  $sth->execute($id,$name,$data->{id}) || return undef;
   return undef if ($sth->rows > 0);
   $sth = eval {
-    $self->db->prepare("UPDATE `participants` SET `peer_id`=?,`role`=? WHERE `participant`=? AND `id` IN (SELECT `id` FROM `rooms` WHERE `name`=?)")
+    $self->db->prepare('UPDATE `participants`
+                          SET `peer_id`=?,`role`=?
+                          WHERE `participant`=?
+                            AND `room_id`=?')
   } || return undef;
-  $sth->execute($id,$role,$name,$room) || return undef;
+  $sth->execute($id,$role,$name,$data->{id}) || return undef;
   $self->app->log->info("User $name (peer id $id) has now the $role role in room $room");
   return 1;
 };
@@ -373,10 +398,19 @@ helper set_peer_role => sub {
 helper get_peer_role => sub {
   my $self = shift;
   my ($room,$id) = @_;
+  my $data = $self->get_room_by_name($room);
+  if (!$data){
+    return undef;
+  }
   my $sth = eval {
-    $self->db->prepare("SELECT `role` FROM `participants` WHERE `peer_id`=? AND `id` IN (SELECT `id` FROM `rooms` WHERE `name`=?)")
+    $self->db->prepare('SELECT `role`
+                          FROM `participants`
+                          WHERE `peer_id`=?
+                            AND `room_id`=?
+                          LIMIT 1')
   } || return undef;
-  $sth->execute($id,$room) || return undef;
+  # TODO: replace with bind_columns
+  $sth->execute($id,$data->{id}) || return undef;
   if ($sth->rows == 1){
     my ($role) = $sth->fetchrow_array();
     return $role;
@@ -390,15 +424,16 @@ helper get_peer_role => sub {
 helper promote_peer => sub {
   my $self = shift;
   my ($room,$id) = @_;
+  my $data = $self->get_room_by_name($room);
+  if (!$data){
+    return undef;
+  }
   my $sth = eval {
-    $self->db->prepare("SELECT * FROM `participants` WHERE `peer_id`=? AND `id` IN (SELECT `id` FROM `rooms` WHERE `name`=?)")
+    $self->db->prepare('UPDATE `participants`
+                          SET `role`=\'owner\'
+                          WHERE `peer_id`=? AND `room_id`=?');
   } || return undef;
-  $sth->execute($id,$room) || return undef;
-  return undef if ($sth->rows != 1);
-  $sth = eval {
-    $self->db->prepare("UPDATE `participants` SET `role`='owner' WHERE `peer_id`=? AND `id` IN (SELECT `id` FROM `rooms` WHERE `name`=?)")
-  } || return undef;
-  $sth->execute($id,$room) || return undef;
+  $sth->execute($id,$data->{id}) || return undef;
   return 1;
 };
 
@@ -408,8 +443,15 @@ helper has_joined => sub {
   my $self = shift;
   my ($session,$name) = @_;
   my $ret = 0;
+  # TODO: replace with a JOIN, and a SELECT COUNT
+  # + check result with bind_columns + fetch
   my $sth = eval {
-    $self->db->prepare("SELECT * FROM `rooms` WHERE `name`=? AND `id` IN (SELECT `id` FROM `participants` WHERE `participant`=?)")
+    $self->db->prepare('SELECT `id`
+                          FROM `rooms`
+                          WHERE `name`=?
+                            AND `id` IN (SELECT `room_id`
+                                           FROM `participants`
+                                             WHERE `participant`=?)')
   } || return undef;
   $sth->execute($name,$session) || return undef;
   $ret = 1 if ($sth->rows > 0);
@@ -420,11 +462,12 @@ helper has_joined => sub {
 helper delete_participants => sub {
   my $self = shift;
   $self->app->log->debug('Removing inactive participants from the database');
-  my $timeout = time()-600;
   my $sth = eval {
-    $self->db->prepare("DELETE FROM `participants` WHERE (`activity_timestamp` < ? OR `activity_timestamp` IS NULL);")
+    $self->db->prepare('DELETE FROM `participants`
+                          WHERE (`last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL 10 MINUTE)
+                            OR `last_activity` IS NULL');
   } || return undef;
-  $sth->execute($timeout) || return undef;
+  $sth->execute || return undef;
   return 1;
 };
 
@@ -434,7 +477,7 @@ helper delete_rooms => sub {
   $self->app->log->debug('Removing unused rooms');
   my $timeout = time()-$config->{'rooms.inactivity_timeout'};
   my $sth = eval {
-    $self->db->prepare("SELECT `name` FROM `rooms` WHERE `activity_timestamp` < ? AND `persistent`='0' AND `owner_password` IS NULL;")
+    $self->db->prepare('SELECT `name` FROM `rooms` WHERE `activity_timestamp` < ? AND `persistent`='0' AND `owner_password` IS NULL')
    } || return undef;
   $sth->execute($timeout);
   my @toDeleteName = ();
