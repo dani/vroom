@@ -105,7 +105,7 @@ our $musics = {
 app->log->level('info');
 # Read conf file, and set default values
 our $config = plugin Config => {
-  file     => '../conf/vroom.conf',
+  file     => 'conf/vroom.conf',
   default  => {
     dbi                           => 'DBI:mysql:database=vroom;host=localhost',
     dbUser                        => 'vroom',
@@ -708,7 +708,7 @@ helper ask_for_name => sub {
 # Randomly choose a music on hold
 helper choose_moh => sub {
   my $self = shift;
-  my @files = (<snd/moh/*.*>);
+  my @files = (<public/snd/moh/*.*>);
   return basename($files[rand @files]);
 };
 
@@ -1579,7 +1579,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
 };
 
 # use the templates defined in the config
-push @{app->renderer->paths}, '../templates/'.$config->{template};
+push @{app->renderer->paths}, 'templates/'.$config->{template};
 # Set the secret used to sign cookies
 app->secret($config->{secret});
 app->sessions->secure(1);
@@ -1591,6 +1591,14 @@ app->hook(before_dispatch => sub {
     $self->languages($self->session('language'));
   }
 });
+# Are we running in hypnotoad ?
+app->config(
+  hypnotoad => {
+    listen   => ['http://127.0.0.1:8090'],
+    pid_file => '/tmp/vroom.pid',
+    proxy    => 1
+  }
+);
 # And start, lets VROOM !!
 app->start;
 

@@ -4,5 +4,5 @@
     </script>
     <% foreach my $js (qw(jquery-1.11.1.min.js bootstrap.min.js notify-combined.min.js bootstrap-switch.min.js vroom.js)){
     %>
-    <script type="text/javascript" src="<%= $self->get_url('/') %><%= $self->get_mtime("js/$js") %>/js/<%= $js %>"></script>
+    <script type="text/javascript" src="<%= $self->get_url('/') %><%= $self->get_mtime("public/js/$js") %>/js/<%= $js %>"></script>
     <% } %>

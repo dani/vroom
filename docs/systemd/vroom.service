@@ -1,0 +1,16 @@
+[Unit]
+Description=VROOM daemon
+After=mariadb.service
+
+[Service]
+Type=simple
+ExecStart=/opt/vroom/scripts/start_hypnotoad
+PIDFile=/tmp/vroom.pid
+PrivateTmp=yes
+User=apache
+Group=apache
+
+[Install]
+WantedBy=multi-user.target
+Wants=mariadb.service httpd.service
+
