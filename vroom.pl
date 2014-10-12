@@ -917,11 +917,8 @@ post '/feedback' => sub {
               comment => $comment
             )
   );
-  $self->redirect_to($self->get_url('feedback_thanks'));
+  return $self->render('feedback_thanks');
 };
-
-# Route for the thanks after feedback form
-get 'feedback_thanks' => 'feedback_thanks';
 
 # Route for the goodbye page, displayed when someone leaves a room
 get '/goodbye/(:room)' => sub {
