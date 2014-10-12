@@ -261,7 +261,7 @@ helper create_room => sub {
   my $tp = $self->get_random(49);
   $sth->execute($name,time(),time(),$owner,$tp,$config->{realm}) || return undef;
   $self->app->log->info("Room $name created by " . $self->session('name'));
-  # therpad integration ?
+  # Etherpad integration ?
   if ($ec){
     $self->create_pad($name);
   }
