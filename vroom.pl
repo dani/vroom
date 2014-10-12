@@ -14,6 +14,7 @@ use MIME::Base64;
 use File::stat;
 use File::Basename;
 use Etherpad::API;
+use Session::Token;
 
 # List The different components we rely on.
 # Used to generate thanks on the about template
@@ -226,7 +227,7 @@ helper db => sub {
 helper login => sub {
   my $self = shift;
   return if $self->session('name');
-  my $login = $ENV{'REMOTE_USER'} || lc $self->get_random(29);
+  my $login = $ENV{'REMOTE_USER'} || lc $self->get_random(256);
   $self->session(
       name => $login,
       ip   => $self->tx->remote_address
@@ -258,7 +259,7 @@ helper create_room => sub {
     $self->db->prepare("INSERT INTO `rooms` (`name`,`create_timestamp`,`activity_timestamp`,`owner`,`token`,`realm`) VALUES (?,?,?,?,?,?);")
   } || return undef;
   # Gen a random token. Will be used as a turnPassword
-  my $tp = $self->get_random(49);
+  my $tp = $self->get_random(256);
   $sth->execute($name,time(),time(),$owner,$tp,$config->{realm}) || return undef;
   $self->app->log->info("Room $name created by " . $self->session('name'));
   # Etherpad integration ?
@@ -548,14 +549,14 @@ helper valid_room_name => sub {
 # Generate a random token
 helper get_random => sub {
   my $self = shift;
-  my ($size) = @_;
-  return join '' => map{('a'..'z','A'..'Z','0'..'9','0'..'9')[rand 72]} 0..$size;
+  my ($entropy) = @_;
+  return Session::Token->new(entropy => $entropy)->get;
 };
 
 # Generate a random name
 helper get_random_name => sub {
   my $self = shift;
-  my $name = lc $self->get_random(9);
+  my $name = lc $self->get_random(64);
   # Get another one if already taken
   while ($self->get_room($name)){
     $name = $self->get_random_name();
@@ -718,7 +719,7 @@ helper add_invitation => sub {
   my ($room,$email) = @_;
   my $from = $self->session('name') || return undef;
   my $data = $self->get_room($room);
-  my $id = $self->get_random(30);
+  my $id = $self->get_random(256);
   return undef unless ($data);
   my $sth = eval {
     $self->db->prepare("INSERT INTO `invitations` (`id`,`from`,`token`,`email`,`timestamp`) VALUES (?,?,?,?,?)")

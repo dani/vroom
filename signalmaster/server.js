@@ -74,7 +74,7 @@ io.configure(function(){
             room  = tab[1],
             token = tab[2];
         // sanitize user input, we don't want to pass random junk to MySQL do we ?
-        if (!user.match(/^[\w\@\.\-]{1,40}$/i) || !room.match(/^[\w\-]{1,50}$/) || !token.match(/^[a-zA-Z0-9]{50}$/)){
+        if (!user.match(/^[\w\@\.\-]{1,60}$/i) || !room.match(/^[\w\-]{1,50}$/) || !token.match(/^[a-zA-Z0-9]{30,60}$/)){
           console.log('Forbidden chars found in either participant session, room name or token, sorry, cannot allow this');
           accept('Forbidden characters found', false);
         }
