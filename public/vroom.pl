@@ -825,9 +825,9 @@ helper create_pad => sub {
     my $group = $ec->create_group() || undef;
     return undef unless ($group);
     my $sth = eval {
-      $self->db->prepare("UPDATE `rooms` SET `etherpad_group`=? WHERE `name`='$room';")
+      $self->db->prepare("UPDATE `rooms` SET `etherpad_group`=? WHERE `name`=?")
     } || return undef;
-    $sth->execute($group) || return undef;
+    $sth->execute($group,$room) || return undef;
     $data = $self->get_room($room);
   }
   $ec->create_group_pad($data->{etherpad_group},$room) || return undef;
