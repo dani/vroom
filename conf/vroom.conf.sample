@@ -46,7 +46,7 @@ chromeExtensionId => 'ecicdpoejfllflombfanbhfpgcimjddn',
 #etherpadApiKey => '',
 # You can also set the base domain common to both vroom and etherpad
 # For example, if you use vroom.example.com and pad.example.com, the base domain is example.com
-#etherpadBaseDomaine => '',
+#etherpadBaseDomain => '',
 
 # Various
 sendmail => '/sbin/sendmail'
