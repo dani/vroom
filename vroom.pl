@@ -208,7 +208,6 @@ if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key
 # Load I18N, and declare supported languages
 plugin I18N => {
   namespace => 'Vroom::I18N',
-  support_url_langs => [qw(en fr)]
 };
 
 # Connect to the database
