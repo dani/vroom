@@ -124,7 +124,7 @@
                     <button type="button" class="btn btn-default help" id="unmuteEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'UNMUTE_EVERYONE' %>">
                       <span class="glyphicon glyphicon-volume-up">
                       </span>
-                    </buton>
+                    </button>
                     <button type="button" class="btn btn-default help" id="suspendEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUSPEND_EVERYONE' %>">
                       <span class="glyphicon glyphicon-eye-close">
                       </span>
