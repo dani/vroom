@@ -422,9 +422,9 @@ helper delete_participants => sub {
   $self->app->log->debug('Removing inactive participants from the database');
   my $timeout = time()-600;
   my $sth = eval {
-    $self->db->prepare("DELETE FROM `participants` WHERE (`activity_timestamp` < $timeout OR `activity_timestamp` IS NULL);")
+    $self->db->prepare("DELETE FROM `participants` WHERE (`activity_timestamp` < ? OR `activity_timestamp` IS NULL);")
   } || return undef;
-  $sth->execute() || return undef;
+  $sth->execute($timeout) || return undef;
   return 1;
 };
 
@@ -434,9 +434,9 @@ helper delete_rooms => sub {
   $self->app->log->debug('Removing unused rooms');
   my $timeout = time()-$config->{'rooms.inactivity_timeout'};
   my $sth = eval {
-    $self->db->prepare("SELECT `name` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='0' AND `owner_password` IS NULL;")
+    $self->db->prepare("SELECT `name` FROM `rooms` WHERE `activity_timestamp` < ? AND `persistent`='0' AND `owner_password` IS NULL;")
    } || return undef;
-  $sth->execute();
+  $sth->execute($timeout);
   my @toDeleteName = ();
   while (my $room = $sth->fetchrow_array){
     push @toDeleteName, $room;
@@ -445,9 +445,9 @@ helper delete_rooms => sub {
   if ($config->{'rooms.reserved_inactivity_timeout'} > 0){
     $timeout = time()-$config->{'rooms.reserved_inactivity_timeout'};
     $sth = eval {
-      $self->db->prepare("SELECT `name` FROM `rooms` WHERE `activity_timestamp` < $timeout AND `persistent`='0' AND `owner_password` IS NOT NULL;")
+      $self->db->prepare("SELECT `name` FROM `rooms` WHERE `activity_timestamp` < ? AND `persistent`='0' AND `owner_password` IS NOT NULL;")
     } || return undef;
-    $sth->execute();
+    $sth->execute($timeout);
     while (my $room = $sth->fetchrow_array){
       push @toDeleteName, $room;
     }
@@ -784,9 +784,9 @@ helper delete_invitations => sub {
   # Invitation older than 2 hours doesn't make much sense
   my $timeout = time()-7200;
   my $sth = eval {
-    $self->db->prepare("DELETE FROM `invitations` WHERE `timestamp` < $timeout;")
+    $self->db->prepare("DELETE FROM `invitations` WHERE `timestamp` < ?;")
   } || return undef;
-  $sth->execute() || return undef;
+  $sth->execute($timeout) || return undef;
   return 1;
 };
 
