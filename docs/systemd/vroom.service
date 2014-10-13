@@ -4,8 +4,7 @@ After=mariadb.service
 
 [Service]
 Type=simple
-ExecStart=/opt/vroom/scripts/start_hypnotoad
-PIDFile=/tmp/vroom.pid
+ExecStart=/opt/vroom/scripts/start_server.pl
 PrivateTmp=yes
 User=apache
 Group=apache

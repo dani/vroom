@@ -64,3 +64,6 @@
 ;listen_ip = '127.0.0.1'
 ; Port used by the hypnotoad daemon
 ;listen_port = '8090'
+; server backend. Can be either morbo (DEV) or hypnotoad (PROD)
+; default is hypnotoad
+;backend = 'hypnotoad'

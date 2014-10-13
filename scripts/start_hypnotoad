@@ -1,6 +1,0 @@
-#!/bin/sh
-
-DIR=$(dirname $0)
-export PERL5LIB="$DIR/../lib/"
-cd $DIR/..
-hypnotoad -f vroom.pl "$*"
