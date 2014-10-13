@@ -326,9 +326,9 @@ helper add_participant => sub {
   my $sth = eval {
     $self->db->prepare('INSERT IGNORE INTO `participants`
                           (`room_id`,`participant`,`last_activity`)
-                          VALUES (?,?,?)');
+                          VALUES (?,?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'))');
   } || return undef;
-  $sth->execute($room->{id},$participant,time()) || return undef;
+  $sth->execute($room->{id},$participant) || return undef;
   $self->app->log->info($self->session('name') . " joined the room $name");
   return 1;
 };
