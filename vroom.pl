@@ -1038,10 +1038,10 @@ get '/kicked/(:room)' => sub {
 get '/invitation' => sub {
   my $self = shift;
   my $inviteId = $self->param('token') || '';
-  # Delecte expired invitation now
+  # Delete expired invitation now
   $self->delete_invitations;
   my $invite = $self->get_invitation($inviteId);
-  my $room = $self->get_room_by_id($invite->{id});
+  my $room = $self->get_room_by_id($invite->{room_id});
   if (!$invite || !$room){
     return $self->render('error',
       err  => 'ERROR_INVITATION_INVALID',
