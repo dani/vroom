@@ -99,7 +99,7 @@ helper valid_room_name => sub {
   elsif (grep { $name eq $_ } @reserved){
     return {msg => 'ERROR_NAME_RESERVED'};
   }
-  return {status => 1};
+  return {ok => 1};
 };
 
 # Check id arg is a valid ID number
@@ -109,7 +109,7 @@ helper valid_id => sub {
   if ($id !~ m/^\d+$/){
     return {msg => 'INVALID_ID'};
   }
-  return {status => 1, msg => 'OK'};
+  return {ok => 1};
 };
 
 ##########################
@@ -121,7 +121,7 @@ helper login => sub {
   my $self = shift;
   my $ret = {};
   if ($self->session('name')){
-    return {status => 1};
+    return {ok => 1};
   }
   my $login = $ENV{'REMOTE_USER'} || lc $self->get_random(256);
   $self->session(
@@ -129,7 +129,7 @@ helper login => sub {
       ip   => $self->tx->remote_address
   );
   $self->app->log->info($self->session('name') . " logged in from " . $self->tx->remote_address);
-  return {status => 1};
+  return {ok => 1};
 };
 
 # Expire the cookie
@@ -143,7 +143,7 @@ helper logout => sub {
   }
   $self->session( expires => 1 );
   $self->app->log->info($self->session('name') . " logged out");
-  return {status => 1};
+  return {ok => 1};
 };
 
 # Create a new room in the DB
@@ -158,7 +158,7 @@ helper create_room => sub {
   }
   # Check if the name is valid
   $res = $self->valid_room_name($name);
-  if (!$res->{status}){
+  if (!$res->{ok}){
     return $res;
   }
   $res = $self->get_room_by_name($name);
@@ -197,7 +197,7 @@ helper create_room => sub {
   if ($ec){
     $self->create_pad($name);
   }
-  return {status => 1};
+  return {ok => 1};
 };
 
 # Take a string as argument
@@ -206,7 +206,7 @@ helper get_room_by_name => sub {
   my $self = shift;
   my ($name) = @_;
   my $res = $self->valid_room_name($name);
-  if (!$res->{status}){
+  if (!$res->{ok}){
     return $res;
   }
   my $sth = eval {
@@ -231,7 +231,7 @@ helper get_room_by_id => sub {
   my $self = shift;
   my ($id) = @_;
   my $res = $self->valid_id($id);
-  if (!$res->{status}){
+  if (!$res->{ok}){
     return $res;
   }
   my $sth = eval {
@@ -255,7 +255,7 @@ helper get_room_by_id => sub {
 helper modify_room => sub {
   my $self = shift;
   my ($room) = @_;
-  # TODO: input validation
+  my $res = {};
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
                           SET `owner`=?,
@@ -283,7 +283,7 @@ helper modify_room => sub {
 helper lock_room => sub {
   my $self = shift;
   my ($name,$lock) = @_;
-  return undef unless ( $self->get_room_by_name($name)->{status} );
+  return undef unless ( $self->get_room_by_name($name)->{ok} );
   return undef unless ($lock =~ m/^0|1$/);
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
@@ -1047,7 +1047,7 @@ post '/create' => sub {
   # Cleanup unused rooms before trying to create it
   $self->delete_rooms;
   my $res = $self->valid_room_name($name);
-  if (!$res->{status}){
+  if (!$res->{ok}){
     $json->{err} = $res->{msg};
     $json->{msg} = $self->l($res->{msg});
     return $self->render(json => $json);
@@ -1058,7 +1058,7 @@ post '/create' => sub {
     return $self->render(json => $json);
   }
   $res = $self->create_room($name,$self->session('name'));
-  if (!$res->{status}){
+  if (!$res->{ok}){
     $json->{err} = $res->{msg};
     $json->{msg} = $self->l($res->{msg});
     return $self->render(json => $json);
@@ -1144,7 +1144,7 @@ get '/(*room)' => sub {
   $self->delete_rooms;
   $self->delete_invitations;
   my $res = $self->valid_room_name($room);
-  if (!$res->{status}){
+  if (!$res->{ok}){
     return $self->render('error',
       msg  => $self->l($res->{msg}),
       err  => $res->{msg},
@@ -1235,7 +1235,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
   }
   # Sanity check on the room name
   my $res = $self->valid_room_name($room);
-  if (!$res->{status}){
+  if (!$res->{ok}){
     return $self->render(
            json => {
              msg    => $self->l($res->{msg}),
