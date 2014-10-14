@@ -27,7 +27,7 @@ CREATE TABLE `rooms` (
   INDEX (`last_activity`)
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `participants` (
+CREATE TABLE `room_participants` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `room_id` INT UNSIGNED NOT NULL,
   `participant` VARCHAR(60) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE `participants` (
     ON DELETE CASCADE
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `notifications` (
+CREATE TABLE `email_notifications` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `room_id` INT UNSIGNED NOT NULL,
   `email` VARCHAR(254),
@@ -54,7 +54,7 @@ CREATE TABLE `notifications` (
     ON DELETE CASCADE
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `invitations` (
+CREATE TABLE `email_invitations` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `room_id` INT UNSIGNED NOT NULL,
   `email` VARCHAR(254) NOT NULL,

@@ -266,7 +266,7 @@ helper create_room => sub {
   my $tp = $self->get_random(256);
   $sth->execute($name,$owner,$tp,$config->{'turn.realm'}) || return undef;
   $self->app->log->info("Room $name created by " . $self->session('name'));
-  # Etherpad integration ?
+  # Etherpad integration ? If so, create the corresponding pad
   if ($ec){
     $self->create_pad($name);
   }
@@ -324,7 +324,7 @@ helper add_participant => sub {
   my ($name,$participant) = @_;
   my $room = $self->get_room_by_name($name) || return undef;
   my $sth = eval {
-    $self->db->prepare('INSERT IGNORE INTO `participants`
+    $self->db->prepare('INSERT IGNORE INTO `room_participants`
                           (`room_id`,`participant`,`last_activity`)
                           VALUES (?,?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'))');
   } || return undef;
@@ -340,7 +340,7 @@ helper remove_participant => sub {
   my ($name,$participant) = @_;
   my $room = $self->get_room_by_name($name) || return undef;
   my $sth = eval {
-    $self->db->prepare('DELETE FROM `participants`
+    $self->db->prepare('DELETE FROM `room_participants`
                           WHERE `id`=?
                             AND `participant`=?');
   } || return undef;
@@ -356,7 +356,7 @@ helper get_participants => sub {
   my $room = $self->get_room_by_name($name) || return undef;
   my $sth = eval {
     $self->db->prepare('SELECT `participant`
-                          FROM `participants`
+                          FROM `room_participants`
                           WHERE `id`=?');
   } || return undef;
   $sth->execute($room->{id}) || return undef;
@@ -378,7 +378,7 @@ helper set_peer_role => sub {
   # Check if this ID isn't the one from another peer first
   my $sth = eval {
     $self->db->prepare('SELECT COUNT(`id`)
-                          FROM `participants`
+                          FROM `room_participants`
                           WHERE `peer_id`=?
                             AND `participant`!=?
                             AND `room_id`=?');
@@ -386,7 +386,7 @@ helper set_peer_role => sub {
   $sth->execute($id,$name,$data->{id}) || return undef;
   return undef if ($sth->rows > 0);
   $sth = eval {
-    $self->db->prepare('UPDATE `participants`
+    $self->db->prepare('UPDATE `room_participants`
                           SET `peer_id`=?,
                               `role`=?
                           WHERE `participant`=?
@@ -407,7 +407,7 @@ helper get_peer_role => sub {
   }
   my $sth = eval {
     $self->db->prepare('SELECT `role`
-                          FROM `participants`
+                          FROM `room_participants`
                           WHERE `peer_id`=?
                             AND `room_id`=?
                           LIMIT 1');
@@ -432,7 +432,7 @@ helper promote_peer => sub {
     return undef;
   }
   my $sth = eval {
-    $self->db->prepare('UPDATE `participants`
+    $self->db->prepare('UPDATE `room_participants`
                           SET `role`=\'owner\'
                           WHERE `peer_id`=?
                             AND `room_id`=?');
@@ -454,7 +454,7 @@ helper has_joined => sub {
                           FROM `rooms`
                           WHERE `name`=?
                             AND `id` IN (SELECT `room_id`
-                                           FROM `participants`
+                                           FROM `room_participants`
                                              WHERE `participant`=?)');
   } || return undef;
   $sth->execute($name,$session) || return undef;
@@ -467,7 +467,7 @@ helper delete_participants => sub {
   my $self = shift;
   $self->app->log->debug('Removing inactive participants from the database');
   my $sth = eval {
-    $self->db->prepare('DELETE FROM `participants`
+    $self->db->prepare('DELETE FROM `room_participants`
                           WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL 10 MINUTE)
                             OR `last_activity` IS NULL');
   } || return undef;
@@ -578,7 +578,7 @@ helper ping_room => sub {
   } || return undef;
   $sth->execute(time(),$data->{id}) || return undef;
   $sth = eval {
-    $self->db->prepare('UPDATE `participants`
+    $self->db->prepare('UPDATE `room_participants`
                           SET `last_activity`=?
                           WHERE `id`=?
                             AND `participant`=?');
@@ -716,7 +716,7 @@ helper add_notification => sub {
   my $data = $self->get_room_by_name($room);
   return undef unless ($data);
   my $sth = eval {
-    $self->db->prepare('INSERT INTO `notifications`
+    $self->db->prepare('INSERT INTO `email_notifications`
                           (`id`,`email`)
                           VALUES (?,?)');
   } || return undef;
@@ -732,7 +732,7 @@ helper get_notification => sub {
   $room = $self->get_room_by_name($room) || return undef;
   my $sth = eval {
     $self->db->prepare('SELECT `email`
-                          FROM `notifications`
+                          FROM `email_notifications`
                           WHERE `id`=?');
   } || return undef;
   $sth->execute($room->{id}) || return undef;
@@ -750,7 +750,7 @@ helper remove_notification => sub {
   my $data = $self->get_room_by_name($room);
   return undef unless ($data);
   my $sth = eval {
-    $self->db->prepare('DELETE FROM `notifications`
+    $self->db->prepare('DELETE FROM `email_notifications`
                           WHERE `id`=?
                             AND `email`=?');
   } || return undef;
@@ -792,7 +792,7 @@ helper add_invitation => sub {
   my $id = $self->get_random(256);
   return undef unless ($data);
   my $sth = eval {
-    $self->db->prepare('INSERT INTO `invitations`
+    $self->db->prepare('INSERT INTO `email_invitations`
                           (`room_id`,`from`,`token`,`email`,`date`)
                           VALUES (?,?,?,?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'))');
   } || return undef;
@@ -808,7 +808,7 @@ helper get_invitation => sub {
   my ($id) = @_;
   my $sth = eval {
     $self->db->prepare('SELECT *
-                          FROM `invitations`
+                          FROM `email_invitations`
                           WHERE `token`=?
                             AND `processed`=\'0\'');
   } || return undef;
@@ -821,7 +821,7 @@ helper find_invitations => sub {
   my $self = shift;
   my $sth = eval {
     $self->db->prepare('SELECT `token`
-                          FROM `invitations`
+                          FROM `email_invitations`
                           WHERE `from`=?
                             AND `response` IS NOT NULL
                             AND `processed`=\'0\'');
@@ -838,7 +838,7 @@ helper respond_invitation => sub {
   my $self = shift;
   my ($id,$response,$message) = @_;
   my $sth = eval {
-    $self->db->prepare('UPDATE `invitations`
+    $self->db->prepare('UPDATE `email_invitations`
                           SET `response`=?,
                               `message`=?
                           WHERE `token`=?');
@@ -852,7 +852,7 @@ helper processed_invitation => sub {
   my $self = shift;
   my ($id) = @_;
   my $sth = eval {
-    $self->db->prepare('UPDATE `invitations`
+    $self->db->prepare('UPDATE `email_invitations`
                           SET `processed`=\'1\'
                           WHERE `token`=?');
   } || return undef;
@@ -865,7 +865,7 @@ helper delete_invitations => sub {
   my $self = shift;
   $self->app->log->debug('Removing expired invitations');
   my $sth = eval {
-    $self->db->prepare('DELETE FROM `invitations`
+    $self->db->prepare('DELETE FROM `email_invitations`
                           WHERE `date` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL 2 HOUR)');
   } || return undef;
   $sth->execute || return undef;
@@ -886,7 +886,7 @@ helper check_invite_token => sub {
   }
   my $sth = eval {
     $self->db->prepare('SELECT *
-                          FROM `invitations`
+                          FROM `email_invitations`
                           WHERE `room_id`=?
                           AND `token`=?
                           AND (`response` IS NULL
