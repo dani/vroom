@@ -108,12 +108,19 @@ helper login => sub {
 helper logout => sub {
   my $self = shift;
   my ($room) = @_;
+  my $ret = {
+    status => undef,
+    msg    => undef
+  };
   # Logout from etherpad
   if ($ec && $self->session($room) && $self->session($room)->{etherpadSessionId}){
     $ec->delete_session($self->session($room)->{etherpadSessionId});
   }
   $self->session( expires => 1 );
   $self->app->log->info($self->session('name') . " logged out");
+  $ret->{status} = 1;
+  $ret->{msg} = 'LOGOUT_SUCCESS';
+  return $ret;
 };
 
 # Create a new room in the DB
