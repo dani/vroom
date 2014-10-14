@@ -334,6 +334,7 @@ helper add_participant => sub {
 };
 
 # Remove participant from the DB
+# Takes two args: room name and user name
 helper remove_participant => sub {
   my $self = shift;
   my ($name,$participant) = @_;
@@ -795,7 +796,7 @@ helper add_invitation => sub {
                           (`room_id`,`from`,`token`,`email`,`date`)
                           VALUES (?,?,?,?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'))');
   } || return undef;
-  $sth->execute($data->{id},$from,$id,$email,time()) || return undef;
+  $sth->execute($data->{id},$from,$id,$email) || return undef;
   $self->app->log->debug($self->session('name') . " has invited $email to join room $room");
   return $id;
 };
