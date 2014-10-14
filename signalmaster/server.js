@@ -38,7 +38,7 @@ function safeCb(cb) {
 }
 
 function checkRoom(room,token,user,cb) {
-   var q = "SELECT `participant` FROM `participants` WHERE `participant`=" + sql.escape(user) + " AND `room_id` IN (SELECT `id` FROM `rooms` WHERE `name`=" + sql.escape(room) + " AND `token`=" + sql.escape(token) + ");";
+   var q = "SELECT `participant` FROM `room_participants` WHERE `participant`=" + sql.escape(user) + " AND `room_id` IN (SELECT `id` FROM `rooms` WHERE `name`=" + sql.escape(room) + " AND `token`=" + sql.escape(token) + ");";
    console.log('Checking if ' + user + ' is allowed to join room ' + room + ' using token ' + token);
    sql.query(q, function(err, rows, fields) {
       if (err){
