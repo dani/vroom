@@ -81,6 +81,36 @@ plugin mail => {
   type => 'text/html',
 };
 
+##########################
+#  Validation helpers    #
+##########################
+
+# take a string as argument and check if it's a valid room name
+helper valid_room_name => sub {
+  my $self = shift;
+  my ($name) = @_;
+  my $ret = {status => undef, msg => undef};
+  # A few names are reserved
+  my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize action
+                    missing dies password kicked invitation js css img fonts snd);
+  if ($name !~ m/^[\w\-]{1,49}$/){
+    $ret->{msg} = 'ERROR_NAME_INVALID';
+  }
+  elsif (grep { $name eq $_ } @reserved){
+    $ret->{msg} = 'ERROR_NAME_RESERVED';
+  }
+  else{
+    $ret->{status} = 1;
+    $ret->{msg}    = 'OK'
+  }
+  return $ret;
+};
+
+
+##########################
+#   Various helpers      #
+##########################
+
 # Create a cookie based session
 helper login => sub {
   my $self = shift;
@@ -133,7 +163,7 @@ helper create_room => sub {
     $name = lc $name;
   }
   # Exit if the name isn't valid or already taken
-  return undef if ($self->get_room_by_name($name) || !$self->valid_room_name($name));
+  return undef if ($self->get_room_by_name($name) || !$self->valid_room_name($name)->{status});
   my $sth = eval {
     $self->db->prepare('INSERT INTO `rooms`
                           (`name`,`create_date`,`last_activity`,`owner`,`token`,`realm`)
@@ -490,20 +520,6 @@ helper ping_room => sub {
   $sth->execute(time(),$data->{id},$self->session('name')) || return undef;
   $self->app->log->debug($self->session('name') . " pinged the room $name");
   return 1;
-};
-
-# Check if this name is a valid room name
-helper valid_room_name => sub {
-  my $self = shift;
-  my ($name) = @_;
-  my $ret = undef;
-  # A few names are reserved
-  my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize action
-                    missing dies password kicked invitation js css img fonts snd);
-  if ($name =~ m/^[\w\-]{1,49}$/ && !grep { $name eq $_ }  @reserved){
-    $ret = 1;
-  }
-  return $ret;
 };
 
 # Generate a random token
@@ -982,10 +998,10 @@ post '/create' => sub {
   my $msg    = $self->l('ERROR_OCCURRED');
   # Cleanup unused rooms before trying to create it
   $self->delete_rooms;
-
-  if (!$self->valid_room_name($name)){
-    $err = 'ERROR_NAME_INVALID';
-    $msg = $self->l('ERROR_NAME_INVALID');
+  my $res = $self->valid_room_name($name);
+  if (!$res->{status}){
+    $err = $res->{msg};
+    $msg = $self->l($res->{msg});
   }
   elsif ($self->get_room_by_name($name)){
     $err = 'ERROR_NAME_CONFLICT';
@@ -1077,10 +1093,11 @@ get '/(*room)' => sub {
   }
   $self->delete_rooms;
   $self->delete_invitations;
-  unless ($self->valid_room_name($room)){
+  my $res = $self->valid_room_name($room);
+  if (!$res->{status}){
     return $self->render('error',
-      msg  => $self->l('ERROR_NAME_INVALID'),
-      err  => 'ERROR_NAME_INVALID',
+      msg  => $self->l($res->{msg}),
+      err  => $res->{msg},
       room => $room
     );
   }
@@ -1167,12 +1184,15 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
            );
   }
   # Sanity check on the room name
-  return $self->render(
+  my $res = $self->valid_room_name($room);
+  if (!$res->{status}){
+    return $self->render(
            json => {
-             msg    => sprintf ($self->l("ERROR_NAME_INVALID"), $room),
+             msg    => $self->l($res->{msg}),
              status => 'error'
            },
-         ) unless ($self->valid_room_name($room));
+         );
+  }
   # Push the room name to the stash, just in case
   $self->stash(room => $room);
   # Gather room info from the DB

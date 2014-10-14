@@ -10,6 +10,7 @@ our %Lexicon = (
     "VROOM_IS_FREE_SOFTWARE"                    => "VROOM est un logiciel libre diffusé sous licence MIT",
     "POWERED_BY"                                => "Fièrement propulsé par",
     "ERROR_NAME_INVALID"                        => "Ce nom n'est pas valide",
+    "ERROR_NAME_RESERVED"                       => "Ce nom est réservé et ne peut être utilisé",
     "ERROR_NAME_CONFLICT"                       => "Ce nom est déjà pris, choisissez en un autre",
     "ERROR_ROOM_s_DOESNT_EXIST"                 => "Le salon %s n'existe pas",
     "ERROR_ROOM_s_LOCKED"                       => "Le salon %s est verrouillé, vous ne pouvez pas le rejoindre",
