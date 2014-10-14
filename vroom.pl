@@ -222,6 +222,7 @@ helper get_room_by_name => sub {
     return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
   }
   return {
+    ok    => 1,
     data  => $sth->fetchall_hashref('name')->{$name}
   };
 };
@@ -247,6 +248,7 @@ helper get_room_by_id => sub {
     return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
   }
   return {
+    ok     => 1,
     data   => $sth->fetchall_hashref('id')->{$id}
   };
 };
