@@ -84,13 +84,24 @@ plugin mail => {
 # Create a cookie based session
 helper login => sub {
   my $self = shift;
-  return if $self->session('name');
+  my $ret = {
+    status => undef,
+    msg    => undef
+  };
+  if ($self->session('name')){
+    $ret->{status} = 1;
+    $ret->{msg} = 'ALREADY_LOGGED';
+    return $ret;
+  }
   my $login = $ENV{'REMOTE_USER'} || lc $self->get_random(256);
   $self->session(
       name => $login,
       ip   => $self->tx->remote_address
   );
   $self->app->log->info($self->session('name') . " logged in from " . $self->tx->remote_address);
+  $ret->{status} = 1;
+  $ret->{msg} = 'LOGIN_SUCCESS';
+  return $ret;
 };
 
 # Expire the cookie
