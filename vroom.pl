@@ -155,6 +155,33 @@ helper get_room_by_id => sub {
   return $sth->fetchall_hashref('id')->{$id};
 };
 
+# Update a room, take a room object as a hashref
+helper modify_room => sub {
+  my $self = shift;
+  my ($room) = @_;
+  # TODO: input validation
+  my $sth = eval {
+    $self->db->prepare('UPDATE `rooms`
+                          SET `owner`=?,
+                              `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
+                              `locked`=?,
+                              `ask_for_name`=?,
+                              `join_password`=?,
+                              `owner_password`=?,
+                              `persistent`=?');
+  } || return undef;
+  $sth->execute(
+    $room->{owner},
+    $room->{locked},
+    $room->{ask_for_name},
+    $room->{join_password},
+    $room->{owner_password},
+    $room->{persistent}
+  ) || return undef;
+  $self->app->log->info("Room " . $room->{name} ." modified by " . $self->session('name'));
+  return 1;
+};
+
 # Lock/unlock a room, to prevent new participants
 # Takes two arg: room name and 1 for lock, 0 for unlock
 helper lock_room => sub {
