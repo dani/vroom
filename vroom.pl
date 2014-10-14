@@ -106,6 +106,15 @@ helper valid_room_name => sub {
   return $ret;
 };
 
+# Check id arg is a valid ID number
+helper valid_id => sub {
+  my $self = shift;
+  my ($id) = @_;
+  if ($id !~ m/^\d+$/){
+    return {msg => 'INVALID_ID'};
+  }
+  return {status => 1, msg => 'OK'};
+};
 
 ##########################
 #   Various helpers      #
@@ -240,17 +249,30 @@ helper get_room_by_name => sub {
   return $res;
 };
 
-# Get room param by ID instead of name
+# Same as before, but take a room ID as argument
 helper get_room_by_id => sub {
   my $self = shift;
   my ($id) = @_;
+  my $res = $self->valid_id($id);
+  if (!$res->{status}){
+    return $res;
+  }
   my $sth = eval {
     $self->db->prepare('SELECT *
                           FROM `rooms`
                           WHERE `id`=?');
-  } || return undef;
-  $sth->execute($id) || return undef;
-  return $sth->fetchall_hashref('id')->{$id};
+  };
+  if ($@){
+    return {msg => $@};
+  }
+  $sth->execute($id);
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+  }
+  return {
+    status => 1,
+    data   => $sth->fetchall_hashref('id')->{$id}
+  };
 };
 
 # Update a room, take a room object as a hashref
@@ -1008,7 +1030,7 @@ get '/invitation' => sub {
   # Delete expired invitation now
   $self->delete_invitations;
   my $invite = $self->get_invitation($inviteId);
-  my $room = $self->get_room_by_id($invite->{room_id});
+  my $room = $self->get_room_by_id($invite->{room_id})->{data};
   if (!$invite || !$room){
     return $self->render('error',
       err  => 'ERROR_INVITATION_INVALID',
