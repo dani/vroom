@@ -89,21 +89,17 @@ plugin mail => {
 helper valid_room_name => sub {
   my $self = shift;
   my ($name) = @_;
-  my $ret = {status => undef, msg => undef};
+  my $ret = {};
   # A few names are reserved
   my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize action
                     missing dies password kicked invitation js css img fonts snd);
   if ($name !~ m/^[\w\-]{1,49}$/){
-    $ret->{msg} = 'ERROR_NAME_INVALID';
+    return {msg => 'ERROR_NAME_INVALID'};
   }
   elsif (grep { $name eq $_ } @reserved){
-    $ret->{msg} = 'ERROR_NAME_RESERVED';
+    return {msg => 'ERROR_NAME_RESERVED'};
   }
-  else{
-    $ret->{status} = 1;
-    $ret->{msg}    = 'OK'
-  }
-  return $ret;
+  return {status => 1};
 };
 
 # Check id arg is a valid ID number
@@ -123,14 +119,9 @@ helper valid_id => sub {
 # Create a cookie based session
 helper login => sub {
   my $self = shift;
-  my $ret = {
-    status => undef,
-    msg    => undef
-  };
+  my $ret = {};
   if ($self->session('name')){
-    $ret->{status} = 1;
-    $ret->{msg} = 'ALREADY_LOGGED';
-    return $ret;
+    return {status => 1};
   }
   my $login = $ENV{'REMOTE_USER'} || lc $self->get_random(256);
   $self->session(
@@ -138,28 +129,21 @@ helper login => sub {
       ip   => $self->tx->remote_address
   );
   $self->app->log->info($self->session('name') . " logged in from " . $self->tx->remote_address);
-  $ret->{status} = 1;
-  $ret->{msg} = 'LOGIN_SUCCESS';
-  return $ret;
+  return {status => 1};
 };
 
 # Expire the cookie
 helper logout => sub {
   my $self = shift;
   my ($room) = @_;
-  my $ret = {
-    status => undef,
-    msg    => undef
-  };
+  my $ret = {};
   # Logout from etherpad
   if ($ec && $self->session($room) && $self->session($room)->{etherpadSessionId}){
     $ec->delete_session($self->session($room)->{etherpadSessionId});
   }
   $self->session( expires => 1 );
   $self->app->log->info($self->session('name') . " logged out");
-  $ret->{status} = 1;
-  $ret->{msg} = 'LOGOUT_SUCCESS';
-  return $ret;
+  return {status => 1};
 };
 
 # Create a new room in the DB
@@ -167,7 +151,7 @@ helper logout => sub {
 helper create_room => sub {
   my $self = shift;
   my ($name,$owner) = @_;
-  my $res = {status => undef, msg => undef};
+  my $res = {};
   # Convert room names to lowercase
   if ($name ne lc $name){
     $name = lc $name;
@@ -177,8 +161,8 @@ helper create_room => sub {
   if (!$res->{status}){
     return $res;
   }
-  elsif ($self->get_room_by_name($name)->{data}){
-    $res->{msg} = 'ERROR_NAME_CONFLICT';
+  $res = $self->get_room_by_name($name);
+  if ($res->{data}){
     return $res;
   }
   my $sth = eval {
@@ -197,8 +181,7 @@ helper create_room => sub {
                                   ?)');
   };
   if ($@){
-    $res->{msg} = $@;
-    return $res;
+    return {msg => $@};
   }
   $sth->execute(
     $name,
@@ -207,17 +190,14 @@ helper create_room => sub {
     $config->{'turn.realm'}
   );
   if ($sth->err){
-    $res->{msg} = "DB Error: " . $sth->errstr . " (code " . $sth->err . ")";
-    return $res;
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
   }
   $self->app->log->info("Room $name created by " . $self->session('name'));
   # Etherpad integration ? If so, create the corresponding pad
   if ($ec){
     $self->create_pad($name);
   }
-  $res->{status} = 1;
-  $res->{msg} = 'ROOM_CREATED';
-  return $res;
+  return {status => 1};
 };
 
 # Take a string as argument
@@ -235,18 +215,15 @@ helper get_room_by_name => sub {
                           WHERE `name`=?');
   };
   if ($@){
-    $res->{msg} = $@;
-    return $res;
+    return {msg => $@};
   }
   $sth->execute($name);
   if ($sth->err){
-    $res->{msg} = "DB Error: " . $sth->errstr . " (code " . $sth->err . ")";
-    return $res;
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
   }
-  $res->{status} = 1;
-  $res->{msg} = '';
-  $res->{data} = $sth->fetchall_hashref('name')->{$name};
-  return $res;
+  return {
+    data  => $sth->fetchall_hashref('name')->{$name}
+  };
 };
 
 # Same as before, but take a room ID as argument
@@ -270,7 +247,6 @@ helper get_room_by_id => sub {
     return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
   }
   return {
-    status => 1,
     data   => $sth->fetchall_hashref('id')->{$id}
   };
 };
