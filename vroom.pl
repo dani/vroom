@@ -128,7 +128,10 @@ helper logout => sub {
 helper create_room => sub {
   my $self = shift;
   my ($name,$owner) = @_;
-  $name = lc $name unless ($name eq lc $name);
+  # Convert room names to lowercase
+  if ($name ne lc $name){
+    $name = lc $name;
+  }
   # Exit if the name isn't valid or already taken
   return undef if ($self->get_room_by_name($name) || !$self->valid_room_name($name));
   my $sth = eval {
