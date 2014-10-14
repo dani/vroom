@@ -258,6 +258,19 @@ helper modify_room => sub {
   my $self = shift;
   my ($room) = @_;
   my $res = {};
+  $res = $self->valid_id($room->{id});
+  if (!$res->{ok}){
+    return $res;
+  }
+  $res = $self->valid_room_name($room->{name});
+  if ($res->{ok}){
+    return $res;
+  }
+  if (($room->{locked} && $room->{locked} !~ m/^0|1$/) ||
+      ($room->{ask_for_name} && $room->{ask_for_name} !~ m/^0|1$/) ||
+      ($room->{persistent} && $room->{persistent} !~ m/^0|1$/)){
+    return {msg => 'ERROR_INVALID_PARAM'};
+  }
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
                           SET `owner`=?,
@@ -267,7 +280,10 @@ helper modify_room => sub {
                               `join_password`=?,
                               `owner_password`=?,
                               `persistent`=?');
-  } || return undef;
+  };
+  if ($@){
+    return {msg => $@};
+  }
   $sth->execute(
     $room->{owner},
     $room->{locked},
@@ -275,9 +291,12 @@ helper modify_room => sub {
     $room->{join_password},
     $room->{owner_password},
     $room->{persistent}
-  ) || return undef;
+  );
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+  }
   $self->app->log->info("Room " . $room->{name} ." modified by " . $self->session('name'));
-  return 1;
+  return {ok => 1};
 };
 
 # Lock/unlock a room, to prevent new participants
