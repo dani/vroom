@@ -158,26 +158,57 @@ helper logout => sub {
 helper create_room => sub {
   my $self = shift;
   my ($name,$owner) = @_;
+  my $res = {status => undef, msg => undef};
   # Convert room names to lowercase
   if ($name ne lc $name){
     $name = lc $name;
   }
-  # Exit if the name isn't valid or already taken
-  return undef if ($self->get_room_by_name($name) || !$self->valid_room_name($name)->{status});
+  # Check if the name is valid
+  $res = $self->valid_room_name($name);
+  if (!$res->{status}){
+    return $res;
+  }
+  elsif ($self->get_room_by_name($name)){
+    $res->{msg} = 'ERROR_NAME_CONFLICT';
+    return $res;
+  }
   my $sth = eval {
     $self->db->prepare('INSERT INTO `rooms`
-                          (`name`,`create_date`,`last_activity`,`owner`,`token`,`realm`)
-                          VALUES (?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),?,?,?)');
-  } || return undef;
-  # Gen a random token. Will be used as a turnPassword
-  my $tp = $self->get_random(256);
-  $sth->execute($name,$owner,$tp,$config->{'turn.realm'}) || return undef;
+                          (`name`,
+                           `create_date`,
+                           `last_activity`,
+                           `owner`,
+                           `token`,
+                           `realm`)
+                          VALUES (?,
+                                  CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
+                                  CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
+                                  ?,
+                                  ?,
+                                  ?)');
+  };
+  if ($@){
+    $res->{msg} = $@;
+    return $res;
+  }
+  $sth->execute(
+    $name,
+    $owner,
+    $self->get_random(256),
+    $config->{'turn.realm'}
+  );
+  if ($sth->err){
+    $res->{msg} = "DB Error: " . $sth->errstr . " (code " . $sth->err . ")";
+    return $res;
+  }
   $self->app->log->info("Room $name created by " . $self->session('name'));
   # Etherpad integration ? If so, create the corresponding pad
   if ($ec){
     $self->create_pad($name);
   }
-  return 1;
+  $res->{status} = 1;
+  $res->{msg} = 'ROOM_CREATED';
+  return $res;
 };
 
 # Read room param in the DB and return a perl hashref
@@ -993,30 +1024,35 @@ post '/create' => sub {
   my $name = $self->param('roomName') || $self->get_random_name();
   # Create a session for this user, but don't set a role for now
   $self->login;
-  my $status = 'error';
-  my $err    = '';
-  my $msg    = $self->l('ERROR_OCCURRED');
+  my $json = {
+    status => 'error',
+    err    => 'ERROR_OCCURRED',
+    msg    => $self->l('ERROR_OCCURRED'),
+    room   => $name
+  };
   # Cleanup unused rooms before trying to create it
   $self->delete_rooms;
   my $res = $self->valid_room_name($name);
   if (!$res->{status}){
-    $err = $res->{msg};
-    $msg = $self->l($res->{msg});
+    $json->{err} = $res->{msg};
+    $json->{msg} = $self->l($res->{msg});
+    return $self->render(json => $json);
   }
   elsif ($self->get_room_by_name($name)){
-    $err = 'ERROR_NAME_CONFLICT';
-    $msg = $self->l('ERROR_NAME_CONFLICT');
+    $json->{err} = 'ERROR_NAME_CONFLICT';
+    $json->{msg} = $self->l('ERROR_NAME_CONFLICT');
+    return $self->render(json => $json);
   }
-  elsif ($self->create_room($name,$self->session('name'))){
-    $status = 'success';
-    $self->session($name => {role => 'owner'});
+  $res = $self->create_room($name,$self->session('name'));
+  if (!$res->{status}){
+    $json->{err} = $res->{msg};
+    $json->{msg} = $self->l($res->{msg});
+    return $self->render(json => $json);
   }
-  $self->render(json => {
-    status => $status,
-    err    => $err,
-    msg    => $msg,
-    room   => $name
-  });
+  $json->{status} = 'success';
+  $json->{err}    = $res->{msg};
+  $self->session($name => {role => 'owner'});
+  return $self->render(json => $json);
 };
 
 # Translation for JS resources
