@@ -529,55 +529,70 @@ helper purge_participants => sub {
 };
 
 # Purge unused rooms
-helper delete_rooms => sub {
+helper purge_rooms => sub {
   my $self = shift;
   $self->app->log->debug('Removing unused rooms');
   my $sth = eval {
-    $self->db->prepare('SELECT `name`
+    $self->db->prepare('SELECT `name`,`etherpad_group`
                           FROM `rooms`
                           WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL ' . $config->{'rooms.inactivity_timeout'} . ' MINUTE)
                           AND `persistent`=\'0\' AND `owner_password` IS NULL');
-   } || return undef;
-  $sth->execute;
-  my @toDeleteName = ();
-  while (my $room = $sth->fetchrow_array){
-    push @toDeleteName, $room;
+  };
+  if ($@){
+    return {msg => $@};
   }
-  my @toDeleteId = ();
+  $sth->execute;
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+  }
+  my $toDelete = {};
+  while (my ($room,$ether_group) = $sth->fetchrow_array){
+    $toDelete->{$room} = $ether_group;
+  }
   if ($config->{'rooms.reserved_inactivity_timeout'} > 0){
     $sth = eval {
-      $self->db->prepare('SELECT `name`
+      $self->db->prepare('SELECT `name`,`etherpad_group`
                             FROM `rooms`
                             WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL ' . $config->{'rooms.reserved_inactivity_timeout'} . ' MINUTE)
                               AND `persistent`=\'0\' AND `owner_password` IS NOT NULL')
-    } || return undef;
+    };
+    if ($@){
+      return {msg => $@};
+    }
     $sth->execute;
-    while (my $room = $sth->fetchrow_array){
-      push @toDeleteName, $room;
+    if ($sth->err){
+      return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    }
+    while (my ($room, $ether_group) = $sth->fetchrow_array){
+      $toDelete->{$room} = $ether_group;
     }
   }
-  foreach my $room (@toDeleteName){
-    my $data = $self->get_room_by_name($room)->{data};
-    $self->app->log->debug("Room " . $data->{name} . " will be deleted");
+  foreach my $room (keys %{$toDelete}){
+    $self->app->log->debug("Room $room will be deleted");
     # Remove Etherpad group
     if ($ec){
-      $ec->delete_pad($data->{etherpad_group} . '$' . $room);
-      $ec->delete_group($data->{etherpad_group});
+      $ec->delete_pad($toDelete->{$room} . '$' . $room);
+      $ec->delete_group($toDelete->{$room});
     }
-    push @toDeleteId, $data->{id};
   }
   # Now remove rooms
-  if (scalar @toDeleteId > 0){
+  if (keys %{$toDelete} > 0){
     $sth = eval {
       $self->db->prepare("DELETE FROM `rooms`
-                            WHERE `id` IN (" . join( ",", map { "?" } @toDeleteId ) . ")");
-    } || return undef;
-    $sth->execute(@toDeleteId) || return undef;
+                            WHERE `name` IN (" . join( ",", map { "?" } keys %{$toDelete} ) . ")");
+    };
+    if ($@){
+      return {msg => $@};
+    }
+    $sth->execute(keys %{$toDelete});
+    if ($sth->err){
+      return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    }
   }
   else{
     $self->app->log->debug('No rooms deleted, as none has expired');
   }
-  return 1;
+  return {ok => 1};
 };
 
 # delete just a specific room
@@ -1026,7 +1041,7 @@ get '/admin/(:room)' => sub {
 # And this one displays the list of existing rooms
 get '/admin' => sub {
   my $self = shift;
-  $self->delete_rooms;
+  $self->purge_rooms;
 } => 'admin';
 
 # Routes for feedback. One get to display the form
@@ -1119,7 +1134,7 @@ post '/create' => sub {
     room   => $name
   };
   # Cleanup unused rooms before trying to create it
-  $self->delete_rooms;
+  $self->purge_rooms;
   my $res = $self->valid_room_name($name);
   if (!$res->{ok}){
     $json->{err} = $res->{msg};
@@ -1215,7 +1230,7 @@ get '/(*room)' => sub {
   if ($room ne lc $room){
     $self->redirect_to($self->get_url('/') . lc $room);
   }
-  $self->delete_rooms;
+  $self->purge_rooms;
   $self->delete_invitations;
   my $res = $self->valid_room_name($room);
   if (!$res->{ok}){
@@ -1412,7 +1427,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     my $res = $self->ping_room($room);
     # Cleanup expired rooms every ~10 pings
     if ((int (rand 100)) <= 10){
-      $self->delete_rooms;
+      $self->purge_rooms;
     }
     # And same for expired invitation links
     if ((int (rand 100)) <= 10){
