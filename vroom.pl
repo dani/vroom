@@ -510,16 +510,22 @@ helper has_joined => sub {
 };
 
 # Purge disconnected participants from the DB
-helper delete_participants => sub {
+helper purge_participants => sub {
   my $self = shift;
   $self->app->log->debug('Removing inactive participants from the database');
   my $sth = eval {
     $self->db->prepare('DELETE FROM `room_participants`
                           WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL 10 MINUTE)
                             OR `last_activity` IS NULL');
-  } || return undef;
-  $sth->execute || return undef;
-  return 1;
+  };
+  if ($@){
+    return {msg => $@};
+  }
+  $sth->execute;
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+  }
+  return {ok => 1};
 };
 
 # Purge unused rooms
@@ -1002,7 +1008,7 @@ get '/help' => 'help';
 get '/admin/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
-  $self->delete_participants;
+  $self->purge_participants;
   my $data = $self->get_room_by_name($room)->{data};
   unless ($data){
     return $self->render('error',
@@ -1414,7 +1420,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     }
     # And also remove inactive participants
     if ((int (rand 100)) <= 10){
-      $self->delete_participants;
+      $self->purge_participants;
     }
     if ($res){
       $status = 'success';
