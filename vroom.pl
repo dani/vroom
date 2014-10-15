@@ -463,19 +463,22 @@ helper get_peer_role => sub {
 # Promote a peer to owner
 helper promote_peer => sub {
   my $self = shift;
-  my ($room,$id) = @_;
-  my $data = $self->get_room_by_name($room)->{data} || return undef;
-  if (!$data){
-    return undef;
-  }
+  my ($data) = @_;
   my $sth = eval {
-    $self->db->prepare('UPDATE `room_participants`
-                          SET `role`=\'owner\'
-                          WHERE `peer_id`=?
-                            AND `room_id`=?');
-  } || return undef;
-  $sth->execute($id,$data->{id}) || return undef;
-  return 1;
+    $self->db->prepare('UPDATE `room_participants` `p`
+                          LEFT JOIN `rooms` `r` ON `p`.`room_id`=`r`.`id`
+                          SET `p`.`role`=\'owner\'
+                          WHERE `p`.`peer_id`=?
+                            AND `r`.`name`=?');
+  };
+  if ($@){
+    return {msg => $@};
+  }
+  $sth->execute($data->{peer_id},$data->{room});
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+  }
+  return {ok => 1};
 };
 
 # Check if a participant has joined a room
@@ -1656,7 +1659,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     elsif ($self->session($room)->{role} ne 'owner'){
       $msg = $self->l('NOT_ALLOWED');
     }
-    elsif ($self->promote_peer($room,$peer)){
+    elsif ($self->promote_peer({room => $room, peer_id => $peer})->{ok}){
       $status = 'success';
       $msg = $self->l('PEER_PROMOTED');
     }
