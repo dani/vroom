@@ -354,21 +354,24 @@ helper remove_participant_from_room => sub {
 };
 
 # Get a list of participants of a room
-helper get_participants => sub {
+helper get_participant_list => sub {
   my $self = shift;
   my ($name) = @_;
-  my $room = $self->get_room_by_name($name)->{data} || return undef;
+  my $res = $self->get_room_by_name($name);
+  if (!$res->{ok}){
+    return $res;
+  }
+  my $room = $res->{data};
   my $sth = eval {
     $self->db->prepare('SELECT `participant`
                           FROM `room_participants`
-                          WHERE `id`=?');
-  } || return undef;
-  $sth->execute($room->{id}) || return undef;
-  my @res;
-  while(my @row = $sth->fetchrow_array){
-    push @res, $row[0];
+                          WHERE `room_id`=?');
+  };
+  if ($@){
+    return {msg => $@};
   }
-  return @res;
+  $sth->execute($room->{id});
+  return {ok => 1, data => $sth->fetchall_hashref('room_id')->{$room->{id}}};
 };
 
 # Set the role of a peer
@@ -968,7 +971,7 @@ get '/admin/(:room)' => sub {
       room => $room
     );
   }
-  my $num = scalar $self->get_participants($room);
+  my $num = scalar keys %{$self->get_participants_list($room)->{data}};
   $self->stash(
     room         => $room,
     participants => $num
