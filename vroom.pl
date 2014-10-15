@@ -371,7 +371,10 @@ helper get_participant_list => sub {
     return {msg => $@};
   }
   $sth->execute($room->{id});
-  return {ok => 1, data => $sth->fetchall_hashref('room_id')->{$room->{id}}};
+  return {
+    ok   => 1,
+    data => $sth->fetchall_hashref('room_id')->{$room->{id}}
+  };
 };
 
 # Set the role of a peer
