@@ -384,23 +384,19 @@ helper get_participant_list => sub {
 helper set_peer_role => sub {
   my $self = shift;
   my ($data) = @_;
-  my $res =  $self->get_room_by_name($data->{room});
-  if (!$res->{ok}){
-    return $res;
-  }
-  my $room = $res->{data};
   # Check if this ID isn't the one from another peer first
   my $sth = eval {
-    $self->db->prepare('SELECT COUNT(`id`)
-                          FROM `room_participants`
-                          WHERE `peer_id`=?
-                            AND `participant`!=?
-                            AND `room_id`=?');
+    $self->db->prepare('SELECT COUNT(`p`.`id`)
+                          FROM `room_participants` `p`
+                          LEFT JOIN `rooms` `r` ON `p`.`room_id`=`r`.`id`
+                          WHERE `p`.`peer_id`=?
+                            AND `p`.`participant`!=?
+                            AND `r`.`name`=?');
   };
   if ($@){
     return {msg => $@};
   }
-  $sth->execute($data->{peer_id},$data->{name},$room->{id});
+  $sth->execute($data->{peer_id},$data->{name},$data->{room});
   if ($sth->err){
     return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
   }
@@ -411,11 +407,12 @@ helper set_peer_role => sub {
     return {msg => 'ERROR_UNAUTHORIZED'};
   }
   $sth = eval {
-    $self->db->prepare('UPDATE `room_participants`
-                          SET `peer_id`=?,
-                              `role`=?
-                          WHERE `participant`=?
-                            AND `room_id`=?');
+    $self->db->prepare('UPDATE `room_participants` `p`
+                          LEFT JOIN `rooms` `r` ON `p`.`room_id`=`r`.`id`
+                          SET `p`.`peer_id`=?,
+                              `p`.`role`=?
+                          WHERE `p`.`participant`=?
+                            AND `r`.`name`=?');
   };
   if ($@){
     return {msg => $@};
@@ -424,7 +421,7 @@ helper set_peer_role => sub {
     $data->{peer_id},
     $data->{role},
     $data->{name},
-    $room->{id}
+    $data->{room}
   );
   if ($sth->err){
     return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
