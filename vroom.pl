@@ -482,24 +482,31 @@ helper promote_peer => sub {
 };
 
 # Check if a participant has joined a room
-# Takes two args: the session name, and the room name
+# Takes a hashref room => room name and name => session name
 helper has_joined => sub {
   my $self = shift;
-  my ($session,$name) = @_;
-  my $ret = 0;
-  # TODO: replace with a JOIN, and a SELECT COUNT
-  # + check result with bind_columns + fetch
+  my ($data) = @_;
   my $sth = eval {
-    $self->db->prepare('SELECT `id`
-                          FROM `rooms`
-                          WHERE `name`=?
-                            AND `id` IN (SELECT `room_id`
-                                           FROM `room_participants`
-                                             WHERE `participant`=?)');
-  } || return undef;
-  $sth->execute($name,$session) || return undef;
-  $ret = 1 if ($sth->rows > 0);
-  return $ret;
+    $self->db->prepare('SELECT COUNT(`r`.`id`)
+                          FROM `rooms` `r`
+                          LEFT JOIN `room_participants` `p` ON `r`.`id`=`p`.`room_id`
+                          WHERE `r`.`name`=?
+                            AND `p`.`participant`=?');
+  };
+  if ($@){
+    return {msg => $@};
+  }
+  $sth->execute($data->{room},$data->{name});
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+  }
+  my $num;
+  $sth->bind_columns(\$num);
+  $sth->fetch;
+  return {
+    ok => 1,
+    data => ($num == 1) ? 1 : 0 
+  }
 };
 
 # Purge disconnected participants from the DB
@@ -1288,7 +1295,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
   }
   # Refuse any action from non members of the room
   if ($prefix ne 'admin' && (!$self->session('name') ||
-                             !$self->has_joined($self->session('name'), $room) ||
+                             !$self->has_joined({name => $self->session('name'), room => $room})->{data} ||
                              !$self->session($room) ||
                              !$self->session($room)->{role})){
     return $self->render(
