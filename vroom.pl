@@ -438,27 +438,29 @@ helper set_peer_role => sub {
 # Return the role of a peer, from it's signaling ID
 helper get_peer_role => sub {
   my $self = shift;
-  my ($room,$id) = @_;
-  my $data = $self->get_room_by_name($room)->{data} || return undef;
-  if (!$data){
-    return undef;
-  }
+  my ($data) = @_;
   my $sth = eval {
-    $self->db->prepare('SELECT `role`
-                          FROM `room_participants`
-                          WHERE `peer_id`=?
-                            AND `room_id`=?
+    $self->db->prepare('SELECT `p`.`role`
+                          FROM `room_participants` `p`
+                          LEFT JOIN `rooms` `r` ON `p`.`room_id`=`r`.`id`
+                          WHERE `p`.`peer_id`=?
+                            AND `r`.`name`=?
                           LIMIT 1');
-  } || return undef;
-  # TODO: replace with bind_columns
-  $sth->execute($id,$data->{id}) || return undef;
-  if ($sth->rows == 1){
-    my ($role) = $sth->fetchrow_array();
-    return $role;
+  };
+  if ($@){
+    return {msg => $@};
   }
-  else{
-    return 'participant';
+  $sth->execute($data->{peer_id},$data->{room});
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
   }
+  my $role;
+  $sth->bind_columns(\$role);
+  $sth->fetch;
+  return {
+    ok   => 1,
+    data => $role
+  };
 };
 
 # Promote a peer to owner
@@ -1529,7 +1531,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     my $id = $self->param('id');
     my %emailNotif;
     if ($self->session($room) && $self->session($room)->{role}){
-      if ($self->session($room)->{role} ne 'owner' && $self->get_peer_role($room,$id) eq 'owner'){
+      if ($self->session($room)->{role} ne 'owner' && $self->get_peer_role({room => $room, peer_id => $id})->{data} eq 'owner'){
         $self->session($room)->{role} = 'owner';
       }
       my $res = $self->set_peer_role({
@@ -1567,7 +1569,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
   # Return the role of a peer
   elsif ($action eq 'getPeerRole'){
     my $id = $self->param('id');
-    my $role = $self->get_peer_role($room,$id);
+    my $role = $self->get_peer_role({room => $room, peer_id => $id});
     return $self->render(
       json => {
         role => $role,
