@@ -329,18 +329,28 @@ helper add_participant_to_room => sub {
 
 # Remove participant from the DB
 # Takes two args: room name and user name
-helper remove_participant => sub {
+helper remove_participant_from_room => sub {
   my $self = shift;
   my ($name,$participant) = @_;
-  my $room = $self->get_room_by_name($name)->{data} || return undef;
+  my $res = $self->get_room_by_name($name);
+  if (!$res->{ok}){
+    return $res;
+  }
+  my $room = $res->{data};
   my $sth = eval {
     $self->db->prepare('DELETE FROM `room_participants`
                           WHERE `id`=?
                             AND `participant`=?');
-  } || return undef;
-  $sth->execute($room->{id},$participant) || return undef;
+  };
+  if ($@){
+    return {msg => $@};
+  }
+  $sth->execute($room->{id},$participant);
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+  }
   $self->app->log->info($self->session('name') . " leaved the room $name");
-  return 1;
+  return {ok => 1};
 };
 
 # Get a list of participants of a room
@@ -993,7 +1003,7 @@ get '/goodbye/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
   if ($self->get_room_by_name($room)->{data} && $self->session('name')){
-    $self->remove_participant($room,$self->session('name'));
+    $self->remove_participant_from_room($room,$self->session('name'));
   }
   $self->logout($room);
 } => 'goodbye';
@@ -1010,7 +1020,7 @@ get '/kicked/(:room)' => sub {
       room => $room
     );
   }
-  $self->remove_participant($room,$self->session('name'));
+  $self->remove_participant_from_room($room,$self->session('name'));
   $self->logout($room);
 } => 'kicked';
 
