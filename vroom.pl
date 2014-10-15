@@ -371,6 +371,9 @@ helper get_participant_list => sub {
     return {msg => $@};
   }
   $sth->execute($room->{id});
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+  }
   return {
     ok   => 1,
     data => $sth->fetchall_hashref('room_id')->{$room->{id}}
@@ -380,11 +383,12 @@ helper get_participant_list => sub {
 # Set the role of a peer
 helper set_peer_role => sub {
   my $self = shift;
-  my ($room,$name,$id,$role) = @_;
-  my $data = $self->get_room_by_name($room)->{data} || return undef;
-  if (!$data){
-    return undef;
+  my ($data) = @_;
+  my $res =  $self->get_room_by_name($data->{room});
+  if (!$res->{ok}){
+    return $res;
   }
+  my $room = $res->{data};
   # Check if this ID isn't the one from another peer first
   my $sth = eval {
     $self->db->prepare('SELECT COUNT(`id`)
@@ -392,19 +396,43 @@ helper set_peer_role => sub {
                           WHERE `peer_id`=?
                             AND `participant`!=?
                             AND `room_id`=?');
-  } || return undef;
-  $sth->execute($id,$name,$data->{id}) || return undef;
-  return undef if ($sth->rows > 0);
+  };
+  if ($@){
+    return {msg => $@};
+  }
+  $sth->execute($data->{peer_id},$data->{name},$room->{id});
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+  }
+  my $num;
+  $sth->bind_columns(\$num);
+  $sth->fetch;
+  if ($num > 0){
+    return {msg => 'ERROR_UNAUTHORIZED'};
+  }
   $sth = eval {
     $self->db->prepare('UPDATE `room_participants`
                           SET `peer_id`=?,
                               `role`=?
                           WHERE `participant`=?
                             AND `room_id`=?');
-  } || return undef;
-  $sth->execute($id,$role,$name,$data->{id}) || return undef;
-  $self->app->log->info("User $name (peer id $id) has now the $role role in room $room");
-  return 1;
+  };
+  if ($@){
+    return {msg => $@};
+  }
+  $sth->execute(
+    $data->{peer_id},
+    $data->{role},
+    $data->{name},
+    $room->{id}
+  );
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+  }
+  $self->app->log->info("User " . $data->{name} . " (peer id " . 
+                          $data->{peer_id} . ") has now the " .
+                          $data->{role} . " role in room " . $data->{room});
+  return {ok => 1};
 };
 
 # Return the role of a peer, from it's signaling ID
@@ -1499,13 +1527,25 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
   # Return your role and various info about the room
   elsif ($action eq 'getRoomInfo'){
     my $id = $self->param('id');
-    my $res = 'error';
     my %emailNotif;
     if ($self->session($room) && $self->session($room)->{role}){
       if ($self->session($room)->{role} ne 'owner' && $self->get_peer_role($room,$id) eq 'owner'){
         $self->session($room)->{role} = 'owner';
       }
-      $res = ($self->set_peer_role($room,$self->session('name'),$id, $self->session($room)->{role})) ? 'success':$res;
+      my $res = $self->set_peer_role({
+        room    => $room,
+        name    => $self->session('name'),
+        peer_id => $id,
+        role    => $self->session($room)->{role}
+      });
+      if (!$res->{ok}){
+        return $self->render(
+          json => {
+            status => 'error',
+            msg    => $self->l($res->{msg})
+          }
+        );
+      }
     }
     if ($self->session($room)->{role} eq 'owner'){
       my $i = 0;
