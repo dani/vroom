@@ -302,18 +302,29 @@ helper modify_room => sub {
 
 # Add a participant in the database. Used by the signaling server to check
 # if user is allowed
-helper add_participant => sub {
+helper add_participant_to_room => sub {
   my $self = shift;
   my ($name,$participant) = @_;
-  my $room = $self->get_room_by_name($name)->{data} || return undef;
+  my $res = $self->get_room_by_name($name);
+  if (!$res->{ok}){
+    return $res;
+  }
+  my $room = $res->{data};
   my $sth = eval {
-    $self->db->prepare('INSERT IGNORE INTO `room_participants`
+    $self->db->prepare('INSERT INTO `room_participants`
                           (`room_id`,`participant`,`last_activity`)
-                          VALUES (?,?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'))');
-  } || return undef;
-  $sth->execute($room->{id},$participant) || return undef;
+                          VALUES (?,?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'))
+                          ON DUPLICATE KEY UPDATE `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')');
+  };
+  if ($@){
+    return {msg => $@};
+  }
+  $sth->execute($room->{id},$participant);
+  if ($sth->err){
+    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+  }
   $self->app->log->info($self->session('name') . " joined the room $name");
-  return 1;
+  return {ok => 1};
 };
 
 # Remove participant from the DB
@@ -1194,15 +1205,16 @@ get '/(*room)' => sub {
   # Short life cookie to negociate a session with the signaling server
   $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60, path => '/'});
   # Add this user to the participants table
-  unless($self->add_participant($room,$self->session('name'))){
+  $res = $self->add_participant_to_room($room,$self->session('name'));
+  if (!$res->{ok}){
     return $self->render('error',
-      msg  => $self->l('ERROR_OCCURRED'),
-      err  => 'ERROR_OCCURRED',
+      msg  => $self->l($res->{msg}),
+      err  => $res->{msg},
       room => $room
     );
   }
   # Now display the room page
-  $self->render('join',
+  return $self->render('join',
     moh           => $self->choose_moh(),
     turnPassword  => $data->{token},
     video         => $video,
