@@ -263,7 +263,7 @@ helper modify_room => sub {
     return $res;
   }
   $res = $self->valid_room_name($room->{name});
-  if ($res->{ok}){
+  if (!$res->{ok}){
     return $res;
   }
   if (($room->{locked} && $room->{locked} !~ m/^0|1$/) ||
@@ -274,12 +274,12 @@ helper modify_room => sub {
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
                           SET `owner`=?,
-                              `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
                               `locked`=?,
                               `ask_for_name`=?,
                               `join_password`=?,
                               `owner_password`=?,
-                              `persistent`=?');
+                              `persistent`=?
+                          WHERE `id`=?');
   };
   if ($@){
     return {msg => $@};
@@ -290,31 +290,14 @@ helper modify_room => sub {
     $room->{ask_for_name},
     $room->{join_password},
     $room->{owner_password},
-    $room->{persistent}
+    $room->{persistent},
+    $room->{id}
   );
   if ($sth->err){
     return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
   }
   $self->app->log->info("Room " . $room->{name} ." modified by " . $self->session('name'));
   return {ok => 1};
-};
-
-# Lock/unlock a room, to prevent new participants
-# Takes two arg: room name and 1 for lock, 0 for unlock
-helper lock_room => sub {
-  my $self = shift;
-  my ($name,$lock) = @_;
-  return undef unless ( $self->get_room_by_name($name)->{ok} );
-  return undef unless ($lock =~ m/^0|1$/);
-  my $sth = eval {
-    $self->db->prepare('UPDATE `rooms`
-                          SET `locked`=?
-                          WHERE `name`=?');
-  } || return undef;
-  $sth->execute($lock,$name) || return undef;
-  my $action = ($lock eq '1') ? 'locked':'unlocked';
-  $self->app->log->info("room $name $action by " . $self->session('name'));
-  return 1;
 };
 
 # Add a participant in the database. Used by the signaling server to check
@@ -1246,7 +1229,10 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     );
   }
   # Refuse any action from non members of the room
-  if ($prefix ne 'admin' && (!$self->session('name') || !$self->has_joined($self->session('name'), $room) || !$self->session($room) || !$self->session($room)->{role})){
+  if ($prefix ne 'admin' && (!$self->session('name') ||
+                             !$self->has_joined($self->session('name'), $room) ||
+                             !$self->session($room) ||
+                             !$self->session($room)->{role})){
     return $self->render(
              json => {
                msg    => $self->l('ERROR_NOT_LOGGED_IN'),
@@ -1258,24 +1244,27 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
   my $res = $self->valid_room_name($room);
   if (!$res->{ok}){
     return $self->render(
-           json => {
-             msg    => $self->l($res->{msg}),
-             status => 'error'
-           },
-         );
+      json => {
+        msg    => $self->l($res->{msg}),
+        status => 'error'
+      },
+    );
   }
   # Push the room name to the stash, just in case
   $self->stash(room => $room);
   # Gather room info from the DB
-  my $data = $self->get_room_by_name($room)->{data};
+  $res = $self->get_room_by_name($room);
   # Stop here if the room doesn't exist
-  return $self->render(
-           json => {
-             msg    => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
-             err    => 'ERROR_ROOM_s_DOESNT_EXIST',
-             status => 'error'
-           },
-         ) unless ($data);
+  if (!$res->{ok}){
+    return $self->render(
+      json => {
+        msg    => $self->l($res->{msg}),
+        err    => $res->{msg},
+        status => 'error'
+      },
+    );
+  }
+  my $data = $res->{data};
 
   # Handle email invitation
   if ($action eq 'invite'){
@@ -1319,20 +1308,31 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     my ($lock,$success);
     my $msg = 'ERROR_OCCURRED';
     my $status = 'error';
+    $data->{locked} = ($action eq 'lock') ? '1':'0';
     # Only the owner can lock or unlock a room
     if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
-      $msg = $self->l('NOT_ALLOWED');
+      return $self->render(
+        json => {
+          status => 'error',
+          msg    => $self->l('NOT_ALLOWED')
+        }
+      );
     }
-    elsif ($self->lock_room($room,($action eq 'lock') ? '1':'0')){
-      $status = 'success';
-      $msg = ($action eq 'lock') ? $self->l('ROOM_LOCKED') : $self->l('ROOM_UNLOCKED');
+    $res = $self->modify_room($data);
+    if (!$res->{ok}){
+      return $self->render(
+        json => {
+          status => 'error',
+          msg => $self->l($res->{msg})
+        }
+      );
     }
     return $self->render(
-             json => {
-               msg    => $msg,
-               status => $status
-             }
-           );
+      json => {
+        msg    => ($action eq 'lock') ? $self->l('ROOM_LOCKED') : $self->l('ROOM_UNLOCKED'),
+        status => 'success'
+      }
+    );
   }
   # Handle activity pings sent every minute by each participant
   elsif ($action eq 'ping'){
