@@ -641,17 +641,17 @@ helper ping_room => sub {
   return undef unless ($data);
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
-                          SET `last_activity`=?
+                          SET `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')
                           WHERE `id`=?');
   } || return undef;
-  $sth->execute(time(),$data->{id}) || return undef;
+  $sth->execute($data->{id}) || return undef;
   $sth = eval {
     $self->db->prepare('UPDATE `room_participants`
-                          SET `last_activity`=?
+                          SET `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')
                           WHERE `id`=?
                             AND `participant`=?');
   } || return undef;
-  $sth->execute(time(),$data->{id},$self->session('name')) || return undef;
+  $sth->execute($data->{id},$self->session('name')) || return undef;
   $self->app->log->debug($self->session('name') . " pinged the room $name");
   return 1;
 };
