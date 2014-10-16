@@ -494,14 +494,15 @@ helper delete_room => sub {
 };
 
 # Retrieve the list of rooms
+# TODO: rewrite to return a hashref with full room data
 helper get_all_rooms => sub {
   my $self = shift;
   my @rooms;
   my $sth = eval {
     $self->db->prepare('SELECT `name`
                           FROM `rooms`');
-  } || return undef;
-  $sth->execute() || return undef;
+  };
+  $sth->execute;
   while (my $name = $sth->fetchrow_array){
     push @rooms, $name;
   }
@@ -513,21 +514,23 @@ helper get_all_rooms => sub {
 helper ping_room => sub {
   my $self = shift;
   my ($name) = @_;
-  my $data = $self->get_room_by_name($name) || return undef;
-  return undef unless ($data);
+  my $data = $self->get_room_by_name($name);
+  if (!$data){
+    return 0;
+  }
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
                           SET `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')
                           WHERE `id`=?');
-  } || return undef;
-  $sth->execute($data->{id}) || return undef;
+  };
+  $sth->execute($data->{id});
   $sth = eval {
     $self->db->prepare('UPDATE `room_participants`
                           SET `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')
                           WHERE `id`=?
                             AND `participant`=?');
-  } || return undef;
-  $sth->execute($data->{id},$self->session('name')) || return undef;
+  };
+  $sth->execute($data->{id},$self->session('name'));
   $self->app->log->debug($self->session('name') . " pinged the room $name");
   return 1;
 };
@@ -579,9 +582,9 @@ helper set_join_pass => sub {
     $self->db->prepare('UPDATE `rooms`
                           SET `join_password`=?
                           WHERE `name`=?');
-  } || return undef;
+  };
   $pass = ($pass) ? Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($pass)->generate : undef;
-  $sth->execute($pass,$room) || return undef;
+  $sth->execute($pass,$room);
   if ($pass){
     $self->app->log->debug($self->session('name') . " has set a password on room $room");
   }
