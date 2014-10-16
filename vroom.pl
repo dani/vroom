@@ -265,7 +265,7 @@ helper modify_room => sub {
                           WHERE `id`=?');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute(
     $room->{owner},
@@ -277,10 +277,10 @@ helper modify_room => sub {
     $room->{id}
   );
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
   $self->app->log->info("Room " . $room->{name} ." modified by " . $self->session('name'));
-  return {ok => 1};
+  return 1;
 };
 
 # Add a participant in the database. Used by the signaling server to check
