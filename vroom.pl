@@ -230,16 +230,13 @@ helper get_room_by_id => sub {
                           WHERE `id`=?');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute($id);
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
-  return {
-    ok     => 1,
-    data   => $sth->fetchall_hashref('id')->{$id}
-  };
+  return $sth->fetchall_hashref('id')->{$id};
 };
 
 # Update a room, take a room object as a hashref
@@ -1078,7 +1075,7 @@ get '/invitation' => sub {
   # Delete expired invitation now
   $self->delete_invitations;
   my $invite = $self->get_invitation($inviteId);
-  my $room = $self->get_room_by_id($invite->{room_id})->{data};
+  my $room = $self->get_room_by_id($invite->{room_id});
   if (!$invite || !$room){
     return $self->render('error',
       err  => 'ERROR_INVITATION_INVALID',
