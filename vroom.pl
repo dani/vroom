@@ -490,13 +490,13 @@ helper purge_participants => sub {
                             OR `last_activity` IS NULL');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute;
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
-  return {ok => 1};
+  return 1;
 };
 
 # Purge unused rooms
