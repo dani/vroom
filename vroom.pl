@@ -622,23 +622,6 @@ helper remove_notification => sub {
   return 1;
 };
 
-
-# Set/unset ask for name
-helper ask_for_name => sub {
-  my $self = shift;
-  my ($room,$set) = @_;
-  my $data = $self->get_room_by_name($room);
-  return undef unless ($data);
-  my $sth = eval {
-    $self->db->prepare('UPDATE `rooms`
-                          SET `ask_for_name`=?
-                          WHERE `name`=?');
-  } || return undef;
-  $sth->execute($set,$room) || return undef;
-  $self->app->log->debug($self->session('name') . " has configured room $room to ask for a name before joining it");
-  return 1;
-};
-
 # Randomly choose a music on hold
 helper choose_moh => sub {
   my $self = shift;
@@ -1442,13 +1425,10 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
       $msg = $self->l('NOT_ALLOWED');
     }
-    elsif($type eq 'set' && $self->ask_for_name($room,'1')){
+    $data->{ask_for_name} = ($type eq 'set') ? 1 : 0;
+    if ($self->modify_room($data)){
       $status = 'success';
-      $msg = $self->l('FORCE_DISPLAY_NAME');
-    }
-    elsif($type eq 'unset' && $self->ask_for_name($room,'0')){
-      $status = 'success';
-      $msg = $self->l('NAME_WONT_BE_ASKED');
+      $msg = $self->l(($type eq 'set') ? 'FORCE_DISPLAY_NAME' : 'NAME_WONT_BE_ASKED');
     }
     return $self->render(
       json => {
