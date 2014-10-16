@@ -335,7 +335,7 @@ helper remove_participant_from_room => sub {
 };
 
 # Get a list of participants of a room
-helper get_participant_list => sub {
+helper get_participants_list => sub {
   my $self = shift;
   my ($name) = @_;
   my $room = $self->get_room_by_name($name);
@@ -348,16 +348,13 @@ helper get_participant_list => sub {
                           WHERE `room_id`=?');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute($room->{id});
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
-  return {
-    ok   => 1,
-    data => $sth->fetchall_hashref('room_id')->{$room->{id}}
-  };
+  return $sth->fetchall_hashref('room_id')->{$room->{id}};
 };
 
 # Set the role of a peer
@@ -1012,7 +1009,7 @@ get '/admin/(:room)' => sub {
       room => $room
     );
   }
-  my $num = scalar keys %{$self->get_participants_list($room)->{data}};
+  my $num = scalar keys %{$self->get_participants_list($room)};
   $self->stash(
     room         => $room,
     participants => $num
