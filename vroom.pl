@@ -133,14 +133,13 @@ helper login => sub {
 helper logout => sub {
   my $self = shift;
   my ($room) = @_;
-  my $ret = {};
   # Logout from etherpad
   if ($ec && $self->session($room) && $self->session($room)->{etherpadSessionId}){
     $ec->delete_session($self->session($room)->{etherpadSessionId});
   }
   $self->session( expires => 1 );
   $self->app->log->info($self->session('name') . " logged out");
-  return {ok => 1};
+  return 1;
 };
 
 # Create a new room in the DB
