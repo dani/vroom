@@ -446,13 +446,13 @@ helper promote_peer => sub {
                             AND `r`.`name`=?');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute($data->{peer_id},$data->{room});
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
-  return {ok => 1};
+  return 1;
 };
 
 # Check if a participant has joined a room
@@ -1657,7 +1657,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     elsif ($self->session($room)->{role} ne 'owner'){
       $msg = $self->l('NOT_ALLOWED');
     }
-    elsif ($self->promote_peer({room => $room, peer_id => $peer})->{ok}){
+    elsif ($self->promote_peer({room => $room, peer_id => $peer})){
       $status = 'success';
       $msg = $self->l('PEER_PROMOTED');
     }
