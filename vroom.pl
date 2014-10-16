@@ -324,14 +324,14 @@ helper remove_participant_from_room => sub {
                             AND `participant`=?');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute($room->{id},$participant);
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
   $self->app->log->info($self->session('name') . " leaved the room $name");
-  return {ok => 1};
+  return 0;
 };
 
 # Get a list of participants of a room
