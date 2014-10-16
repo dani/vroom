@@ -118,7 +118,7 @@ helper login => sub {
   my $self = shift;
   my $ret = {};
   if ($self->session('name')){
-    return {ok => 1};
+    return 1;
   }
   my $login = $ENV{'REMOTE_USER'} || lc $self->get_random(256);
   $self->session(
@@ -126,7 +126,7 @@ helper login => sub {
       ip   => $self->tx->remote_address
   );
   $self->app->log->info($self->session('name') . " logged in from " . $self->tx->remote_address);
-  return {ok => 1};
+  return 1;
 };
 
 # Expire the cookie
