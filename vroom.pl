@@ -510,11 +510,11 @@ helper purge_rooms => sub {
                           AND `persistent`=\'0\' AND `owner_password` IS NULL');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute;
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
   my $toDelete = {};
   while (my ($room,$ether_group) = $sth->fetchrow_array){
@@ -528,11 +528,11 @@ helper purge_rooms => sub {
                               AND `persistent`=\'0\' AND `owner_password` IS NOT NULL')
     };
     if ($@){
-      return {msg => $@};
+      return 0;
     }
     $sth->execute;
     if ($sth->err){
-      return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+      return 0;
     }
     while (my ($room, $ether_group) = $sth->fetchrow_array){
       $toDelete->{$room} = $ether_group;
@@ -553,17 +553,17 @@ helper purge_rooms => sub {
                             WHERE `name` IN (" . join( ",", map { "?" } keys %{$toDelete} ) . ")");
     };
     if ($@){
-      return {msg => $@};
+      return 0;
     }
     $sth->execute(keys %{$toDelete});
     if ($sth->err){
-      return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+      return 0;
     }
   }
   else{
     $self->app->log->debug('No rooms deleted, as none has expired');
   }
-  return {ok => 1};
+  return 1;
 };
 
 # delete just a specific room
