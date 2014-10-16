@@ -575,14 +575,17 @@ helper add_notification => sub {
   my $self = shift;
   my ($room,$email) = @_;
   my $data = $self->get_room_by_name($room);
-  return undef unless ($data);
+  if (!$data){
+    return 0;
+  }
   my $sth = eval {
     $self->db->prepare('INSERT INTO `email_notifications`
-                          (`id`,`email`)
+                          (`room_id`,`email`)
                           VALUES (?,?)');
-  } || return undef;
-  $sth->execute($data->{id},$email) || return undef;
-  $self->app->log->debug($self->session('name') . " has added $email to the list of email which will be notified when someone joins room $room");
+  };
+  $sth->execute($data->{id},$email);
+  $self->app->log->debug($self->session('name') . 
+       " has added $email to the list of email which will be notified when someone joins room $room");
   return 1;
 };
 
@@ -592,16 +595,12 @@ helper get_notification => sub {
   my ($room) = @_;
   $room = $self->get_room_by_name($room) || return undef;
   my $sth = eval {
-    $self->db->prepare('SELECT `email`
+    $self->db->prepare('SELECT `id`,`email`
                           FROM `email_notifications`
-                          WHERE `id`=?');
-  } || return undef;
-  $sth->execute($room->{id}) || return undef;
-  my @res;
-  while(my @row = $sth->fetchrow_array){
-    push @res, $row[0];
-  }
-  return @res;
+                          WHERE `room_id`=?');
+  };
+  $sth->execute($room->{id});
+  return $sth->fetchall_hashref('id');
 };
 
 # Remove an email from notification list
@@ -609,14 +608,17 @@ helper remove_notification => sub {
   my $self = shift;
   my ($room,$email) = @_;
   my $data = $self->get_room_by_name($room);
-  return undef unless ($data);
+  if (!$data){
+    return 0;
+  }
   my $sth = eval {
     $self->db->prepare('DELETE FROM `email_notifications`
-                          WHERE `id`=?
+                          WHERE `room_id`=?
                             AND `email`=?');
-  } || return undef;
+  };
   $sth->execute($data->{id},$email) || return undef;
-  $self->app->log->debug($self->session('name') . " has removed $email from the list of email which are notified when someone joins room $room");
+  $self->app->log->debug($self->session('name') .
+    " has removed $email from the list of email which are notified when someone joins room $room");
   return 1;
 };
 
@@ -1381,8 +1383,6 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     }
     if ($self->session($room)->{role} eq 'owner'){
       my $i = 0;
-      my @email = $self->get_notification($room);
-      %emailNotif = map { $i => $email[$i++] } @email;
     }
     return $self->render(
                json => {
@@ -1391,7 +1391,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
                  join_auth    => ($data->{join_password})  ? 'yes' : 'no',
                  locked       => ($data->{locked})         ? 'yes' : 'no',
                  ask_for_name => ($data->{ask_for_name})   ? 'yes' : 'no',
-                 notif        => Mojo::JSON->new->encode({email => { %emailNotif }}),
+                 notif        => $self->get_notification($room),
                  status       => 'success'
                },
              );
@@ -1462,9 +1462,10 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     my $name = $self->param('name') || '';
     my $subj = ($name eq '') ? sprintf($self->l('s_JOINED_ROOM_s'), $self->l('SOMEONE'), $room) : sprintf($self->l('s_JOINED_ROOM_s'), $name, $room);
     # Send notifications
-    foreach my $rcpt ($self->get_notification($room)){
+    my $recipients = $self->get_notification($room);
+    foreach my $rcpt (keys %{$recipients}){
       my $sent = $self->mail(
-                   to      => $rcpt,
+                   to      => $recipients->{$rcpt}->{email},
                    subject => $subj,
                    data    => $self->render_mail('notification',
                                 room => $room,

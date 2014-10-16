@@ -537,9 +537,8 @@ function initVroom(room) {
           if (countPeers() > 1){
             $('.threePeersEl').show(500);
           }
-          var notif = JSON.parse(data.notif);
-          $.each(notif.email, function(index, val){
-            addNotifiedEmail(val);
+          $.each(data.notif, function(index, obj){
+            addNotifiedEmail(obj.email);
           });
         }
         // We're are not owner of the room
