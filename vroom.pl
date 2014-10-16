@@ -371,17 +371,17 @@ helper set_peer_role => sub {
                             AND `r`.`name`=?');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute($data->{peer_id},$data->{name},$data->{room});
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
   my $num;
   $sth->bind_columns(\$num);
   $sth->fetch;
   if ($num > 0){
-    return {msg => 'ERROR_UNAUTHORIZED'};
+    return 0;
   }
   $sth = eval {
     $self->db->prepare('UPDATE `room_participants` `p`
@@ -392,7 +392,7 @@ helper set_peer_role => sub {
                             AND `r`.`name`=?');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute(
     $data->{peer_id},
@@ -401,12 +401,12 @@ helper set_peer_role => sub {
     $data->{room}
   );
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
   $self->app->log->info("User " . $data->{name} . " (peer id " . 
                           $data->{peer_id} . ") has now the " .
                           $data->{role} . " role in room " . $data->{room});
-  return {ok => 1};
+  return 1;
 };
 
 # Return the role of a peer, from it's signaling ID
@@ -1541,11 +1541,11 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
         peer_id => $id,
         role    => $self->session($room)->{role}
       });
-      if (!$res->{ok}){
+      if (!$res){
         return $self->render(
           json => {
             status => 'error',
-            msg    => $self->l($res->{msg})
+            msg    => $self->l('ERROR_OCCURRED')
           }
         );
       }
