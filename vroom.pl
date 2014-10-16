@@ -72,7 +72,11 @@ plugin database => {
   dsn      => $config->{'database.dsn'},
   username => $config->{'database.user'},
   password => $config->{'database.password'},
-  options  => { mysql_enable_utf8 => 1 }
+  options  => {
+    mysql_enable_utf8 => 1,
+    RaiseError        => 1,
+    PrintError        => 0
+  }
 };
 
 # Load mail plugin with its default values
@@ -173,18 +177,12 @@ helper create_room => sub {
                                   ?,
                                   ?)');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute(
     $name,
     $owner,
     $self->get_random(256),
     $config->{'turn.realm'}
   );
-  if ($sth->err){
-    return 0;
-  }
   $self->app->log->info("Room $name created by " . $self->session('name'));
   # Etherpad integration ? If so, create the corresponding pad
   if ($ec){
@@ -207,13 +205,7 @@ helper get_room_by_name => sub {
                           FROM `rooms`
                           WHERE `name`=?');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute($name);
-  if ($sth->err){
-    return 0;
-  }
   return $sth->fetchall_hashref('name')->{$name}
 };
 
@@ -229,13 +221,7 @@ helper get_room_by_id => sub {
                           FROM `rooms`
                           WHERE `id`=?');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute($id);
-  if ($sth->err){
-    return 0;
-  }
   return $sth->fetchall_hashref('id')->{$id};
 };
 
@@ -252,7 +238,7 @@ helper modify_room => sub {
   if (($room->{locked} && $room->{locked} !~ m/^0|1$/) ||
       ($room->{ask_for_name} && $room->{ask_for_name} !~ m/^0|1$/) ||
       ($room->{persistent} && $room->{persistent} !~ m/^0|1$/)){
-    return {msg => 'ERROR_INVALID_PARAM'};
+    return 0;
   }
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
@@ -264,9 +250,6 @@ helper modify_room => sub {
                               `persistent`=?
                           WHERE `id`=?');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute(
     $room->{owner},
     $room->{locked},
@@ -276,9 +259,6 @@ helper modify_room => sub {
     $room->{persistent},
     $room->{id}
   );
-  if ($sth->err){
-    return 0;
-  }
   $self->app->log->info("Room " . $room->{name} ." modified by " . $self->session('name'));
   return 1;
 };
@@ -298,13 +278,7 @@ helper add_participant_to_room => sub {
                           VALUES (?,?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'))
                           ON DUPLICATE KEY UPDATE `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute($room->{id},$participant);
-  if ($sth->err){
-    return 0;
-  }
   $self->app->log->info($self->session('name') . " joined the room $name");
   return 1;
 };
@@ -323,13 +297,7 @@ helper remove_participant_from_room => sub {
                           WHERE `id`=?
                             AND `participant`=?');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute($room->{id},$participant);
-  if ($sth->err){
-    return 0;
-  }
   $self->app->log->info($self->session('name') . " leaved the room $name");
   return 0;
 };
@@ -347,13 +315,7 @@ helper get_participants_list => sub {
                           FROM `room_participants`
                           WHERE `room_id`=?');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute($room->{id});
-  if ($sth->err){
-    return 0;
-  }
   return $sth->fetchall_hashref('room_id')->{$room->{id}};
 };
 
@@ -370,13 +332,7 @@ helper set_peer_role => sub {
                             AND `p`.`participant`!=?
                             AND `r`.`name`=?');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute($data->{peer_id},$data->{name},$data->{room});
-  if ($sth->err){
-    return 0;
-  }
   my $num;
   $sth->bind_columns(\$num);
   $sth->fetch;
@@ -391,18 +347,12 @@ helper set_peer_role => sub {
                           WHERE `p`.`participant`=?
                             AND `r`.`name`=?');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute(
     $data->{peer_id},
     $data->{role},
     $data->{name},
     $data->{room}
   );
-  if ($sth->err){
-    return 0;
-  }
   $self->app->log->info("User " . $data->{name} . " (peer id " . 
                           $data->{peer_id} . ") has now the " .
                           $data->{role} . " role in room " . $data->{room});
@@ -421,13 +371,7 @@ helper get_peer_role => sub {
                             AND `r`.`name`=?
                           LIMIT 1');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute($data->{peer_id},$data->{room});
-  if ($sth->err){
-    return 0;
-  }
   my $role;
   $sth->bind_columns(\$role);
   $sth->fetch;
@@ -445,13 +389,7 @@ helper promote_peer => sub {
                           WHERE `p`.`peer_id`=?
                             AND `r`.`name`=?');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute($data->{peer_id},$data->{room});
-  if ($sth->err){
-    return 0;
-  }
   return 1;
 };
 
@@ -467,13 +405,7 @@ helper has_joined => sub {
                           WHERE `r`.`name`=?
                             AND `p`.`participant`=?');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute($data->{room},$data->{name});
-  if ($sth->err){
-    return 0;
-  }
   my $num;
   $sth->bind_columns(\$num);
   $sth->fetch;
@@ -489,13 +421,7 @@ helper purge_participants => sub {
                           WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL 10 MINUTE)
                             OR `last_activity` IS NULL');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute;
-  if ($sth->err){
-    return 0;
-  }
   return 1;
 };
 
@@ -509,13 +435,7 @@ helper purge_rooms => sub {
                           WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL ' . $config->{'rooms.inactivity_timeout'} . ' MINUTE)
                           AND `persistent`=\'0\' AND `owner_password` IS NULL');
   };
-  if ($@){
-    return 0;
-  }
   $sth->execute;
-  if ($sth->err){
-    return 0;
-  }
   my $toDelete = {};
   while (my ($room,$ether_group) = $sth->fetchrow_array){
     $toDelete->{$room} = $ether_group;
@@ -527,13 +447,7 @@ helper purge_rooms => sub {
                             WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL ' . $config->{'rooms.reserved_inactivity_timeout'} . ' MINUTE)
                               AND `persistent`=\'0\' AND `owner_password` IS NOT NULL')
     };
-    if ($@){
-      return 0;
-    }
     $sth->execute;
-    if ($sth->err){
-      return 0;
-    }
     while (my ($room, $ether_group) = $sth->fetchrow_array){
       $toDelete->{$room} = $ether_group;
     }
@@ -552,16 +466,7 @@ helper purge_rooms => sub {
       $self->db->prepare("DELETE FROM `rooms`
                             WHERE `name` IN (" . join( ",", map { "?" } keys %{$toDelete} ) . ")");
     };
-    if ($@){
-      return 0;
-    }
     $sth->execute(keys %{$toDelete});
-    if ($sth->err){
-      return 0;
-    }
-  }
-  else{
-    $self->app->log->debug('No rooms deleted, as none has expired');
   }
   return 1;
 };
