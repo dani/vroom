@@ -104,9 +104,9 @@ helper valid_id => sub {
   my $self = shift;
   my ($id) = @_;
   if ($id !~ m/^\d+$/){
-    return {msg => 'INVALID_ID'};
+    return 0;
   }
-  return {ok => 1};
+  return 1;
 };
 
 ##########################
@@ -227,9 +227,8 @@ helper get_room_by_name => sub {
 helper get_room_by_id => sub {
   my $self = shift;
   my ($id) = @_;
-  my $res = $self->valid_id($id);
-  if (!$res->{ok}){
-    return $res;
+  if (!$self->valid_id($id)){
+    return 0;
   }
   my $sth = eval {
     $self->db->prepare('SELECT *
@@ -253,10 +252,8 @@ helper get_room_by_id => sub {
 helper modify_room => sub {
   my $self = shift;
   my ($room) = @_;
-  my $res = {};
-  $res = $self->valid_id($room->{id});
-  if (!$res->{ok}){
-    return $res;
+  if (!$self->valid_id($room->{id})){
+    return 0;
   }
   if (!$self->valid_room_name($room->{name})){
     return 0;
