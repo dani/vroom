@@ -1024,14 +1024,13 @@ post '/create' => sub {
     $json->{msg} = $self->l('ERROR_NAME_CONFLICT');
     return $self->render(json => $json);
   }
-  my $res = $self->create_room($name,$self->session('name'));
-  if (!$res->{ok}){
-    $json->{err} = $res->{msg};
-    $json->{msg} = $self->l($res->{msg});
+  if (!$self->create_room($name,$self->session('name'))){
+    $json->{err} = 'ERROR_OCCURRED';
+    $json->{msg} = $self->l('ERROR_OCCURRED');
     return $self->render(json => $json);
   }
   $json->{status} = 'success';
-  $json->{err}    = $res->{msg};
+  $json->{err}    = '';
   $self->session($name => {role => 'owner'});
   return $self->render(json => $json);
 };
@@ -1157,11 +1156,10 @@ get '/(*room)' => sub {
   # Short life cookie to negociate a session with the signaling server
   $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60, path => '/'});
   # Add this user to the participants table
-  $res = $self->add_participant_to_room($room,$self->session('name'));
-  if (!$res->{ok}){
+  if (!$self->add_participant_to_room($room,$self->session('name'))){
     return $self->render('error',
-      msg  => $self->l($res->{msg}),
-      err  => $res->{msg},
+      msg  => $self->l('ERROR_OCCURRED'),
+      err  => 'ERROR_OCCURRED',
       room => $room
     );
   }
