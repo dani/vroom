@@ -422,19 +422,16 @@ helper get_peer_role => sub {
                           LIMIT 1');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute($data->{peer_id},$data->{room});
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
   my $role;
   $sth->bind_columns(\$role);
   $sth->fetch;
-  return {
-    ok   => 1,
-    data => $role
-  };
+  return $role;
 };
 
 # Promote a peer to owner
@@ -1532,7 +1529,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     my $id = $self->param('id');
     my %emailNotif;
     if ($self->session($room) && $self->session($room)->{role}){
-      if ($self->session($room)->{role} ne 'owner' && $self->get_peer_role({room => $room, peer_id => $id})->{data} eq 'owner'){
+      if ($self->session($room)->{role} ne 'owner' && $self->get_peer_role({room => $room, peer_id => $id}) eq 'owner'){
         $self->session($room)->{role} = 'owner';
       }
       my $res = $self->set_peer_role({
