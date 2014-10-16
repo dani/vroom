@@ -147,7 +147,6 @@ helper logout => sub {
 helper create_room => sub {
   my $self = shift;
   my ($name,$owner) = @_;
-  my $res = {};
   # Convert room names to lowercase
   if ($name ne lc $name){
     $name = lc $name;
@@ -156,9 +155,8 @@ helper create_room => sub {
   if (!$self->valid_room_name($name)){
     return 0;
   }
-  $res = $self->get_room_by_name($name);
-  if ($res->{data}){
-    return $res;
+  if ($self->get_room_by_name($name)){
+    return 0;
   }
   my $sth = eval {
     $self->db->prepare('INSERT INTO `rooms`
@@ -176,7 +174,7 @@ helper create_room => sub {
                                   ?)');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute(
     $name,
@@ -185,14 +183,14 @@ helper create_room => sub {
     $config->{'turn.realm'}
   );
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
   $self->app->log->info("Room $name created by " . $self->session('name'));
   # Etherpad integration ? If so, create the corresponding pad
   if ($ec){
     $self->create_pad($name);
   }
-  return {ok => 1};
+  return 1;
 };
 
 # Take a string as argument
@@ -210,16 +208,13 @@ helper get_room_by_name => sub {
                           WHERE `name`=?');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute($name);
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
-  return {
-    ok    => 1,
-    data  => $sth->fetchall_hashref('name')->{$name}
-  };
+  return $sth->fetchall_hashref('name')->{$name}
 };
 
 # Same as before, but take a room ID as argument
@@ -296,11 +291,10 @@ helper modify_room => sub {
 helper add_participant_to_room => sub {
   my $self = shift;
   my ($name,$participant) = @_;
-  my $res = $self->get_room_by_name($name);
-  if (!$res->{ok}){
-    return $res;
+  my $room = $self->get_room_by_name($name);
+  if (!$room){
+    return 0;
   }
-  my $room = $res->{data};
   my $sth = eval {
     $self->db->prepare('INSERT INTO `room_participants`
                           (`room_id`,`participant`,`last_activity`)
@@ -308,14 +302,14 @@ helper add_participant_to_room => sub {
                           ON DUPLICATE KEY UPDATE `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')');
   };
   if ($@){
-    return {msg => $@};
+    return 0;
   }
   $sth->execute($room->{id},$participant);
   if ($sth->err){
-    return {msg => "DB Error: " . $sth->errstr . " (code " . $sth->err . ")"};
+    return 0;
   }
   $self->app->log->info($self->session('name') . " joined the room $name");
-  return {ok => 1};
+  return 1;
 };
 
 # Remove participant from the DB
@@ -323,11 +317,10 @@ helper add_participant_to_room => sub {
 helper remove_participant_from_room => sub {
   my $self = shift;
   my ($name,$participant) = @_;
-  my $res = $self->get_room_by_name($name);
-  if (!$res->{ok}){
-    return $res;
+  my $room = $self->get_room_by_name($name);
+  if (!$room){
+    return 0;
   }
-  my $room = $res->{data};
   my $sth = eval {
     $self->db->prepare('DELETE FROM `room_participants`
                           WHERE `id`=?
@@ -348,11 +341,10 @@ helper remove_participant_from_room => sub {
 helper get_participant_list => sub {
   my $self = shift;
   my ($name) = @_;
-  my $res = $self->get_room_by_name($name);
-  if (!$res->{ok}){
-    return $res;
+  my $room = $self->get_room_by_name($name);
+  if (!$room){
+    return 0;
   }
-  my $room = $res->{data};
   my $sth = eval {
     $self->db->prepare('SELECT `participant`
                           FROM `room_participants`
@@ -591,7 +583,7 @@ helper delete_room => sub {
   my $self = shift;
   my ($room) = @_;
   $self->app->log->debug("Removing room $room");
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   if (!$data){
     $self->app->log->debug("Error: room $room doesn't exist");
     return undef;
@@ -628,7 +620,7 @@ helper get_all_rooms => sub {
 helper ping_room => sub {
   my $self = shift;
   my ($name) = @_;
-  my $data = $self->get_room_by_name($name)->{data} || return undef;
+  my $data = $self->get_room_by_name($name) || return undef;
   return undef unless ($data);
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
@@ -659,7 +651,7 @@ helper get_random_name => sub {
   my $self = shift;
   my $name = lc $self->get_random(64);
   # Get another one if already taken
-  while ($self->get_room_by_name($name)->{data}){
+  while ($self->get_room_by_name($name)){
     $name = $self->get_random_name();
   }
   return $name;
@@ -689,7 +681,7 @@ helper get_url => sub {
 helper set_join_pass => sub {
   my $self = shift;
   my ($room,$pass) = @_;
-  return undef unless ( $self->get_room_by_name($room)->{data} );
+  return undef unless ( $self->get_room_by_name($room) );
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
                           SET `join_password`=?
@@ -711,7 +703,7 @@ helper set_join_pass => sub {
 helper set_owner_pass => sub {
   my $self = shift;
   my ($room,$pass) = @_;
-  return undef unless ( $self->get_room_by_name($room)->{data} );
+  return undef unless ( $self->get_room_by_name($room) );
   if ($pass){
     my $sth = eval {
       $self->db->prepare('UPDATE `rooms`
@@ -737,7 +729,7 @@ helper set_owner_pass => sub {
 helper set_persistent => sub {
   my $self = shift;
   my ($room,$set) = @_;
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   return undef unless ($data);
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
@@ -758,7 +750,7 @@ helper set_persistent => sub {
 helper add_notification => sub {
   my $self = shift;
   my ($room,$email) = @_;
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   return undef unless ($data);
   my $sth = eval {
     $self->db->prepare('INSERT INTO `email_notifications`
@@ -774,7 +766,7 @@ helper add_notification => sub {
 helper get_notification => sub {
   my $self = shift;
   my ($room) = @_;
-  $room = $self->get_room_by_name($room)->{data} || return undef;
+  $room = $self->get_room_by_name($room) || return undef;
   my $sth = eval {
     $self->db->prepare('SELECT `email`
                           FROM `email_notifications`
@@ -792,7 +784,7 @@ helper get_notification => sub {
 helper remove_notification => sub {
   my $self = shift;
   my ($room,$email) = @_;
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   return undef unless ($data);
   my $sth = eval {
     $self->db->prepare('DELETE FROM `email_notifications`
@@ -809,7 +801,7 @@ helper remove_notification => sub {
 helper ask_for_name => sub {
   my $self = shift;
   my ($room,$set) = @_;
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   return undef unless ($data);
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
@@ -833,7 +825,7 @@ helper add_invitation => sub {
   my $self = shift;
   my ($room,$email) = @_;
   my $from = $self->session('name') || return undef;
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   my $id = $self->get_random(256);
   return undef unless ($data);
   my $sth = eval {
@@ -925,7 +917,7 @@ helper check_invite_token => sub {
   $self->delete_invitations;
   $self->app->log->debug("Checking if invitation with token $token is valid for room $room");
   my $ret = 0;
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   if (!$data || !$token){
     return undef;
   }
@@ -953,7 +945,7 @@ helper create_pad => sub {
   my $self = shift;
   my ($room) = @_;
   return undef unless ($ec);
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   return undef unless ($data);
   if (!$data->{etherpad_group}){
     my $group = $ec->create_group() || undef;
@@ -964,7 +956,7 @@ helper create_pad => sub {
                             WHERE `name`=?');
     } || return undef;
     $sth->execute($group,$room) || return undef;
-    $data = $self->get_room_by_name($room)->{data};
+    $data = $self->get_room_by_name($room);
   }
   $ec->create_group_pad($data->{etherpad_group},$room) || return undef;
   $self->app->log->debug("Pad for room $room created (group " . $data->{etherpad_group} . ")");
@@ -976,7 +968,7 @@ helper create_etherpad_session => sub {
   my $self = shift;
   my ($room) = @_;
   return undef unless ($ec);
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   return undef unless ($data && $data->{etherpad_group});
   my $id = $ec->create_author_if_not_exists_for($self->session('name'));
   $self->session($room)->{etherpadAuthorId} = $id;
@@ -1015,7 +1007,7 @@ get '/admin/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
   $self->purge_participants;
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   unless ($data){
     return $self->render('error',
       err  => 'ERROR_ROOM_s_DOESNT_EXIST',
@@ -1057,7 +1049,7 @@ post '/feedback' => sub {
 get '/goodbye/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
-  if ($self->get_room_by_name($room)->{data} && $self->session('name')){
+  if ($self->get_room_by_name($room) && $self->session('name')){
     $self->remove_participant_from_room($room,$self->session('name'));
   }
   $self->logout($room);
@@ -1068,7 +1060,7 @@ get '/goodbye/(:room)' => sub {
 get '/kicked/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
-  if (!$self->get_room_by_name($room)->{data}){
+  if (!$self->get_room_by_name($room)){
     return $self->render('error',
       err  => 'ERROR_ROOM_s_DOESNT_EXIST',
       msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
@@ -1131,7 +1123,7 @@ post '/create' => sub {
     $json->{msg} = $self->l('ERROR_NAME_INVALID');
     return $self->render(json => $json);
   }
-  elsif ($self->get_room_by_name($name)->{data}){
+  elsif ($self->get_room_by_name($name)){
     $json->{err} = 'ERROR_NAME_CONFLICT';
     $json->{msg} = $self->l('ERROR_NAME_CONFLICT');
     return $self->render(json => $json);
@@ -1166,7 +1158,7 @@ get '/localize/:lang' => { lang => 'en' } => sub {
 get '/password/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room') || '';
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   unless ($data){
     return $self->render('error',
       err  => 'ERROR_ROOM_s_DOESNT_EXIST',
@@ -1181,7 +1173,7 @@ get '/password/(:room)' => sub {
 post '/password/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room') || '';
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   unless ($data){
     return $self->render('error',
       err  => 'ERROR_ROOM_s_DOESNT_EXIST',
@@ -1230,7 +1222,7 @@ get '/(*room)' => sub {
       room => $room
     );
   }
-  my $data = $self->get_room_by_name($room)->{data};
+  my $data = $self->get_room_by_name($room);
   unless ($data){
     return $self->render('error',
       err  => 'ERROR_ROOM_s_DOESNT_EXIST',
@@ -1328,9 +1320,9 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
   # Push the room name to the stash, just in case
   $self->stash(room => $room);
   # Gather room info from the DB
-  my $res = $self->get_room_by_name($room);
+  my $data = $self->get_room_by_name($room);
   # Stop here if the room doesn't exist
-  if (!$res->{ok}){
+  if (!$data){
     return $self->render(
       json => {
         msg    => $self->l($res->{msg}),
@@ -1339,7 +1331,6 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
       },
     );
   }
-  my $data = $res->{data};
 
   # Handle email invitation
   if ($action eq 'invite'){
