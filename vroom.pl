@@ -1322,8 +1322,8 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
   if (!$data){
     return $self->render(
       json => {
-        msg    => $self->l($res->{msg}),
-        err    => $res->{msg},
+        msg    => sprintf ($self->l('ERROR_ROOM_s_DOESNT_EXIST'), $room),
+        err    => 'ERROR_ROOM_s_DOESNT_EXIST',
         status => 'error'
       },
     );
@@ -1381,12 +1381,11 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
         }
       );
     }
-    $res = $self->modify_room($data);
-    if (!$res->{ok}){
+    if (!$self->modify_room($data)){
       return $self->render(
         json => {
           status => 'error',
-          msg => $self->l($res->{msg})
+          msg => $self->l('ERROR_OCCURRED')
         }
       );
     }
@@ -1567,7 +1566,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
                  locked       => ($data->{locked})         ? 'yes' : 'no',
                  ask_for_name => ($data->{ask_for_name})   ? 'yes' : 'no',
                  notif        => Mojo::JSON->new->encode({email => { %emailNotif }}),
-                 status       => $res
+                 status       => 'success'
                },
              );
   }
