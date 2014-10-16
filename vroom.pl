@@ -570,57 +570,6 @@ helper get_url => sub {
   return $url;
 };
 
-# Password protect a room
-# Takes two args: room name and password
-# If password is undef: remove the password
-# Password is hashed and salted before being stored
-helper set_join_pass => sub {
-  my $self = shift;
-  my ($room,$pass) = @_;
-  return undef unless ( $self->get_room_by_name($room) );
-  my $sth = eval {
-    $self->db->prepare('UPDATE `rooms`
-                          SET `join_password`=?
-                          WHERE `name`=?');
-  };
-  $pass = ($pass) ? Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($pass)->generate : undef;
-  $sth->execute($pass,$room);
-  if ($pass){
-    $self->app->log->debug($self->session('name') . " has set a password on room $room");
-  }
-  else{
-    $self->app->log->debug($self->session('name') . " has removed password on room $room");
-  }
-  return 1;
-};
-
-# Set owner password. Not needed to join a room
-# but needed to prove you're the owner, and access the configuration menu
-helper set_owner_pass => sub {
-  my $self = shift;
-  my ($room,$pass) = @_;
-  return undef unless ( $self->get_room_by_name($room) );
-  if ($pass){
-    my $sth = eval {
-      $self->db->prepare('UPDATE `rooms`
-                          SET `owner_password`=?
-                            WHERE `name`=?');
-    } || return undef;
-    my $pass = Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($pass)->generate;
-    $sth->execute($pass,$room) || return undef;
-    $self->app->log->debug($self->session('name') . " has set an owner password on room $room");
-  }
-  else{
-    my $sth = eval {
-      $self->db->prepare('UPDATE `rooms`
-                            SET `owner_password`=?
-                            WHERE `name`=?');
-    } || return undef;
-    $sth->execute(undef,$room) || return undef;
-    $self->app->log->debug($self->session('name') . " has removed the owner password on room $room");
-  }
-};
-
 # Make the room persistent
 helper set_persistent => sub {
   my $self = shift;
@@ -1179,7 +1128,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
   my $self = shift;
   my $action = $self->param('action');
   my $prefix = ($self->stash('action') eq 'admin/action') ? 'admin':'room';
-  my $room = $self->param('room') || "";
+  my $room = $self->param('room') || '';
   if ($action eq 'langSwitch'){
     my $new_lang = $self->param('lang') || 'en';
     $self->app->log->debug("switching to lang $new_lang");
@@ -1345,25 +1294,29 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     my $pass = $self->param('password');
     my $type = $self->param('type') || 'join';
     # Empty password is equivalent to no password at all
-    $pass = undef if ($pass && $pass eq '');
-    my $res = undef;
+    $pass = ($pass && $pass ne '') ?
+      Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($pass)->generate : undef;
     my $msg = $self->l('ERROR_OCCURRED');
     my $status = 'error';
     # Once again, only the owner can do this
     if ($prefix eq 'admin' || $self->session($room)->{role} eq 'owner'){
       if ($type eq 'owner'){
+        $data->{owner_password} = $pass;
         # Forbid a few common room names to be reserved
         if (grep { $room eq $_ } (split /[,;]/, $config->{'rooms.common_names'})){
           $msg = $self->l('ERROR_COMMON_ROOM_NAME');
         }
-        elsif ($self->set_owner_pass($room,$pass)){
+        elsif ($self->modify_room($data)){
           $msg = ($pass) ? $self->l('ROOM_NOW_RESERVED') : $self->l('ROOM_NO_MORE_RESERVED');
           $status = 'success';
         }
       }
-      elsif ($type eq 'join' && $self->set_join_pass($room,$pass)){
-        $msg = ($pass) ? $self->l('PASSWORD_PROTECT_SET') : $self->l('PASSWORD_PROTECT_UNSET');
-        $status = 'success';
+      elsif ($type eq 'join'){
+        $data->{join_password} = $pass;
+        if ($self->modify_room($data)){
+          $msg = ($pass) ? $self->l('PASSWORD_PROTECT_SET') : $self->l('PASSWORD_PROTECT_UNSET');
+          $status = 'success';
+        }
       }
     }
     # Simple participants will get an error
