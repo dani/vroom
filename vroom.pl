@@ -479,7 +479,7 @@ helper delete_room => sub {
   my $data = $self->get_room_by_name($room);
   if (!$data){
     $self->app->log->debug("Error: room $room doesn't exist");
-    return undef;
+    return 0;
   }
   if ($ec && $data->{etherpad_group}){
     $ec->delete_pad($data->{etherpad_group} . '$' . $room);
@@ -487,9 +487,9 @@ helper delete_room => sub {
   }
   my $sth = eval {
       $self->db->prepare('DELETE FROM `rooms`
-                            WHERE `id`=?');
-  } || return undef;
-  $sth->execute($data->{id}) || return undef;
+                            WHERE `name`=?');
+  };
+  $sth->execute($room);
   return 1;
 };
 
