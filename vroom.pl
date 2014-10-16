@@ -570,27 +570,6 @@ helper get_url => sub {
   return $url;
 };
 
-# Make the room persistent
-helper set_persistent => sub {
-  my $self = shift;
-  my ($room,$set) = @_;
-  my $data = $self->get_room_by_name($room);
-  return undef unless ($data);
-  my $sth = eval {
-    $self->db->prepare('UPDATE `rooms`
-                          SET `persistent`=?
-                          WHERE `name`=?');
-  } || return undef;
-  $sth->execute($set,$room) || return undef;
-  if ($set eq '1'){
-    $self->app->log->debug("Room $room is now persistent");
-  }
-  else{
-    $self->app->log->debug("Room $room isn't persistent anymore");
-  }
-  return 1;
-};
-
 # Add an email address to the list of notifications
 helper add_notification => sub {
   my $self = shift;
@@ -1339,13 +1318,10 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     if ($prefix ne 'admin'){
       $msg = $self->l('NOT_ALLOWED');
     }
-    elsif($type eq 'set' && $self->set_persistent($room,'1')){
+    $data->{persistent} = ($type eq 'set') ? 1 : 0;
+    if ($self->modify_room($data)){
       $status = 'success';
-      $msg = $self->l('ROOM_NOW_PERSISTENT');
-    }
-    elsif($type eq 'unset' && $self->set_persistent($room,'0')){
-      $status = 'success';
-      $msg = $self->l('ROOM_NO_MORE_PERSISTENT');
+      $msg = $self->l(($type eq 'set') ? 'ROOM_NOW_PERSISTENT' : 'ROOM_NO_MORE_PERSISTENT');
     }
     return $self->render(
       json => {
