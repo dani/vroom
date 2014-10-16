@@ -93,13 +93,10 @@ helper valid_room_name => sub {
   # A few names are reserved
   my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize action
                     missing dies password kicked invitation js css img fonts snd);
-  if ($name !~ m/^[\w\-]{1,49}$/){
-    return {msg => 'ERROR_NAME_INVALID'};
+  if ($name !~ m/^[\w\-]{1,49}$/ || grep { $name eq $_ } @reserved){
+    return 0;
   }
-  elsif (grep { $name eq $_ } @reserved){
-    return {msg => 'ERROR_NAME_RESERVED'};
-  }
-  return {ok => 1};
+  return 1;
 };
 
 # Check id arg is a valid ID number
@@ -157,9 +154,8 @@ helper create_room => sub {
     $name = lc $name;
   }
   # Check if the name is valid
-  $res = $self->valid_room_name($name);
-  if (!$res->{ok}){
-    return $res;
+  if (!$self->valid_room_name($name)){
+    return 0;
   }
   $res = $self->get_room_by_name($name);
   if ($res->{data}){
@@ -206,8 +202,8 @@ helper get_room_by_name => sub {
   my $self = shift;
   my ($name) = @_;
   my $res = $self->valid_room_name($name);
-  if (!$res->{ok}){
-    return $res;
+  if (!$self->valid_room_name($name)){
+    return 0;
   }
   my $sth = eval {
     $self->db->prepare('SELECT *
@@ -262,9 +258,8 @@ helper modify_room => sub {
   if (!$res->{ok}){
     return $res;
   }
-  $res = $self->valid_room_name($room->{name});
-  if (!$res->{ok}){
-    return $res;
+  if (!$self->valid_room_name($room->{name})){
+    return 0;
   }
   if (($room->{locked} && $room->{locked} !~ m/^0|1$/) ||
       ($room->{ask_for_name} && $room->{ask_for_name} !~ m/^0|1$/) ||
@@ -1135,10 +1130,9 @@ post '/create' => sub {
   };
   # Cleanup unused rooms before trying to create it
   $self->purge_rooms;
-  my $res = $self->valid_room_name($name);
-  if (!$res->{ok}){
-    $json->{err} = $res->{msg};
-    $json->{msg} = $self->l($res->{msg});
+  if (!$self->valid_room_name($name)){
+    $json->{err} = 'ERROR_NAME_INVALID';
+    $json->{msg} = $self->l('ERROR_NAME_INVALID');
     return $self->render(json => $json);
   }
   elsif ($self->get_room_by_name($name)->{data}){
@@ -1146,7 +1140,7 @@ post '/create' => sub {
     $json->{msg} = $self->l('ERROR_NAME_CONFLICT');
     return $self->render(json => $json);
   }
-  $res = $self->create_room($name,$self->session('name'));
+  my $res = $self->create_room($name,$self->session('name'));
   if (!$res->{ok}){
     $json->{err} = $res->{msg};
     $json->{msg} = $self->l($res->{msg});
@@ -1233,10 +1227,10 @@ get '/(*room)' => sub {
   $self->purge_rooms;
   $self->delete_invitations;
   my $res = $self->valid_room_name($room);
-  if (!$res->{ok}){
+  if (!$self->valid_room_name($room)){
     return $self->render('error',
-      msg  => $self->l($res->{msg}),
-      err  => $res->{msg},
+      msg  => $self->l('ERROR_NAME_INVALID'),
+      err  => 'ERROR_NAME_INVALID',
       room => $room
     );
   }
@@ -1327,11 +1321,10 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
            );
   }
   # Sanity check on the room name
-  my $res = $self->valid_room_name($room);
-  if (!$res->{ok}){
+  if (!$self->valid_room_name($room)){
     return $self->render(
       json => {
-        msg    => $self->l($res->{msg}),
+        msg    => $self->l('ERROR_NAME_INVALID'),
         status => 'error'
       },
     );
@@ -1339,7 +1332,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
   # Push the room name to the stash, just in case
   $self->stash(room => $room);
   # Gather room info from the DB
-  $res = $self->get_room_by_name($room);
+  my $res = $self->get_room_by_name($room);
   # Stop here if the room doesn't exist
   if (!$res->{ok}){
     return $self->render(
