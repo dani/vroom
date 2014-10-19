@@ -226,6 +226,7 @@ helper get_room_by_id => sub {
 };
 
 # Update a room, take a room object as a hashref
+# TODO: log modified fields
 helper modify_room => sub {
   my $self = shift;
   my ($room) = @_;
@@ -616,7 +617,7 @@ helper remove_notification => sub {
                           WHERE `room_id`=?
                             AND `email`=?');
   };
-  $sth->execute($data->{id},$email) || return undef;
+  $sth->execute($data->{id},$email);
   $self->app->log->debug($self->session('name') .
     " has removed $email from the list of email which are notified when someone joins room $room");
   return 1;
@@ -633,33 +634,39 @@ helper choose_moh => sub {
 helper add_invitation => sub {
   my $self = shift;
   my ($room,$email) = @_;
-  my $from = $self->session('name') || return undef;
   my $data = $self->get_room_by_name($room);
-  my $id = $self->get_random(256);
-  return undef unless ($data);
+  if (!$data){
+    return 0;
+  }
+  my $token = $self->get_random(256);
   my $sth = eval {
     $self->db->prepare('INSERT INTO `email_invitations`
                           (`room_id`,`from`,`token`,`email`,`date`)
                           VALUES (?,?,?,?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'))');
-  } || return undef;
-  $sth->execute($data->{id},$from,$id,$email) || return undef;
+  };
+  $sth->execute(
+    $data->{id},
+    $self->session('name'),
+    $token,
+    $email
+  );
   $self->app->log->debug($self->session('name') . " has invited $email to join room $room");
-  return $id;
+  return $token;
 };
 
 # return a hash with all the invitation param
 # just like get_room
-helper get_invitation => sub {
+helper get_invitation_by_token => sub {
   my $self = shift;
-  my ($id) = @_;
+  my ($token) = @_;
   my $sth = eval {
     $self->db->prepare('SELECT *
                           FROM `email_invitations`
                           WHERE `token`=?
                             AND `processed`=\'0\'');
-  } || return undef;
-  $sth->execute($id) || return undef;
-  return $sth->fetchall_hashref('token')->{$id};
+  };
+  $sth->execute($id);
+  return $sth->fetchall_hashref('token')->{$token};
 };
 
 # Find invitations which have a unprocessed repsponse
@@ -886,7 +893,7 @@ get '/invitation' => sub {
   my $inviteId = $self->param('token') || '';
   # Delete expired invitation now
   $self->delete_invitations;
-  my $invite = $self->get_invitation($inviteId);
+  my $invite = $self->get_invitation_by_token($inviteId);
   my $room = $self->get_room_by_id($invite->{room_id});
   if (!$invite || !$room){
     return $self->render('error',
@@ -1231,7 +1238,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     if (scalar @invitations > 0){
       $msg = '';
       foreach my $id (@invitations){
-        my $invit = $self->get_invitation($id);
+        my $invit = $self->get_invitation_by_token($id);
         $msg .= sprintf($self->l('INVITE_REPONSE_FROM_s'), $invit->{email}) . "\n" ;
         if ($invit->{response} && $invit->{response} eq 'later'){
           $msg .= $self->l('HE_WILL_TRY_TO_JOIN_LATER');
