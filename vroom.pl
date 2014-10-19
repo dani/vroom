@@ -807,7 +807,7 @@ helper create_etherpad_session => sub {
 };
 
 # Route / to the index page
-any '/' => sub {
+get '/' => sub {
   my $self = shift;
   $self->stash(
     etherpad => ($ec) ? 'true' : 'false'
