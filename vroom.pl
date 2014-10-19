@@ -924,7 +924,7 @@ any [qw(GET POST)] => '/invitation/:token' => { token => '' } => sub {
   }
 };
 
-# This handler creates a new room
+# This handler room creation
 post '/create' => sub {
   my $self = shift;
   # No name provided ? Lets generate one
@@ -969,56 +969,49 @@ get '/localize/:lang' => { lang => 'en' } => sub {
   foreach my $string (JS_STRINGS){
     $strings->{$string} = $self->l($string);
   }
-  # Cache the translation
+  # Tell the client to cache it
   $self->res->headers->cache_control('private,max-age=3600');
   return $self->render(json => $strings);
 };
 
 # Route for the password page
-get '/password/(:room)' => sub {
+# When someone tries to join a password protected room
+any [qw(GET POST)] => '/password/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room') || '';
   my $data = $self->get_room_by_name($room);
-  unless ($data){
+  if (!$data){
     return $self->render('error',
       err  => 'ERROR_ROOM_s_DOESNT_EXIST',
       msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
       room => $room
     );
   }
-  $self->render('password', room => $room);
-};
-
-# Route for password submiting
-post '/password/(:room)' => sub {
-  my $self = shift;
-  my $room = $self->stash('room') || '';
-  my $data = $self->get_room_by_name($room);
-  unless ($data){
-    return $self->render('error',
-      err  => 'ERROR_ROOM_s_DOESNT_EXIST',
-      msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
+  if ($self->req->method eq 'GET'){
+    return $self->render('password',
       room => $room
     );
   }
-  my $pass = $self->param('password');
-  # First check if we got the owner password, and if so, mark this user as owner
-  if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
-    $self->session($room => {role => 'owner'});
-    $self->redirect_to($self->get_url('/') . $room);
-  }
-  # Then, check if it's the join password
-  elsif ($data->{join_password} && Crypt::SaltedHash->validate($data->{join_password}, $pass)){
-    $self->session($room => {role => 'participant'});
-    $self->redirect_to($self->get_url('/') . $room);
-  }
-  # Else, it's a wrong password, display an error page
   else{
-    $self->render('error',
-      err  => 'WRONG_PASSWORD',
-      msg  => sprintf ($self->l("WRONG_PASSWORD"), $room),
-      room => $room
-    );
+    my $pass = $self->param('password');
+    # First check if we got the owner password, and if so, mark this user as owner
+    if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
+      $self->session($room => {role => 'owner'});
+      return $self->redirect_to($self->get_url('/') . $room);
+    }
+    # Then, check if it's the join password
+    elsif ($data->{join_password} && Crypt::SaltedHash->validate($data->{join_password}, $pass)){
+      $self->session($room => {role => 'participant'});
+      return $self->redirect_to($self->get_url('/') . $room);
+    }
+    # Else, it's a wrong password, display an error page
+    else{
+      return $self->render('error',
+        err  => 'WRONG_PASSWORD',
+        msg  => sprintf ($self->l("WRONG_PASSWORD"), $room),
+        room => $room
+      );
+    }
   }
 };
 
