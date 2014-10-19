@@ -22,7 +22,7 @@
     <h1>
       <% my $roomAccess = $room;
          if ($joinPass eq 'yes') {
-           $roomAccess .= '?token=' . $inviteId;
+           $roomAccess .= '?token=' . $token;
          }
       %>
       <a href="<%= $url . $roomAccess %>">
@@ -42,7 +42,7 @@
 <p>
   <%=l 'IF_YOU_CANNOT_JOIN' %>
     <h3>
-      <a style="color:red" href="<%= $url . 'invitation?token=' . $inviteId %>">
+      <a style="color:red" href="<%= $url . 'invitation/' . $token %>">
         <%=l 'YOU_CAN_NOTIFY_THE_ORGANIZER' %>
       </a>
     </h3>

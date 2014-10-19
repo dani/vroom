@@ -717,6 +717,7 @@ helper mark_invitation_processed => sub {
 };
 
 # Purge expired invitation links
+# Invitations older than 2 hours really doesn't make a lot of sens
 helper purge_invitations => sub {
   my $self = shift;
   $self->app->log->debug('Removing expired invitations');
@@ -738,25 +739,29 @@ helper check_invite_token => sub {
   my $ret = 0;
   my $data = $self->get_room_by_name($room);
   if (!$data || !$token){
-    return undef;
+    return 0;
   }
   my $sth = eval {
-    $self->db->prepare('SELECT *
+    $self->db->prepare('SELECT COUNT(`id`)
                           FROM `email_invitations`
                           WHERE `room_id`=?
                           AND `token`=?
                           AND (`response` IS NULL
                                 OR `response`=\'later\')');
-  } || return undef;
-  $sth->execute($data->{id},$token) || return undef;
-  if ($sth->rows == 1){
-    $ret = 1;
-    $self->app->log->debug("Invitation is valid");
-  }
-  else{
+  };
+  $sth->execute(
+    $data->{id},
+    $token
+  );
+  my $num;
+  $sth->bind_columns(\$num);
+  $sth->fetch;
+  if ($num != 1){
     $self->app->log->debug("Invitation is invalid");
+    return 0;
   }
-  return $ret;
+  $self->app->log->debug("Invitation is valid");
+  return 1;
 };
 
 # Create a pad (and the group if needed)
@@ -1020,7 +1025,7 @@ post '/password/(:room)' => sub {
 };
 
 # Catch all route: if nothing else match, it's the name of a room
-get '/(*room)' => sub {
+get '/:room' => sub {
   my $self = shift;
   my $room = $self->stash('room');
   my $video = $self->param('video') || '1';
@@ -1161,18 +1166,18 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
       $msg = $self->l('ERROR_MAIL_INVALID');
     }
     else{
-      my $inviteId = $self->add_invitation($room,$rcpt);
+      my $token = $self->add_invitation($room,$rcpt);
       my $sent = $self->mail(
                    to      => $rcpt,
                    subject => $self->l("EMAIL_INVITATION"),
                    data    => $self->render_mail('invite', 
                                 room     => $room,
                                 message  => $message,
-                                inviteId => $inviteId,
+                                token    => $token,
                                 joinPass => ($data->{join_password}) ? 'yes' : 'no'
                               )
                  );
-      if ($inviteId && $sent){
+      if ($token && $sent){
         $self->app->log->info($self->session('name') . " sent an invitation for room $room to $rcpt");
         $status = 'success';
         $msg = sprintf($self->l('INVITE_SENT_TO_s'), $rcpt);
