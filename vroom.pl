@@ -795,9 +795,10 @@ helper create_pad => sub {
 helper create_etherpad_session => sub {
   my $self = shift;
   my ($room) = @_;
-  return undef unless ($ec);
   my $data = $self->get_room_by_name($room);
-  return undef unless ($data && $data->{etherpad_group});
+  if (!$ec || !$data || !$data->{etherpad_group}){
+    return 0;
+  }
   my $id = $ec->create_author_if_not_exists_for($self->session('name'));
   $self->session($room)->{etherpadAuthorId} = $id;
   my $etherpadSession = $ec->create_session($data->{etherpad_group}, $id, time + 86400);
@@ -807,6 +808,7 @@ helper create_etherpad_session => sub {
     $etherpadCookieParam->{domain} = $config->{'etherpad.base_domain'};
   }
   $self->cookie(sessionID => $etherpadSession, $etherpadCookieParam);
+  return 1;
 };
 
 # Route / to the index page
