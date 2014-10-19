@@ -698,15 +698,15 @@ helper respond_invitation => sub {
 };
 
 # Mark a invitation response as processed
-helper processed_invitation => sub {
+helper mark_invitation_processed => sub {
   my $self = shift;
-  my ($id) = @_;
+  my ($token) = @_;
   my $sth = eval {
     $self->db->prepare('UPDATE `email_invitations`
                           SET `processed`=\'1\'
                           WHERE `token`=?');
-  } || return undef;
-  $sth->execute($id) || return undef;
+  };
+  $sth->execute($token);
   return 1;
 };
 
@@ -1245,7 +1245,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
         $msg .= "\n" . $self->l('MESSAGE') . ":\n" . $invitations->{$invit}->{message} . "\n";
       }
       $msg .= "\n";
-      $self->processed_invitation($invitations->{$invit}->{token});
+      $self->mark_invitation_processed($invitations->{$invit}->{token});
     }
     return $self->render(
              json => {
