@@ -684,6 +684,8 @@ helper get_invitation_list => sub {
   return $sth->fetchall_hashref('id');
 };
 
+# Got a response from invitation. Store the message in the DB
+# so the organizer can get it on next ping
 helper respond_to_invitation => sub {
   my $self = shift;
   my ($token,$response,$message) = @_;
@@ -715,14 +717,14 @@ helper mark_invitation_processed => sub {
 };
 
 # Purge expired invitation links
-helper delete_invitations => sub {
+helper purge_invitations => sub {
   my $self = shift;
   $self->app->log->debug('Removing expired invitations');
   my $sth = eval {
     $self->db->prepare('DELETE FROM `email_invitations`
                           WHERE `date` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL 2 HOUR)');
-  } || return undef;
-  $sth->execute || return undef;
+  };
+  $sth->execute;
   return 1;
 };
 
@@ -731,7 +733,7 @@ helper check_invite_token => sub {
   my $self = shift;
   my ($room,$token) = @_;
   # Expire invitations before checking if it's valid
-  $self->delete_invitations;
+  $self->purge_invitations;
   $self->app->log->debug("Checking if invitation with token $token is valid for room $room");
   my $ret = 0;
   my $data = $self->get_room_by_name($room);
@@ -893,7 +895,7 @@ any [qw(GET POST)] => '/invitation/:token' => { token => '' } => sub {
   my $self = shift;
   my $token = $self->stash('token');
   # Delete expired invitation now
-  $self->delete_invitations;
+  $self->purge_invitations;
   my $invite = $self->get_invitation_by_token($token);
   my $room = $self->get_room_by_id($invite->{room_id});
   if (!$invite || !$room){
@@ -1028,7 +1030,7 @@ get '/(*room)' => sub {
     $self->redirect_to($self->get_url('/') . lc $room);
   }
   $self->purge_rooms;
-  $self->delete_invitations;
+  $self->purge_invitations;
   my $res = $self->valid_room_name($room);
   if (!$self->valid_room_name($room)){
     return $self->render('error',
@@ -1224,7 +1226,7 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
     }
     # And same for expired invitation links
     if ((int (rand 100)) <= 10){
-      $self->delete_invitations;
+      $self->purge_invitations;
     }
     # And also remove inactive participants
     if ((int (rand 100)) <= 10){
