@@ -826,31 +826,28 @@ get '/about' => sub {
 # Route for the help page
 get '/help' => 'help';
 
-# Route for the admin page
-# This one displas the details of a room
-get '/admin/(:room)' => sub {
+# Route for the admin pages
+get '/admin/:room' => { room => ''} => sub {
   my $self = shift;
   my $room = $self->stash('room');
-  $self->purge_participants;
+  if ($room eq ''){
+    $self->purge_rooms;
+    return $self->render('admin');
+  }
   my $data = $self->get_room_by_name($room);
-  unless ($data){
+  if (!$data){
     return $self->render('error',
       err  => 'ERROR_ROOM_s_DOESNT_EXIST',
       msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
       room => $room
     );
   }
-  my $num = scalar keys %{$self->get_participants_list($room)};
-  $self->stash(
+  $self->purge_participants;
+  return $self->render('manage_room',
     room         => $room,
-    participants => $num
+    participants => scalar keys %{$self->get_participants_list($room)}
   );
-} => 'manage_room';
-# And this one displays the list of existing rooms
-get '/admin' => sub {
-  my $self = shift;
-  $self->purge_rooms;
-} => 'admin';
+};
 
 # Routes for feedback. One get to display the form
 # and one post to get data from it
