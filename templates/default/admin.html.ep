@@ -20,9 +20,8 @@
       </thead>
       <tbody>
         <%
-          my @rooms = $self->get_all_rooms();
-          foreach my $room (@rooms){
-            my $data = $self->get_room($room);
+          my $rooms = $self->get_room_list();
+          foreach my $room (keys %{$rooms}){
         %>
         <tr>
           <td>

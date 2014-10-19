@@ -312,12 +312,12 @@ helper get_participants_list => sub {
     return 0;
   }
   my $sth = eval {
-    $self->db->prepare('SELECT `participant`
+    $self->db->prepare('SELECT `participant`,`room_id`
                           FROM `room_participants`
                           WHERE `room_id`=?');
   };
   $sth->execute($room->{id});
-  return $sth->fetchall_hashref('room_id')->{$room->{id}};
+  return $sth->fetchall_hashref('room_id');
 };
 
 # Set the role of a peer
@@ -495,19 +495,14 @@ helper delete_room => sub {
 };
 
 # Retrieve the list of rooms
-# TODO: rewrite to return a hashref with full room data
-helper get_all_rooms => sub {
+helper get_room_list => sub {
   my $self = shift;
-  my @rooms;
   my $sth = eval {
-    $self->db->prepare('SELECT `name`
+    $self->db->prepare('SELECT *
                           FROM `rooms`');
   };
   $sth->execute;
-  while (my $name = $sth->fetchrow_array){
-    push @rooms, $name;
-  }
-  return @rooms;
+  return $sth->fetchall_hashref('name');
 };
 
 # Just update the activity timestamp

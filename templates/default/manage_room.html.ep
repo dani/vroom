@@ -37,7 +37,7 @@
     <div class="panel-heading">
       <%=l 'ROOM_DETAILS' %>
     </div>
-    <% my $data = $self->get_room($room); %>
+    <% my $data = $self->get_room_by_name($room); %>
     <table class="table table-hover">
       <tbody>
         <tr>
