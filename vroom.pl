@@ -95,7 +95,7 @@ helper valid_room_name => sub {
   my ($name) = @_;
   my $ret = {};
   # A few names are reserved
-  my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize action
+  my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize jsonrpc
                     missing dies password kicked invitation js css img fonts snd);
   if ($name !~ m/^[\w\-]{1,49}$/ || grep { $name eq $_ } @reserved){
     return 0;
@@ -1093,10 +1093,10 @@ get '/:room' => sub {
 };
 
 # Route for various room actions
-post '/*action' => [action => [qw/action admin\/action/]] => sub {
+post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
   my $self = shift;
   my $action = $self->param('action');
-  my $prefix = ($self->stash('action') eq 'admin/action') ? 'admin':'room';
+  my $prefix = ($self->stash('jsonrpc') eq 'admin/jsonrpc') ? 'admin' : 'room';
   my $room = $self->param('room') || '';
   if ($action eq 'langSwitch'){
     my $new_lang = $self->param('lang') || 'en';
