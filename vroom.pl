@@ -684,16 +684,20 @@ helper get_invitation_list => sub {
   return $sth->fetchall_hashref('id');
 };
 
-helper respond_invitation => sub {
+helper respond_to_invitation => sub {
   my $self = shift;
-  my ($id,$response,$message) = @_;
+  my ($token,$response,$message) = @_;
   my $sth = eval {
     $self->db->prepare('UPDATE `email_invitations`
                           SET `response`=?,
                               `message`=?
                           WHERE `token`=?');
-  } || return undef;
-  $sth->execute($response,$message,$id) || return undef;
+  };
+  $sth->execute(
+    $response,
+    $message,
+    $token
+  );
   return 1;
 };
 
@@ -885,12 +889,12 @@ get '/kicked/(:room)' => sub {
 } => 'kicked';
 
 # Route for invitition response
-get '/invitation' => sub {
+any [qw(GET POST)] => '/invitation/:token' => { token => '' } => sub {
   my $self = shift;
-  my $inviteId = $self->param('token') || '';
+  my $token = $self->stash('token');
   # Delete expired invitation now
   $self->delete_invitations;
-  my $invite = $self->get_invitation_by_token($inviteId);
+  my $invite = $self->get_invitation_by_token($token);
   my $room = $self->get_room_by_id($invite->{room_id});
   if (!$invite || !$room){
     return $self->render('error',
@@ -899,21 +903,20 @@ get '/invitation' => sub {
       room => $room
     );
   }
-  $self->render('invitation',
-    inviteId => $inviteId,
-    room     => $room->{name},
-  );
-};
-
-post '/invitation' => sub {
-  my $self = shift;
-  my $id = $self->param('token') || '';
-  my $response = $self->param('response') || 'decline';
-  my $message = $self->param('message') || '';
-  if ($response !~ m/^(later|decline)$/ || !$self->respond_invitation($id,$response,$message)){
-    return $self->render('error');
+  if ($self->req->method eq 'GET'){
+    return $self->render('invitation',
+      token => $token,
+      room  => $room->{name},
+    );
   }
-  $self->render('invitation_thanks');
+  elsif ($self->req->method eq 'POST'){
+    my $response = $self->param('response') || 'decline';
+    my $message = $self->param('message') || '';
+    if ($response !~ m/^(later|decline)$/ || !$self->respond_to_invitation($token,$response,$message)){
+      return $self->render('error');
+    }
+    return $self->render('invitation_thanks');
+  }
 };
 
 # This handler creates a new room
