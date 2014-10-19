@@ -768,21 +768,25 @@ helper check_invite_token => sub {
 helper create_pad => sub {
   my $self = shift;
   my ($room) = @_;
-  return undef unless ($ec);
   my $data = $self->get_room_by_name($room);
-  return undef unless ($data);
-  if (!$data->{etherpad_group}){
-    my $group = $ec->create_group() || undef;
-    return undef unless ($group);
+  if (!$ec || !$data){
+    return 0;
+  }
+  # Create the etherpad group if not already done
+  # and register it in the DB
+  if (!$data->{etherpad_group} || $data->{etherpad_group} eq ''){
+    $data->{etherpad_group} = $ec->create_group();
+    if (!$data->{etherpad_group}){
+      return 0;
+    }
     my $sth = eval {
       $self->db->prepare('UPDATE `rooms`
                             SET `etherpad_group`=?
-                            WHERE `name`=?');
-    } || return undef;
-    $sth->execute($group,$room) || return undef;
-    $data = $self->get_room_by_name($room);
+                            WHERE `id`=?');
+    };
+    $sth->execute($data->{etherpad_group},$data->{id});
   }
-  $ec->create_group_pad($data->{etherpad_group},$room) || return undef;
+  $ec->create_group_pad($data->{etherpad_group},$room);
   $self->app->log->debug("Pad for room $room created (group " . $data->{etherpad_group} . ")");
   return 1;
 };
