@@ -665,26 +665,23 @@ helper get_invitation_by_token => sub {
                           WHERE `token`=?
                             AND `processed`=\'0\'');
   };
-  $sth->execute($id);
+  $sth->execute($token);
   return $sth->fetchall_hashref('token')->{$token};
 };
 
 # Find invitations which have a unprocessed repsponse
-helper find_invitations => sub {
+helper get_invitation_list => sub {
   my $self = shift;
+  my ($session) = @_;
   my $sth = eval {
-    $self->db->prepare('SELECT `token`
+    $self->db->prepare('SELECT *
                           FROM `email_invitations`
                           WHERE `from`=?
                             AND `response` IS NOT NULL
                             AND `processed`=\'0\'');
-  } || return undef;
-  $sth->execute($self->session('name')) || return undef;
-  my @res;
-  while(my $invit = $sth->fetchrow_array){
-    push @res, $invit;
-  }
-  return @res;
+  };
+  $sth->execute($session);
+  return $sth->fetchall_hashref('id');
 };
 
 helper respond_invitation => sub {
@@ -1234,24 +1231,21 @@ post '/*action' => [action => [qw/action admin\/action/]] => sub {
       $status = 'success';
       $msg = '';
     }
-    my @invitations = $self->find_invitations();
-    if (scalar @invitations > 0){
-      $msg = '';
-      foreach my $id (@invitations){
-        my $invit = $self->get_invitation_by_token($id);
-        $msg .= sprintf($self->l('INVITE_REPONSE_FROM_s'), $invit->{email}) . "\n" ;
-        if ($invit->{response} && $invit->{response} eq 'later'){
-          $msg .= $self->l('HE_WILL_TRY_TO_JOIN_LATER');
-        }
-        else{
-          $msg .= $self->l('HE_WONT_JOIN');
-        }
-        if ($invit->{message} && $invit->{message} ne ''){
-          $msg .= "\n" . $self->l('MESSAGE') . ":\n" . $invit->{message} . "\n";
-        }
-        $msg .= "\n";
-        $self->processed_invitation($id);
+    my $invitations = $self->get_invitation_list($self->session('name'));
+    $msg = '';
+    foreach my $invit (keys %{$invitations}){
+      $msg .= sprintf($self->l('INVITE_REPONSE_FROM_s'), $invitations->{$invit}->{email}) . "\n" ;
+      if ($invitations->{$invit}->{response} && $invitations->{$invit}->{response} eq 'later'){
+        $msg .= $self->l('HE_WILL_TRY_TO_JOIN_LATER');
       }
+      else{
+        $msg .= $self->l('HE_WONT_JOIN');
+      }
+      if ($invitations->{$invit}->{message} && $invitations->{$invit}->{message} ne ''){
+        $msg .= "\n" . $self->l('MESSAGE') . ":\n" . $invitations->{$invit}->{message} . "\n";
+      }
+      $msg .= "\n";
+      $self->processed_invitation($invitations->{$invit}->{token});
     }
     return $self->render(
              json => {
