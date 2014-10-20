@@ -126,8 +126,8 @@ helper login => sub {
   }
   my $login = $ENV{'REMOTE_USER'} || lc $self->get_random(256);
   $self->session(
-      name => $login,
-      ip   => $self->tx->remote_address
+    name => $login,
+    ip   => $self->tx->remote_address
   );
   $self->app->log->info($self->session('name') . " logged in from " . $self->tx->remote_address);
   return 1;
@@ -279,7 +279,10 @@ helper add_participant_to_room => sub {
                           VALUES (?,?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'))
                           ON DUPLICATE KEY UPDATE `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')');
   };
-  $sth->execute($room->{id},$participant);
+  $sth->execute(
+    $room->{id},
+    $participant
+  );
   $self->app->log->info($self->session('name') . " joined the room $name");
   return 1;
 };
@@ -298,7 +301,10 @@ helper remove_participant_from_room => sub {
                           WHERE `id`=?
                             AND `participant`=?');
   };
-  $sth->execute($room->{id},$participant);
+  $sth->execute(
+    $room->{id},
+    $participant
+  );
   $self->app->log->info($self->session('name') . " leaved the room $name");
   return 0;
 };
@@ -372,7 +378,10 @@ helper get_peer_role => sub {
                             AND `r`.`name`=?
                           LIMIT 1');
   };
-  $sth->execute($data->{peer_id},$data->{room});
+  $sth->execute(
+    $data->{peer_id},
+    $data->{room}
+  );
   my $role;
   $sth->bind_columns(\$role);
   $sth->fetch;
@@ -390,7 +399,10 @@ helper promote_peer => sub {
                           WHERE `p`.`peer_id`=?
                             AND `r`.`name`=?');
   };
-  $sth->execute($data->{peer_id},$data->{room});
+  $sth->execute(
+    $data->{peer_id},
+    $data->{room}
+  );
   return 1;
 };
 
@@ -406,7 +418,10 @@ helper has_joined => sub {
                           WHERE `r`.`name`=?
                             AND `p`.`participant`=?');
   };
-  $sth->execute($data->{room},$data->{name});
+  $sth->execute(
+    $data->{room},
+    $data->{name}
+  );
   my $num;
   $sth->bind_columns(\$num);
   $sth->fetch;
@@ -526,7 +541,10 @@ helper ping_room => sub {
                           WHERE `id`=?
                             AND `participant`=?');
   };
-  $sth->execute($data->{id},$self->session('name'));
+  $sth->execute(
+    $data->{id},
+    $self->session('name')
+  );
   $self->app->log->debug($self->session('name') . " pinged the room $name");
   return 1;
 };
@@ -579,7 +597,10 @@ helper add_notification => sub {
                           (`room_id`,`email`)
                           VALUES (?,?)');
   };
-  $sth->execute($data->{id},$email);
+  $sth->execute(
+    $data->{id},
+    $email
+  );
   $self->app->log->debug($self->session('name') . 
        " has added $email to the list of email which will be notified when someone joins room $room");
   return 1;
@@ -612,7 +633,10 @@ helper remove_notification => sub {
                           WHERE `room_id`=?
                             AND `email`=?');
   };
-  $sth->execute($data->{id},$email);
+  $sth->execute(
+    $data->{id},
+    $email
+  );
   $self->app->log->debug($self->session('name') .
     " has removed $email from the list of email which are notified when someone joins room $room");
   return 1;
@@ -779,7 +803,10 @@ helper create_pad => sub {
                             SET `etherpad_group`=?
                             WHERE `id`=?');
     };
-    $sth->execute($data->{etherpad_group},$data->{id});
+    $sth->execute(
+      $data->{etherpad_group},
+      $data->{id}
+    );
   }
   $ec->create_group_pad($data->{etherpad_group},$room);
   $self->app->log->debug("Pad for room $room created (group " . $data->{etherpad_group} . ")");
@@ -796,7 +823,11 @@ helper create_etherpad_session => sub {
   }
   my $id = $ec->create_author_if_not_exists_for($self->session('name'));
   $self->session($room)->{etherpadAuthorId} = $id;
-  my $etherpadSession = $ec->create_session($data->{etherpad_group}, $id, time + 86400);
+  my $etherpadSession = $ec->create_session(
+    $data->{etherpad_group},
+    $id,
+    time + 86400
+  );
   $self->session($room)->{etherpadSessionId} = $etherpadSession;
   my $etherpadCookieParam = {};
   if ($config->{'etherpad.base_domain'} && $config->{'etherpad.base_domain'} ne ''){
@@ -857,12 +888,12 @@ post '/feedback' => sub {
   my $email = $self->param('email') || '';
   my $comment = $self->param('comment');
   my $sent = $self->mail(
-    to => $config->{'email.contact'},
+    to      => $config->{'email.contact'},
     subject => $self->l("FEEDBACK_FROM_VROOM"),
-    data => $self->render_mail('feedback',
-              email   => $email,
-              comment => $comment
-            )
+    data    => $self->render_mail('feedback',
+      email   => $email,
+      comment => $comment
+    )
   );
   return $self->render('feedback_thanks');
 };
@@ -872,7 +903,10 @@ get '/goodbye/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
   if ($self->get_room_by_name($room) && $self->session('name')){
-    $self->remove_participant_from_room($room,$self->session('name'));
+    $self->remove_participant_from_room(
+      $room,
+      $self->session('name')
+    );
   }
   $self->logout($room);
 } => 'goodbye';
@@ -889,7 +923,10 @@ get '/kicked/(:room)' => sub {
       room => $room
     );
   }
-  $self->remove_participant_from_room($room,$self->session('name'));
+  $self->remove_participant_from_room(
+    $room,
+    $self->session('name')
+  );
   $self->logout($room);
 } => 'kicked';
 
@@ -1046,7 +1083,10 @@ get '/:room' => sub {
   # Create a session if not already done
   $self->login;
   # If the room is locked and we're not the owner, we cannot join it !
-  if ($data->{'locked'} && (!$self->session($room) || !$self->session($room)->{role} || $self->session($room)->{role} ne 'owner')){
+  if ($data->{'locked'} &&
+      (!$self->session($room) ||
+       !$self->session($room)->{role} ||
+       $self->session($room)->{role} ne 'owner')){
     return $self->render('error',
       msg => sprintf($self->l("ERROR_ROOM_s_LOCKED"), $room),
       err => 'ERROR_ROOM_s_LOCKED',
@@ -1057,12 +1097,15 @@ get '/:room' => sub {
   # Now, if the room is password protected and we're not a participant, nor the owner, lets prompt for the password
   # Email invitation have a token which can be used instead of password
   if ($data->{join_password} &&
-     (!$self->session($room) || $self->session($room)->{role} !~ m/^participant|owner$/) &&
+     (!$self->session($room) ||
+      $self->session($room)->{role} !~ m/^participant|owner$/) &&
      !$self->check_invite_token($room,$token)){
     return $self->redirect_to($self->get_url('/password') . $room);
   }
   # Set this peer as a simple participant if he has no role yet (shouldn't happen)
-  $self->session($room => {role => 'participant'}) if (!$self->session($room) || !$self->session($room)->{role});
+  if (!$self->session($room) || !$self->session($room)->{role}){
+    $self->session($room => {role => 'participant'});
+  }
   # Create etherpad session if needed
   if ($ec && !$self->session($room)->{etherpadSession}){
     # pad doesn't exist yet ?
@@ -1072,9 +1115,15 @@ get '/:room' => sub {
     $self->create_etherpad_session($room);
   }
   # Short life cookie to negociate a session with the signaling server
-  $self->cookie(vroomsession => encode_base64($self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''), {expires => time + 60, path => '/'});
+  $self->cookie(vroomsession => encode_base64(
+    $self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''),
+    {
+      expires => time + 60,
+      path => '/'
+    }
+  );
   # Add this user to the participants table
-  if (!$self->add_participant_to_room($room,$self->session('name'))){
+  if (!$self->add_participant_to_room($room, $self->session('name'))){
     return $self->render('error',
       msg  => $self->l('ERROR_OCCURRED'),
       err  => 'ERROR_OCCURRED',
@@ -1093,11 +1142,12 @@ get '/:room' => sub {
 };
 
 # Route for various room actions
-post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
+post '/*jsonrpc' => { jsonrpc => [qw(jsonrpc admin/jsonrpc)] }  => sub {
   my $self = shift;
   my $action = $self->param('action');
   my $prefix = ($self->stash('jsonrpc') eq 'admin/jsonrpc') ? 'admin' : 'room';
   my $room = $self->param('room') || '';
+  # Lang switch can be done by unauth users
   if ($action eq 'langSwitch'){
     my $new_lang = $self->param('lang') || 'en';
     $self->app->log->debug("switching to lang $new_lang");
@@ -1110,15 +1160,17 @@ post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
   }
   # Refuse any action from non members of the room
   if ($prefix ne 'admin' && (!$self->session('name') ||
-                             !$self->has_joined({name => $self->session('name'), room => $room}) ||
+                             !$self->has_joined({
+                               name => $self->session('name'),
+                               room => $room}) ||
                              !$self->session($room) ||
                              !$self->session($room)->{role})){
     return $self->render(
-             json => {
-               msg    => $self->l('ERROR_NOT_LOGGED_IN'),
-               status => 'error'
-             },
-           );
+      json => {
+        msg    => $self->l('ERROR_NOT_LOGGED_IN'),
+        status => 'error'
+      }
+    );
   }
   # Sanity check on the room name
   if (!$self->valid_room_name($room)){
@@ -1159,15 +1211,15 @@ post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
     else{
       my $token = $self->add_invitation($room,$rcpt);
       my $sent = $self->mail(
-                   to      => $rcpt,
-                   subject => $self->l("EMAIL_INVITATION"),
-                   data    => $self->render_mail('invite', 
-                                room     => $room,
-                                message  => $message,
-                                token    => $token,
-                                joinPass => ($data->{join_password}) ? 'yes' : 'no'
-                              )
-                 );
+        to      => $rcpt,
+        subject => $self->l("EMAIL_INVITATION"),
+        data    => $self->render_mail('invite', 
+          room     => $room,
+          message  => $message,
+          token    => $token,
+          joinPass => ($data->{join_password}) ? 'yes' : 'no'
+        )
+      );
       if ($token && $sent){
         $self->app->log->info($self->session('name') . " sent an invitation for room $room to $rcpt");
         $status = 'success';
@@ -1206,7 +1258,7 @@ post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
     }
     return $self->render(
       json => {
-        msg    => ($action eq 'lock') ? $self->l('ROOM_LOCKED') : $self->l('ROOM_UNLOCKED'),
+        msg    => $self->l(($action eq 'lock') ? 'ROOM_LOCKED' : 'ROOM_UNLOCKED'),
         status => 'success'
       }
     );
@@ -1234,6 +1286,8 @@ post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
     }
     my $invitations = $self->get_invitation_list($self->session('name'));
     $msg = '';
+    # Check if we have invitation's response, and if we do
+    # send them to the client
     foreach my $invit (keys %{$invitations}){
       $msg .= sprintf($self->l('INVITE_REPONSE_FROM_s'), $invitations->{$invit}->{email}) . "\n" ;
       if ($invitations->{$invit}->{response} && $invitations->{$invit}->{response} eq 'later'){
@@ -1249,11 +1303,11 @@ post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
       $self->mark_invitation_processed($invitations->{$invit}->{token});
     }
     return $self->render(
-             json => {
-               msg    => $msg,
-               status => $status
-             }
-           );
+      json => {
+        msg    => $msg,
+        status => $status
+      }
+    );
   }
   # Handle password (join and owner)
   elsif ($action eq 'setPassword'){
@@ -1273,14 +1327,14 @@ post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
           $msg = $self->l('ERROR_COMMON_ROOM_NAME');
         }
         elsif ($self->modify_room($data)){
-          $msg = ($pass) ? $self->l('ROOM_NOW_RESERVED') : $self->l('ROOM_NO_MORE_RESERVED');
+          $msg = $self->l(($pass) ? 'ROOM_NOW_RESERVED' : 'ROOM_NO_MORE_RESERVED');
           $status = 'success';
         }
       }
       elsif ($type eq 'join'){
         $data->{join_password} = $pass;
         if ($self->modify_room($data)){
-          $msg = ($pass) ? $self->l('PASSWORD_PROTECT_SET') : $self->l('PASSWORD_PROTECT_UNSET');
+          $msg = $self->l(($pass) ? 'PASSWORD_PROTECT_SET' : 'PASSWORD_PROTECT_UNSET');
           $status = 'success';
         }
       }
@@ -1290,11 +1344,11 @@ post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
       $msg = $self->l('NOT_ALLOWED');
     }
     return $self->render(
-             json => {
-               msg    => $msg,
-               status => $status
-             }
-           );
+      json => {
+        msg    => $msg,
+        status => $status
+      }
+    );
   }
   # Handle persistence
   elsif ($action eq 'setPersistent'){
@@ -1337,18 +1391,20 @@ post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
       $msg = $self->l('NOT_ALLOWED');
     }
     return $self->render(
-               json => {
-                 msg    => $msg,
-                 status => $status
-               },
-             );
+      json => {
+        msg    => $msg,
+        status => $status
+      }
+    );
   }
   # Return your role and various info about the room
   elsif ($action eq 'getRoomInfo'){
     my $id = $self->param('id');
     my %emailNotif;
     if ($self->session($room) && $self->session($room)->{role}){
-      if ($self->session($room)->{role} ne 'owner' && $self->get_peer_role({room => $room, peer_id => $id}) eq 'owner'){
+      # If we just have been promoted to owner
+      if ($self->session($room)->{role} ne 'owner' &&
+          $self->get_peer_role({room => $room, peer_id => $id}) eq 'owner'){
         $self->session($room)->{role} = 'owner';
       }
       my $res = $self->set_peer_role({
@@ -1370,16 +1426,16 @@ post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
       my $i = 0;
     }
     return $self->render(
-               json => {
-                 role         => $self->session($room)->{role},
-                 owner_auth   => ($data->{owner_password}) ? 'yes' : 'no',
-                 join_auth    => ($data->{join_password})  ? 'yes' : 'no',
-                 locked       => ($data->{locked})         ? 'yes' : 'no',
-                 ask_for_name => ($data->{ask_for_name})   ? 'yes' : 'no',
-                 notif        => $self->get_notification($room),
-                 status       => 'success'
-               },
-             );
+      json => {
+        role         => $self->session($room)->{role},
+        owner_auth   => ($data->{owner_password}) ? 'yes' : 'no',
+        join_auth    => ($data->{join_password})  ? 'yes' : 'no',
+        locked       => ($data->{locked})         ? 'yes' : 'no',
+        ask_for_name => ($data->{ask_for_name})   ? 'yes' : 'no',
+        notif        => $self->get_notification($room),
+        status       => 'success'
+      },
+    );
   }
   # Return the role of a peer
   elsif ($action eq 'getPeerRole'){
@@ -1442,23 +1498,23 @@ post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
   # New participant joined the room
   elsif ($action eq 'join'){
     my $name = $self->param('name') || '';
-    my $subj = ($name eq '') ? sprintf($self->l('s_JOINED_ROOM_s'), $self->l('SOMEONE'), $room) : sprintf($self->l('s_JOINED_ROOM_s'), $name, $room);
+    my $subj = sprintf($self->l('s_JOINED_ROOM_s'), ($name eq '') ? $self->l('SOMEONE') : $name, $room);
     # Send notifications
     my $recipients = $self->get_notification($room);
     foreach my $rcpt (keys %{$recipients}){
       my $sent = $self->mail(
-                   to      => $recipients->{$rcpt}->{email},
-                   subject => $subj,
-                   data    => $self->render_mail('notification',
-                                room => $room,
-                                name => $name
-                               )
-                 );
+        to      => $recipients->{$rcpt}->{email},
+        subject => $subj,
+        data    => $self->render_mail('notification',
+          room => $room,
+          name => $name
+        )
+      );
     }
     return $self->render(
-        json => {
-          status => 'success'
-        }
+      json => {
+        status => 'success'
+      }
     );
   }
   # A participant is being promoted to the owner status
@@ -1493,7 +1549,9 @@ post '/*jsonrpc' => [jsonrpc => [qw(jsonrpc admin/jsonrpc)] => sub {
     elsif (!$ec){
       $msg = 'NOT_ENABLED';
     }
-    elsif ($ec->delete_pad($data->{etherpad_group} . '$' . $room) && $self->create_pad($room) && $self->create_etherpad_session($room)){
+    elsif ($ec->delete_pad($data->{etherpad_group} . '$' . $room) &&
+           $self->create_pad($room) &&
+           $self->create_etherpad_session($room)){
       $status = 'success';
       $msg = '';
     }
