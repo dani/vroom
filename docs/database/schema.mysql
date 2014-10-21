@@ -72,7 +72,7 @@ CREATE TABLE `email_invitations` (
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `api_keys` (
-  `id` INT UNSIGNED NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `token` VARCHAR(160) NOT NULL,
   `admin` TINYINT UNSIGNED DEFAULT '0',
   `not_after` DATETIME DEFAULT NULL,
@@ -82,9 +82,10 @@ CREATE TABLE `api_keys` (
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `room_keys` (
-  `id` INT UNSIGNED NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `room_id` INT UNSIGNED NOT NULL,
   `key_id` INT UNSIGNED NOT NULL,
+  `role` ENUM('owner', 'participant') DEFAULT 'participant',
   PRIMARY KEY (`id`),
   UNIQUE (`room_id`, `key_id`),
   FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`)
