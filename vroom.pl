@@ -95,7 +95,7 @@ helper valid_room_name => sub {
   my ($name) = @_;
   my $ret = {};
   # A few names are reserved
-  my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize jsapi
+  my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize jsapi api
                     missing dies password kicked invitation js css img fonts snd);
   if ($name !~ m/^[\w\-]{1,49}$/ || grep { $name eq $_ } @reserved){
     return 0;
@@ -444,6 +444,18 @@ helper purge_participants => sub {
     $self->db->prepare('DELETE FROM `room_participants`
                           WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL 10 MINUTE)
                             OR `last_activity` IS NULL');
+  };
+  $sth->execute;
+  return 1;
+};
+
+# Purge api keys
+helper purge_api_keys => sub {
+  my $self = shift;
+  $self->app->log->debug('Removing expired API keys');
+  my $sth = eval {
+    $self->db->prepare('DELETE FROM `api_keys`
+                          WHERE `not_after` > CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')');
   };
   $sth->execute;
   return 1;
@@ -1109,6 +1121,22 @@ any [qw(GET POST)] => '/password/(:room)' => sub {
         room => $room
       );
     }
+  }
+};
+
+# API request handler
+any '/api' => sub {
+  my $self = shift;
+  $self->purge_api_keys;
+  my $key = $self->req->headers->header('X-API-Key');
+  if (!$key){
+    return $self->render(
+      json => {
+        status => 'error',
+        msg    => 'NOT_ALLOWED'
+      },
+      status => '403'
+    );
   }
 };
 
