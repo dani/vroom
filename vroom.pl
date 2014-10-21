@@ -845,6 +845,43 @@ helper create_etherpad_session => sub {
   return 1;
 };
 
+# Get an API key by id
+helper get_key_by_token => sub {
+  my $self = shift;
+  my ($token) = @_;
+  if (!$token || $token eq ''){
+    return 0;
+  }
+  my $sth = eval {
+    $self->db->prepare('SELECT *
+                          FROM `api_keys`
+                          WHERE `token`=?
+                          LIMIT 1');
+  };
+  $sth->execute($token);
+  return $sth->fetchall_hashref('token')->{$token};
+};
+
+# Associate an API key to a room, and set the corresponding role
+helper associate_key_to_room => sub {
+  my $self = shift;
+  my (%data) = @_;
+  my $data = \%data;
+  my $room = $self->get_room_by_name($data->{room});
+  my $key = $self->get_key_by_token($data->{key});
+  if (!$room || !$key){
+    return 0;
+  }
+  my $sth = eval {
+    $self->db->prepare('INSERT INTO `room_keys`
+                          (`room_id`,`key_id`,`role`)
+                          VALUES (?,?,?)
+                          ON DUPLICATE KEY UPDATE `role`=?');
+  };
+  $sth->execute($room->{id},$key->{id},$data->{role},$data->{role});
+  return 1;
+};
+
 # Route / to the index page
 get '/' => sub {
   my $self = shift;
@@ -1002,6 +1039,11 @@ post '/create' => sub {
   $json->{status} = 'success';
   $json->{err}    = '';
   $self->session($name => {role => 'owner'});
+  $self->associate_key_to_room(
+    room => $name,
+    key  => $self->session('key'),
+    role => 'owner'
+  );
   return $self->render(json => $json);
 };
 
@@ -1042,11 +1084,21 @@ any [qw(GET POST)] => '/password/(:room)' => sub {
     # First check if we got the owner password, and if so, mark this user as owner
     if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
       $self->session($room => {role => 'owner'});
+      $self->associate_key_to_room(
+        room => $room,
+        key  => $self->session('key'),
+        role => 'owner'
+      );
       return $self->redirect_to($self->get_url('/') . $room);
     }
     # Then, check if it's the join password
     elsif ($data->{join_password} && Crypt::SaltedHash->validate($data->{join_password}, $pass)){
       $self->session($room => {role => 'participant'});
+      $self->associate_key_to_room(
+        room => $room,
+        key  => $self->session('key'),
+        role => 'participant'
+      );
       return $self->redirect_to($self->get_url('/') . $room);
     }
     # Else, it's a wrong password, display an error page
@@ -1113,6 +1165,11 @@ get '/:room' => sub {
   # Set this peer as a simple participant if he has no role yet (shouldn't happen)
   if (!$self->session($room) || !$self->session($room)->{role}){
     $self->session($room => {role => 'participant'});
+    $self->associate_key_to_room(
+      room => $room,
+      key  => $self->session('key'),
+      role => 'participant'
+    );
   }
   # Create etherpad session if needed
   if ($ec && !$self->session($room)->{etherpadSession}){
@@ -1388,6 +1445,11 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
     # Auth succeed ? lets promote him to owner of the room
     if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
       $self->session($room, {role => 'owner'});
+      $self->associate_key_to_room(
+        room => $room,
+        key  => $self->session('key'),
+        role => 'owner'
+      );
       $msg = $self->l('AUTH_SUCCESS');
       $status = 'success';
     }
@@ -1414,6 +1476,11 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
       if ($self->session($room)->{role} ne 'owner' &&
           $self->get_peer_role({room => $room, peer_id => $id}) eq 'owner'){
         $self->session($room)->{role} = 'owner';
+        $self->associate_key_to_room(
+          room => $room,
+          key  => $self->session('key'),
+          role => 'owner'
+        );
       }
       my $res = $self->set_peer_role({
         room    => $room,
