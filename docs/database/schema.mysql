@@ -71,6 +71,30 @@ CREATE TABLE `email_invitations` (
     ON DELETE CASCADE
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `api_keys` (
+  `id` INT UNSIGNED NOT NULL,
+  `token` VARCHAR(160) NOT NULL,
+  `admin` TINYINT UNSIGNED DEFAULT '0',
+  `not_after` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE (`token`),
+  INDEX (`not_after`)
+) ENGINE INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `room_keys` (
+  `id` INT UNSIGNED NOT NULL,
+  `room_id` INT UNSIGNED NOT NULL,
+  `key_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE (`room_id`, `key_id`),
+  FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (`key_id`) REFERENCES `api_keys` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+) ENGINE INNODB DEFAULT CHARSET=utf8;
+
 #DROP TABLE IF EXISTS `turnusers_lt`;
 #CREATE TABLE `turnusers_lt` (
 #  name VARCHAR(512) PRIMARY KEY,
