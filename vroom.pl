@@ -125,9 +125,17 @@ helper login => sub {
     return 1;
   }
   my $login = $ENV{'REMOTE_USER'} || lc $self->get_random(256);
+  my $key = $self->get_random(256);
+  my $sth = eval {
+    $self->db->prepare('INSERT INTO `api_keys`
+                         (`token`,`not_after`)
+                         VALUES (?,DATE_ADD(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL 24 HOUR))');
+  };
+  $sth->execute($key);
   $self->session(
     name => $login,
-    ip   => $self->tx->remote_address
+    ip   => $self->tx->remote_address,
+    key  => $key
   );
   $self->app->log->info($self->session('name') . " logged in from " . $self->tx->remote_address);
   return 1;
