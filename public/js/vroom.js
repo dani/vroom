@@ -35,7 +35,7 @@ $.ajax({
 
 // Default ajax setup
 $.ajaxSetup({
-  url: rootUrl + 'jsonrpc',
+  url: rootUrl + 'jsapi',
   type: 'POST',
   dataType: 'json',
 });
@@ -307,7 +307,7 @@ function initManage(){
 
   function sendAction(data,sw){
     $.ajax({
-      url: rootUrl + 'admin/jsonrpc',
+      url: rootUrl + 'admin/jsapi',
       data: data,
       error: function(data) {
         $.notify(locale.ERROR_OCCURRED, 'error');
