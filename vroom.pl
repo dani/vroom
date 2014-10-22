@@ -66,6 +66,7 @@ if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key
 plugin I18N => {
   namespace => 'Vroom::I18N',
 };
+our @supported_lang = qw(en fr);
 
 # Connect to the database
 plugin database => {
@@ -868,6 +869,7 @@ helper get_key_by_token => sub {
     $self->db->prepare('SELECT *
                           FROM `api_keys`
                           WHERE `token`=?
+                            AND `not_after` < CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')
                           LIMIT 1');
   };
   $sth->execute($token);
@@ -1124,12 +1126,46 @@ any [qw(GET POST)] => '/password/(:room)' => sub {
   }
 };
 
-# API request handler
+# API requests handler
 any '/api' => sub {
   my $self = shift;
+  my @anon_actions = qw(switch_lang);
+  my @admin_actions = qw(list_rooms);
   $self->purge_api_keys;
-  my $key = $self->req->headers->header('X-API-Key');
-  if (!$key){
+  my $token = $self->req->headers->header('X-VROOM-API-Key');
+  my $json = Mojo::JSON->new;
+  my $req = $json->decode($self->param('req'));
+  my $err = $json->error;
+  if ($err || !$req->{action} || !$req->{param}){
+    return $self->render(
+      json => {
+        status => 'error',
+        msg    => $err
+      },
+      status => 503
+    );
+  }   
+  # Handle requests authorized for anonymous users righ now
+  if ($req->{action} eq 'switch_lang'){
+    if (!grep { $req->{param}->{language} eq $_ } @supported_lang){
+      return $self->render(
+        json => {
+          status => 'error',
+          msg    => 'UNSUPPORTED_LANG'
+        },
+        status => 503
+      );
+    }
+    $self->session(language => $req->{param}->{language});
+    return $self->render(
+      json => {
+        status => 'success',
+      }
+    );
+  }
+
+  # Ok, now, lets check the API key is valid
+  if (!$token){
     return $self->render(
       json => {
         status => 'error',
@@ -1240,17 +1276,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
   my $action = $self->param('action');
   my $prefix = ($self->stash('jsapi') eq 'admin/jsapi') ? 'admin' : 'room';
   my $room = $self->param('room') || '';
-  # Lang switch can be done by unauth users
-  if ($action eq 'langSwitch'){
-    my $new_lang = $self->param('lang') || 'en';
-    $self->app->log->debug("switching to lang $new_lang");
-    $self->session(language => $new_lang);
-    return $self->render(
-      json => {
-        status => 'success',
-      }
-    );
-  }
   # Refuse any action from non members of the room
   if ($prefix ne 'admin' && (!$self->session('name') ||
                              !$self->has_joined({
