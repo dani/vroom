@@ -41,14 +41,14 @@ $.ajaxSetup({
 });
 
 // Handle lang switch
-$('#langSwitch').change(function(){
+$('#switch_lang').change(function(){
     $.ajax({
     url: rootUrl + 'api',
     data: {
       req: JSON.stringify({
         action: 'switch_lang',
         param : {
-          language: $('#langSwitch').val()
+          language: $('#switch_lang').val()
         }
       })
     },
