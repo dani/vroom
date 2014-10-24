@@ -38,6 +38,9 @@ $.ajaxSetup({
   url: rootUrl + 'jsapi',
   type: 'POST',
   dataType: 'json',
+  headers: {
+    'X-VROOM-API-Key': api_key
+  }
 });
 
 // Handle lang switch
@@ -1573,11 +1576,16 @@ function initVroom(room) {
       return;
     }
     $.ajax({
+      url: rootUrl + 'api',
       data: {
-        action: 'invite',
-        recipient: rcpt,
-        message: message,
-        room: roomName
+        req: JSON.stringify({
+          action: 'invite_email',
+          param: {
+            rcpt: rcpt,
+            message: message,
+            room: roomName
+          }
+        })
       },
       error: function(data) {
         $.notify(locale.ERROR_OCCURRED, 'error');

@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use base 'Exporter';
 
-our @EXPORT = qw/COMPONENTS MOH JS_STRINGS/;
+our @EXPORT = qw/COMPONENTS MOH JS_STRINGS API_ACTIONS/;
 
 # Components used to generate the credits part
 use constant COMPONENTS => {
@@ -152,5 +152,15 @@ use constant JS_STRINGS => qw(
   ROOM_DATA_WIPED_BY_s
 );
 
+# API actions
+use constant API_ACTIONS => {
+  admin => {
+    list_rooms => 1
+  },
+  owner => {
+    invite_email => 1
+  },
+  participant => {}
+};
 
 1;

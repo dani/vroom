@@ -17,6 +17,7 @@ use File::Basename;
 use Etherpad::API;
 use Session::Token;
 use Config::Simple;
+use Data::Dumper;
 
 app->log->level('info');
 # Read conf file, and set default values
@@ -456,7 +457,7 @@ helper purge_api_keys => sub {
   $self->app->log->debug('Removing expired API keys');
   my $sth = eval {
     $self->db->prepare('DELETE FROM `api_keys`
-                          WHERE `not_after` > CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')');
+                          WHERE `not_after` < CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')');
   };
   $sth->execute;
   return 1;
@@ -869,7 +870,7 @@ helper get_key_by_token => sub {
     $self->db->prepare('SELECT *
                           FROM `api_keys`
                           WHERE `token`=?
-                            AND `not_after` < CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')
+                            AND `not_after` > CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')
                           LIMIT 1');
   };
   $sth->execute($token);
@@ -892,8 +893,63 @@ helper associate_key_to_room => sub {
                           VALUES (?,?,?)
                           ON DUPLICATE KEY UPDATE `role`=?');
   };
-  $sth->execute($room->{id},$key->{id},$data->{role},$data->{role});
+  $sth->execute(
+    $room->{id},
+    $key->{id},
+    $data->{role},
+    $data->{role}
+  );
   return 1;
+};
+
+# Check if a key can perform an action against a room
+helper key_can_do_this => sub {
+  my $self = shift;
+  my (%data) = @_;
+  my $data = \%data;
+  if (!$data->{action}){
+    return 0;
+  }
+  my $key = $self->get_key_by_token($data->{token});
+  if (!$key){
+    $self->app->log->debug("Invalid API key");
+    return 0;
+  }
+  # API key is an admin one ?
+  if ($key->{admin}){
+    $self->app->log->debug("Admin API Key");
+    return 1;
+  }
+  # Global actions can only be performed by admin keys
+  if (!$key->{admin} && !$data->{param}->{room}){
+    $self->app->log->debug("Non admin API Key doesn't allow global actions");
+    return 0;
+  }
+  
+  # Now, lookup the DB the role of this key for this room
+  my $sth = eval {
+    $self->db->prepare('SELECT role
+                          FROM `room_keys`
+                          LEFT JOIN `rooms` ON `room_keys`.`room_id`=`rooms`.`id`
+                          WHERE `room_keys`.`key_id`=?
+                          LIMIT 1');
+  };
+  $sth->execute($key->{id});
+  $sth->bind_columns(\$key->{role});
+  $sth->fetch;
+  my $actions = API_ACTIONS;
+  $self->app->log->debug("Key role: " . $key->{role} . " and action: " . $data->{action});
+  # If this key has owner privileges on this room, allow both owner and partitipant actions
+  if ($key->{role} eq 'owner' && ($actions->{owner}->{$data->{action}} || $actions->{participant}->{$data->{action}})){
+    return 1;
+  }
+  # If this key as simple partitipant priv in this room, only allow participant actions
+  elsif ($key->{role} eq 'partitipant' && $actions->{participant}->{$data->{action}}){
+    return 1;
+  }
+  # Else, deny
+  $self->app->log->debug("API Key " . $data->{key} . " cannot run action " . $data->{action} . " on room " . $data->{param}->{room});
+  return 0;
 };
 
 # Route / to the index page
@@ -1129,8 +1185,6 @@ any [qw(GET POST)] => '/password/(:room)' => sub {
 # API requests handler
 any '/api' => sub {
   my $self = shift;
-  my @anon_actions = qw(switch_lang);
-  my @admin_actions = qw(list_rooms);
   $self->purge_api_keys;
   my $token = $self->req->headers->header('X-VROOM-API-Key');
   my $json = Mojo::JSON->new;
@@ -1164,14 +1218,60 @@ any '/api' => sub {
     );
   }
 
-  # Ok, now, lets check the API key is valid
-  if (!$token){
+  # Now, lets check the key can do the requested action
+  my $res = $self->key_can_do_this(
+    token  => $token,
+    action => $req->{action},
+    param  => $req->{param}
+  );
+  if (!$res){
     return $self->render(
       json => {
         status => 'error',
         msg    => 'NOT_ALLOWED'
       },
       status => '403'
+    );
+  }
+  # Ok, now, we don't have to bother with authorization anymore
+  if ($req->{action} eq 'invite_email'){
+    my $room = $self->get_room_by_name($req->{param}->{room});
+    if (!$req->{param}->{rcpt} || $req->{param}->{rcpt}!~ m/\S+@\S+\.\S+$/){
+      return $self->render(
+        json => {
+          status => 'error',
+          msg    => 'ERROR_MAIL_INVALID'
+        }
+      );
+    }
+    my $token = $self->add_invitation(
+      $req->{param}->{room},
+      $req->{param}->{rcpt}
+    );
+    my $sent = $self->mail(
+      to      => $req->{param}->{rcpt},
+      subject => $self->l("EMAIL_INVITATION"),
+      data    => $self->render_mail('invite',
+        room     => $req->{param}->{room},
+        message  => $req->{param}->{message},
+        token    => $token,
+        joinPass => ($room->{join_password}) ? 'yes' : 'no'
+      )
+    );
+    if ($token && $sent){
+      $self->app->log->info("Email invitation to join room " . $req->{param}->{room} . " sent to " . $req->{param}->{rcpt});
+      return $self->render(
+        json => {
+          status => 'success',
+          msg    => sprintf($self->l('INVITE_SENT_TO_s'), $req->{param}->{rcpt})
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        status => 'error',
+        msg    => 'ERROR_OCCURRED'
+      }
     );
   }
 };
@@ -1314,43 +1414,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
     );
   }
 
-  # Handle email invitation
-  if ($action eq 'invite'){
-    my $rcpt    = $self->param('recipient');
-    my $message = $self->param('message');
-    my $status  = 'error';
-    my $msg     = $self->l('ERROR_OCCURRED');
-    if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
-      $msg = 'NOT_ALLOWED';
-    }
-    elsif ($rcpt !~ m/\S+@\S+\.\S+$/){
-      $msg = $self->l('ERROR_MAIL_INVALID');
-    }
-    else{
-      my $token = $self->add_invitation($room,$rcpt);
-      my $sent = $self->mail(
-        to      => $rcpt,
-        subject => $self->l("EMAIL_INVITATION"),
-        data    => $self->render_mail('invite', 
-          room     => $room,
-          message  => $message,
-          token    => $token,
-          joinPass => ($data->{join_password}) ? 'yes' : 'no'
-        )
-      );
-      if ($token && $sent){
-        $self->app->log->info($self->session('name') . " sent an invitation for room $room to $rcpt");
-        $status = 'success';
-        $msg = sprintf($self->l('INVITE_SENT_TO_s'), $rcpt);
-      }
-    }
-    $self->render(
-      json => {
-        msg    => $msg,
-        status => $status
-      }
-    );
-  }
   # Handle room lock/unlock
   if ($action =~ m/(un)?lock/){
     my ($lock,$success);
