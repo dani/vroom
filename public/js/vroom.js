@@ -2277,17 +2277,22 @@ function initVroom(room) {
 
   // Ping the room every minutes
   // Used to detect inactive rooms
-  setInterval(function pingRoom(){
+  setInterval(function(){
     $.ajax({
+      url: rootUrl + 'api',
       data: {
-        action: 'ping',
-        room: roomName
+        req: JSON.stringify({
+          action: 'ping',
+          param: {
+            room: roomName
+          }
+        })
       },
       error: function(data) {
         $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data) {
-        if (data.status == 'success' && data.msg && data.msg != ''){
+        if (data.status === 'success' && data.msg && data.msg != ''){
           $.notify(data.msg, {
             className: 'info',
             autoHide: false

@@ -162,7 +162,9 @@ use constant API_ACTIONS => {
     lock_room    => 1,
     unlock_room  => 1
   },
-  participant => {}
+  participant => {
+    ping => 1
+  }
 };
 
 1;

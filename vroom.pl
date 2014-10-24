@@ -948,7 +948,7 @@ helper key_can_do_this => sub {
     return 1;
   }
   # Else, deny
-  $self->app->log->debug("API Key " . $data->{key} . " cannot run action " . $data->{action} . " on room " . $data->{param}->{room});
+  $self->app->log->debug("API Key " . $data->{token} . " cannot run action " . $data->{action} . " on room " . $data->{param}->{room});
   return 0;
 };
 
@@ -1293,6 +1293,40 @@ any '/api' => sub {
       }
     );
   }
+  # Handle activity pings sent every minute by each participant
+  elsif ($req->{action} eq 'ping'){
+    $self->ping_room($room);
+    # Cleanup expired rooms every ~10 pings
+    if ((int (rand 100)) <= 10){
+      $self->purge_rooms;
+      $self->purge_invitations;
+      $self->purge_participants;
+    }
+    # Check if we got any invitation response to process
+    my $invitations = $self->get_invitation_list($self->session('name'));
+    my $msg = '';
+    foreach my $invit (keys %{$invitations}){
+      $msg .= sprintf($self->l('INVITE_REPONSE_FROM_s'), $invitations->{$invit}->{email}) . "\n" ;
+      if ($invitations->{$invit}->{response} && $invitations->{$invit}->{response} eq 'later'){
+        $msg .= $self->l('HE_WILL_TRY_TO_JOIN_LATER');
+      }
+      else{
+        $msg .= $self->l('HE_WONT_JOIN');
+      }
+      if ($invitations->{$invit}->{message} && $invitations->{$invit}->{message} ne ''){
+        $msg .= "\n" . $self->l('MESSAGE') . ":\n" . $invitations->{$invit}->{message} . "\n";
+      }
+      $msg .= "\n";
+      $self->mark_invitation_processed($invitations->{$invit}->{token});
+    }
+    return $self->render(
+      json => {
+        msg    => $msg,
+        status => 'success'
+      }
+    );
+  }
+
 };
 
 # Catch all route: if nothing else match, it's the name of a room
@@ -1433,52 +1467,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
     );
   }
 
-  # Handle activity pings sent every minute by each participant
-  elsif ($action eq 'ping'){
-    my $status = 'error';
-    my $msg = $self->l('ERROR_OCCURRED');
-    my $res = $self->ping_room($room);
-    # Cleanup expired rooms every ~10 pings
-    if ((int (rand 100)) <= 10){
-      $self->purge_rooms;
-    }
-    # And same for expired invitation links
-    if ((int (rand 100)) <= 10){
-      $self->purge_invitations;
-    }
-    # And also remove inactive participants
-    if ((int (rand 100)) <= 10){
-      $self->purge_participants;
-    }
-    if ($res){
-      $status = 'success';
-      $msg = '';
-    }
-    my $invitations = $self->get_invitation_list($self->session('name'));
-    $msg = '';
-    # Check if we have invitation's response, and if we do
-    # send them to the client
-    foreach my $invit (keys %{$invitations}){
-      $msg .= sprintf($self->l('INVITE_REPONSE_FROM_s'), $invitations->{$invit}->{email}) . "\n" ;
-      if ($invitations->{$invit}->{response} && $invitations->{$invit}->{response} eq 'later'){
-        $msg .= $self->l('HE_WILL_TRY_TO_JOIN_LATER');
-      }
-      else{
-        $msg .= $self->l('HE_WONT_JOIN');
-      }
-      if ($invitations->{$invit}->{message} && $invitations->{$invit}->{message} ne ''){
-        $msg .= "\n" . $self->l('MESSAGE') . ":\n" . $invitations->{$invit}->{message} . "\n";
-      }
-      $msg .= "\n";
-      $self->mark_invitation_processed($invitations->{$invit}->{token});
-    }
-    return $self->render(
-      json => {
-        msg    => $msg,
-        status => $status
-      }
-    );
-  }
   # Handle password (join and owner)
   elsif ($action eq 'setPassword'){
     my $pass = $self->param('password');
