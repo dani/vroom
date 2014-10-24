@@ -158,7 +158,9 @@ use constant API_ACTIONS => {
     list_rooms => 1
   },
   owner => {
-    invite_email => 1
+    invite_email => 1,
+    lock_room    => 1,
+    unlock_room  => 1
   },
   participant => {}
 };

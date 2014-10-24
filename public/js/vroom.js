@@ -1672,11 +1672,16 @@ function initVroom(room) {
 
   // Handle room lock/unlock
   $('#lockButton').change(function() {
-    var action = ($(this).is(":checked")) ? 'lock':'unlock';
+    var action = ($(this).is(":checked")) ? 'lock_room' : 'unlock_room';
     $.ajax({
+      url: rootUrl + 'api',
       data: {
-        action: action,
-        room: roomName
+        req: JSON.stringify({
+          action: action,
+          param: {
+            room: roomName
+          }
+        })
       },
       error: function(data) {
         $.notify(locale.ERROR_OCCURRED, 'error');
@@ -1684,11 +1689,10 @@ function initVroom(room) {
       success: function(data) {
         if (data.status == 'success'){
           $.notify(data.msg, 'info');
-          if (action === 'lock'){
+          if (action === 'lock_room'){
             $('#lockLabel').addClass('btn-danger active');
           }
           else{
-            on_off = 'off';
             $('#lockLabel').removeClass('btn-danger active');
           }
           webrtc.sendToAll('room_lock', {action: action});

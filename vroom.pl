@@ -1190,6 +1190,7 @@ any '/api' => sub {
   my $json = Mojo::JSON->new;
   my $req = $json->decode($self->param('req'));
   my $err = $json->error;
+  my $room;
   if ($err || !$req->{action} || !$req->{param}){
     return $self->render(
       json => {
@@ -1224,7 +1225,8 @@ any '/api' => sub {
     action => $req->{action},
     param  => $req->{param}
   );
-  if (!$res){
+  $room = $self->get_room_by_name($req->{param}->{room});
+  if (!$res || (!$room && $req->{param}->{room})){
     return $self->render(
       json => {
         status => 'error',
@@ -1235,7 +1237,6 @@ any '/api' => sub {
   }
   # Ok, now, we don't have to bother with authorization anymore
   if ($req->{action} eq 'invite_email'){
-    my $room = $self->get_room_by_name($req->{param}->{room});
     if (!$req->{param}->{rcpt} || $req->{param}->{rcpt}!~ m/\S+@\S+\.\S+$/){
       return $self->render(
         json => {
@@ -1271,6 +1272,24 @@ any '/api' => sub {
       json => {
         status => 'error',
         msg    => 'ERROR_OCCURRED'
+      }
+    );
+  }
+  # Handle room lock/unlock
+  if ($req->{action} =~ m/(un)?lock_room/){
+    $room->{locked} = ($req->{action} eq 'lock_room') ? '1':'0';
+    if ($self->modify_room($room)){
+      return $self->render(
+        json => {
+          status => 'success',
+          msg => $self->l(($req->{action} eq 'lock_room') ? 'ROOM_LOCKED' : 'ROOM_UNLOCKED')
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        msg    => $self->l('ERROR_OCCURRED'),
+        status => 'error'
       }
     );
   }
@@ -1414,36 +1433,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
     );
   }
 
-  # Handle room lock/unlock
-  if ($action =~ m/(un)?lock/){
-    my ($lock,$success);
-    my $msg = 'ERROR_OCCURRED';
-    my $status = 'error';
-    $data->{locked} = ($action eq 'lock') ? '1':'0';
-    # Only the owner can lock or unlock a room
-    if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
-      return $self->render(
-        json => {
-          status => 'error',
-          msg    => $self->l('NOT_ALLOWED')
-        }
-      );
-    }
-    if (!$self->modify_room($data)){
-      return $self->render(
-        json => {
-          status => 'error',
-          msg => $self->l('ERROR_OCCURRED')
-        }
-      );
-    }
-    return $self->render(
-      json => {
-        msg    => $self->l(($action eq 'lock') ? 'ROOM_LOCKED' : 'ROOM_UNLOCKED'),
-        status => 'success'
-      }
-    );
-  }
   # Handle activity pings sent every minute by each participant
   elsif ($action eq 'ping'){
     my $status = 'error';
