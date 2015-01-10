@@ -1326,7 +1326,51 @@ any '/api' => sub {
       }
     );
   }
-
+  # Handle password (join and owner)
+  elsif ($req->{action} eq 'set_join_password'){
+    $room->{join_password} = ($req->{param}->{password} && $req->{param}->{password} ne '') ?
+      Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($req->{param}->{password})->generate : undef;
+    if ($self->modify_room($room)){
+      return $self->render(
+        json => {
+          msg    => $self->l(($req->{param}->{password}) ? 'PASSWORD_PROTECT_SET' : 'PASSWORD_PROTECT_UNSET'),
+          status => 'success'
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        msg    => $self->('ERROR_OCCURRED'),
+        status => 'error'
+      }
+    );
+  }
+  elsif ($req->{action} eq 'set_owner_password'){
+    if (grep { $req->{param}->{room} eq $_ } (split /[,;]/, $config->{'rooms.common_names'})){
+      return $self->render(
+        json => {
+          status => 'error',
+          msg    => $self->l('ERROR_COMMON_ROOM_NAME')
+        }
+      );
+    }
+    $room->{owner_password} = ($req->{param}->{password} && $req->{param}->{password} ne '') ?
+      Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($req->{param}->{password})->generate : undef;
+    if ($self->modify_room($room)){
+      return $self->render(
+        json => {
+          msg    => $self->l(($req->{param}->{password}) ? 'ROOM_NOW_RESERVED' : 'ROOM_NO_MORE_RESERVED'),
+          status => 'success'
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        msg    => $self->('ERROR_OCCURRED'),
+        status => 'error'
+      }
+    );
+  }   
 };
 
 # Catch all route: if nothing else match, it's the name of a room
@@ -1467,47 +1511,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
     );
   }
 
-  # Handle password (join and owner)
-  elsif ($action eq 'setPassword'){
-    my $pass = $self->param('password');
-    my $type = $self->param('type') || 'join';
-    # Empty password is equivalent to no password at all
-    $pass = ($pass && $pass ne '') ?
-      Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($pass)->generate : undef;
-    my $msg = $self->l('ERROR_OCCURRED');
-    my $status = 'error';
-    # Once again, only the owner can do this
-    if ($prefix eq 'admin' || $self->session($room)->{role} eq 'owner'){
-      if ($type eq 'owner'){
-        $data->{owner_password} = $pass;
-        # Forbid a few common room names to be reserved
-        if (grep { $room eq $_ } (split /[,;]/, $config->{'rooms.common_names'})){
-          $msg = $self->l('ERROR_COMMON_ROOM_NAME');
-        }
-        elsif ($self->modify_room($data)){
-          $msg = $self->l(($pass) ? 'ROOM_NOW_RESERVED' : 'ROOM_NO_MORE_RESERVED');
-          $status = 'success';
-        }
-      }
-      elsif ($type eq 'join'){
-        $data->{join_password} = $pass;
-        if ($self->modify_room($data)){
-          $msg = $self->l(($pass) ? 'PASSWORD_PROTECT_SET' : 'PASSWORD_PROTECT_UNSET');
-          $status = 'success';
-        }
-      }
-    }
-    # Simple participants will get an error
-    else{
-      $msg = $self->l('NOT_ALLOWED');
-    }
-    return $self->render(
-      json => {
-        msg    => $msg,
-        status => $status
-      }
-    );
-  }
   # Handle persistence
   elsif ($action eq 'setPersistent'){
     my $type = $self->param('type');

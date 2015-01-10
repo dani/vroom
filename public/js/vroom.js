@@ -1904,10 +1904,15 @@ function initVroom(room) {
     }
     else{
       $.ajax({
+        url: rootUrl + 'api',
         data: {
-          action: 'setPassword',
-          type: 'join',
-          room: roomName
+          req: JSON.stringify({
+            action: 'set_join_password',
+            param: {
+              type: 'join',
+              room: roomName,
+            }
+          })
         },
         error: function() {
           $.notify(locale.ERROR_OCCURRED, 'error');
@@ -1936,11 +1941,15 @@ function initVroom(room) {
     if (pass == pass2 && pass != ''){
       $('#setJoinPassButton').addClass('disabled');
       $.ajax({
+        url: rootUrl + 'api',
         data: {
-          action: 'setPassword',
-          password: pass,
-          type: 'join',
-          room: roomName
+          req: JSON.stringify({
+            action: 'set_join_password',
+            param: {
+              password: pass,
+              room: roomName
+            }
+          })
         },
         error: function() {
           $.notify(locale.ERROR_OCCURRED, 'error');
@@ -1978,10 +1987,14 @@ function initVroom(room) {
     }
     else{
       $.ajax({
+        url: rootUrl + 'api',
         data: {
-          action: 'setPassword',
-          type: 'owner',
-          room: roomName
+          req: JSON.stringify({
+            action: 'set_owner_password',
+            param: {
+              room: roomName
+            }
+          })
         },
         error: function() {
           $.notify(locale.ERROR_OCCURRED, 'error');
@@ -2009,11 +2022,15 @@ function initVroom(room) {
     if (pass == pass2 && pass != ''){
       $('#setOwnerPassButton').addClass('disabled');
       $.ajax({
+        url: rootUrl + 'api',
         data: {
-          action: 'setPassword',
-          password: pass,
-          type: 'owner',
-          room: roomName
+          req: JSON.stringify({
+            action: 'set_owner_password',
+            param: {
+              password: pass,
+              room: roomName
+            }
+          })
         },
         error: function() {
           $.notify(locale.ERROR_OCCURRED, 'error');
