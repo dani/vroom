@@ -17,6 +17,7 @@ use File::Basename;
 use Etherpad::API;
 use Session::Token;
 use Config::Simple;
+use Email::Valid;
 use Data::Dumper;
 
 app->log->level('info');
@@ -120,10 +121,7 @@ helper valid_id => sub {
 helper valid_email => sub {
   my $self = shift;
   my ($email) = @_;
-  if ($email !~ m/^\S+@\S+\.\S+$/){
-    return 0;
-  }
-  return 1;
+  return Email::Valid->address($email);
 };
 
 ##########################
