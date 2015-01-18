@@ -163,7 +163,8 @@ use constant API_ACTIONS => {
     lock_room          => 1,
     unlock_room        => 1,
     set_join_password  => 1,
-    set_owner_password => 1
+    set_owner_password => 1,
+    set_ask_for_name   => 1
   },
   participant => {
     ping          => 1,

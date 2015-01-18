@@ -1718,12 +1718,17 @@ function initVroom(room) {
 
   // Force participants to set a name
   $('#askForNameButton').change(function() {
-    var type = ($(this).is(":checked")) ? 'set':'unset';
+    var set = ($(this).is(":checked")) ? 'on':'off';
     $.ajax({
+      url: rootUrl + 'api',
       data: {
-        action: 'askForName',
-        type: type,
-        room: roomName
+        req: JSON.stringify({
+          action: 'set_ask_for_name',
+          param: {
+            set: set,
+            room: roomName
+          }
+        })
       },
       error: function(data) {
         $.notify(locale.ERROR_OCCURRED, 'error');
@@ -1731,13 +1736,13 @@ function initVroom(room) {
       success: function(data) {
         if (data.status == 'success'){
           $.notify(data.msg, 'info');
-          if (type === 'set'){
+          if (set === 'on'){
             $('#askForNameLabel').addClass('btn-danger active');
           }
           else{
             $('#askForNameLabel').removeClass('btn-danger active');
           }
-           webrtc.sendToAll('ask_for_name', {action: type});
+           webrtc.sendToAll('ask_for_name', {action: set});
         }
         else{
           $.notify(data.msg, 'error');

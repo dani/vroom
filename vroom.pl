@@ -1390,6 +1390,25 @@ any '/api' => sub {
       }
     );
   }
+  # Set/unset askForName
+  elsif ($req->{action} eq 'set_ask_for_name'){
+    my $set = $req->{param}->{set};
+    $room->{ask_for_name} = ($set eq 'on') ? 1 : 0;
+    if ($self->modify_room($room)){
+      return $self->render(
+        json => {
+          status => 'success',
+          msg => $self->l(($set eq 'on') ? 'FORCE_DISPLAY_NAME' : 'NAME_WONT_BE_ASKED')
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        msg    => $self->l('ERROR_OCCURRED'),
+        status => 'error'
+      }
+    );
+  }
   elsif ($req->{action} eq 'authenticate'){
     my $pass = $req->{param}->{'password'};
     # Auth succeed ? lets promote him to owner of the room
@@ -1635,26 +1654,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
     elsif ($type eq 'remove' && $self->remove_notification($room,$email)){
       $status = 'success';
       $msg = sprintf($self->l('s_WONT_BE_NOTIFIED_ANYMORE'), $email);
-    }
-    return $self->render(
-      json => {
-        msg    => $msg,
-        status => $status
-      }
-    );
-  }
-  # Set/unset askForName
-  elsif ($action eq 'askForName'){
-    my $type = $self->param('type');
-    my $status = 'error';
-    my $msg    = $self->l('ERROR_OCCURRED');
-    if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
-      $msg = $self->l('NOT_ALLOWED');
-    }
-    $data->{ask_for_name} = ($type eq 'set') ? 1 : 0;
-    if ($self->modify_room($data)){
-      $status = 'success';
-      $msg = $self->l(($type eq 'set') ? 'FORCE_DISPLAY_NAME' : 'NAME_WONT_BE_ASKED');
     }
     return $self->render(
       json => {
