@@ -1448,7 +1448,7 @@ any '/api' => sub {
     my $peer_id = $req->{param}->{peer_id};
     if ($self->session($room->{name}) && $self->session($room->{name})->{role}){
       # If we just have been promoted to owner
-      if ($self->session($room)->{role} ne 'owner' &&
+      if ($self->session($room->{name})->{role} ne 'owner' &&
           $self->get_peer_role({room => $room->{name}, peer_id => $peer_id}) eq 'owner'){
         $self->session($room)->{role} = 'owner';
         $self->associate_key_to_room(
