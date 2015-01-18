@@ -1393,7 +1393,7 @@ any '/api' => sub {
     elsif ($room->{owner_password}){
       return $self->render(
         json => {
-          status => 'success',
+          status => 'error',
           msg    => $self->l('WRONG_PASSWORD')
         }
       );
