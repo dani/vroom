@@ -1376,9 +1376,9 @@ any '/api' => sub {
     my $pass = $req->{param}->{'password'};
     # Auth succeed ? lets promote him to owner of the room
     if ($room->{owner_password} && Crypt::SaltedHash->validate($room->{owner_password}, $pass)){
-      $self->session($room, {role => 'owner'});
+      $self->session($room->{name}, {role => 'owner'});
       $self->associate_key_to_room(
-        room => $room,
+        room => $room->{name},
         key  => $self->session('key'),
         role => 'owner'
       );
