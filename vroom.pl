@@ -1219,7 +1219,7 @@ any '/api' => sub {
     );
   }
 
-  # Now, lets check the key can do the requested action
+  # Now, lets check if the key can do the requested action
   my $res = $self->key_can_do_this(
     token  => $token,
     action => $req->{action},
