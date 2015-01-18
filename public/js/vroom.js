@@ -958,10 +958,15 @@ function initVroom(room) {
   function promotePeer(id){
     if (peers[id] && peers[id].role != 'owner'){
       $.ajax({
+        url: rootUrl + 'api',
         data: {
-          action: 'promote',
-          room: roomName,
-          peer: id
+          req: JSON.stringify({
+            action: 'promote_peer',
+            param: {
+              room: roomName,
+              peer: id
+            }
+          })
         },
         error: function(data) {
           $.notify(locale.ERROR_OCCURRED, 'error');

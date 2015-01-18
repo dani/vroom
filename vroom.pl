@@ -1563,6 +1563,24 @@ any '/api' => sub {
       }
     );
   }
+  # Promote a participant to be owner of a room
+  elsif ($req->{action} eq 'promote_peer'){
+    my $peer_id = $req->{param}->{peer_id};
+    if ($peer_id && $self->promote_peer({room => $room, peer_id => $peer_id})){
+      return $self->render(
+        json => {
+          status => 'success',
+          msg    => $self->l('PEER_PROMOTED')
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        msg    => 'error',
+        status => $self->l('ERROR_OCCURRED')
+      }
+    );
+  }
 };
 
 # Catch all route: if nothing else match, it's the name of a room
@@ -1700,28 +1718,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
         err    => 'ERROR_ROOM_s_DOESNT_EXIST',
         status => 'error'
       },
-    );
-  }
-  # A participant is being promoted to the owner status
-  elsif ($action eq 'promote'){
-    my $peer = $self->param('peer');
-    my $status = 'error';
-    my $msg    = $self->l('ERROR_OCCURRED');
-    if (!$peer){
-      $msg    = $self->l('ERROR_OCCURRED');
-    }
-    elsif ($self->session($room)->{role} ne 'owner'){
-      $msg = $self->l('NOT_ALLOWED');
-    }
-    elsif ($self->promote_peer({room => $room, peer_id => $peer})){
-      $status = 'success';
-      $msg = $self->l('PEER_PROMOTED');
-    }
-    return $self->render(
-      json => {
-        msg    => $msg,
-        status => $status
-      }
     );
   }
   # Wipe etherpad data
