@@ -1617,6 +1617,23 @@ any '/api' => sub {
       }
     );
   }
+  # Delete a room
+  elsif ($req->{action} eq 'delete_room'){
+    if ($self->delete_room($room->{name})){
+      return $self->render(
+        json => {
+          msg    => $self->l('ROOM_DELETED'),
+          status => 'success'
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        msg    => $self->l('ERROR_OCCURRED'),
+        status => 'error'
+      }
+    );
+  }
 };
 
 # Catch all route: if nothing else match, it's the name of a room
@@ -1754,24 +1771,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
         err    => 'ERROR_ROOM_s_DOESNT_EXIST',
         status => 'error'
       },
-    );
-  }
-  # delete the room
-  elsif ($action eq 'deleteRoom'){
-    my $status = 'error';
-    my $msg    = $self->l('ERROR_OCCURRED');
-    if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
-      $msg = $self->l('NOT_ALLOWED');
-    }
-    elsif ($self->delete_room($room)){
-      $msg = $self->l('ROOM_DELETED');
-      $status = 'success';
-    }
-    return $self->render(
-      json => {
-        msg    => $msg,
-        status => $status
-      }
     );
   }
 };

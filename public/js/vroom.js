@@ -2306,9 +2306,14 @@ function initVroom(room) {
     webrtc.sendToAll('terminate_room', {});
     wipeRoomData();
     $.ajax({
+      url: rootUrl + 'api',
       data: {
-        action: 'deleteRoom',
-        room: roomName
+        req: JSON.stringify({
+          action: 'delete_room',
+          param: {
+            room: roomName
+          }
+        })
       },
       async: false,
       error: function(data) {

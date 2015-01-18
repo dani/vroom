@@ -167,7 +167,8 @@ use constant API_ACTIONS => {
     set_ask_for_name   => 1,
     email_notification => 1,
     promote_peer       => 1,
-    wipe_data          => 1
+    wipe_data          => 1,
+    delete_room        => 1
   },
   participant => {
     ping             => 1,
