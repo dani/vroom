@@ -1581,6 +1581,25 @@ any '/api' => sub {
       }
     );
   }
+  # Wipe room data (chat history and etherpad content)
+  elsif ($req->{action} eq 'wipe_data'){
+    if (!$ec || ($ec->delete_pad($room->{etherpad_group} . '$' . $room->{name}) &&
+           $self->create_pad($room->{name}) &&
+           $self->create_etherpad_session($room->{name}))){
+      return $self->render(
+        json => {
+          status => 'success',
+          msg    => $self->l('DATA_WIPED')
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        msg    => $self->l('ERROR_OCCURRED'),
+        status => 'error'
+      }
+    );
+  }
 };
 
 # Catch all route: if nothing else match, it's the name of a room
@@ -1718,29 +1737,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
         err    => 'ERROR_ROOM_s_DOESNT_EXIST',
         status => 'error'
       },
-    );
-  }
-  # Wipe etherpad data
-  elsif ($action eq 'wipeData'){
-    my $status = 'error';
-    my $msg    = $self->l('ERROR_OCCURRED');
-    if ($self->session($room)->{role} ne 'owner'){
-      $msg = $self->l('NOT_ALLOWED');
-    }
-    elsif (!$ec){
-      $msg = 'NOT_ENABLED';
-    }
-    elsif ($ec->delete_pad($data->{etherpad_group} . '$' . $room) &&
-           $self->create_pad($room) &&
-           $self->create_etherpad_session($room)){
-      $status = 'success';
-      $msg = '';
-    }
-    return $self->render(
-      json => {
-        msg    => $msg,
-        status => $status
-      }
     );
   }
   elsif ($action eq 'padSession'){

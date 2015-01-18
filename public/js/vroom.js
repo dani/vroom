@@ -1062,19 +1062,24 @@ function initVroom(room) {
   function wipeRoomData(){
     if (etherpad.enabled){
       $.ajax({
+        url: rootUrl + 'api',
         data: {
-          action: 'wipeData',
-          room: roomName
+          req: JSON.stringify({
+            action: 'wipe_data',
+            param: {
+              room: roomName
+            }
+          })
         },
         async: false,
         error: function(data){
           $.notify(locale.ERROR_OCCURRED, 'error');
         },
         success: function(data){
-          if (data.status && data.status == 'success' && $('#etherpadContainer').html() != ''){
+          if (data.status && data.status === 'success' && $('#etherpadContainer').html() != ''){
             loadEtherpadIframe();
           }
-          else if (data.msg){
+          else if (data.status !== 'success' && data.msg){
             $.notify(data.msg, 'error');
           }
         }
