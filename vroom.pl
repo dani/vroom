@@ -115,6 +115,17 @@ helper valid_id => sub {
   return 1;
 };
 
+# Check email address
+# TODO: replace with Email::Valid
+helper valid_email => sub {
+  my $self = shift;
+  my ($email) = @_;
+  if ($email !~ m/^\S+@\S+\.\S+$/){
+    return 0;
+  }
+  return 1;
+};
+
 ##########################
 #   Various helpers      #
 ##########################
@@ -1409,6 +1420,41 @@ any '/api' => sub {
       }
     );
   }
+  # Add or remove an email address to the list of email notifications
+  elsif ($req->{action} eq 'email_notification'){
+    my $email = $req->{param}->{email};
+    my $set = $req->{param}->{set};
+    if (!$self->valid_email($email)){
+      return $self->render(
+        json => {
+          msg    => $self->l('ERROR_MAIL_INVALID'),
+          status => 'error'
+        }
+      );
+    }
+    elsif ($set eq 'on' && $self->add_notification($room->{name},$email)){
+      return $self->render(
+        json => {
+          status => 'success',
+          msg    => sprintf($self->l('s_WILL_BE_NOTIFIED'), $email)
+        }
+      );
+    }
+    elsif ($set eq 'off' && $self->remove_notification($room->{name},$email)){
+      return $self->render(
+        json => {
+          status => 'success',
+          msg    => sprintf($self->l('s_WONT_BE_NOTIFIED_ANYMORE'), $email)
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        msg    => $self->l('ERROR_OCCURRED'),
+        status => 'error'
+      }
+    );
+  }
   elsif ($req->{action} eq 'authenticate'){
     my $pass = $req->{param}->{'password'};
     # Auth succeed ? lets promote him to owner of the room
@@ -1633,33 +1679,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
         err    => 'ERROR_ROOM_s_DOESNT_EXIST',
         status => 'error'
       },
-    );
-  }
-  # Add a new email for notifications when someone joins
-  elsif ($action eq 'emailNotification'){
-    my $email  = $self->param('email');
-    my $type   = $self->param('type');
-    my $status = 'error';
-    my $msg    = $self->l('ERROR_OCCURRED');
-    if ($prefix ne 'admin' && $self->session($room)->{role} ne 'owner'){
-      $msg = $self->l('NOT_ALLOWED');
-    }
-    elsif ($email !~ m/^\S+@\S+\.\S+$/){
-      $msg = $self->l('ERROR_MAIL_INVALID');
-    }
-    elsif ($type eq 'add' && $self->add_notification($room,$email)){
-      $status = 'success';
-      $msg = sprintf($self->l('s_WILL_BE_NOTIFIED'), $email);
-    }
-    elsif ($type eq 'remove' && $self->remove_notification($room,$email)){
-      $status = 'success';
-      $msg = sprintf($self->l('s_WONT_BE_NOTIFIED_ANYMORE'), $email);
-    }
-    return $self->render(
-      json => {
-        msg    => $msg,
-        status => $status
-      }
     );
   }
   # New participant joined the room

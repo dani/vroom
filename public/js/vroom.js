@@ -98,11 +98,16 @@ function addNotifiedEmail(email){
 function removeNotifiedEmail(email){
   var id = escapeJqSelector(email.replace(/['"]/, '_').replace('\\\'', '\''));
   $.ajax({
+    url: rootUrl + 'api',
     data: {
-      action: 'emailNotification',
-      type: 'remove',
-      email: email,
-      room: roomName
+      req: JSON.stringify({
+        action: 'email_notification',
+        param: {
+          set: 'off',
+          email: email,
+          room: roomName
+        }
+      })
     },
     error: function() {
       $.notify(locale.ERROR_OCCURRED, 'error');
@@ -2091,11 +2096,16 @@ function initVroom(room) {
   $('#newEmailNotificationForm').submit(function(event){
     event.preventDefault();
     $.ajax({
+      url: rootUrl + 'api',
       data: {
-        action: 'emailNotification',
-        type: 'add',
-        email: $('#newEmailNotification').val(),
-        room: roomName
+        req: JSON.stringify({
+          action: 'email_notification',
+          param: {
+            set: 'on',
+            email: $('#newEmailNotification').val(),
+            room: roomName
+          }
+        })
       },
       error: function() {
         $.notify(locale.ERROR_OCCURRED, 'error');
