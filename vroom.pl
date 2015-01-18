@@ -1372,6 +1372,24 @@ any '/api' => sub {
       }
     );
   }
+  elsif ($req->{action} eq 'set_persistent'){
+    my $set = $self->param('set');
+    $room->{persistent} = ($set eq 'on') ? 1 : 0;
+    if ($self->modify_room($room)){
+      return $self->render(
+        json => {
+          status => 'success',
+          msg    => $self->l(($set eq 'on') ? 'ROOM_NOW_PERSISTENT' : 'ROOM_NO_MORE_PERSISTENT')
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        msg    => $self->l('ERROR_OCCURRED'),
+        status => 'error'
+      }
+    );
+  }
   elsif ($req->{action} eq 'authenticate'){
     my $pass = $req->{param}->{'password'};
     # Auth succeed ? lets promote him to owner of the room
@@ -1546,27 +1564,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
     );
   }
 
-  # Handle persistence
-  elsif ($action eq 'setPersistent'){
-    my $type = $self->param('type');
-    my $status = 'error';
-    my $msg    = $self->l('ERROR_OCCURRED');
-    # Only possible through /admin/action
-    if ($prefix ne 'admin'){
-      $msg = $self->l('NOT_ALLOWED');
-    }
-    $data->{persistent} = ($type eq 'set') ? 1 : 0;
-    if ($self->modify_room($data)){
-      $status = 'success';
-      $msg = $self->l(($type eq 'set') ? 'ROOM_NOW_PERSISTENT' : 'ROOM_NO_MORE_PERSISTENT');
-    }
-    return $self->render(
-      json => {
-        msg    => $msg,
-        status => $status
-      }
-    );
-  }
   # Return your role and various info about the room
   elsif ($action eq 'getRoomInfo'){
     my $id = $self->param('id');

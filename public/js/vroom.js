@@ -380,8 +380,8 @@ function initManage(){
       }
     }
     else if (param === 'persistentSwitch'){
-      data.action = 'setPersistent';
-      data.type = (state) ? 'set' : 'unset';
+      data.action = 'set_persistent';
+      data.set = (state) ? 'on' : 'off';
       sendAction(data,sw);
     }
     // Something isn't implemented yet ?
