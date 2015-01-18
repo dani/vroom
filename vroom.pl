@@ -1541,7 +1541,28 @@ any '/api' => sub {
       }
     );
   }
-
+  # Notify the backend when we join a room
+  elsif ($req->{action} eq 'join'){
+    my $name = $req->{param}->{name} || '';
+    my $subj = sprintf($self->l('s_JOINED_ROOM_s'), ($name eq '') ? $self->l('SOMEONE') : $name, $room);
+    # Send notifications
+    my $recipients = $self->get_notification($room);
+    foreach my $rcpt (keys %{$recipients}){
+      my $sent = $self->mail(
+        to      => $recipients->{$rcpt}->{email},
+        subject => $subj,
+        data    => $self->render_mail('notification',
+          room => $room->{name},
+          name => $name
+        )
+      );
+    }
+    return $self->render(
+      json => {
+        status => 'success'
+      }
+    );
+  }
 };
 
 # Catch all route: if nothing else match, it's the name of a room
@@ -1679,28 +1700,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
         err    => 'ERROR_ROOM_s_DOESNT_EXIST',
         status => 'error'
       },
-    );
-  }
-  # New participant joined the room
-  elsif ($action eq 'join'){
-    my $name = $self->param('name') || '';
-    my $subj = sprintf($self->l('s_JOINED_ROOM_s'), ($name eq '') ? $self->l('SOMEONE') : $name, $room);
-    # Send notifications
-    my $recipients = $self->get_notification($room);
-    foreach my $rcpt (keys %{$recipients}){
-      my $sent = $self->mail(
-        to      => $recipients->{$rcpt}->{email},
-        subject => $subj,
-        data    => $self->render_mail('notification',
-          room => $room,
-          name => $name
-        )
-      );
-    }
-    return $self->render(
-      json => {
-        status => 'success'
-      }
     );
   }
   # A participant is being promoted to the owner status

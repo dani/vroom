@@ -1495,10 +1495,15 @@ function initVroom(room) {
     // we send it. Not that I like sending this kind of data to the server
     // but it's needed for email notifications
     $.ajax({
+      url: rootUrl + 'api',
       data: {
-        action: 'join',
-        room: roomName,
-        name: (peers.local.hasName) ? peers.local.displayName : ''
+        req: JSON.stringify({
+          action: 'join',
+          param: {
+            room: roomName,
+            name: (peers.local.hasName) ? peers.local.displayName : ''
+          }
+        })
       },
       error: function(data) {
         $.notify(locale.ERROR_OCCURRED, 'error');
