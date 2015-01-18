@@ -1424,6 +1424,47 @@ any '/api' => sub {
       }
     );
   }
+  # Return your role and various info about the room
+  elsif ($req->{action} eq 'get_room_info'){
+    my $peer_id = $req->{param}->{peer_id};
+    if ($self->session($room->{name}) && $self->session($room->{name})->{role}){
+      # If we just have been promoted to owner
+      if ($self->session($room)->{role} ne 'owner' &&
+          $self->get_peer_role({room => $room->{name}, peer_id => $peer_id}) eq 'owner'){
+        $self->session($room)->{role} = 'owner';
+        $self->associate_key_to_room(
+          room => $room->{name},
+          key  => $self->session('key'),
+          role => 'owner'
+        );
+      }
+      my $res = $self->set_peer_role({
+        room    => $room->{name},
+        name    => $self->session('name'),
+        peer_id => $peer_id,
+        role    => $self->session($room->{name})->{role}
+      });
+      if (!$res){
+        return $self->render(
+          json => {
+            status => 'error',
+            msg    => $self->l('ERROR_OCCURRED')
+          }
+        );
+      }
+    }
+    return $self->render(
+      json => {
+        role         => $self->session($room->{name})->{role},
+        owner_auth   => ($room->{owner_password}) ? 'yes' : 'no',
+        join_auth    => ($room->{join_password})  ? 'yes' : 'no',
+        locked       => ($room->{locked})         ? 'yes' : 'no',
+        ask_for_name => ($room->{ask_for_name})   ? 'yes' : 'no',
+        notif        => $self->get_notification($room->{name}),
+        status       => 'success'
+      },
+    );
+  }
 };
 
 # Catch all route: if nothing else match, it's the name of a room
@@ -1560,52 +1601,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
         msg    => sprintf ($self->l('ERROR_ROOM_s_DOESNT_EXIST'), $room),
         err    => 'ERROR_ROOM_s_DOESNT_EXIST',
         status => 'error'
-      },
-    );
-  }
-
-  # Return your role and various info about the room
-  elsif ($action eq 'getRoomInfo'){
-    my $id = $self->param('id');
-    my %emailNotif;
-    if ($self->session($room) && $self->session($room)->{role}){
-      # If we just have been promoted to owner
-      if ($self->session($room)->{role} ne 'owner' &&
-          $self->get_peer_role({room => $room, peer_id => $id}) eq 'owner'){
-        $self->session($room)->{role} = 'owner';
-        $self->associate_key_to_room(
-          room => $room,
-          key  => $self->session('key'),
-          role => 'owner'
-        );
-      }
-      my $res = $self->set_peer_role({
-        room    => $room,
-        name    => $self->session('name'),
-        peer_id => $id,
-        role    => $self->session($room)->{role}
-      });
-      if (!$res){
-        return $self->render(
-          json => {
-            status => 'error',
-            msg    => $self->l('ERROR_OCCURRED')
-          }
-        );
-      }
-    }
-    if ($self->session($room)->{role} eq 'owner'){
-      my $i = 0;
-    }
-    return $self->render(
-      json => {
-        role         => $self->session($room)->{role},
-        owner_auth   => ($data->{owner_password}) ? 'yes' : 'no',
-        join_auth    => ($data->{join_password})  ? 'yes' : 'no',
-        locked       => ($data->{locked})         ? 'yes' : 'no',
-        ask_for_name => ($data->{ask_for_name})   ? 'yes' : 'no',
-        notif        => $self->get_notification($room),
-        status       => 'success'
       },
     );
   }

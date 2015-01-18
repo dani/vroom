@@ -522,10 +522,15 @@ function initVroom(room) {
   // Get our role and other room settings from the server
   function getRoomInfo(){
     $.ajax({
+      url: rootUrl + 'api',
       data: {
-        action: 'getRoomInfo',
-        room: roomName,
-        id: peers.local.id
+        req: JSON.stringify({
+          action: 'get_room_info',
+          param: {
+            room: roomName,
+            peer_id: peers.local.id
+          }
+        })
       },
       async: false,
       error: function(data){
