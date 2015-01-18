@@ -165,7 +165,8 @@ use constant API_ACTIONS => {
     set_owner_password => 1
   },
   participant => {
-    ping => 1
+    ping         => 1,
+    authenticate => 1
   }
 };
 
