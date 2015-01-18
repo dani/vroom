@@ -911,7 +911,6 @@ helper key_can_do_this => sub {
     return 0;
   }
   my $key = $self->get_key_by_token($data->{token});
-  my $room = $self->get_room_by_name($data->{param}->{room});
   if (!$key){
     $self->app->log->debug("Invalid API key");
     return 0;
@@ -922,7 +921,7 @@ helper key_can_do_this => sub {
     return 1;
   }
   # Global actions can only be performed by admin keys
-  if (!$room){
+  if (!$data->{param}->{room}){
     $self->app->log->debug("Invalid room ID");
     return 0;
   }
@@ -933,10 +932,10 @@ helper key_can_do_this => sub {
                           FROM `room_keys`
                           LEFT JOIN `rooms` ON `room_keys`.`room_id`=`rooms`.`id`
                           WHERE `room_keys`.`key_id`=?
-                            AND `room_keys`.`room_id`=?
+                            AND `rooms`.`name`=?
                           LIMIT 1');
   };
-  $sth->execute($key->{id},$room->{id});
+  $sth->execute($key->{id},$data->{param}->{room});
   $sth->bind_columns(\$key->{role});
   $sth->fetch;
   my $actions = API_ACTIONS;
@@ -946,7 +945,7 @@ helper key_can_do_this => sub {
     return 1;
   }
   # If this key as simple partitipant priv in this room, only allow participant actions
-  elsif ($key->{role} eq 'partitipant' && $actions->{participant}->{$data->{action}}){
+  elsif ($key->{role} eq 'participant' && $actions->{participant}->{$data->{action}}){
     return 1;
   }
   # Else, deny
@@ -1402,7 +1401,7 @@ any '/api' => sub {
     # There's no owner password, so you cannot auth
     return $self->render(
       json => {
-        msg    => 'NOT_ALLOWED',
+        msg    => $self->l('NOT_ALLOWED'),
         status => 'error'
       }
     );
