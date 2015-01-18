@@ -1873,8 +1873,10 @@ function initVroom(room) {
       data: {
         req: JSON.stringify({
           action: 'authenticate',
-          password: pass,
-          room: roomName
+          param: {
+            password: pass,
+            room: roomName
+          }
         })
       },
       error: function(data) {
