@@ -1450,9 +1450,14 @@ function initVroom(room) {
     wipeChatHistory();
     if (etherpad.enabled){
       $.ajax({
+        url: rootUrl + 'api',
         data: {
-          action: 'padSession',
-          room: roomName,
+          req: JSON.stringify({
+            action: 'get_pad_session',
+            param: {
+              room: roomName
+            }
+          })
         },
         error: function(data) {
           $.notify(locale.ERROR_OCCURRED, 'error');

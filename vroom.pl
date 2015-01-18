@@ -1600,6 +1600,23 @@ any '/api' => sub {
       }
     );
   }
+  # Get a new etherpad session
+  elsif ($req->{action} eq 'get_pad_session'){
+    if ($self->create_etherpad_session($room->{name})){
+      return $self->render(
+        json => {
+          status => 'success',
+          msg    => $self->l('SESSION_CREATED')
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        msg    => $self->l('ERROR_OCCURRED'),
+        status => 'error'
+      }
+    );
+  }
 };
 
 # Catch all route: if nothing else match, it's the name of a room
@@ -1737,26 +1754,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
         err    => 'ERROR_ROOM_s_DOESNT_EXIST',
         status => 'error'
       },
-    );
-  }
-  elsif ($action eq 'padSession'){
-    my $status = 'error';
-    my $msg    = $self->l('ERROR_OCCURRED');
-    if ($self->session($room)->{role} !~ m/^owner|participant$/){
-      $msg = $self->l('NOT_ALLOWED');
-    }
-    elsif (!$ec){
-      $msg = 'NOT_ENABLED';
-    }
-    elsif ($self->create_etherpad_session($room)){
-      $status = 'success';
-      $msg = '';
-    }
-    return $self->render(
-      json => {
-        msg    => $msg,
-        status => $status
-      }
     );
   }
   # delete the room
