@@ -588,10 +588,15 @@ function initVroom(room) {
   // Get the role of a peer
   function getPeerRole(id){
     $.ajax({
+      url: rootUrl + 'api',
       data: {
-        action: 'getPeerRole',
-        room: roomName,
-        id: id
+        req: JSON.stringify({
+          action: 'get_peer_role',
+          param: {
+            room: roomName,
+            peer_id: id
+          }
+        })
       },
       error: function(data){
         $.notify(locale.ERROR_OCCURRED, 'error');

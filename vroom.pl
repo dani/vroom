@@ -1465,6 +1465,18 @@ any '/api' => sub {
       },
     );
   }
+  # Return the role of a peer
+  elsif ($req->{action} eq 'get_peer_role'){
+    my $peer_id = $req->{param}->{peer_id};
+    my $role = $self->get_peer_role({room => $room->{name}, peer_id => $peer_id});
+    return $self->render(
+      json => {
+        role => $role,
+        status => 'success'
+      }
+    );
+  }
+
 };
 
 # Catch all route: if nothing else match, it's the name of a room
@@ -1602,17 +1614,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
         err    => 'ERROR_ROOM_s_DOESNT_EXIST',
         status => 'error'
       },
-    );
-  }
-  # Return the role of a peer
-  elsif ($action eq 'getPeerRole'){
-    my $id = $self->param('id');
-    my $role = $self->get_peer_role({room => $room, peer_id => $id});
-    return $self->render(
-      json => {
-        role => $role,
-        status => 'success'
-      }
     );
   }
   # Add a new email for notifications when someone joins
