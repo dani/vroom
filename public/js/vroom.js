@@ -1869,10 +1869,13 @@ function initVroom(room) {
     event.preventDefault();
     var pass = $('#authPass').val();
     $.ajax({
+      url: rootUrl + 'api',
       data: {
-        action: 'authenticate',
-        password: pass,
-        room: roomName
+        req: JSON.stringify({
+          action: 'authenticate',
+          password: pass,
+          room: roomName
+        })
       },
       error: function(data) {
         $.notify(locale.ERROR_OCCURRED, 'error');

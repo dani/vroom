@@ -1370,7 +1370,41 @@ any '/api' => sub {
         status => 'error'
       }
     );
-  }   
+  }
+  elsif ($req->{action} eq 'authenticate'){
+    my $pass = $req->{param}->{'password'};
+    # Auth succeed ? lets promote him to owner of the room
+    if ($room->{owner_password} && Crypt::SaltedHash->validate($room->{owner_password}, $pass)){
+      $self->session($room, {role => 'owner'});
+      $self->associate_key_to_room(
+        room => $room,
+        key  => $self->session('key'),
+        role => 'owner'
+      );
+      return $self->render(
+        json => {
+          status => 'success',
+          msg    => $self->l('AUTH_SUCCESS')
+        }
+      );
+    }
+    # Oner password is set, but auth failed
+    elsif ($room->{owner_password}){
+      return $self->render(
+        json => {
+          status => 'success',
+          msg    => $self->l('WRONG_PASSWORD')
+        }
+      );
+    }
+    # There's no owner password, so you cannot auth
+    return $self->render(
+      json => {
+        msg    => 'NOT_ALLOWED',
+        status => 'error'
+      }
+    );
+  }
 };
 
 # Catch all route: if nothing else match, it's the name of a room
@@ -1524,37 +1558,6 @@ post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
     if ($self->modify_room($data)){
       $status = 'success';
       $msg = $self->l(($type eq 'set') ? 'ROOM_NOW_PERSISTENT' : 'ROOM_NO_MORE_PERSISTENT');
-    }
-    return $self->render(
-      json => {
-        msg    => $msg,
-        status => $status
-      }
-    );
-  }
-  # A participant is trying to auth as an owner, lets check that
-  elsif ($action eq 'authenticate'){
-    my $pass = $self->param('password');
-    my $res = undef;
-    my $msg = $self->l('ERROR_OCCURRED');
-    my $status = 'error';
-    # Auth succeed ? lets promote him to owner of the room
-    if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
-      $self->session($room, {role => 'owner'});
-      $self->associate_key_to_room(
-        room => $room,
-        key  => $self->session('key'),
-        role => 'owner'
-      );
-      $msg = $self->l('AUTH_SUCCESS');
-      $status = 'success';
-    }
-    elsif ($data->{owner_password}){
-      $msg = $self->l('WRONG_PASSWORD');
-    }
-    # There's no owner password, so you cannot auth
-    else{
-      $msg = $self->l('NOT_ALLOWED');
     }
     return $self->render(
       json => {
