@@ -974,7 +974,7 @@ get '/about' => sub {
 get '/help' => 'help';
 
 # Route for the admin pages
-get '/admin/:room' => { room => ''} => sub {
+get '/admin/:room' => { room => '' } => sub {
   my $self = shift;
   my $room = $self->stash('room');
   if ($room eq ''){
