@@ -35,7 +35,7 @@ $.ajax({
 
 // Default ajax setup
 $.ajaxSetup({
-  url: rootUrl + 'jsapi',
+  url: rootUrl + 'api',
   type: 'POST',
   dataType: 'json',
   headers: {
@@ -46,7 +46,6 @@ $.ajaxSetup({
 // Handle lang switch
 $('#switch_lang').change(function(){
     $.ajax({
-    url: rootUrl + 'api',
     data: {
       req: JSON.stringify({
         action: 'switch_lang',
@@ -98,7 +97,6 @@ function addNotifiedEmail(email){
 function removeNotifiedEmail(email){
   var id = escapeJqSelector(email.replace(/['"]/, '_').replace('\\\'', '\''));
   $.ajax({
-    url: rootUrl + 'api',
     data: {
       req: JSON.stringify({
         action: 'email_notification',
@@ -527,7 +525,6 @@ function initVroom(room) {
   // Get our role and other room settings from the server
   function getRoomInfo(){
     $.ajax({
-      url: rootUrl + 'api',
       data: {
         req: JSON.stringify({
           action: 'get_room_info',
@@ -593,7 +590,6 @@ function initVroom(room) {
   // Get the role of a peer
   function getPeerRole(id){
     $.ajax({
-      url: rootUrl + 'api',
       data: {
         req: JSON.stringify({
           action: 'get_peer_role',
@@ -958,7 +954,6 @@ function initVroom(room) {
   function promotePeer(id){
     if (peers[id] && peers[id].role != 'owner'){
       $.ajax({
-        url: rootUrl + 'api',
         data: {
           req: JSON.stringify({
             action: 'promote_peer',
@@ -1062,7 +1057,6 @@ function initVroom(room) {
   function wipeRoomData(){
     if (etherpad.enabled){
       $.ajax({
-        url: rootUrl + 'api',
         data: {
           req: JSON.stringify({
             action: 'wipe_data',
@@ -1450,7 +1444,6 @@ function initVroom(room) {
     wipeChatHistory();
     if (etherpad.enabled){
       $.ajax({
-        url: rootUrl + 'api',
         data: {
           req: JSON.stringify({
             action: 'get_pad_session',
@@ -1510,7 +1503,6 @@ function initVroom(room) {
     // we send it. Not that I like sending this kind of data to the server
     // but it's needed for email notifications
     $.ajax({
-      url: rootUrl + 'api',
       data: {
         req: JSON.stringify({
           action: 'join',
@@ -1611,7 +1603,6 @@ function initVroom(room) {
       return;
     }
     $.ajax({
-      url: rootUrl + 'api',
       data: {
         req: JSON.stringify({
           action: 'invite_email',
@@ -1709,7 +1700,6 @@ function initVroom(room) {
   $('#lockButton').change(function() {
     var action = ($(this).is(":checked")) ? 'lock_room' : 'unlock_room';
     $.ajax({
-      url: rootUrl + 'api',
       data: {
         req: JSON.stringify({
           action: action,
@@ -1745,7 +1735,6 @@ function initVroom(room) {
   $('#askForNameButton').change(function() {
     var set = ($(this).is(":checked")) ? 'on':'off';
     $.ajax({
-      url: rootUrl + 'api',
       data: {
         req: JSON.stringify({
           action: 'set_ask_for_name',
@@ -1909,7 +1898,6 @@ function initVroom(room) {
     event.preventDefault();
     var pass = $('#authPass').val();
     $.ajax({
-      url: rootUrl + 'api',
       data: {
         req: JSON.stringify({
           action: 'authenticate',
@@ -1949,7 +1937,6 @@ function initVroom(room) {
     }
     else{
       $.ajax({
-        url: rootUrl + 'api',
         data: {
           req: JSON.stringify({
             action: 'set_join_password',
@@ -1986,7 +1973,6 @@ function initVroom(room) {
     if (pass == pass2 && pass != ''){
       $('#setJoinPassButton').addClass('disabled');
       $.ajax({
-        url: rootUrl + 'api',
         data: {
           req: JSON.stringify({
             action: 'set_join_password',
@@ -2032,7 +2018,6 @@ function initVroom(room) {
     }
     else{
       $.ajax({
-        url: rootUrl + 'api',
         data: {
           req: JSON.stringify({
             action: 'set_owner_password',
@@ -2067,7 +2052,6 @@ function initVroom(room) {
     if (pass == pass2 && pass != ''){
       $('#setOwnerPassButton').addClass('disabled');
       $.ajax({
-        url: rootUrl + 'api',
         data: {
           req: JSON.stringify({
             action: 'set_owner_password',
@@ -2116,7 +2100,6 @@ function initVroom(room) {
   $('#newEmailNotificationForm').submit(function(event){
     event.preventDefault();
     $.ajax({
-      url: rootUrl + 'api',
       data: {
         req: JSON.stringify({
           action: 'email_notification',
@@ -2306,7 +2289,6 @@ function initVroom(room) {
     webrtc.sendToAll('terminate_room', {});
     wipeRoomData();
     $.ajax({
-      url: rootUrl + 'api',
       data: {
         req: JSON.stringify({
           action: 'delete_room',
@@ -2351,7 +2333,6 @@ function initVroom(room) {
   // Used to detect inactive rooms
   setInterval(function(){
     $.ajax({
-      url: rootUrl + 'api',
       data: {
         req: JSON.stringify({
           action: 'ping',

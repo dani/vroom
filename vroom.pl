@@ -97,7 +97,7 @@ helper valid_room_name => sub {
   my ($name) = @_;
   my $ret = {};
   # A few names are reserved
-  my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize jsapi api
+  my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize api
                     missing dies password kicked invitation js css img fonts snd);
   if ($name !~ m/^[\w\-]{1,49}$/ || grep { $name eq $_ } @reserved){
     return 0;
@@ -1728,51 +1728,6 @@ get '/:room' => sub {
     etherpadGroup => $data->{etherpad_group},
     ua            => $self->req->headers->user_agent
   );
-};
-
-# Route for various room actions
-post '/*jsapi' => { jsapi => [qw(jsapi admin/jsapi)] }  => sub {
-  my $self = shift;
-  my $action = $self->param('action');
-  my $prefix = ($self->stash('jsapi') eq 'admin/jsapi') ? 'admin' : 'room';
-  my $room = $self->param('room') || '';
-  # Refuse any action from non members of the room
-  if ($prefix ne 'admin' && (!$self->session('name') ||
-                             !$self->has_joined({
-                               name => $self->session('name'),
-                               room => $room}) ||
-                             !$self->session($room) ||
-                             !$self->session($room)->{role})){
-    return $self->render(
-      json => {
-        msg    => $self->l('ERROR_NOT_LOGGED_IN'),
-        status => 'error'
-      }
-    );
-  }
-  # Sanity check on the room name
-  if (!$self->valid_room_name($room)){
-    return $self->render(
-      json => {
-        msg    => $self->l('ERROR_NAME_INVALID'),
-        status => 'error'
-      },
-    );
-  }
-  # Push the room name to the stash, just in case
-  $self->stash(room => $room);
-  # Gather room info from the DB
-  my $data = $self->get_room_by_name($room);
-  # Stop here if the room doesn't exist
-  if (!$data){
-    return $self->render(
-      json => {
-        msg    => sprintf ($self->l('ERROR_ROOM_s_DOESNT_EXIST'), $room),
-        err    => 'ERROR_ROOM_s_DOESNT_EXIST',
-        status => 'error'
-      },
-    );
-  }
 };
 
 # use the templates defined in the config
