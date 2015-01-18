@@ -911,6 +911,7 @@ helper key_can_do_this => sub {
     return 0;
   }
   my $key = $self->get_key_by_token($data->{token});
+  my $room = $self->get_room_by_name($data->{param}->{room});
   if (!$key){
     $self->app->log->debug("Invalid API key");
     return 0;
@@ -921,20 +922,21 @@ helper key_can_do_this => sub {
     return 1;
   }
   # Global actions can only be performed by admin keys
-  if (!$key->{admin} && !$data->{param}->{room}){
-    $self->app->log->debug("Non admin API Key doesn't allow global actions");
+  if (!$room){
+    $self->app->log->debug("Invalid room ID");
     return 0;
   }
-  
+
   # Now, lookup the DB the role of this key for this room
   my $sth = eval {
-    $self->db->prepare('SELECT role
+    $self->db->prepare('SELECT `role`
                           FROM `room_keys`
                           LEFT JOIN `rooms` ON `room_keys`.`room_id`=`rooms`.`id`
                           WHERE `room_keys`.`key_id`=?
+                            AND `room_keys`.`room_id`=?
                           LIMIT 1');
   };
-  $sth->execute($key->{id});
+  $sth->execute($key->{id},$room->{id});
   $sth->bind_columns(\$key->{role});
   $sth->fetch;
   my $actions = API_ACTIONS;
