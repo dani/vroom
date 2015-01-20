@@ -93,8 +93,7 @@ our %Lexicon = (
     "SEND_CUSTOM_MESSAGE"                       => "Vous pouvez ajouter un message personnalisé",
     "DISPLAY_NAME"                              => "Nom",
     "YOUR_NAME"                                 => "Votre nom",
-    "NAME_SENT_TO_OTHERS"                       => "Ce nom sera envoyé aux autres participants pour qu'ils puissent vous identifier. " .
-                                                   "Vous devez en saisir un avant de pouvoir utiliser le tchat",
+    "NAME_SENT_TO_OTHERS"                       => "Ce nom sera envoyé aux autres participants",
     "DISPLAY_NAME_TOO_LONG"                     => "Ce nom est trop long",
     "DISPLAY_NAME_REQUIRED"                     => "Vous devez entrer votre nom",
     "SET_A_DISPLAY_NAME"                        => "Merci de saisir votre nom avant de pouvoir rejoindre le salon",
