@@ -1714,6 +1714,7 @@ function initVroom(room) {
           else{
             $('#lockLabel').removeClass('btn-danger active');
           }
+          $('#lockLabel').removeClass('focus');
           webrtc.sendToAll('room_lock', {action: action});
         }
         else{
@@ -1748,8 +1749,10 @@ function initVroom(room) {
             $('#askForNameLabel').addClass('btn-danger active');
           }
           else{
-            $('#askForNameLabel').removeClass('btn-danger active');
+            $('#askForNameLabel').removeClass('btn-danger active focus');
           }
+           // In any case, remove the focus
+           $('#askForNameLabel').removeClass('focus');
            webrtc.sendToAll('ask_for_name', {action: set});
         }
         else{
