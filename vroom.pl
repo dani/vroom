@@ -1731,7 +1731,7 @@ get '/:room' => sub {
 # use the templates defined in the config
 push @{app->renderer->paths}, 'templates/'.$config->{'interface.template'};
 # Set the secret used to sign cookies
-app->secret($config->{'cookie.secret'});
+app->secrets([$config->{'cookie.secret'}]);
 app->sessions->secure(1);
 app->sessions->cookie_name($config->{'cookie.name'});
 app->hook(before_dispatch => sub {
