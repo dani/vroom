@@ -64,7 +64,7 @@
             <span class="glyphicon glyphicon-eye-close">
             </span>
           </label>
-          <label class="btn btn-default help aloneEl" id="pauseMohLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PAUSE_MOH' %>">
+          <label class="btn btn-default help hidden-xs aloneEl" id="pauseMohLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PAUSE_MOH' %>">
             <input type="checkbox" id="pauseMohButton">
             <span class="glyphicon glyphicon-music">
             </span>
