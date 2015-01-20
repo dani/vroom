@@ -257,15 +257,6 @@
               </span>
             </button>
           </div>
-          <div class="btn-group">
-            <select class="form-control" id="switch_lang">
-              <% foreach my $lang (qw(en fr)){ %>
-              <option value="<%= $lang %>" <%= ($self->languages eq $lang) ? 'selected="selected"' : '' %>>
-                <%= $lang %>
-              </option>
-              <% } %>
-            </select>
-          </div>
         </div>
       </div>
     </nav>
