@@ -661,14 +661,8 @@
             <p>
               <%=l 'ARE_YOU_SURE_YOU_WANT_TO_LEAVE' %>
             </p>
-            <p class="ownerEl">
-              <%=l 'YOU_CAN_WIPE_DATA_BEFORE_LEAVING' %>
-            </p>
           </div>
           <div class="modal-footer">
-            <button id="confirmWipeAndQuitButton" class="btn btn-danger ownerEl">
-              <%=l 'WIPE_AND_QUIT' %>
-            </button>
             <button id="confirmQuitButton" class="btn btn-primary">
               <%=l 'QUIT' %>
             </button>

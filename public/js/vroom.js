@@ -2180,11 +2180,6 @@ function initVroom(room) {
     hangupCall;
     window.location.assign(rootUrl + 'goodbye/' + roomName);
   });
-  $('#confirmWipeAndQuitButton').click(function(){
-    wipeRoomData();
-    hangupCall;
-    window.location.assign(rootUrl + 'goodbye/' + roomName);
-  });
   window.onunload = window.onbeforeunload = hangupCall;
 
   // Go fullscreen on double click
