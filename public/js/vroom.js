@@ -1526,7 +1526,7 @@ function initVroom(room) {
     });
     checkMoh();
     $('#videoLocalContainer').show(200);
-    $('#timeCounter').tinyTimer({ from: new Date }).show(200);
+    $('#timeCounterXs,#timeCounter').tinyTimer({ from: new Date });
   });
 
   // Handle new video stream added: someone joined the room

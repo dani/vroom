@@ -3,6 +3,9 @@
   <div class="container-fluid">
     <nav id="toolbar" class="navbar navbar-default" role="toolbar">
       <div class="navbar-header">
+        <div id="timeCounterXs" class="btn btn-default navbar-btn disabled hidden-sm hidden-md hidden-lg col-xs-offset-1">
+          00:00
+        </div>
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#roomToolBar">
           <span class="sr-only">
           </span>
@@ -246,7 +249,8 @@
               <span class="glyphicon glyphicon-question-sign">
               </span>
             </button>
-            <div id="timeCounter" class="btn btn-default disabled">
+            <div id="timeCounter" class="btn btn-default disabled hidden-xs">
+              00:00
             </div>
             <button class="btn btn-default help" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
               <span class="glyphicon glyphicon-log-out">
