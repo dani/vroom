@@ -359,17 +359,9 @@ our %Lexicon = (
                                                    "donnés à d'autres participants",
     "RESERVED_ROOMS"                            => "Salons réservés",
     "HELP_RESERVED_ROOMS"                       => "Par défaut, les salons sont éphémères, c'est à dire qu'ils sont automatiquement " .
-                                                   "supprimés si ils ne présentent aucune activité pendant un certains temps. " .
+                                                   "supprimés si ils ne sont pas utilisés pendant un certains temps. " .
                                                    "Le créateur du salon peut définir un mot de passe de gestionaire, ce qui " .
-                                                   "rendra réservera le salon. Un salon réservé peut tout de même " .
-                                                   "être supprimé si il n'est pas utilisé pendant une très longue période, mais le " .
-                                                   "délais sera bien plus long.",
-    "RESERVE_YOUR_ROOM"                         => "Réservez votre salon",
-    "HELP_RESERVE_YOUR_ROOM"                    => "Vous souhaitez réserver le nom de votre salon pour qu'il soit toujours disponible " .
-                                                   "pour vous (nom de votre entreprise, nom d'un projet en cours etc.) ? Configurez simplement " .
-                                                   "un mot de passe pour rejoindre le salon et un mot de passe de gestionnaire. Le " .
-                                                   "salon sera conservé aussi longtemps que le mot de passe de gestionnaire est en place ".
-                                                   "(du moment que vous vous en servez de temps en temps)",
+                                                   "réservera le salon. Un salon réservé peut tout de même sera conservé plus longtemps.",
     "BE_NOTIFIED"                               => "Notifications",
     "HELP_BE_NOTIFIED"                          => "Vous pouvez être notifiés par email dès que quelqu'un rejoint un de vos salons. " .
                                                    "Par exemple, créez un salon, ajoutez un mot de passe pour le rendre persistant et " .

@@ -328,10 +328,6 @@ our %Lexicon = (
                                             "have no activity for some time. The room's creator can define an owner's password, " .
                                             "which will make the room reserved. A reserved room can still be deleted " .
                                             "if it's not used for a very long period of time, but will last longuer on the system",
-  "RESERVE_YOUR_ROOM"                    => "Reserve your room",
-  "HELP_RESERVE_YOUR_ROOM"               => "Want to reserve your room name so it's always available for you (company name, ongoing project " .
-                                            "etc.) ? Just set both a join password and the owner password. The room will be kept " .
-                                            "as long as the owner password is set (and as long as you use it from time to time)",
   "BE_NOTIFIED"                          => "Notifications",
   "HELP_BE_NOTIFIED"                     => "You can be notified by email as soon as someone joins one of your rooms. For example, " .
                                             "create a room, add a password to make it persistent and add the link in your email signature. " .
