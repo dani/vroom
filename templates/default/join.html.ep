@@ -76,38 +76,11 @@
           </label>
         </div>
         <div class="btn-group navbar-form navbar-left">
-          <div class="btn-group dropdown ownerEl">
-            <button class="btn btn-default dropdown-toggle help" type="button" id="inviteMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'INVITE_PEOPLE' %>">
+          <div class="btn-group ownerEl">
+            <button class="btn btn-default help" type="button" data-toggle="modal" data-target="#inviteModal" data-toggle="tooltip" data-placement="bottom" title="<%=l 'INVITE_PEOPLE' %>">
               <span class="glyphicon glyphicon-user">
               </span>
-              <span class="caret">
-              </span>
             </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="inviteMenuButton" id="inviteMenu">
-              <li class="text-center">
-                <p>
-                  <%=l 'TO_INVITE_SHARE_THIS_URL' %>
-                </p>
-                <% my $url = $self->url_for('/')->to_abs;
-                   $url .= ($url =~ m/\/$/) ? '':'/';
-                %>
-                <h4>
-                  <a href="javascript:void(0)" onclick="inviteUrlPopup();">
-                    <%= $url . $room %>
-                  </a>
-                </h4>
-              </li>
-              <li class="divider">
-              </li>
-              <li>
-                <div class="text-center">
-                  <button type="button" class="btn btn-default help" id="showEmailInvite" data-toggle="tooltip" data-placement="bottom" title="<%=l 'YOU_CAN_INVITE_BY_MAIL' %>">
-                    <span class="glyphicon glyphicon-envelope">
-                    </span>
-                  </button>
-                </div>
-              </li>
-            </ul>
           </div>
           <div class="btn-group dropdown ownerEl threePeersEl">
             <button class="btn btn-default dropdown-toggle help" type="button" id="groupActionsButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'GROUP_ACTIONS' %>">

@@ -1,4 +1,4 @@
-    <div class="modal fade" role="dialog" id="emailInviteModal" aria-labelledby="emailInviteModal" aria-hidden="true">
+    <div class="modal fade" role="dialog" id="inviteModal" aria-labelledby="inviteModal" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">

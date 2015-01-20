@@ -72,12 +72,6 @@ $('#switch_lang').change(function(){
 // Define a few functions
 //
 
-// Popup with the URL to share
-function inviteUrlPopup(){
-  window.prompt(locale.TO_INVITE_SHARE_THIS_URL, window.location.href);
-  return false;
-}
-
 // Add a new email address to be notified when someone joins
 // This only add the email address on the interface
 function addNotifiedEmail(email){
@@ -2261,10 +2255,6 @@ function initVroom(room) {
     $('#helpButton').removeClass('active');
   });
 
-  // Show the invite by email dialog
-  $('#showEmailInvite').click(function(){
-    $('#emailInviteModal').modal('show');
-  });
   // Display the wipe data modal
   $('#wipeDataButton').click(function(){
     $('#wipeModal').modal('show');
