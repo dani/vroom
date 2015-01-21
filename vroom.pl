@@ -1574,8 +1574,8 @@ any '/api' => sub {
     }
     return $self->render(
       json => {
-        msg    => 'error',
-        status => $self->l('ERROR_OCCURRED')
+        status => 'error',
+        msg    => $self->l('ERROR_OCCURRED')
       }
     );
   }
