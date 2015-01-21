@@ -546,9 +546,12 @@ function initVroom(room) {
           if (countPeers() > 1){
             $('.threePeersEl').show(500);
           }
+          $('.email-list').find('.email-entry:not(:first)').remove();
           $.each(data.notif, function(index, obj){
             addNotifiedEmail(obj.email);
+            addEmailInputField(obj.email);
           });
+          $('.email-list').find('.email-entry:first').remove();
         }
         // We're are not owner of the room
         else{
@@ -2028,18 +2031,20 @@ function initVroom(room) {
       $('#ownerPassFields').hide(200);
     }
   });
-  // Add emails input fields
-  $(document).on('click','button.btn-add-email',function(e){
-    e.preventDefault();
+  function addEmailInputField(val){
     var parentEl = $('.email-list'),
-        currentEntry = $(this).parents('.email-entry:first'),
+        currentEntry = parentEl.find('.email-entry:last'),
         newEntry = $(currentEntry.clone()).appendTo(parentEl);
-    // Clear the value of the new input field
-    newEntry.find('input').val('');
+    newEntry.find('input').val(val);
     parentEl.find('.email-entry:not(:last) .btn-add-email')
       .removeClass('btn-primary').removeClass('btn-add-email')
       .addClass('btn-danger').addClass('btn-remove-email')
       .html('<span class="glyphicon glyphicon-minus"></span>');
+  }
+  // Add emails input fields
+  $(document).on('click','button.btn-add-email',function(e){
+    e.preventDefault();
+    addEmailInputField('');
   });
   $(document).on('click','button.btn-remove-email',function(e){
     e.preventDefault();
