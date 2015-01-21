@@ -10,7 +10,7 @@
             </h4>
           </div>
           <div class="modal-body">
-            <form id ="configureRoomForm" class="form-horizontal" role="form">
+            <form id="configureRoomForm" class="form-horizontal" role="form">
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="lockedSet">
                   <%=l 'LOCK_ROOM' %>
