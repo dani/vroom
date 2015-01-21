@@ -572,10 +572,12 @@ function initVroom(room) {
         if (data.join_auth == 'yes'){
           $('#joinPassLabel').addClass('btn-danger active');
           $('#joinPassButton').prop('checked', true);
+          $('#joinPassSet').bootstrapSwitch('state', true);
         }
         if (data.owner_auth == 'yes'){
           $('#ownerPassLabel').addClass('btn-danger active');
           $('#ownerPassButton').prop('checked', true);
+          $('#ownerPassSet').bootstrapSwitch('state', true);
         }
       }
     });
@@ -1402,11 +1404,13 @@ function initVroom(room) {
       $.notify(sprintf(locale.PASSWORD_PROTECT_ON_BY_s, stringEscape(who)), 'info');
       $('#joinPassLabel').addClass('btn-danger active');
       $('#joinPassButton').prop('checked', true);
+      $('#joinPassSet').bootstrapSwitch('state', true);
     }
     else{
       $.notify(sprintf(locale.PASSWORD_PROTECT_OFF_BY_s, stringEscape(who)), 'info');
       $('#joinPassLabel').removeClass('btn-danger active');
       $('#joinPassButton').prop('checked', false);
+      $('#joinPassSet').bootstrapSwitch('state', true);
     }
   });
   webrtc.on('owner_password', function(data){
@@ -1419,11 +1423,13 @@ function initVroom(room) {
         $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(who)), 'info');
         $('#ownerPassLabel').addClass('btn-danger active');
         $('#ownerPassButton').prop('checked', true);
+        $('#ownerPassSet').bootstrapSwitch('state', true);
       }
       else{
         $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(who)), 'info');
         $('#ownerPassLabel').removeClass('btn-danger active');
         $('#ownerPassButton').prop('checked', false);
+        $('#ownerPassSet').bootstrapSwitch('state', false);
       }
     }
     else{
@@ -2000,6 +2006,24 @@ function initVroom(room) {
     }
     else{
       $('#joinPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
+    }
+  });
+
+  // Hide or show password fields
+  $('#joinPassSet').on('switchChange.bootstrapSwitch', function(event, state) {
+    if (state){
+      $('#joinPassFields').show(200);
+    }
+    else{
+      $('#joinPassFields').hide(200);
+    }
+  });
+  $('#ownerPassSet').on('switchChange.bootstrapSwitch', function(event, state) {
+    if (state){
+      $('#ownerPassFields').show(200);
+    }   
+    else{
+      $('#ownerPassFields').hide(200);
     }
   });
 

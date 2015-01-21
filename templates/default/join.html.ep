@@ -82,6 +82,12 @@
               </span>
             </button>
           </div>
+          <div class="btn-group ownerEl">
+            <button class="btn btn-default help" type="button" data-toggle="modal" data-target="#configureModal" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
+              <span class="glyphicon glyphicon-cog">
+              </span>
+            </button>
+          </div>
           <div class="btn-group dropdown ownerEl threePeersEl">
             <button class="btn btn-default dropdown-toggle help" type="button" id="groupActionsButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'GROUP_ACTIONS' %>">
               <span class="glyphicon glyphicon-flag">
@@ -774,6 +780,7 @@
       </div>
     </div>
 %=include 'invite_modal'
+%=include 'configure_modal'
 %=include 'owner_password_modal'
 %=include 'join_password_modal'
 %=include 'noscript'

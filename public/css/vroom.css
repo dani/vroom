@@ -147,6 +147,9 @@
 #mainVideo {
   display: none;
 }
+.hidden-form {
+  display: none;
+}
 .actionMute:before{
   font-family: 'Glyphicons Halflings';
   content: "\e036";
