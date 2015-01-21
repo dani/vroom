@@ -955,7 +955,7 @@ function initVroom(room) {
             action: 'promote_peer',
             param: {
               room: roomName,
-              peer: id
+              peer_id: id
             }
           })
         },
