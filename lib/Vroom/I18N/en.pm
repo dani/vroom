@@ -139,8 +139,7 @@ our %Lexicon = (
   "ADD_NOTIFICATION"                     => "Add a notification",
   "ADD_THIS_ADDRESS"                     => "Add this address",
   "REMOVE_THIS_ADDRESS"                  => "Remove this address",
-  "NOTIFICATION_ON_JOIN"                 => "You can set a list of email address which will receive a notification each time " .
-                                            "someone joins this room",
+  "NOTIFICATION_ON_JOIN"                 => "Email addresses to notify when someone joins this room",
   "s_WILL_BE_NOTIFIED"                   => "%s will receive a notification each time someone joins this room",
   "s_WONT_BE_NOTIFIED_ANYMORE"           => "%s won't be notified anymore",
   "s_JOINED_ROOM_s"                      => "%s joined room %s",

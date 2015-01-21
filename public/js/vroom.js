@@ -2028,6 +2028,23 @@ function initVroom(room) {
       $('#ownerPassFields').hide(200);
     }
   });
+  // Add emails input fields
+  $(document).on('click','button.btn-add-email',function(e){
+    e.preventDefault();
+    var parentEl = $('.email-list'),
+        currentEntry = $(this).parents('.email-entry:first'),
+        newEntry = $(currentEntry.clone()).appendTo(parentEl);
+    // Clear the value of the new input field
+    newEntry.find('input').val('');
+    parentEl.find('.email-entry:not(:last) .btn-add-email')
+      .removeClass('btn-primary').removeClass('btn-add-email')
+      .addClass('btn-danger').addClass('btn-remove-email')
+      .html('<span class="glyphicon glyphicon-minus"></span>');
+  });
+  $(document).on('click','button.btn-remove-email',function(e){
+    e.preventDefault();
+    $(this).parents('.email-entry:first').remove();
+  });
 
   $('#ownerPassButton').change(function(){
     var action = ($(this).is(':checked')) ? 'set':'unset';
