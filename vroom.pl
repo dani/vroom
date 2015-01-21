@@ -1494,7 +1494,7 @@ any '/api' => sub {
       # If we just have been promoted to owner
       if ($self->session($room->{name})->{role} ne 'owner' &&
           $self->get_peer_role({room => $room->{name}, peer_id => $peer_id}) eq 'owner'){
-        $self->session($room)->{role} = 'owner';
+        $self->session($room->{name})->{role} = 'owner';
         $self->associate_key_to_room(
           room => $room->{name},
           key  => $self->session('key'),
@@ -1564,7 +1564,7 @@ any '/api' => sub {
   # Promote a participant to be owner of a room
   elsif ($req->{action} eq 'promote_peer'){
     my $peer_id = $req->{param}->{peer_id};
-    if ($peer_id && $self->promote_peer({room => $room, peer_id => $peer_id})){
+    if ($peer_id && $self->promote_peer({room => $room->{name}, peer_id => $peer_id})){
       return $self->render(
         json => {
           status => 'success',
