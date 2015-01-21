@@ -564,10 +564,12 @@ function initVroom(room) {
         if (data.locked == 'yes'){
           $('#lockLabel').addClass('btn-danger active');
           $('#lockButton').prop('checked', true);
+          $('#lockedSet').bootstrapSwitch('state', true);
         }
         if (data.ask_for_name == 'yes'){
           $('#askForNameLabel').addClass('btn-danger active');
           $('#askForNameButton').prop('checked', true);
+          $('#askForNameSet').bootstrapSwitch('state', true);
         }
         if (data.join_auth == 'yes'){
           $('#joinPassLabel').addClass('btn-danger active');
