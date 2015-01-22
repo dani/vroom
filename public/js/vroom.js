@@ -9,6 +9,9 @@ Daniel Berteaud <daniel@firewall-services.com>
 $.notify.defaults( { globalPosition: 'bottom left' } );
 // Enable tooltip on required elements
 $('.help').tooltip({container: 'body'});
+$('.modal').on('show.bs.modal', function(){
+  $('.help').tooltip('hide');
+});
 // Enable bootstrap-swicth
 $('.bs-switch').bootstrapSwitch();
 
@@ -537,7 +540,7 @@ function initVroom(room) {
           peers[id].role = data.role;
           if (data.role == 'owner'){
             // If this peer is a owner, we add the mark on its preview
-            $('#overlay_' + id).append($('<div></div>').attr('id', 'owner_' + id).addClass('owner'));
+            $('#overlay_' + id).append($('<div></div>').attr('id', 'owner_' + id).addClass('owner hidden-xs'));
             // And we disable owner's action for him
             $('#ownerActions_' + id).remove();
           }
@@ -643,10 +646,10 @@ function initVroom(room) {
       // the owner actions (overlay)
       $('<div></div>').addClass('volumeBar').attr('id', 'volume_' + id).appendTo(div);
       $('<div></div>').addClass('displayName').attr('id', 'name_' + id).appendTo(div);
-      $('<div></div>').attr('id', 'overlay_' + id).appendTo(div);
+      $('<div></div>').attr('id', 'overlay_' + id).addClass('hidden-xs').appendTo(div);
       // Will contains per peer action menu (mute/pause/kick), but will only be displayed
       // on owners screen
-      $('<div></div>').addClass('ownerActions').attr('id', 'ownerActions_' + id).appendTo(div)
+      $('<div></div>').addClass('ownerActions hidden-xs').attr('id', 'ownerActions_' + id).appendTo(div)
         .append($('<div></div>',{
            class: 'btn-group'
          })
