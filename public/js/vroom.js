@@ -1742,6 +1742,7 @@ function initVroom(room) {
       success: function(data) {
         $('#ownerPass,#ownerPassConfirm,#joinPass,#joinPassConfirm').val('');
         if (data.status == 'success'){
+          $('#configureModal').modal('hide');
           $.notify(data.msg, 'info');
           webrtc.sendToAll('room_conf_updated');
         }
