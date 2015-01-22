@@ -1783,7 +1783,7 @@ function initVroom(room) {
   });
 
   // Handle hangup/close window
-  $('#logoutButton').click(function(){
+  $('.btn-logout').click(function(){
     $('#quitModal').modal('show');
     if (!$('#muteMicButton').is(':checked')){
       muteMic();
@@ -1795,7 +1795,7 @@ function initVroom(room) {
   // Remove the active class on the logout button if
   // the modal is closed
   $('#quitModal').on('hide.bs.modal',function(){
-    $('#logoutButton').removeClass('active');
+    $('.btn-logout').removeClass('active');
     if (!$('#muteMicButton').is(':checked')){
       unmuteMic();
     }
