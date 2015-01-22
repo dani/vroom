@@ -12,14 +12,6 @@ $('.help').tooltip({container: 'body'});
 // Enable bootstrap-swicth
 $('.bs-switch').bootstrapSwitch();
 
-// Animation on dropdown menus
-$('.dropdown').on('show.bs.dropdown', function(e){
-  $(this).find('.dropdown-menu').first().stop(true, true).slideDown(150);
-});
-$('.dropdown').on('hide.bs.dropdown', function(e){
-  $(this).find('.dropdown-menu').first().stop(true, true).slideUp(150);
-});
-
 // Strings we need translated
 var locale = {};
 
