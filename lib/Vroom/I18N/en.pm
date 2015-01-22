@@ -171,12 +171,6 @@ our %Lexicon = (
   "HELP_SHARE_SCREEN_BUTTON"             => "Share your screen, or just a window with others. Only available with Google Chrome for now.",
   "HELP_INVITE_MENU"                     => "This menu lets you invite other people",
   "HELP_EMAIL_INVITE_BUTTON"             => "This button send an invitation to the email adress you enterred",
-  "HELP_GROUP_ACTIONS"                   => "This menu contains global actions (which affects all the peers at once). It'll " .
-                                            "only be displayed if there's 3 or more participants in the room.",
-  "HELP_MUTE_EVERYONE_BUTTON"            => "This button will mute all the microphones (peers already muted won't be affected)",
-  "HELP_UNMUTE_EVERYONE_BUTTON"          => "This button will unmute all the microphones (peers already unmuted won't be affected)",
-  "HELP_SUSPEND_EVERYONE_BUTTON"         => "This button will suspend all the webcams (peers already suspended won't be affected)",
-  "HELP_RESUME_EVERYONE_BUTTON"          => "This button will resume all the webcam (peers already resumed wont be affected)",
   "HELP_CONF_MENU"                       => "This menu contains room configuration",
   "HELP_LOCK_BUTTON"                     => "This button will lock the room: nobody will be able to join it (except owners of the room)",
   "HELP_PASSWORD_BUTTON"                 => "This button will protect access to this room with a password. Note that this password " .

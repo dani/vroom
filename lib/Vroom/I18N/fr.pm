@@ -182,16 +182,6 @@ our %Lexicon = (
     "HELP_INVITE_MENU"                          => "Ce menu permet d'inviter d'autres personnes sur le salon.",
     "HELP_EMAIL_INVITE_BUTTON"                  => "Ce bouton vous permet d'envoyer une invitation par email (après avoir remplis " .
                                                    "le champs demandant l'adresse email)",
-    "HELP_GROUP_ACTIONS"                        => "Ce menu permet d'effectuer des actions sur l'ensemble des participants. Il ne " .
-                                                   "s'affiche que si le salon compte 3 participants ou plus",
-    "HELP_MUTE_EVERYONE_BUTTON"                 => "Permet de couper le micro de tous les participants (ceux dont le micro est " .
-                                                   "déjà coupé ne sont pas affectés)",
-    "HELP_UNMUTE_EVERYONE_BUTTON"               => "Permet de ré-activer le micro de tous les participants (ceux dont le micro " .
-                                                   "est actif ne sont pas affectés)",
-    "HELP_SUSPEND_EVERYONE_BUTTON"              => "Permet de mettre toutes les webcams en pause (ceux dont la webcam est déjà " .
-                                                   "en pause ne sont pas affectés)",
-    "HELP_RESUME_EVERYONE_BUTTON"               => "Permet de réactiver toutes les webcams (ceux dont la webcam est déjà active " .
-                                                   "ne sont pas affectés)",
     "HELP_CONF_MENU"                            => "Ce menu permet de configurer le salon. Il n'est accessible qu'aux propriétaires " .
                                                    "du salon",
     "HELP_LOCK_BUTTON"                          => "Permet de verrouiller le salon: plus personne ne pourra le rejoindre (exceptés " .

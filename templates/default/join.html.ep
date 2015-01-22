@@ -88,38 +88,6 @@
               </span>
             </button>
           </div>
-          <div class="btn-group dropdown ownerEl threePeersEl">
-            <button class="btn btn-default dropdown-toggle help" type="button" id="groupActionsButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'GROUP_ACTIONS' %>">
-              <span class="glyphicon glyphicon-flag">
-              </span>
-              <span class="caret">
-              </span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="groupActionsButton" id="confMenu">
-              <li class="text-center">
-                <div class="navbar-form">
-                  <div class="btn-group" data-toggle="buttons">
-                    <button type="button" class="btn btn-default help" id="muteEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_EVERYONE' %>">
-                      <span class="glyphicon glyphicon-volume-off">
-                      </span>
-                    </button>
-                    <button type="button" class="btn btn-default help" id="unmuteEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'UNMUTE_EVERYONE' %>">
-                      <span class="glyphicon glyphicon-volume-up">
-                      </span>
-                    </button>
-                    <button type="button" class="btn btn-default help" id="suspendEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUSPEND_EVERYONE' %>">
-                      <span class="glyphicon glyphicon-eye-close">
-                      </span>
-                    </button>
-                    <button type="button" class="btn btn-default help" id="resumeEveryoneButton" data-toggle="tooltip" data-placement="bottom" title="<%=l 'RESUME_EVERYONE' %>">
-                      <span class="glyphicon glyphicon-eye-open">
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
         </div>
         <div class="btn-group navbar-form navbar-left">
           <button class="btn btn-default dropdown-toggle help unauthEl" type="button" id="authMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>">
@@ -274,65 +242,6 @@
                   </div>
                   <div class="col-md-10">
                     <%=l 'HELP_EMAIL_INVITE_BUTTON' %>
-                  </div>
-                </div>
-              </div>
-              <div class="list-group-item row ownerEl threePeersEl">
-                <div class="col-md-1 text-center">
-                  <a data-toggle="collapse" href="#helpGroupActionsMenuCollapse" class="btn btn-default">
-                    <span class="glyphicon glyphicon-flag">
-                    </span>
-                    <span class="caret">
-                    </span>
-                  </a>
-                </div>
-                <div class="col-md-11">
-                  <%=l 'HELP_GROUP_ACTIONS' %>
-                </div>
-              </div>
-              <div id="helpGroupActionsMenuCollapse" class="collapse">
-                <div class="list-group-item row ownerEl threePeersEl">
-                  <div class="col-md-1 col-md-offset-1 text-center">
-                    <div class="btn btn-default">
-                      <span class="glyphicon glyphicon-volume-off">
-                      </span>
-                    </div>
-                  </div>
-                  <div class="col-md-10">
-                    <%=l 'HELP_MUTE_EVERYONE_BUTTON' %>
-                  </div>
-                </div>
-                <div class="list-group-item row ownerEl threePeersEl">
-                  <div class="col-md-1 col-md-offset-1 text-center">
-                    <div class="btn btn-default">
-                      <span class="glyphicon glyphicon-volume-up">
-                      </span>
-                    </div>
-                  </div>
-                  <div class="col-md-10">
-                    <%=l 'HELP_UNMUTE_EVERYONE_BUTTON' %>
-                  </div>
-                </div>
-                <div class="list-group-item row ownerEl threePeersEl">
-                  <div class="col-md-1 col-md-offset-1 text-center">
-                    <div class="btn btn-default">
-                      <span class="glyphicon glyphicon-eye-close">
-                      </span>
-                    </div>
-                  </div>
-                  <div class="col-md-10">
-                    <%=l 'HELP_SUSPEND_EVERYONE_BUTTON' %>
-                  </div>
-                </div>
-                <div class="list-group-item row ownerEl threePeersEl">
-                  <div class="col-md-1 col-md-offset-1 text-center">
-                    <div class="btn btn-default">
-                      <span class="glyphicon glyphicon-eye-open">
-                      </span>
-                    </div>
-                  </div>
-                  <div class="col-md-10">
-                    <%=l 'HELP_RESUME_EVERYONE_BUTTON' %>
                   </div>
                 </div>
               </div>

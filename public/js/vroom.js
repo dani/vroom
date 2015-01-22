@@ -493,10 +493,7 @@ function initVroom(room) {
         // Enable owner reserved menu
         if (data.role == 'owner'){
           $('.unauthEl').hide(500);
-          $('.ownerEl').not('.threePeersEl').show(500);
-          if (countPeers() > 1){
-            $('.threePeersEl').show(500);
-          }
+          $('.ownerEl').show(500);
           // Reset the list of email displayed, so first remove evry input field but the first one
           // We keep it so we can clone it again
           $('.email-list').find('.email-entry:not(:first)').remove();
@@ -740,14 +737,6 @@ function initVroom(room) {
       // Stop moh, we're not alone anymore
       $('#mohPlayer')[0].pause();
       $('.aloneEl').hide(300);
-      if (countPeers() > 1){
-        if (peers.local.role == 'owner'){
-          $('.threePeersEl').show(500);
-        }
-        else{
-          $('.threePeersEl').not('.ownerEl').show(500);
-        }
-      }
     }
     $(div).attr('id', 'peer_' + id);
     // Disable context menu on the video
@@ -1441,9 +1430,6 @@ function initVroom(room) {
     if (id != 'local'){
       checkMoh();
     }
-    if (countPeers() < 2){
-      $('.threePeersEl').hide(500);
-    }
   });
 
   // Detect connection lost
@@ -1642,39 +1628,6 @@ function initVroom(room) {
       $('#suspendCamLabel').removeClass('btn-danger');
       $.notify(locale.CAM_RESUMED, 'info');
     }
-  });
-
-  // Mute all the peers
-  $('#muteEveryoneButton').click(function(){
-    $.each(peers, function(id){
-      if (id != 'local'){
-        mutePeer(id, 'mute');
-      }
-    });
-  });
-  // Unmute all the peers
-  $('#unmuteEveryoneButton').click(function(){
-    $.each(peers, function(id){
-      if (id != 'local'){
-        mutePeer(id, 'unmute');
-      }
-    });
-  });
-  // Suspend all the peers
-  $('#suspendEveryoneButton').click(function(){
-    $.each(peers, function(id){
-      if (id != 'local' && peers[id].hasVideo){
-        pausePeer(id, 'pause');
-      }
-    });
-  });
-  // Resum all the peers
-  $('#resumeEveryoneButton').click(function(){
-    $.each(peers, function(id){
-      if (id != 'local' && peers[id].hasVideo){
-        pausePeer(id, 'resume');
-      }
-    });
   });
 
   // Handle auth to become room owner
