@@ -105,14 +105,14 @@
             </span>
           </button>
         </div>
-        <div class="navbar-form navbar-right" data-toggle="buttons" >
+        <div class="navbar-form navbar-right hidden-xs" data-toggle="buttons" >
           <div class="btn-group">
             <button id="helpButton" class="btn btn-default help" data-toggle="modal" data-target="#helpModal" rel="tooltip" data-placement="bottom" title="<%=l 'HELP' %>">
               <span class="glyphicon glyphicon-question-sign">
               </span>
             </button>
           </div>
-          <div class="btn-group hidden-xs">
+          <div class="btn-group">
             <div class="btn btn-default disabled">
               <span class="glyphicon glyphicon glyphicon-hourglass">
               </span>
