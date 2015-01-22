@@ -1658,6 +1658,7 @@ function initVroom(room) {
       success: function(data) {
         $('#authPass').val('');
         if (data.status == 'success'){
+          $('#ownerAuthModal').modal('hide');
           getRoomInfo();
           $.notify(data.msg, 'success');
         }
