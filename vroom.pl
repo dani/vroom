@@ -937,6 +937,23 @@ helper associate_key_to_room => sub {
   return 1;
 };
 
+# Make an API key admin of every rooms
+helper make_key_admin => sub {
+  my $self = shift;
+  my ($token) = @_;
+  my $key = $self->get_key_by_token($token);
+  if (!$key){
+    return 0;
+  }
+  my $sth = eval {
+    $self->db->prepare('UPDATE `api_keys`
+                         SET `admin`=\'1\'
+                         WHERE `id`=?');
+  };
+  $sth->execute($key->{id});
+  return 1;
+};
+
 # Check if a key can perform an action against a room
 helper key_can_do_this => sub {
   my $self = shift;
@@ -1012,6 +1029,10 @@ get '/help' => 'help';
 get '/admin/:room' => { room => '' } => sub {
   my $self = shift;
   my $room = $self->stash('room');
+  # Someone accessing /admin is considered an admin
+  # For now, the auth is handled outside of VROOM itself
+  my $token = $self->req->headers->header('X-VROOM-API-Key');
+  $self->make_key_admin($token);
   if ($room eq ''){
     $self->purge_rooms;
     return $self->render('admin');
@@ -1261,6 +1282,24 @@ any '/api' => sub {
     action => $req->{action},
     param  => $req->{param}
   );
+
+  # Here are mthod not tied to a room
+  if ($req->{action} eq 'get_room_list'){
+    my $rooms = $self->get_room_list;
+    # Blank out a few param we don't need
+    foreach my $r (keys %{$rooms}){
+      foreach my $p (qw/join_password owner_password owner token etherpad_group/){
+        delete $rooms->{$r}->{$p};
+      }
+    }
+    return $self->render(
+      json => {
+        status => 'success',
+        rooms  => $rooms
+      }
+    );
+  }
+
   $room = $self->get_room_by_name($req->{param}->{room});
   if (!$res || (!$room && $req->{param}->{room})){
     return $self->render(
@@ -1312,7 +1351,7 @@ any '/api' => sub {
     );
   }
   # Handle room lock/unlock
-  if ($req->{action} =~ m/(un)?lock_room/){
+  elsif ($req->{action} =~ m/(un)?lock_room/){
     $room->{locked} = ($req->{action} eq 'lock_room') ? '1':'0';
     if ($self->modify_room($room)){
       return $self->render(

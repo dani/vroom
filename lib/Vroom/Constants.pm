@@ -149,7 +149,7 @@ use constant JS_STRINGS => qw(
 # API actions
 use constant API_ACTIONS => {
   admin => {
-    list_rooms     => 1,
+    get_room_list  => 1,
     set_persistent => 1
   },
   owner => {

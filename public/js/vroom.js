@@ -257,7 +257,7 @@ function initAdmin(){
   var matches = 0;
 
   // Update display of room list
-  function updateDeviceList(filter, min, max){
+  function updateRoomList(filter, min, max){
     $('#deviceList').html('');
     var filterRe = new RegExp(filter, "gi");
     var i = 0;
@@ -266,14 +266,24 @@ function initAdmin(){
       if (filter === '' || obj.name.match(filterRe)){
         matches++;
         if (i >= min && i < max){
-          $('#deviceList').append($('<tr>')
+          $('#roomList').append($('<tr>')
             .append($('<td>').html(stringEscape(obj.name)))
             .append($('<td>')
               .append($('<div>').addClass('btn-group')
                 .append($('<a>').addClass('btn btn-default').attr('href',rootUrl + obj.name)
                   .html(
                     $('<span>').addClass('glyphicon glyphicon-log-in')
-                   )
+                  )
+                )
+                .append($('<button>').addClass('btn btn-default btn-configure').data('room', obj.name)
+                  .html(
+                    $('<span>').addClass('glyphicon glyphicon-cog')
+                  )
+                )
+                .append($('<a>').addClass('btn btn-default btn-remove').data('room', obj.name)
+                  .html(
+                    $('<span>').addClass('glyphicon glyphicon-trash')
+                  )
                 )
               )
             )
@@ -298,8 +308,8 @@ function initAdmin(){
       },
       success: function(data){
         if (data.status === 'success'){
-          deviceList = data.data;
-          matches = Object.keys(deviceList).length;
+          roomList = data.rooms;
+          matches = Object.keys(roomList).length;
           updateRoomList($('searchRoom').val(), 0, matches);
         }
         else{
