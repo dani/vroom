@@ -8,7 +8,7 @@ Daniel Berteaud <daniel@firewall-services.com>
 // Default notifications
 $.notify.defaults( { globalPosition: 'bottom left' } );
 // Enable tooltip on required elements
-$('.help').tooltip({container: 'body'});
+$('.help').tooltip({container: 'body', trigger: 'hover'});
 $('.modal').on('show.bs.modal', function(){
   $('.help').tooltip('hide');
 });
