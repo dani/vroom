@@ -251,168 +251,66 @@ function initIndex(){
   });
 }
 
-// Used on the management page
-function initManage(){
+// Used on the admin page
+function initAdmin(){
+  var roomList = {};
+  var matches = 0;
 
-  var data = {};
-
-  function sendAction(data,sw){
-    $.ajax({
-      url: rootUrl + 'admin/jsapi',
-      data: data,
-      error: function(data) {
-        $.notify(locale.ERROR_OCCURRED, 'error');
-        if (typeof(sw) == 'object'){
-          sw.bootstrapSwitch('toggleState', true);
+  // Update display of room list
+  function updateDeviceList(filter, min, max){
+    $('#deviceList').html('');
+    var filterRe = new RegExp(filter, "gi");
+    var i = 0;
+    matches = 0;
+    $.each(roomList, function (index, obj){
+      if (filter === '' || obj.name.match(filterRe)){
+        matches++;
+        if (i >= min && i < max){
+          $('#deviceList').append($('<tr>')
+            .append($('<td>').html(stringEscape(obj.name)))
+            .append($('<td>')
+              .append($('<div>').addClass('btn-group')
+                .append($('<a>').addClass('btn btn-default').attr('href',rootUrl + obj.name)
+                  .html(
+                    $('<span>').addClass('glyphicon glyphicon-log-in')
+                   )
+                )
+              )
+            )
+          );
         }
+        i++;
+      }
+    });
+  }
+
+  
+  function getRooms(){
+    $.ajax({
+      data: {
+        req: JSON.stringify({
+          action: 'get_room_list',
+          param: {}
+        })        
       },
-      success: function(data) {
+      error: function() {
+        $.notify(locale.ERROR_OCCURRED, 'error');
+      },
+      success: function(data){
         if (data.status === 'success'){
-          $.notify(data.msg, 'success');
+          deviceList = data.data;
+          matches = Object.keys(deviceList).length;
+          updateRoomList($('searchRoom').val(), 0, matches);
         }
         else{
-          $.notify(data.msg, 'error');
-          if (typeof(sw) == 'object'){
-            sw.bootstrapSwitch('toggleState', true);
-          }
+          $.notify(locale.ERROR_OCCURED, 'error');
         }
       }
     });
   }
 
-  // Replace timestamps with a readable date
-  $('.timeStamp').each(function(){
-    $(this).html(timeStamp2Date(parseInt($(this).html())));
-  });
-
-  $('.bs-switch').on('switchChange.bootstrapSwitch', function(event, state) {
-    var sw = $(this);
-    var param = $(this).prop('id');
-    var room = $(this).data('room');
-    data = {room: room};
-    if (param === 'lockSwitch'){
-      data.action = (state) ? 'lock' : 'unlock';
-      sendAction(data,sw);
-    }
-    else if (param === 'askForNameSwitch'){
-      data.action = 'askForName';
-      data.type = (state) ? 'set' : 'unset';
-      sendAction(data,sw);
-    }
-    else if (param === 'joinPassSwitch'){
-      if (state){
-        $('#joinPassModal').modal('show');
-        // switch back to off in case it's cancelled
-        sw.bootstrapSwitch('toggleState', true);
-      }
-      else{
-        data.action = 'setPassword';
-        data.type = 'join';
-        sendAction(data,sw);
-      }
-    }
-    else if (param === 'ownerPassSwitch'){
-      if (state){
-        $('#ownerPassModal').modal('show');
-        sw.bootstrapSwitch('toggleState', true);
-      }
-      else{
-        data.action = 'setPassword';
-        data.type = 'owner';
-        sendAction(data,sw);
-      }
-    }
-    else if (param === 'persistentSwitch'){
-      data.action = 'set_persistent';
-      data.set = (state) ? 'on' : 'off';
-      sendAction(data,sw);
-    }
-    // Something isn't implemented yet ?
-    else{
-      $.notify(locale.ERROR_OCCURRED, 'error');
-      setTimeout(function(){
-        sw.bootstrapSwitch('toggleState', true);
-      }, 500);
-    }
-  });
-
-  $('#joinPassForm').submit(function(event) {
-    event.preventDefault();
-    var pass  = $('#joinPass').val();
-    var pass2 = $('#joinPassConfirm').val();
-    if (pass == pass2 && pass != ''){
-      $('#setJoinPassButton').addClass('disabled');
-      $('#joinPass').val('');
-      $('#joinPassConfirm').val('');
-      data.action = 'setPassword';
-      data.type = 'join';
-      data.password = pass
-      sendAction(data, $('#joinPassSwitch'));
-      $('#joinPassSwitch').bootstrapSwitch('toggleState', true);
-      $('#joinPassModal').modal('hide');
-    }
-    else{
-      $('#joinPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
-    }
-  });
-
-  $('#ownerPassForm').submit(function(event) {
-    event.preventDefault();
-    var pass  = $('#ownerPass').val();
-    var pass2 = $('#ownerPassConfirm').val();
-    if (pass == pass2 && pass != ''){
-      $('#setOwnerPassButton').addClass('disabled');
-      $('#ownerPass').val('');
-      $('#ownerPassConfirm').val('');
-      data.action = 'setPassword';
-      data.type = 'owner';
-      data.password = pass
-      sendAction(data, $('#ownerPassSwitch'));
-      $('#ownerPassSwitch').bootstrapSwitch('toggleState', true);
-      $('#ownerPassModal').modal('hide');
-    }
-    else{
-      $('#ownerPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
-    }
-  });
-
-  // Handle room deletion
-  $('#deleteRoomButton').click(function(){
-    $('#deleteRoomModal').modal('show');
-    data.room = $(this).data('room');
-  });
-  $('#confirmDeleteButton').click(function(){
-    data.action = 'deleteRoom';
-    sendAction(data);
-    $('#deleteRoomModal').modal('hide');
-    setTimeout(function(){
-      window.location.assign(rootUrl + 'admin');
-    }, 2000);
-  });
-
-  // Show the invite by email dialog
-  $('#showEmailInvite').click(function(){
-    $('#emailInviteModal').modal('show');
-    data.room = $(this).data('room');
-  });
-
-  // Handle Email Invitation
-  $('#inviteEmail').submit(function(event) {
-    event.preventDefault();
-    var rcpt    = $('#recipient').val();
-        message = $('#message').val();
-    // Simple email address verification
-    // not fullproof, but email validation is a real nightmare
-    if (!rcpt.match(/\S+@\S+\.\S+/)){
-      $.notify(locale.ERROR_MAIL_INVALID, 'error');
-      return;
-    }
-    data.action = 'invite';
-    data.recipient = rcpt;
-    data.message = message
-    sendAction(data);
-  });
-
+  // Get room list right after loading the page
+  getRooms();
 }
 
 // This is the main function called when you join a room

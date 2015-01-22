@@ -3,44 +3,47 @@
 %=include 'public_toolbar'
 <div class="container-fluid">
 %= include 'noscript'
+%= include 'configure_modal'
+%= include 'invite_modal'
   <div class="panel panel-default">
     <div class="panel-heading">
-      <%=l 'EXISTING_ROOMS' %>
+      <div class="form-inline">
+        <div class="form-group">
+          <div class="input-group">
+            <input type="text" id="searchRoom" class="form-control" value=""/>
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-search">
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>
-            <%=l 'ROOM_NAME' %>
-          </th>
-          <th>
-            <%=l 'MANAGE' %>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <%
-          my $rooms = $self->get_room_list();
-          foreach my $room (keys %{$rooms}){
-        %>
-        <tr>
-          <td>
-            <%= $room %>
-          </td>
-          <td>
-            <a class="btn btn-primary" href="<%= $self->get_url('/admin/') . $room %>">
+    <div class="panel-body">
+      <div class="text-center" id="pagination">
+      </div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>
+              <%=l 'ROOM_NAME' %>
+            </th>
+            <th>
               <%=l 'MANAGE' %>
-            </a>
-            <a class="btn btn-default" href="<%= $self->get_url('/') . $room %>">
-              <%=l 'JOIN_THIS_ROOM' %>
-            </a>
-          </td>
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="roomList">
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
 %=include 'js_common'
+<script>
+$(document).ready(function(){
+  initAdmin();
+});
+</script>
 %=include 'footer'
