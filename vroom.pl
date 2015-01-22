@@ -1367,7 +1367,7 @@ any '/api' => sub {
     $room->{locked} = ($req->{param}->{locked}) ? '1' : '0';
     $room->{ask_for_name} = ($req->{param}->{ask_for_name}) ? '1' : '0';
     foreach my $pass (qw/join_password owner_password/){
-      if (!$req->{param}->{$pass}){
+      if ($req->{param}->{$pass} eq Mojo::JSON->false){
         $room->{$pass} = undef;
       }
       elsif ($req->{param}->{$pass} ne ''){
