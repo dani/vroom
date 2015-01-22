@@ -508,18 +508,11 @@ function initVroom(room) {
             $('.unauthEl').hide(500);
           }
         }
-        if (data.locked == 'yes'){
-          $('#lockedSet').bootstrapSwitch('state', true);
-        }
-        if (data.ask_for_name == 'yes'){
-          $('#askForNameSet').bootstrapSwitch('state', true);
-        }
-        if (data.join_auth == 'yes'){
-          $('#joinPassSet').bootstrapSwitch('state', true);
-        }
-        if (data.owner_auth == 'yes'){
-          $('#ownerPassSet').bootstrapSwitch('state', true);
-        }
+        // Update config switches
+        $('#lockedSet').bootstrapSwitch('state', data.locked == 'yes');
+        $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name == 'yes');
+        $('#joinPassSet').bootstrapSwitch('state', data.join_auth == 'yes');
+        $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth == 'yes');
       }
     });
   }
