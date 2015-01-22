@@ -1634,10 +1634,11 @@ any '/api' => sub {
   # Notify the backend when we join a room
   elsif ($req->{action} eq 'join'){
     my $name = $req->{param}->{name} || '';
-    my $subj = sprintf($self->l('s_JOINED_ROOM_s'), ($name eq '') ? $self->l('SOMEONE') : $name, $room);
+    my $subj = sprintf($self->l('s_JOINED_ROOM_s'), ($name eq '') ? $self->l('SOMEONE') : $name, $room->{name});
     # Send notifications
-    my $recipients = $self->get_notification($room);
+    my $recipients = $self->get_notification($room->{name});
     foreach my $rcpt (keys %{$recipients}){
+      $self->app->log->debug('Sending an email to ' . $recipients->{$rcpt}->{email});
       my $sent = $self->mail(
         to      => $recipients->{$rcpt}->{email},
         subject => $subj,
