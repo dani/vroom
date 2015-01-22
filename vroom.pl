@@ -620,7 +620,7 @@ helper add_notification => sub {
   my $self = shift;
   my ($room,$email) = @_;
   my $data = $self->get_room_by_name($room);
-  if (!$data){
+  if (!$data || !$self->valid_email($email)){
     return 0;
   }
   my $sth = eval {
@@ -632,8 +632,34 @@ helper add_notification => sub {
     $data->{id},
     $email
   );
-  $self->app->log->debug($self->session('name') . 
-       " has added $email to the list of email which will be notified when someone joins room $room");
+  return 1;
+};
+
+# Update the list of notified email for a room in one go
+# Take the room and an array ref of emails
+helper update_email_notifications => sub {
+  my $self = shift;
+  my ($room,$emails) = @_;
+  my $data = $self->get_room_by_name($room);
+  if (!$data){
+    return 0;
+  }
+  # First, drop all existing notifications
+  my $sth = eval {
+    $self->db->prepare('DELETE FROM `email_notifications`
+                          WHERE `room_id`=?');
+  };
+  $sth->execute(
+    $data->{id},
+  );
+  # Now, insert new emails
+  foreach my $email (@$emails){
+    # Skip empty inputs
+    if ($email eq ''){
+      next;
+    }
+    $self->add_notification($room,$email) || return 0;
+  }
   return 1;
 };
 
@@ -1348,7 +1374,7 @@ any '/api' => sub {
         $room->{$pass} = Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($req->{param}->{$pass})->generate;
       }
     }
-    if ($self->modify_room($room)){
+    if ($self->modify_room($room) && $self->update_email_notifications($room->{name},$req->{param}->{emails})){
       return $self->render(
         json => {
           status => 'success',

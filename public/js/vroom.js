@@ -546,12 +546,17 @@ function initVroom(room) {
           if (countPeers() > 1){
             $('.threePeersEl').show(500);
           }
+          // Reset the list of email displayed, so first remove evry input field but the first one
+          // We keep it so we can clone it again
           $('.email-list').find('.email-entry:not(:first)').remove();
           $.each(data.notif, function(index, obj){
             addNotifiedEmail(obj.email);
             addEmailInputField(obj.email);
           });
-          $('.email-list').find('.email-entry:first').remove();
+          // Now, remove the first one if the list is not empty
+          if (data.notif.length > 0){
+            $('.email-list').find('.email-entry:first').remove();
+          }
         }
         // We're are not owner of the room
         else{
