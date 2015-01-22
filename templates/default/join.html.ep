@@ -120,81 +120,6 @@
               </li>
             </ul>
           </div>
-          <div class="btn-group dropdown ownerEl">
-            <button class="btn btn-default dropdown-toggle help" type="button" id="confMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
-              <span class="glyphicon glyphicon-wrench">
-              </span>
-              <span class="caret">
-              </span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="confMenuButton" id="confMenu">
-              <li class="text-center">
-                <div class="navbar-form">
-                  <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-default help" id="lockLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PREVENT_TO_JOIN' %>">
-                      <input type="checkbox" id="lockButton">
-                      <span class="glyphicon glyphicon-ban-circle">
-                      </span>
-                    </label>
-                    <label class="btn btn-default help" id="joinPassLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PASSWORD_PROTECT' %>">
-                      <input type="checkbox" id="joinPassButton">
-                      <span class="glyphicon glyphicon-lock">
-                      </span>
-                    </label>
-                    <label class="btn btn-default help" id="ownerPassLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'RESERVE_THIS_ROOM' %>">
-                      <input type="checkbox" id="ownerPassButton">
-                      <span class="glyphicon glyphicon-pushpin">
-                      </span>
-                    </label>
-                    <label class="btn btn-default help" id="askForNameLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'FORCE_DISPLAY_NAME' %>">
-                      <input type="checkbox" id="askForNameButton">
-                      <span class="glyphicon glyphicon-leaf">
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </li>
-              <li class="divider">
-              </li>
-              <li class="text-center">
-                <div class="navbar-form">
-                  <div class="btn-group">
-                    <%
-                      my $wipeTitle = ($etherpad) ? 'WIPE_CHAT_AND_PAD' : 'WIPE_CHAT';
-                    %>
-                    <button id="wipeDataButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l $wipeTitle %>">
-                      <span class="glyphicon glyphicon-fire">
-                      </span>
-                    </button>
-                    <button id="terminateRoomButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'TERMINATE_ROOM' %>">
-                      <span class="glyphicon glyphicon-trash">
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </li>
-              <li class="divider">
-              </li>
-              <li>
-                <p class="text-center">
-                  <%=l 'NOTIFICATION_ON_JOIN' %>
-                </p>
-                <ul class="list-inline" id="emailNotificationList">
-                </ul>
-                <form class="navbar-form" id="newEmailNotificationForm">
-                  <div class="input-group">
-                    <input type="email" id="newEmailNotification" class="form-control help" placeholder="<%=l 'EMAIL_PLACEHOLDER' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'ADD_NOTIFICATION' %>"/>
-                    <span class="input-group-btn">
-                      <button id="newEmailNotificationButton" type="submit" class="btn btn-default help disabled" data-toggle="tooltip" data-placement="bottom" title="<%=l 'ADD_THIS_ADDRESS' %>">
-                        <span class="glyphicon glyphicon-ok">
-                        </span>
-                      </button>
-                    </span>
-                  </div>
-                </form>
-              </li>
-            </ul>
-          </div>
         </div>
         <div class="btn-group navbar-form navbar-left">
           <button class="btn btn-default dropdown-toggle help unauthEl" type="button" id="authMenuButton" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>">
@@ -781,8 +706,6 @@
     </div>
 %=include 'invite_modal'
 %=include 'configure_modal'
-%=include 'owner_password_modal'
-%=include 'join_password_modal'
 %=include 'noscript'
     <div class="frame">
       <div id="chatMenu" class="nav-collapse collapse">

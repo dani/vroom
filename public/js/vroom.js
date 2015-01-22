@@ -72,51 +72,6 @@ $('#switch_lang').change(function(){
 // Define a few functions
 //
 
-// Add a new email address to be notified when someone joins
-// This only add the email address on the interface
-function addNotifiedEmail(email){
-  var id = email.replace(/['"]/g, '_');
-  $('<li></li>').html(email +
-                     '  <a href="javascript:void(0);" onclick="removeNotifiedEmail(\'' + email.replace('\'', '\\\'') + '\');"' +
-                     ' title="' + locale.REMOVE_THIS_ADDRESS + '">' +
-                     '    <span class="glyphicon glyphicon-remove-circle"></span>' +
-                     '  </a>')
-   .attr('id', 'emailNotification_' + id)
-   .appendTo('#emailNotificationList');
-}
-
-// Remove the address from the list
-// Remove it from the interface and request the frontend to remove it from
-// the database too
-function removeNotifiedEmail(email){
-  var id = escapeJqSelector(email.replace(/['"]/, '_').replace('\\\'', '\''));
-  $.ajax({
-    data: {
-      req: JSON.stringify({
-        action: 'email_notification',
-        param: {
-          set: 'off',
-          email: email,
-          room: roomName
-        }
-      })
-    },
-    error: function() {
-      $.notify(locale.ERROR_OCCURRED, 'error');
-    },
-    success: function(data) {
-      if (data.status == 'success'){
-        $.notify(data.msg, 'info');
-        $('#emailNotification_' + id).remove();
-        webrtc.sendToAll('notif_change', {});
-      }
-      else{
-        $.notify(data.msg, 'error');
-      }
-    }
-  });
-}
-
 // Escape a string to be used as a jQuerry selector
 // Taken from http://totaldev.com/content/escaping-characters-get-valid-jquery-id
 function escapeJqSelector(string){
@@ -222,22 +177,18 @@ function maxHeight(){
 $('#ownerPassConfirm').on('input', function() {
   if ($('#ownerPassConfirm').val() == $('#ownerPass').val() &&
       $('#ownerPassConfirm').val() != ''){
-    $('#setOwnerPassButton').removeClass('disabled');
     $('#ownerPassConfirm').parent().removeClass('has-error');
   }
   else{
-    $('#setOwnerPassButton').addClass('disabled');
     $('#ownerPassConfirm').parent().addClass('has-error');
   }
 });
 $('#joinPassConfirm').on('input', function() {
   if ($('#joinPass').val() == $('#joinPassConfirm').val() &&
       $('#joinPass').val() != ''){
-    $('#setJoinPassButton').removeClass('disabled');
     $('#joinPassConfirm').parent().removeClass('has-error');
   }
   else{
-    $('#setJoinPassButton').addClass('disabled');
     $('#joinPassConfirm').parent().addClass('has-error');
   }
 });
@@ -550,7 +501,6 @@ function initVroom(room) {
           // We keep it so we can clone it again
           $('.email-list').find('.email-entry:not(:first)').remove();
           $.each(data.notif, function(index, obj){
-            addNotifiedEmail(obj.email);
             addEmailInputField(obj.email);
           });
           // Now, remove the first one if the list is not empty
@@ -570,23 +520,15 @@ function initVroom(room) {
           }
         }
         if (data.locked == 'yes'){
-          $('#lockLabel').addClass('btn-danger active');
-          $('#lockButton').prop('checked', true);
           $('#lockedSet').bootstrapSwitch('state', true);
         }
         if (data.ask_for_name == 'yes'){
-          $('#askForNameLabel').addClass('btn-danger active');
-          $('#askForNameButton').prop('checked', true);
           $('#askForNameSet').bootstrapSwitch('state', true);
         }
         if (data.join_auth == 'yes'){
-          $('#joinPassLabel').addClass('btn-danger active');
-          $('#joinPassButton').prop('checked', true);
           $('#joinPassSet').bootstrapSwitch('state', true);
         }
         if (data.owner_auth == 'yes'){
-          $('#ownerPassLabel').addClass('btn-danger active');
-          $('#ownerPassButton').prop('checked', true);
           $('#ownerPassSet').bootstrapSwitch('state', true);
         }
       }
@@ -1360,92 +1302,6 @@ function initVroom(room) {
     getPeerRole(data.id);
   });
 
-  // A new notified email has been added or removed
-  // We need to refresh the whole list
-  webrtc.on('notif_change', function(data){
-    if (peers.local.role != 'owner' || data.roomType == 'screen' || peers[data.id].role != 'owner'){
-      return;
-    }
-    $('#emailNotificationList > li').remove();
-    getRoomInfo();
-  });
-
-  // askForName set/unset
-  webrtc.on('ask_for_name', function(data){
-    if (peers.local.role != 'owner' || peers[data.id].role != 'owner'){
-      return;
-    }
-    if (data.payload.action == 'set'){
-      roomInfo.ask_for_name = 'yes';
-      $('#askForNameLabel').addClass('btn-danger active');
-      $('#askForNameButton').prop('checked', true);
-    }
-    else{
-      roomInfo.ask_for_name = 'no';
-      $('#askForNameLabel').removeClass('btn-danger active');
-      $('#askForNameButton').prop('checked', false);
-    }
-  });
-
-  // A few notif on password set/unset or lock/unlock
-  webrtc.on('room_lock', function(data){
-    if (data.roomType == 'screen' || peers[data.id].role != 'owner'){
-      return;
-    }
-    if (data.payload.action == 'lock'){
-      roomInfo.locked = 'yes';
-      $('#lockLabel').addClass('btn-danger active');
-      $('#lockButton').prop('checked', true);
-      $.notify(sprintf(locale.ROOM_LOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
-    }
-    else{
-      roomInfo.locked = 'no';
-      $('#lockLabel').removeClass('btn-danger active');
-      $('#lockButton').prop('checked', false);
-      $.notify(sprintf(locale.ROOM_UNLOCKED_BY_s, stringEscape(peers[data.id].displayName)), 'info');
-    }
-  });
-  webrtc.on('password_protect', function(data){
-    if (data.roomType == 'screen' || peers[data.id].role != 'owner'){
-      return;
-    }
-    var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
-    if (data.payload.action == 'set'){
-      $.notify(sprintf(locale.PASSWORD_PROTECT_ON_BY_s, stringEscape(who)), 'info');
-      $('#joinPassLabel').addClass('btn-danger active');
-      $('#joinPassButton').prop('checked', true);
-      $('#joinPassSet').bootstrapSwitch('state', true);
-    }
-    else{
-      $.notify(sprintf(locale.PASSWORD_PROTECT_OFF_BY_s, stringEscape(who)), 'info');
-      $('#joinPassLabel').removeClass('btn-danger active');
-      $('#joinPassButton').prop('checked', false);
-      $('#joinPassSet').bootstrapSwitch('state', true);
-    }
-  });
-  webrtc.on('owner_password', function(data){
-    if (data.roomType == 'screen' || peers[data.id].role != 'owner'){
-      return;
-    }
-    if (peers.local.role == 'owner'){
-      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
-      if (data.payload.action == 'set'){
-        $.notify(sprintf(locale.OWNER_PASSWORD_CHANGED_BY_s, stringEscape(who)), 'info');
-        $('#ownerPassLabel').addClass('btn-danger active');
-        $('#ownerPassButton').prop('checked', true);
-        $('#ownerPassSet').bootstrapSwitch('state', true);
-      }
-      else{
-        $.notify(sprintf(locale.OWNER_PASSWORD_REMOVED_BY_s, stringEscape(who)), 'info');
-        $('#ownerPassLabel').removeClass('btn-danger active');
-        $('#ownerPassButton').prop('checked', false);
-        $('#ownerPassSet').bootstrapSwitch('state', false);
-      }
-    }
-    else{
-      getRoomInfo();
-    }
-  });
   // An owner has wiped data
   webrtc.on('wipe_data', function(data){
     if (data.roomType == 'screen' || peers[data.id].role != 'owner'){
@@ -1597,10 +1453,6 @@ function initVroom(room) {
     }, 2000);
   });
 
-  // Do not close the dropdown menus (invite/conf) when filling fields
-  $('.dropdown-menu').on('click', 'li', function(e){
-    e.stopPropagation();
-  });
   // Handle Email Invitation
   $('#inviteEmail').submit(function(event) {
     event.preventDefault();
@@ -1704,79 +1556,6 @@ function initVroom(room) {
       $('#chatBox').removeAttr('disabled').removeAttr('placeholder');
       webrtc.joinRoom(room);
     }
-  });
-
-  // Handle room lock/unlock
-  $('#lockButton').change(function() {
-    var action = ($(this).is(":checked")) ? 'lock_room' : 'unlock_room';
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: action,
-          param: {
-            room: roomName
-          }
-        })
-      },
-      error: function(data) {
-        $.notify(locale.ERROR_OCCURRED, 'error');
-      },
-      success: function(data) {
-        if (data.status == 'success'){
-          $.notify(data.msg, 'info');
-          if (action === 'lock_room'){
-            $('#lockLabel').addClass('btn-danger active');
-          }
-          else{
-            $('#lockLabel').removeClass('btn-danger active');
-          }
-          $('#lockLabel').removeClass('focus');
-          webrtc.sendToAll('room_lock', {action: action});
-        }
-        else{
-          $.notify(data.msg, 'error');
-        }
-      }  
-    });
-    // DIsable the button for a moment so you cannot overload the server
-    suspendButton($(this));
-  });
-
-  // Force participants to set a name
-  $('#askForNameButton').change(function() {
-    var set = ($(this).is(":checked")) ? 'on':'off';
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'set_ask_for_name',
-          param: {
-            set: set,
-            room: roomName
-          }
-        })
-      },
-      error: function(data) {
-        $.notify(locale.ERROR_OCCURRED, 'error');
-      },
-      success: function(data) {
-        if (data.status == 'success'){
-          $.notify(data.msg, 'info');
-          if (set === 'on'){
-            $('#askForNameLabel').addClass('btn-danger active');
-          }
-          else{
-            $('#askForNameLabel').removeClass('btn-danger active focus');
-          }
-           // In any case, remove the focus
-           $('#askForNameLabel').removeClass('focus');
-           webrtc.sendToAll('ask_for_name', {action: set});
-        }
-        else{
-          $.notify(data.msg, 'error');
-        }
-      }
-    });
-    suspendButton($(this));
   });
 
   // ScreenSharing
@@ -1938,87 +1717,6 @@ function initVroom(room) {
     });
   });
 
-  $('#joinPassButton').change(function(){
-    var action = ($(this).is(':checked')) ? 'set':'unset';
-    if (action == 'set'){
-      $('#joinPassModal').modal('show');
-      // Uncheck the button now
-      // so it's not inconsistent if we just close the modal dialog
-      // submitting the form will recheck it
-      $('#joinPassButton').prop('checked', false);
-      $('#joinPassLabel').removeClass('active');
-    }
-    else{
-      $.ajax({
-        data: {
-          req: JSON.stringify({
-            action: 'set_join_password',
-            param: {
-              type: 'join',
-              room: roomName,
-            }
-          })
-        },
-        error: function() {
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        },
-        success: function(data) {
-          $('#joinPass').val('');
-          $('#joinPassConfirm').val('');
-          if (data.status == 'success'){
-            $.notify(data.msg, 'info');
-            $('#joinPassLabel').removeClass('btn-danger active');
-            webrtc.sendToAll('password_protect', {action: 'unset'});
-          }
-          else{
-            $.notify(data.msg, 'error');
-          }
-        }
-      });
-      suspendButton($(this));
-    }
-  });
-  // Join password protection
-  $('#joinPassForm').submit(function(event) {
-    event.preventDefault();
-    var pass  = $('#joinPass').val();
-    var pass2 = $('#joinPassConfirm').val();
-    if (pass == pass2 && pass != ''){
-      $('#setJoinPassButton').addClass('disabled');
-      $.ajax({
-        data: {
-          req: JSON.stringify({
-            action: 'set_join_password',
-            param: {
-              password: pass,
-              room: roomName
-            }
-          })
-        },
-        error: function() {
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        },
-        success: function(data) {
-          $('#joinPass').val('');
-          $('#joinPassConfirm').val('');
-          if (data.status == 'success'){
-            $.notify(data.msg, 'info');
-            $('#joinPassModal').modal('hide');
-            $('#joinPassLabel').addClass('btn-danger active');
-            $('#joinPassButton').prop('checked', true);
-            webrtc.sendToAll('password_protect', {action: 'set'});
-          }
-          else{
-            $.notify(data.msg, 'error');
-          }
-        }
-      });
-    }
-    else{
-      $('#joinPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
-    }
-  });
-
   // Hide or show password fields
   $('#joinPassSet').on('switchChange.bootstrapSwitch', function(event, state) {
     if (state){
@@ -2095,127 +1793,6 @@ function initVroom(room) {
         if (data.status == 'success'){
           $.notify(data.msg, 'info');
           webrtc.sendToAll('room_conf_updated');
-        }
-        else{
-          $.notify(data.msg, 'error');
-        }
-      }
-    });
-  });
-
-  $('#ownerPassButton').change(function(){
-    var action = ($(this).is(':checked')) ? 'set':'unset';
-    if (action == 'set'){
-      $('#ownerPassModal').modal('show');
-      // Uncheck the button now
-      // so it's not inconsistent if we just close the modal dialog
-      // submitting the form will recheck it
-      $('#ownerPassButton').prop('checked', false);
-      $('#ownerPassLabel').removeClass('active');
-    }
-    else{
-      $.ajax({
-        data: {
-          req: JSON.stringify({
-            action: 'set_owner_password',
-            param: {
-              room: roomName
-            }
-          })
-        },
-        error: function() {
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        },
-        success: function(data) {
-          $('#ownerPass').val('');
-          if (data.status == 'success'){
-            $.notify(data.msg, 'info');
-            webrtc.sendToAll('owner_password', {action: 'remove'});
-            $('#ownerPassLabel').removeClass('btn-danger active');
-          }
-          else{
-            $.notify(data.msg, 'error');
-          }
-        }
-      });
-      suspendButton($(this));
-    }
-  });
-
-  $('#ownerPassForm').submit(function(event) {
-    event.preventDefault();
-    var pass  = $('#ownerPass').val();
-    var pass2 = $('#ownerPassConfirm').val();
-    if (pass == pass2 && pass != ''){
-      $('#setOwnerPassButton').addClass('disabled');
-      $.ajax({
-        data: {
-          req: JSON.stringify({
-            action: 'set_owner_password',
-            param: {
-              password: pass,
-              room: roomName
-            }
-          })
-        },
-        error: function() {
-          $.notify(locale.ERROR_OCCURRED, 'error');
-          $('#ownerPassLabel').removeClass('btn-danger active');
-        },
-        success: function(data) {
-          $('#ownerPass').val('');
-          $('#ownerPassConfirm').val('');
-          if (data.status == 'success'){
-            $('#ownerPassModal').modal('hide');
-            $('#ownerPassLabel').addClass('btn-danger active');
-            $('#ownerPassButton').prop('checked', true);
-            $.notify(data.msg, 'info');
-            webrtc.sendToAll('owner_password', {action: 'set'});
-          }
-          else{
-            $.notify(data.msg, 'error');
-          }
-        }
-      });
-    }
-    else{
-      $('#ownerPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
-    }
-  });
-
-  // Add an email to be notified when someone joins
-  // First, enable the add button when the input looks like an email address
-  $('#newEmailNotification').on('input', function() {
-    if (!$('#newEmailNotification').val().match(/^\S+\@\S+\.\S+$/)){
-      $('#newEmailNotificationButton').addClass('disabled');
-    }
-    else{
-      $('#newEmailNotificationButton').removeClass('disabled');
-    }
-  });
-  // Then send this new address to the server
-  $('#newEmailNotificationForm').submit(function(event){
-    event.preventDefault();
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'email_notification',
-          param: {
-            set: 'on',
-            email: $('#newEmailNotification').val(),
-            room: roomName
-          }
-        })
-      },
-      error: function() {
-        $.notify(locale.ERROR_OCCURRED, 'error');
-      },
-      success: function(data) {
-        if (data.status == 'success'){
-          $.notify(data.msg, 'info');
-          addNotifiedEmail($('#newEmailNotification').val());
-          webrtc.sendToAll('notif_change', {});
-          $('#newEmailNotification').val('');
         }
         else{
           $.notify(data.msg, 'error');
@@ -2346,11 +1923,6 @@ function initVroom(room) {
       $('#chatBox').val('').prop('rows', 1);
       $('#saveChat,#sendChat').css('height', $('#chatBox').css('height'));
     }
-  });
-
-  // Empty password fields on modal dismiss
-  $('#joinPassModal,#ownerPassModal').on('hide.bs.modal',function(){
-    $(this).find(':input').val('');
   });
 
   // Remove the active class on the help button
