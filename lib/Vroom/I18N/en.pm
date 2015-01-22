@@ -142,6 +142,7 @@ our %Lexicon = (
   "NOTIFICATION_ON_JOIN"                 => "Email addresses to notify when someone joins this room",
   "s_WILL_BE_NOTIFIED"                   => "%s will receive a notification each time someone joins this room",
   "s_WONT_BE_NOTIFIED_ANYMORE"           => "%s won't be notified anymore",
+  "ROOM_CONFIG_UPDATED"                  => "Room configuration has been updated",
   "s_JOINED_ROOM_s"                      => "%s joined room %s",
   "SOMEONE"                              => "Someone",
   "SOMEONE_JOINED_A_ROOM"                => "Someone joined a video conference room, and your address is configured to receive " .

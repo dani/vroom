@@ -1336,6 +1336,33 @@ any '/api' => sub {
       }
     );
   }
+  # Update room configuration
+  elsif ($req->{action} eq 'update_room_conf'){
+    $room->{locked} = ($req->{param}->{locked}) ? '1' : '0';
+    $room->{ask_for_name} = ($req->{param}->{ask_for_name}) ? '1' : '0';
+    foreach my $pass (qw/join_password owner_password/){
+      if (!$req->{param}->{$pass}){
+        $room->{$pass} = undef;
+      }
+      elsif ($req->{param}->{$pass} ne ''){
+        $room->{$pass} = Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($req->{param}->{$pass})->generate;
+      }
+    }
+    if ($self->modify_room($room)){
+      return $self->render(
+        json => {
+          status => 'success',
+          msg    => $self->l('ROOM_CONFIG_UPDATED')
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        status => 'error',
+        msg    => $self->l('ERROR_OCCURRED')
+      }
+    );
+  }
   # Handle password (join and owner)
   elsif ($req->{action} eq 'set_join_password'){
     $room->{join_password} = ($req->{param}->{password} && $req->{param}->{password} ne '') ?

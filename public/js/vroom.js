@@ -2031,6 +2031,8 @@ function initVroom(room) {
       $('#ownerPassFields').hide(200);
     }
   });
+
+  // Create a new input field
   function addEmailInputField(val){
     var parentEl = $('.email-list'),
         currentEntry = parentEl.find('.email-entry:last'),
@@ -2049,6 +2051,51 @@ function initVroom(room) {
   $(document).on('click','button.btn-remove-email',function(e){
     e.preventDefault();
     $(this).parents('.email-entry:first').remove();
+  });
+
+  // Submit the configuration form
+  $('#configureRoomForm').submit(function(e){
+    e.preventDefault();
+    // TODO: validate password and email here
+    // or disable the submit button and validate as you type ?
+    var locked = $('#lockedSet').bootstrapSwitch('state'),
+        askForName = $('#askForNameSet').bootstrapSwitch('state'),
+        joinPass = ($('#joinPassSet').bootstrapSwitch('state')) ?
+                     $('#joinPass').val() : false,
+        ownerPass = ($('#ownerPassSet').bootstrapSwitch('state')) ?
+                     $('#ownerPass').val() : false,
+        emails = [];
+    $('input[name="emails[]"]').each(function(){
+      emails.push($(this).val());
+    });
+    $.ajax({
+      data: {
+        req: JSON.stringify({
+          action: 'update_room_conf',
+          param: {
+            room: roomName,
+            locked: locked,
+            ask_for_name: askForName,
+            join_password: joinPass,
+            owner_password: ownerPass,
+            emails: emails
+          }
+        })
+      },
+      error: function() {
+        $.notify(locale.ERROR_OCCURRED, 'error');
+      },
+      success: function(data) {
+        $('#ownerPass,#ownerPassConfirm,#joinPass,#joinPassConfirm').val('');
+        if (data.status == 'success'){
+          $.notify(data.msg, 'info');
+          webrtc.sendToAll('room_conf_updated');
+        }
+        else{
+          $.notify(data.msg, 'error');
+        }
+      }
+    });
   });
 
   $('#ownerPassButton').change(function(){

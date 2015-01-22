@@ -149,6 +149,7 @@ our %Lexicon = (
     "NOTIFICATION_ON_JOIN"                      => "Email à notifier lorsque quelqu'un rejoint ce salon",
     "s_WILL_BE_NOTIFIED"                        => "%s recevra une notification à chaque fois qu'une personne rejoint ce salon",
     "s_WONT_BE_NOTIFIED_ANYMORE"                => "%s ne recevra plus les notifications pour ce salon",
+    "ROOM_CONFIG_UPDATED"                       => "La configuration du salon a été mise à jour",
     "s_JOINED_ROOM_s"                           => "%s a rejoint le salon %s",
     "SOMEONE"                                   => "Quelqu'un",
     "SOMEONE_JOINED_A_ROOM"                     => "Quelqu'un a rejoint un salon de vidéo conférence, et votre adresse est configurée " .
