@@ -439,7 +439,7 @@ function initVroom(room) {
 
   // Screen sharing is only suported on chrome desktop > 26
   if ( !$.browser.webkit || $.browser.android || $.browser.versionNumber < 26 ) {
-    $('#shareScreenLabel').addClass('disabled');
+    $('#shareScreenLabel').remove();
   }
 
   // If browser doesn't support webRTC or dataChannels
