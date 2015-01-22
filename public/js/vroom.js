@@ -1639,9 +1639,9 @@ function initVroom(room) {
       $('#authPassButton').removeClass('disabled');
     }
   });
-  $('#authForm').submit(function(event) {
+  $('#ownerAuthForm').submit(function(event) {
     event.preventDefault();
-    var pass = $('#authPass').val();
+    var pass = $('#ownerAuthPass').val();
     $.ajax({
       data: {
         req: JSON.stringify({
@@ -1664,8 +1664,6 @@ function initVroom(room) {
         else{
           $.notify(data.msg, 'error');
         }
-        // Close the auth menu
-        $('#authMenu').dropdown('toggle');
       }
     });
   });
