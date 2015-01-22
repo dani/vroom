@@ -504,7 +504,7 @@ function initVroom(room) {
             addEmailInputField(obj.email);
           });
           // Now, remove the first one if the list is not empty
-          if (data.notif.length > 0){
+          if (Object.keys(data.notif).length > 0){
             $('.email-list').find('.email-entry:first').remove();
           }
         }
