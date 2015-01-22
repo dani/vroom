@@ -1331,7 +1331,7 @@ any '/api' => sub {
   }
   # Handle activity pings sent every minute by each participant
   elsif ($req->{action} eq 'ping'){
-    $self->ping_room($room);
+    $self->ping_room($room->{name});
     # Cleanup expired rooms every ~10 pings
     if ((int (rand 100)) <= 10){
       $self->purge_rooms;
