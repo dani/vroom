@@ -1751,6 +1751,8 @@ function initVroom(room) {
         $('#ownerPass,#ownerPassConfirm,#joinPass,#joinPassConfirm').val('');
         if (data.status == 'success'){
           $('#configureModal').modal('hide');
+          // Hide passwords inputs too
+          $('#joinPassFields,#ownerPassFields').hide();
           $.notify(data.msg, 'info');
           webrtc.sendToAll('room_conf_updated');
         }
