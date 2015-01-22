@@ -1091,6 +1091,13 @@ function initVroom(room) {
     }
   });
 
+  // Room config has been updated
+  webrtc.on('room_conf_updated', function(data){
+    var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
+    getRoomInfo();
+    $.notify(sprintf(locale.s_CHANGED_ROOM_CONFIG, who), 'success');
+  });
+
   // This peer indicates he has no webcam
   webrtc.on('media_info', function(data){
     if (!data.payload.video){

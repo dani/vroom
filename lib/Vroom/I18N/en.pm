@@ -208,6 +208,7 @@ our %Lexicon = (
   "s_IS_PROMOTING_s"                     => "%s has granted %s administration privileges on the room",
   "PEER_PROMOTED"                        => "You have granted administration privileges on the room",
   "s_IS_KICKING_s"                       => "%s has kicked %s out of the room",
+  "s_CHANGED_ROOM_CONFIG"                => "%s changed room configuration",
   "KICKED"                               => "Kicked",
   "YOU_HAVE_BEEN_KICKED"                 => "You've been kicked out of the room",
   "AN_ADMIN_HAS_KICKED_YOU"              => "An administrator of the room has excluded you",
