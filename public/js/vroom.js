@@ -1710,8 +1710,19 @@ function initVroom(room) {
   // Submit the configuration form
   $('#configureRoomForm').submit(function(e){
     e.preventDefault();
-    // TODO: validate password and email here
-    // or disable the submit button and validate as you type ?
+    // check if passwords match
+    if ($('#joinPassSet').bootstrapSwitch('state')){
+      if ($('#joinPass').val() !== $('#joinPassConfirm').val()){
+        $('#joinPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
+        return false;
+      }
+    }
+    if ($('#ownerPassSet').bootstrapSwitch('state')){
+      if ($('#ownerPass').val() !== $('#ownerPassConfirm').val()){
+        $('#ownerPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
+        return false;
+      }
+    }
     var locked = $('#lockedSet').bootstrapSwitch('state'),
         askForName = $('#askForNameSet').bootstrapSwitch('state'),
         joinPass = ($('#joinPassSet').bootstrapSwitch('state')) ?
