@@ -229,6 +229,65 @@ $('#ownerPassSet').on('switchChange.bootstrapSwitch', function(event, state) {
 });
 
 
+// Submit the configuration form
+$('#configureRoomForm').submit(function(e){
+  e.preventDefault();
+  // check if passwords match
+  if ($('#joinPassSet').bootstrapSwitch('state')){
+    if ($('#joinPass').val() !== $('#joinPassConfirm').val()){
+      $('#joinPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
+      return false;
+    }
+  }
+  if ($('#ownerPassSet').bootstrapSwitch('state')){
+    if ($('#ownerPass').val() !== $('#ownerPassConfirm').val()){
+      $('#ownerPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
+      return false;
+    }
+  }
+  var locked = $('#lockedSet').bootstrapSwitch('state'),
+      askForName = $('#askForNameSet').bootstrapSwitch('state'),
+      joinPass = ($('#joinPassSet').bootstrapSwitch('state')) ?
+                   $('#joinPass').val() : false,
+      ownerPass = ($('#ownerPassSet').bootstrapSwitch('state')) ?
+                   $('#ownerPass').val() : false,
+      emails = [];
+  $('input[name="emails[]"]').each(function(){
+    emails.push($(this).val());
+  });
+  $.ajax({
+    data: {
+      req: JSON.stringify({
+        action: 'update_room_conf',
+        param: {
+          room: roomName,
+          locked: locked,
+          ask_for_name: askForName,
+          join_password: joinPass,
+          owner_password: ownerPass,
+          emails: emails
+        }
+      })
+    },
+    error: function() {
+      $.notify(locale.ERROR_OCCURRED, 'error');
+    },
+    success: function(data) {
+      $('#ownerPass,#ownerPassConfirm,#joinPass,#joinPassConfirm').val('');
+      if (data.status == 'success'){
+        $('#configureModal').modal('hide');
+        // Hide passwords inputs too
+        $('#joinPassFields,#ownerPassFields').hide();
+        $.notify(data.msg, 'info');
+        $('#configureRoomForm').trigger('room_conf_updated');
+      }
+      else{
+        $.notify(data.msg, 'error');
+      }
+    }
+  });
+});
+
 
 // Used on the index page
 function initIndex(){
@@ -398,7 +457,8 @@ function initAdmin(){
   }
 
   $(document).on('click', '.btn-configure', function(){
-    getRoomConf($(this).data('room'));
+    roomName = $(this).data('room');
+    getRoomConf(roomName);
   });
 
   // Get room list right after loading the page
@@ -1654,63 +1714,10 @@ function initVroom(room) {
     });
   });
 
-  // Submit the configuration form
-  $('#configureRoomForm').submit(function(e){
-    e.preventDefault();
-    // check if passwords match
-    if ($('#joinPassSet').bootstrapSwitch('state')){
-      if ($('#joinPass').val() !== $('#joinPassConfirm').val()){
-        $('#joinPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
-        return false;
-      }
-    }
-    if ($('#ownerPassSet').bootstrapSwitch('state')){
-      if ($('#ownerPass').val() !== $('#ownerPassConfirm').val()){
-        $('#ownerPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
-        return false;
-      }
-    }
-    var locked = $('#lockedSet').bootstrapSwitch('state'),
-        askForName = $('#askForNameSet').bootstrapSwitch('state'),
-        joinPass = ($('#joinPassSet').bootstrapSwitch('state')) ?
-                     $('#joinPass').val() : false,
-        ownerPass = ($('#ownerPassSet').bootstrapSwitch('state')) ?
-                     $('#ownerPass').val() : false,
-        emails = [];
-    $('input[name="emails[]"]').each(function(){
-      emails.push($(this).val());
-    });
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'update_room_conf',
-          param: {
-            room: roomName,
-            locked: locked,
-            ask_for_name: askForName,
-            join_password: joinPass,
-            owner_password: ownerPass,
-            emails: emails
-          }
-        })
-      },
-      error: function() {
-        $.notify(locale.ERROR_OCCURRED, 'error');
-      },
-      success: function(data) {
-        $('#ownerPass,#ownerPassConfirm,#joinPass,#joinPassConfirm').val('');
-        if (data.status == 'success'){
-          $('#configureModal').modal('hide');
-          // Hide passwords inputs too
-          $('#joinPassFields,#ownerPassFields').hide();
-          $.notify(data.msg, 'info');
-          webrtc.sendToAll('room_conf_updated');
-        }
-        else{
-          $.notify(data.msg, 'error');
-        }
-      }
-    });
+  // The configuration formed has been submited successfuly
+  // Lets announce it to the other peers
+  $('#configureRoomForm').on('room_conf_updated', function(){
+    webrtc.sendToAll('room_conf_updated');
   });
 
   // Choose another color. Useful if two peers have the same
