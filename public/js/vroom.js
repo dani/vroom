@@ -174,10 +174,18 @@ function addEmailInputField(val){
       currentEntry = parentEl.find('.email-entry:last'),
       newEntry = $(currentEntry.clone()).appendTo(parentEl);
   newEntry.find('input').val(val);
-  parentEl.find('.email-entry:not(:last) .btn-add-email')
+  adjustAddRemoveEmailButtons();
+}
+// Adjust add and remove buttons foir email notifications
+function adjustAddRemoveEmailButtons(){
+  $('.email-list').find('.email-entry:not(:last) .btn-add-email')
     .removeClass('btn-primary').removeClass('btn-add-email')
     .addClass('btn-danger').addClass('btn-remove-email')
     .html('<span class="glyphicon glyphicon-minus"></span>');
+  $('.email-list').find('.email-entry:last .btn-remove-email')
+    .removeClass('btn-danger').removeClass('btn-remove-email')
+    .addClass('btn-primary').addClass('btn-add-email')
+    .html('<span class="glyphicon glyphicon-plus"></span>');
 }
 // Add emails input fields
 $(document).on('click','button.btn-add-email',function(e){
@@ -188,7 +196,6 @@ $(document).on('click','button.btn-remove-email',function(e){
   e.preventDefault();
   $(this).parents('.email-entry:first').remove();
 });
-
 
 // Handle owner/join password confirm
 $('#ownerPassConfirm').on('input', function() {
@@ -446,6 +453,7 @@ function initAdmin(){
         if (Object.keys(data.notif).length > 0){
           $('.email-list').find('.email-entry:first').remove();
         }
+        adjustAddRemoveEmailButtons();
         // Update config switches
         $('#lockedSet').bootstrapSwitch('state', data.locked == 'yes');
         $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name == 'yes');
@@ -549,6 +557,7 @@ function initVroom(room) {
           if (Object.keys(data.notif).length > 0){
             $('.email-list').find('.email-entry:first').remove();
           }
+          adjustAddRemoveEmailButtons();
         }
         // We're are not owner of the room
         else{
