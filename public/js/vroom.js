@@ -168,6 +168,28 @@ function maxHeight(){
   return $(window).height()-$('#toolbar').height()-25;
 }
 
+// Create a new input field
+function addEmailInputField(val){
+  var parentEl = $('.email-list'),
+      currentEntry = parentEl.find('.email-entry:last'),
+      newEntry = $(currentEntry.clone()).appendTo(parentEl);
+  newEntry.find('input').val(val);
+  parentEl.find('.email-entry:not(:last) .btn-add-email')
+    .removeClass('btn-primary').removeClass('btn-add-email')
+    .addClass('btn-danger').addClass('btn-remove-email')
+    .html('<span class="glyphicon glyphicon-minus"></span>');
+}
+// Add emails input fields
+$(document).on('click','button.btn-add-email',function(e){
+  e.preventDefault();
+  addEmailInputField('');
+});
+$(document).on('click','button.btn-remove-email',function(e){
+  e.preventDefault();
+  $(this).parents('.email-entry:first').remove();
+});
+
+
 // Handle owner/join password confirm
 $('#ownerPassConfirm').on('input', function() {
   if ($('#ownerPassConfirm').val() == $('#ownerPass').val() &&
@@ -334,6 +356,16 @@ function initAdmin(){
         $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data){
+        // Reset the list of email displayed, so first remove evry input field but the first one
+        // We keep it so we can clone it again
+        $('.email-list').find('.email-entry:not(:first)').remove();
+        $.each(data.notif, function(index, obj){
+          addEmailInputField(obj.email);
+        });
+        // Now, remove the first one if the list is not empty
+        if (Object.keys(data.notif).length > 0){
+          $('.email-list').find('.email-entry:first').remove();
+        }
         // Update config switches
         $('#lockedSet').bootstrapSwitch('state', data.locked == 'yes');
         $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name == 'yes');
@@ -1617,27 +1649,6 @@ function initVroom(room) {
     else{
       $('#ownerPassFields').hide(200);
     }
-  });
-
-  // Create a new input field
-  function addEmailInputField(val){
-    var parentEl = $('.email-list'),
-        currentEntry = parentEl.find('.email-entry:last'),
-        newEntry = $(currentEntry.clone()).appendTo(parentEl);
-    newEntry.find('input').val(val);
-    parentEl.find('.email-entry:not(:last) .btn-add-email')
-      .removeClass('btn-primary').removeClass('btn-add-email')
-      .addClass('btn-danger').addClass('btn-remove-email')
-      .html('<span class="glyphicon glyphicon-minus"></span>');
-  }
-  // Add emails input fields
-  $(document).on('click','button.btn-add-email',function(e){
-    e.preventDefault();
-    addEmailInputField('');
-  });
-  $(document).on('click','button.btn-remove-email',function(e){
-    e.preventDefault();
-    $(this).parents('.email-entry:first').remove();
   });
 
   // Submit the configuration form
