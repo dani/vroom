@@ -209,6 +209,27 @@ $('#joinPassConfirm').on('input', function() {
     $('#joinPassConfirm').parent().addClass('has-error');
   }
 });
+
+// Hide or show password fields
+$('#joinPassSet').on('switchChange.bootstrapSwitch', function(event, state) {
+  if (state){
+    $('#joinPassFields').show(200);
+  }   
+  else{
+    $('#joinPassFields').hide(200);
+  }
+});
+$('#ownerPassSet').on('switchChange.bootstrapSwitch', function(event, state) {
+  if (state){
+    $('#ownerPassFields').show(200);
+  }   
+  else{
+    $('#ownerPassFields').hide(200);
+  }
+});
+
+
+
 // Used on the index page
 function initIndex(){
   var room;
@@ -1631,24 +1652,6 @@ function initVroom(room) {
         }
       }
     });
-  });
-
-  // Hide or show password fields
-  $('#joinPassSet').on('switchChange.bootstrapSwitch', function(event, state) {
-    if (state){
-      $('#joinPassFields').show(200);
-    }
-    else{
-      $('#joinPassFields').hide(200);
-    }
-  });
-  $('#ownerPassSet').on('switchChange.bootstrapSwitch', function(event, state) {
-    if (state){
-      $('#ownerPassFields').show(200);
-    }   
-    else{
-      $('#ownerPassFields').hide(200);
-    }
   });
 
   // Submit the configuration form
