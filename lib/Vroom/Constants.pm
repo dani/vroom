@@ -169,6 +169,7 @@ use constant API_ACTIONS => {
     ping             => 1,
     authenticate     => 1,
     get_room_info    => 1,
+    get_room_conf    => 1,
     get_peer_role    => 1,
     join             => 1,
     get_padd_session => 1

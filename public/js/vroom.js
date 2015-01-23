@@ -319,6 +319,35 @@ function initAdmin(){
     });
   }
 
+  function getRoomConf(roomName){
+    $.ajax({
+      data: {
+        req: JSON.stringify({
+          action: 'get_room_conf',
+          param: {
+            room: roomName,
+          }
+        })
+      },
+      async: false,
+      error: function(data){
+        $.notify(locale.ERROR_OCCURRED, 'error');
+      },
+      success: function(data){
+        // Update config switches
+        $('#lockedSet').bootstrapSwitch('state', data.locked == 'yes');
+        $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name == 'yes');
+        $('#joinPassSet').bootstrapSwitch('state', data.join_auth == 'yes');
+        $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth == 'yes');
+        $('#configureModal').modal('show');
+      }
+    });
+  }
+
+  $(document).on('click', '.btn-configure', function(){
+    getRoomConf($(this).data('room'));
+  });
+
   // Get room list right after loading the page
   getRooms();
 }

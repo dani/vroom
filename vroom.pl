@@ -942,6 +942,7 @@ helper make_key_admin => sub {
   my $self = shift;
   my ($token) = @_;
   my $key = $self->get_key_by_token($token);
+  $self->app->log->debug("making key $token an admin key");
   if (!$key){
     return 0;
   }
@@ -1031,8 +1032,8 @@ get '/admin/:room' => { room => '' } => sub {
   my $room = $self->stash('room');
   # Someone accessing /admin is considered an admin
   # For now, the auth is handled outside of VROOM itself
-  my $token = $self->req->headers->header('X-VROOM-API-Key');
-  $self->make_key_admin($token);
+  $self->login;
+  $self->make_key_admin($self->session('key'));
   if ($room eq ''){
     $self->purge_rooms;
     return $self->render('admin');
@@ -1576,6 +1577,19 @@ any '/api' => sub {
       json => {
         msg    => $self->l('NOT_ALLOWED'),
         status => 'error'
+      }
+    );
+  }
+  # Return just room config
+  elsif ($req->{action} eq 'get_room_conf'){
+    return $self->render(
+      json => {
+        owner_auth   => ($room->{owner_password}) ? 'yes' : 'no',
+        join_auth    => ($room->{join_password})  ? 'yes' : 'no',
+        locked       => ($room->{locked})         ? 'yes' : 'no',
+        ask_for_name => ($room->{ask_for_name})   ? 'yes' : 'no',
+        notif        => $self->get_notification($room->{name}),
+        status       => 'success'
       }
     );
   }
