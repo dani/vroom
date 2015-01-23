@@ -174,6 +174,7 @@ function addEmailInputField(val){
       currentEntry = parentEl.find('.email-entry:last'),
       newEntry = $(currentEntry.clone()).appendTo(parentEl);
   newEntry.find('input').val(val);
+  newEntry.removeClass('has-error');
   adjustAddRemoveEmailButtons();
 }
 // Adjust add and remove buttons foir email notifications
@@ -251,6 +252,22 @@ $('#configureRoomForm').submit(function(e){
       $('#ownerPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
       return false;
     }
+  }
+  var validEmail = true;
+  $('.email-list').find('input').each(function(index, input){
+    if (!$(input).val().match(/\S+@\S+\.\S+/)){
+      $(input).parent().addClass('has-error');
+      //$(input).parent().notify(locale.ERROR_MAIL_INVALID, 'error');
+      validEmail = false;
+      // Break the each loop
+      return false;
+    }
+    else{
+      $(input).parent().removeClass('has-error');
+    }
+  });
+  if (!validEmail){
+    return false;
   }
   var locked = $('#lockedSet').bootstrapSwitch('state'),
       askForName = $('#askForNameSet').bootstrapSwitch('state'),
