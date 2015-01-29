@@ -384,7 +384,7 @@ function initAdmin(){
 
   // Update display of room list
   function updateRoomList(filter, min, max){
-    $('#deviceList').html('');
+    $('#roomList').html('');
     var filterRe = new RegExp(filter, "gi");
     var i = 0;
     matches = 0;
@@ -486,8 +486,36 @@ function initAdmin(){
     getRoomConf(roomName);
   });
 
+  $(document).on('click', '.btn-remove', function(){
+    roomName = $(this).data('room');
+    $('#deleteRoomModal').modal('show');
+  });
+
   // Get room list right after loading the page
   getRooms();
+
+  // Delete room form
+  $('#deleteRoomForm').submit(function(e){
+    e.preventDefault();
+    $.ajax({
+      data: {
+        req: JSON.stringify({
+          action: 'delete_room',
+          param: {
+            room: roomName,
+          }
+        })
+      },
+      error: function(data){
+        $.notify(locale.ERROR_OCCURRED, 'error');
+      },
+      success: function(data){
+        $.notify(data.msg, 'success');
+        getRooms();
+        $('#deleteRoomModal').modal('hide');
+      }
+    });
+  });
 }
 
 // This is the main function called when you join a room

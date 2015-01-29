@@ -164,7 +164,7 @@ our %Lexicon = (
     "ROOM_NOW_PERSISTENT"                       => "Ce salon est maintenant persistant",
     "ROOM_NO_MORE_PERSISTENT"                   => "Ce salon n'est plus persistant",
     "EMAIL_INVITE"                              => "Invitation par email",
-    "DELETE_THIS_ROOM"                          => "Supprimer ce salon",
+    "DELETE"                                    => "Supprimer",
     "CONFIRM_DELETE"                            => "Confirmer la suppression",
     "HELP_SET_DISPLAY_NAME"                     => "Ce champs vous permet de saisir le nom qui sera affiché pour les autres personnes. " .
                                                    "Il est obligatoire avant de pouvoir utiliser le tchat. Pas besoin de valider quoi " .

@@ -158,7 +158,7 @@ our %Lexicon = (
   "ROOM_NOW_PERSISTENT"                  => "This room is now persistent",
   "ROOM_NO_MORE_PERSISTENT"              => "This rooms isn't persistent anymore",
   "EMAIL_INVITE"                         => "Email invitation",
-  "DELETE_THIS_ROOM"                     => "Delete this room",
+  "DELETE"                               => "Delete",
   "CONFIRM_DELETE"                       => "Confirm delation",
   "HELP_SET_DISPLAY_NAME"                => "This field lets you type your name which will be displayed for other participants. " .
                                             "It must be set before you can use the chat. no need to validate anything, the name " .
