@@ -55,6 +55,9 @@ use constant COMPONENTS => {
   },
   "Bootstrap Switch" => {
     url => 'http://www.bootstrap-switch.org/'
+  },
+  "bootpag" => {
+    url => "http://botmonster.com/jquery-bootpag/"
   }
 };
 
