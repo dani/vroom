@@ -157,6 +157,7 @@ our %Lexicon = (
     "LAST_ACTIVITY"                             => "Dernière activité",
     "NUMBER_OF_PARTICIPANTS"                    => "Nombre de participants",
     "LOCKED"                                    => "Verrouillé",
+    "LOCK_ROOM"                                 => "Empêcher l'accès à ce salon",
     "ASK_FOR_NAME"                              => "Exige de saisir un nom",
     "JOIN_PASSWORD"                             => "Mot de passe d'accès au salon",
     "OWNER_PASSWORD"                            => "Mot de passe de gestionnaire",

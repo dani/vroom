@@ -151,6 +151,7 @@ our %Lexicon = (
   "LAST_ACTIVITY"                        => "Last activity",
   "NUMBER_OF_PARTICIPANTS"               => "Number of participants",
   "LOCKED"                               => "Locked",
+  "LOCK_ROOM"                            => "Prevent room access",
   "ASK_FOR_NAME"                         => "Require to enter a name",
   "JOIN_PASSWORD"                        => "Password to join the room",
   "OWNER_PASSWORD"                       => "Password to manage the room",
