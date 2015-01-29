@@ -18,6 +18,9 @@ $('.bs-switch').bootstrapSwitch();
 // Strings we need translated
 var locale = {};
 
+// When pagination is done, how many item per page
+var itemPerPage = 20;
+
 // Localize the strings we need
 $.ajax({
   url: rootUrl + 'localize/' + currentLang,
@@ -420,6 +423,28 @@ function initAdmin(){
     });
   }
 
+  // Update pagination
+  function updatePagination(){
+    if (matches <= itemPerPage){
+      $('#pagination').hide(200);
+      return;
+    }
+    var total = Math.ceil(matches / itemPerPage);
+    if (total === 0){
+      total = 1;
+    }
+    $('#pagination').bootpag({
+      total: total,
+      maxVisible: 10,
+      page: 1
+    }).on('page', function(e, page){
+      var min = itemPerPage * (page - 1);
+      var max = min + itemPerPage;
+      updateRoomList($('#searchRoom').val(), min, max);
+    });
+    $('#pagination').show(200);
+  }
+
   // Request the list of existing rooms to the server
   function getRooms(){
     $.ajax({
@@ -436,7 +461,8 @@ function initAdmin(){
         if (data.status === 'success'){
           roomList = data.rooms;
           matches = Object.keys(roomList).length;
-          updateRoomList($('searchRoom').val(), 0, matches);
+          updateRoomList('', 0, itemPerPage);
+          updatePagination();
         }
         else{
           $.notify(locale.ERROR_OCCURED, 'error');
@@ -481,11 +507,13 @@ function initAdmin(){
     });
   }
 
+  // Handle submiting the configuration form
   $(document).on('click', '.btn-configure', function(){
     roomName = $(this).data('room');
     getRoomConf(roomName);
   });
 
+  // Submitting the delete form
   $(document).on('click', '.btn-remove', function(){
     roomName = $(this).data('room');
     $('#deleteRoomModal').modal('show');
@@ -522,7 +550,8 @@ function initAdmin(){
     var lastInput = +new Date;
     setTimeout(function(){
       if (lastInput + 500 < +new Date){
-        updateRoomList($('#searchRoom').val(), 0, matches);
+        updateRoomList($('#searchRoom').val(), 0, itemPerPage);
+        updatePagination();
       }
     }, 600);
   });
