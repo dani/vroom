@@ -167,42 +167,6 @@ our %Lexicon = (
     "EMAIL_INVITE"                              => "Invitation par email",
     "DELETE"                                    => "Supprimer",
     "CONFIRM_DELETE"                            => "Confirmer la suppression",
-    "HELP_SET_DISPLAY_NAME"                     => "Ce champs vous permet de saisir le nom qui sera affiché pour les autres personnes. " .
-                                                   "Il est obligatoire avant de pouvoir utiliser le tchat. Pas besoin de valider quoi " .
-                                                   "que ce soit, il est envoyé à tous les autres au fur et à mesure que vous le tapez.",
-    "HELP_CHANGE_COLOR_BUTTON"                  => "Ce bouton vous permet de choisir une autre couleur aléatoirement. Utile si " .
-                                                   "plusieurs personnes se retrouvent avec des couleurs identiques ou trop proches.",
-    "HELP_CHAT_BUTTON"                          => "Affiche ou masque le menu du tchat",
-    "HELP_MUTE_BUTTON"                          => "Coupe ou réactive votre micro.",
-    "HELP_SUSPEND_CAM_BUTTON"                   => "Mettre en pause/réactiver la webcam. Les autres participants vous entendront toujours " .
-                                                   "(sauf si vous avez également coupé votre micro).",
-    "HELP_MOH_BUTTON"                           => "Ce bouton n'apparait que si vous êtes seul dans le salon. Il vous permet " .
-                                                   "de jouer/arrêter la musique d'attente.",
-    "HELP_SHARE_SCREEN_BUTTON"                  => "Ce bouton vous permet de partager votre écran, ou une application avec les autres " .
-                                                   "personnes. Disponible uniquement avec le navigateur Google Chrome actuellement.",
-    "HELP_INVITE_MENU"                          => "Ce menu permet d'inviter d'autres personnes sur le salon.",
-    "HELP_EMAIL_INVITE_BUTTON"                  => "Ce bouton vous permet d'envoyer une invitation par email (après avoir remplis " .
-                                                   "le champs demandant l'adresse email)",
-    "HELP_CONF_MENU"                            => "Ce menu permet de configurer le salon. Il n'est accessible qu'aux propriétaires " .
-                                                   "du salon",
-    "HELP_LOCK_BUTTON"                          => "Permet de verrouiller le salon: plus personne ne pourra le rejoindre (exceptés " .
-                                                   "les propriétaires)",
-    "HELP_PASSWORD_BUTTON"                      => "Permet de protéger l'accès par un mot de passe. Notez que le mot de passe n'est " .
-                                                   "pas demandé lorsque l'on " .
-                                                   "rejoint un salon suite à une invitation par email (l'authentification se fait " .
-                                                   "par un jeton unique valide pendant deux heures",
-    "HELP_RESERVE_BUTTON"                       => "Permet de réserver le salon. Vous pourrez donc vous reconnecter et " .
-                                                   "récupérer l'accès aux menus de configuration. Le salon sera également conservé " .
-                                                   "bien plus longtemps sur le système",
-    "HELP_ASK_FOR_NAME_BUTTON"                  => "Permet d'imposer la saisie du nom avant de pouvoir rejoindre le salon",
-    "HELP_WIPE_DATA_BUTTON"                     => "Supprime les données du salon (historique du tchat, prise de notes)",
-    "HELP_LOGOUT_BUTTON"                        => "Ce bouton vous déconnectera du système",
-    "HELP_PEER_ACTIONS_BUTTONS"                 => "Ce menu s'affiche en passant la souris au dessus d'une vignette vidéo. Il " .
-                                                   "vous permet d'effectuer certaines actions qui ne concerneront que cette " .
-                                                   "personne (coupé le micro, mettre la webcam en pause, donner les droits " .
-                                                   "d'administration sur le salon et bannir du salon). Attention: donner les droits " .
-                                                   "d'administration à quelqu'un est irrévocable, et il pourra modifier tous les " .
-                                                   "paramètres (y compris les mots de passe).",
     "LOGOUT"                                    => "Quitter le salon",
     "LEAVE_THIS_ROOM"                           => "Quitter le salon",
     "ARE_YOU_SURE_YOU_WANT_TO_LEAVE"            => "Êtes-vous sûr de vouloir quitter le salon ?",

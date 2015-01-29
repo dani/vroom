@@ -161,31 +161,6 @@ our %Lexicon = (
   "EMAIL_INVITE"                         => "Email invitation",
   "DELETE"                               => "Delete",
   "CONFIRM_DELETE"                       => "Confirm delation",
-  "HELP_SET_DISPLAY_NAME"                => "This field lets you type your name which will be displayed for other participants. " .
-                                            "It must be set before you can use the chat. no need to validate anything, the name " .
-                                            "will be sent to others as you type.",
-  "HELP_CHANGE_COLOR_BUTTON"             => "Randomly choose another color. Usefull when two peers have the same, are too close colors.",
-  "HELP_CHAT_BUTTON"                     => "Display or hide the chat menu",
-  "HELP_MUTE_BUTTON"                     => "Mute or unmute your microphone",
-  "HELP_SUSPEND_CAM_BUTTON"              => "Suspend or resum your webcam. Others will still hear you (unless you also muted your mic)",
-  "HELP_MOH_BUTTON"                      => "This button only appears when you're alone in the room. It lets you play/stop music on hold.",
-  "HELP_SHARE_SCREEN_BUTTON"             => "Share your screen, or just a window with others. Only available with Google Chrome for now.",
-  "HELP_INVITE_MENU"                     => "This menu lets you invite other people",
-  "HELP_EMAIL_INVITE_BUTTON"             => "This button send an invitation to the email adress you enterred",
-  "HELP_CONF_MENU"                       => "This menu contains room configuration",
-  "HELP_LOCK_BUTTON"                     => "This button will lock the room: nobody will be able to join it (except owners of the room)",
-  "HELP_PASSWORD_BUTTON"                 => "This button will protect access to this room with a password. Note that this password " .
-                                            "isn't asked it you join the room through an email invitation (in which case the " .
-                                            "authentication is done with a uniq token valid for two hours)",
-  "HELP_RESERVE_BUTTON"                  => "Reserve this room, you'll be able to leave, reconnect, and get configuration menus back. " .
-                                            "The room will also be kept much longer.",
-  "HELP_ASK_FOR_NAME_BUTTON"             => "This will enforce participants to set their name before joining the room.",
-  "HELP_WIPE_DATA_BUTTON"                => "This will wipe room data (chat history and collaborative pad content)",
-  "HELP_LOGOUT_BUTTON"                   => "This will end the call and disconnect you from the room",
-  "HELP_PEER_ACTIONS_BUTTONS"            => "This menu will appear when you put the mouse over a video preview. It'll allow " .
-                                            "you to run actions which only affect this peer (mute/suspend/grant admin rights/kick " .
-                                            "from the room). Warning: grating admin rights to someone is irrevocable, and he will " .
-                                            "be able to change configuration parameters (including passwords).",
   "LOGOUT"                               => "Leave the room",
   "LEAVE_THIS_ROOM"                      => "Leave the room",
   "ARE_YOU_SURE_YOU_WANT_TO_LEAVE"       => "Are you sure you want to leave this room ?",
