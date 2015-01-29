@@ -26,7 +26,7 @@
           <li>
             <a href="<%= $self->get_url('/feedback') %>"><%=l 'FEEDBACK' %></a>
           </li>
-          <li>
+          <li class="hidden-xs">
             <select class="form-control navbar-btn" id="switch_lang">
               <% foreach my $lang (qw(en fr)){ %>
               <option value="<%= $lang %>" <%= ($self->languages eq $lang) ? 'selected="selected"' : '' %>>
