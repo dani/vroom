@@ -111,7 +111,7 @@ our %Lexicon = (
   "PASSWORD_PROTECT"                     => "Password protect",
   "PASSWORDS_DO_NOT_MATCH"               => "Passwords do not match",
   "RESERVE_THIS_ROOM"                    => "Reserve this room",
-  "SET_OWNER_PASS"                       => "Keep this password carefully, it'll grant you access to the configuration menus ",
+  "SET_OWNER_PASS"                       => "Keep this password carefully, it'll grant you access to the configuration menus " .
                                             "next time you connect.",
   "A_STANDARD_ROOM_EXPIRES_AFTER_d"      => "A standard room will be deleted after %d hour(s) without activity",
   "A_RESERVED_ROOM"                      => "A reserved room",
