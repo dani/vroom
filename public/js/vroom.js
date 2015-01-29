@@ -461,7 +461,7 @@ function initAdmin(){
         if (data.status === 'success'){
           roomList = data.rooms;
           matches = Object.keys(roomList).length;
-          updateRoomList('', 0, itemPerPage);
+          updateRoomList($('#searchRoom').val(), 0, itemPerPage);
           updatePagination();
         }
         else{
