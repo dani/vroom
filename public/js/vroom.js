@@ -258,7 +258,7 @@ $('#configureRoomForm').submit(function(e){
   }
   var validEmail = true;
   $('.email-list').find('input').each(function(index, input){
-    if (!$(input).val().match(/\S+@\S+\.\S+/)){
+    if (!$(input).val().match(/\S+@\S+\.\S+/) && $(input).val() !== ''){
       $(input).parent().addClass('has-error');
       //$(input).parent().notify(locale.ERROR_MAIL_INVALID, 'error');
       validEmail = false;
