@@ -420,7 +420,7 @@ function initAdmin(){
     });
   }
 
-  
+  // Request the list of existing rooms to the server
   function getRooms(){
     $.ajax({
       data: {
@@ -515,6 +515,16 @@ function initAdmin(){
         $('#deleteRoomModal').modal('hide');
       }
     });
+  });
+
+  // Update room list when searching
+  $('#searchRoom').on('input', function(){
+    var lastInput = +new Date;
+    setTimeout(function(){
+      if (lastInput + 500 < +new Date){
+        updateRoomList($('#searchRoom').val(), 0, matches);
+      }
+    }, 600);
   });
 }
 
