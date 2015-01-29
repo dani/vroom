@@ -32,7 +32,7 @@ our %Lexicon = (
     "YOUR_MAIL_OPTIONAL"                        => "Votre adresse email (optionnelle)",
     "COMMENT"                                   => "Commentaire",
     "VROOM_IS_AWESOME"                          => "VROOM est vraiment génial ;-)",
-    "SUBMIT"                                    => "Envoyer",
+    "SUBMIT"                                    => "Valider",
     "THANK_YOU"                                 => "Merci :-)",
     "THANKS_FOR_YOUR_FEEDBACK"                  => "Votre message a bien été transmis, merci d'avoir pris le temps de nous faire part " .
                                                    "de votre expérience",
