@@ -326,9 +326,8 @@ our %Lexicon = (
   "ABOUT_THANKS"                         => "VROOM uses the following components, so, thanks to their respective authors :-)",
   "ABOUT_MUSICS"                         => "Also thanks to the authors of songs used",
   "FROM_AUTHOR"                          => "from",
-  "PAGE_NOT_FOUND"                       => "This page does not exist"
-
-
+  "PAGE_NOT_FOUND"                       => "This page does not exist",
+  "SERVER_ERROR"                         => "Sorry for the inconvinience"
 ); 
 
 1;
