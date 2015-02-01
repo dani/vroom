@@ -151,12 +151,6 @@ function getTime(){
   return hours + ':' + minutes + ':' + seconds;
 }
 
-// Convert a timestamp to readable date
-function timeStamp2Date(sec){
-  var d = new Date(sec*1000);
-  return d.toLocaleString();
-}
-
 // Convert dates from UTC to local TZ
 function utc2Local(date) {
   var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
