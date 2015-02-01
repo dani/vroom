@@ -5,7 +5,7 @@ our %Lexicon = (
   _AUTO => 1,
   "WELCOME"                              => "Welcome on VROOM !!",
   "VROOM_DESC"                           => "VROOM is a simple video conferencing solution",
-  "VROOM_IS_FREE_SOFTWARE"               => "VROOM is a free software, released under the MIT licence",
+  "VROOM_IS_FREE_SOFTWARE"               => "VROOM is a free software",
   "POWERED_BY"                           => "Proudly powered by",
   "ERROR_NAME_INVALID"                   => "This name is not valid",
   "ERROR_NAME_RESERVED"                  => "This name is reserved and cannot be used",
@@ -48,7 +48,7 @@ our %Lexicon = (
   "JOIN_THIS_ROOM"                       => "Join this room",
   "CREATE_ROOM"                          => "Create a new room",
   "ROOM_NAME"                            => "Room name",
-  "RANDOM_IF_EMPTY"                      => "If you let this field empty, a random name will be given to the room",
+  "RANDOM_IF_EMPTY"                      => "If you let this empty, a random name will be given to the room",
   "THIS_ROOM_ALREADY_EXISTS"             => "This room already exists",
   "CONFIRM_OR_CHOOSE_ANOTHER_NAME"       => "Do you want to join it or choose another name ?",
   "CHOOSE_ANOTHER_NAME"                  => "Choose another name",
@@ -204,10 +204,6 @@ our %Lexicon = (
   "CAM_SUSPENDED"                        => "Your webcam is now suspended",
   "CAM_RESUMED"                          => "Your webcam is on again",
   "GROUP_ACTIONS"                        => "Grouped actions",
-  "MUTE_EVERYONE"                        => "Mute everyone",
-  "UNMUTE_EVERYONE"                      => "Unmute everyone",
-  "SUSPEND_EVERYONE"                     => "Suspend everyone's webcam",
-  "RESUME_EVERYONE"                      => "Resume everyone's webcam",
   "SHARE_YOUR_SCREEN"                    => "Share your screen with the other members of this room",
   "CANT_SHARE_SCREEN"                    => "Sorry, your configuration does not allow screen sharing",
   "SCREEN_SHARING_ONLY_FOR_CHROME"       => "Sorry, but you can't share your screen. Only Google Chrome supports this feature for now",
@@ -248,22 +244,21 @@ our %Lexicon = (
                                             "is the capacity of your Internet pipe. Usually, you can chat with " .
                                             "up to 5~6 person without problem",
   "NO_SIGNIN"                            => "No need to register",
-  "YOU_DONT_HAVE_TO_REGISTER"            => "Tired of creating an account on each and every service you can find, checking " .
-                                            "your friends or coworkers did the same ? Well, great news, with VROOM, you do not need to, " .
-                                            "in fact, you don't have to register at all",
+  "YOU_DONT_HAVE_TO_REGISTER"            => "Tired of creating an account on each and every service you can find ?" .
+                                            "Well, great news, with VROOM, you do not need to register at all ",
   "QUICK"                                => "Quick",
   "STOP_WASTING_TIME"                    => "Stop wasting time checking, installing, explaining. Just click, send a link, and talk. " .
                                             "It couldn't be simpler or faster",
   "SHARE_DESKTOP_OR_WINDOW"              => "Share your entire screen, or only a window in a single click, with an great quality. " .
                                             "With this feature, broadcast any content (images, presententions, documents etc...)",
   "TEXT_CHAT"                            => "Chat Included",
-  "SECURED_TEXT_CHAT"                    => "Video and audio are not enough ? You can also use the included text chat, and fully secured: " .
-                                            "your discussions are done directly between members and will never be sent on our servers.",
+  "SECURED_TEXT_CHAT"                    => "Video and audio are not enough ? You can also use the included text chat." .
   "COLLABORATIVE_NOTETAKING"             => "Realtime notetaking",
-  "TAKE_NOTE_IN_REALTIME"                => "Write your meating notes with others, all in real time with the included editor",
+  "TAKE_NOTE_IN_REALTIME"                => "Write your meating notes with others, all in real time with the included text pad",
   "SUPPORTED_BROWSERS"                   => "Supported browsers",
   "HELP_BROWSERS_SUPPORTED"              => "VROOM works with any modern, standard compliant browsers, which means any " .
-                                            "recent Mozilla Firefox, Google Chrome or Opera.",
+                                            "recent Mozilla Firefox, Google Chrome or Opera. Other browsers (mainly Internet Explorer " .
+                                            "and Safari) won't work for now.",
   "I_DONT_HAVE_A_WEBCAM"                 => "I don't have a webcam",
   "HELP_I_DONT_HAVE_A_WEBCAM"            => "You'll still be able to participate. If no webcam is detected when you join a room " .
                                             "you'll get a message. Click on the link at the bottom and you'll join with audio " .
@@ -271,8 +266,8 @@ our %Lexicon = (
                                             "screen instead of your video.",
   "SCREEN_SHARING"                       => "Screen Sharing",
   "HELP_SCREEN_SHARING"                  => "VROOM lets you share your screen (or a single window) with the other members of the room. For now " .
-                                            "this feature is only available in Google Chrome, and you need to install an extension " .
-                                            "(you'll be prompted for it the first time you try to share your screen)",
+                                            "this feature is only available with Google Chrome, and you need to install an extension " .
+                                            "(you'll be prompted to install it the first time you try to share your screen)",
   "OWNER_PRIVILEGES"                     => "Room creator's privileges",
   "HELP_OWNER_PRIVILEGES"                => "Room's creator (also called manager) has special privileges (compared to those who join " .
                                             "later, which are simple participants). For example, he can protect access with a password " .

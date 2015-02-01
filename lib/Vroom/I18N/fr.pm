@@ -7,7 +7,7 @@ our %Lexicon = (
     _AUTO                                       => 1,
     "WELCOME"                                   => "Bienvenue sur VROOM !!",
     "VROOM_DESC"                                => "VROOM est une solution simple de vidéo conférence",
-    "VROOM_IS_FREE_SOFTWARE"                    => "VROOM est un logiciel libre diffusé sous licence MIT",
+    "VROOM_IS_FREE_SOFTWARE"                    => "VROOM est un logiciel libre",
     "POWERED_BY"                                => "Fièrement propulsé par",
     "ERROR_NAME_INVALID"                        => "Ce nom n'est pas valide",
     "ERROR_NAME_RESERVED"                       => "Ce nom est réservé et ne peut être utilisé",
@@ -53,7 +53,7 @@ our %Lexicon = (
     "JOIN_THIS_ROOM"                            => "Rejoindre ce salon",
     "CREATE_ROOM"                               => "Créer un salon",
     "ROOM_NAME"                                 => "Nom du salon",
-    "RANDOM_IF_EMPTY"                           => "Si vous laissez ce champs vide, un nom aléatoire sera choisi",
+    "RANDOM_IF_EMPTY"                           => "Si vous laissez vide, un nom aléatoire sera choisi",
     "THIS_ROOM_ALREADY_EXISTS"                  => "Ce salon existe déjà",
     "CONFIRM_OR_CHOOSE_ANOTHER_NAME"            => "Voulez-vous le rejoindre ou choisir un autre nom ?",
     "CHOOSE_ANOTHER_NAME"                       => "Choisir un autre nom",
@@ -210,10 +210,6 @@ our %Lexicon = (
     "CAM_SUSPENDED"                             => "Votre webcam est en pause",
     "CAM_RESUMED"                               => "Votre webcam est à nouveau active",
     "GROUP_ACTIONS"                             => "Actions groupées",
-    "MUTE_EVERYONE"                             => "Couper le micro de tous les participants",
-    "UNMUTE_EVERYONE"                           => "Réactiver le micro de tous les participants",
-    "SUSPEND_EVERYONE"                          => "Mettre en pause les webcam de tous les participants",
-    "RESUME_EVERYONE"                           => "Réactiver les webcam de tous les participants",
     "SHARE_YOUR_SCREEN"                         => "Partager votre écran",
     "CANT_SHARE_SCREEN"                         => "Désolé, mais votre configuration ne vous permet pas de partager votre écran",
     "SCREEN_SHARING_ONLY_FOR_CHROME"            => "Désolé, mais vous ne pouvez pas partager votre écran. Seul le navigateur Google Chrome " .
@@ -249,16 +245,14 @@ our %Lexicon = (
                                                    "et sont sécurisées",
     "WORKS_EVERYWHERE"                          => "Universel",
     "MODERN_BROWSERS"                           => "VROOM fonctionne avec les navigateurs modernes (Google Chrome, Mozilla Firefox, Opera), " .
-                                                   "vous n'avez aucun plugin à installer, ni codec, ni logiciel, ni à " .
-                                                   "envoyer la doc technique aux autres participants. Vous n'avez qu'à cliquer, et discuter",
+                                                   "vous n'avez aucun plugin, codec, ou logiciel à installer",
     "MULTI_USER"                                => "Multi utilisateurs",
     "THE_LIMIT_IS_YOUR_PIPE"                    => "Avec VROOM, vous n'avez pas de limite de participants, vous pouvez discuter à " .
                                                    "plusieurs en même temps. La seule limite est la capacité de votre connexion Internet. " .
                                                    "En général, vous pouvez discuter à 5~6 personnes sans problème.",
     "NO_SIGNIN"                                 => "Pas d'inscription",
-    "YOU_DONT_HAVE_TO_REGISTER"                 => "Vous en avez marre de créer un compte sur tous les services possibles et imaginables, " .
-                                                   "de devoir vérifier que ceux avec qui vous voulez parler ont eux aussi créé un compte ? " .
-                                                   "Ça tombe bien, avec VROOM, vous n'en avez pas besoin: aucun compte à créer",
+    "YOU_DONT_HAVE_TO_REGISTER"                 => "Vous en avez marre de créer un compte sur tous les services possibles et imaginables ?" .
+                                                   "Ça tombe bien, avec VROOM, il n'y a pas d'inscription",
     "QUICK"                                     => "Rapide",
     "STOP_WASTING_TIME"                         => "Ne perdez plus votre temps à vérifier, installer, expliquer. Cliquez, envoyez un lien " .
                                                    "à qui vous voulez, et discutez. On ne peut pas faire plus simple ou plus rapide.",
@@ -266,21 +260,19 @@ our %Lexicon = (
                                                    "exceptionnelle. Grâce à cette fonctionnalité, diffusez n'importe quel contenu " .
                                                    "(images, présentations, documents etc...)",
     "TEXT_CHAT"                                 => "Tchat intégré",
-    "SECURED_TEXT_CHAT"                         => "La vidéo et le son ne vous suffisent pas ? Vous pouvez aussi utiliser le tchat intégré et " .
-                                                   "entièrement sécurisé: vos discussions se font directement entre les membres, et ne passent " .
-                                                   "à aucun moment par nos serveurs.",
+    "SECURED_TEXT_CHAT"                         => "La vidéo et le son ne vous suffisent pas ? Vous pouvez aussi utiliser le tchat intégré" .
     "COLLABORATIVE_NOTETAKING"                  => "Prise de notes collaborative",
-    "TAKE_NOTE_IN_REALTIME"                     => "Prenez des notes tous ensembles, en temps réel grâce à l'éditeur collaboratif intégré",
+    "TAKE_NOTE_IN_REALTIME"                     => "Prenez des notes tous ensembles, en temps réel grâce à un bloc notes collaboratif",
     "SUPPORTED_BROWSERS"                        => "Navigateurs supportés",
-    "HELP_BROWSERS_SUPPORTED"                   => "VROOM fonctionne avec tous les navigateurs modernes et respectueux des standards. " .
+    "HELP_BROWSERS_SUPPORTED"                   => "VROOM fonctionne avec tous les navigateurs modernes. " .
                                                    "Les technologies employées (WebRTC) étant encore jeunes, seules les versions " .
-                                                   "récentes de Mozilla Firefox, Google Chrome et Opéra fonctionnent pour l'instant. " .
-                                                   "Les autres navigateurs (principalement Internet Explorer et Safari) devraient " .
-                                                   "suivrent un jour, mais ne fonctionneront pas actuellement",
+                                                   "récentes de Mozilla Firefox, Google Chrome et Opera fonctionnent pour l'instant. " .
+                                                   "Les autres navigateurs (principalement Internet Explorer et Safari) " .
+                                                   "ne fonctionneront pas pour l'instant",
     "I_DONT_HAVE_A_WEBCAM"                      => "Je n'ai pas de webcam",
     "HELP_I_DONT_HAVE_A_WEBCAM"                 => "Vous pourrez quand même participer. Si aucune webcam n'est disponible au moment " .
                                                    "de rejoindre un salon, un message apparaitra. Vous pouvez à ce moment cliquer " .
-                                                   "sur le lien en bas de cette fenêtre pour rejoindre le salon an audio uniquement. " .
+                                                   "choisir de rejoindre le salon an audio uniquement. " .
                                                    "Vous pourrez voir les autres participants, et ils pourront vous entendre, mais " .
                                                    "verront un écran noir à la place de votre vidéo.",
     "SCREEN_SHARING"                            => "Partage d'écran",
@@ -301,10 +293,11 @@ our %Lexicon = (
     "HELP_RESERVED_ROOMS"                       => "Par défaut, les salons sont éphémères, c'est à dire qu'ils sont automatiquement " .
                                                    "supprimés si ils ne sont pas utilisés pendant un certains temps. " .
                                                    "Le créateur du salon peut définir un mot de passe de gestionaire, ce qui " .
-                                                   "réservera le salon. Un salon réservé peut tout de même sera conservé plus longtemps.",
+                                                   "réservera le salon. Un salon réservé peut toujours être supprimé s'il n'est " .
+                                                   "utilisé pendant une longue période, mais sera conservé plus longtemps.",
     "BE_NOTIFIED"                               => "Notifications",
     "HELP_BE_NOTIFIED"                          => "Vous pouvez être notifiés par email dès que quelqu'un rejoint un de vos salons. " .
-                                                   "Par exemple, créez un salon, ajoutez un mot de passe pour le rendre persistant et " .
+                                                   "Par exemple, créez un salon, réservez-le en configurant un mot de pase de gestionnaire et " .
                                                    "ajoutez le lien dans votre signature de mail. Dès que quelqu'un cherche à discuter " .
                                                    "avez vous, vous recevrez une notification",
     "ABOUT_VROOM"                               => "VROOM est un logiciel libre exploitant les dernières technologies du " .
