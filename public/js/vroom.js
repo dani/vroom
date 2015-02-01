@@ -287,6 +287,7 @@ $('#configureRoomForm').submit(function(e){
                    $('#joinPass').val() : false,
       ownerPass = ($('#ownerPassSet').bootstrapSwitch('state')) ?
                    $('#ownerPass').val() : false,
+      persistent = $('#persistentSet').bootstrapSwitch('state'),
       emails = [];
   $('input[name="emails[]"]').each(function(){
     emails.push($(this).val());
@@ -301,6 +302,7 @@ $('#configureRoomForm').submit(function(e){
           ask_for_name: askForName,
           join_password: joinPass,
           owner_password: ownerPass,
+          persistent: persistent,
           emails: emails
         }
       })
@@ -517,6 +519,7 @@ function initAdmin(){
         $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name == 'yes');
         $('#joinPassSet').bootstrapSwitch('state', data.join_auth == 'yes');
         $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth == 'yes');
+        $('#persistentSet').bootstrapSwitch('state', data.persistent == 'yes');
         $('#configureModal').modal('show');
       }
     });

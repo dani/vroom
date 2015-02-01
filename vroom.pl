@@ -1028,29 +1028,15 @@ get '/about' => sub {
 get '/help' => 'help';
 
 # Route for the admin pages
-get '/admin/:room' => { room => '' } => sub {
+get '/admin' => sub {
   my $self = shift;
-  my $room = $self->stash('room');
   # Someone accessing /admin is considered an admin
   # For now, the auth is handled outside of VROOM itself
   $self->login;
   $self->make_key_admin($self->session('key'));
-  if ($room eq ''){
-    $self->purge_rooms;
-    return $self->render('admin');
-  }
-  my $data = $self->get_room_by_name($room);
-  if (!$data){
-    return $self->render('error',
-      err  => 'ERROR_ROOM_s_DOESNT_EXIST',
-      msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
-      room => $room
-    );
-  }
-  $self->purge_participants;
-  return $self->render('manage_room',
-    room         => $room,
-    participants => scalar keys %{$self->get_participants_list($room)}
+  $self->purge_rooms;
+  return $self->render('admin',
+    admin => 1
   );
 };
 
@@ -1407,6 +1393,10 @@ any '/api' => sub {
   elsif ($req->{action} eq 'update_room_conf'){
     $room->{locked} = ($req->{param}->{locked}) ? '1' : '0';
     $room->{ask_for_name} = ($req->{param}->{ask_for_name}) ? '1' : '0';
+    # Room persistence can only be set by admins
+    if ($self->key_can_do_this(token  => $token, action => 'set_persistent')){
+      $room->{persistent} = ($req->{param}->{persistent}) ? '1' : '0';
+    }
     foreach my $pass (qw/join_password owner_password/){
       if ($req->{param}->{$pass} eq Mojo::JSON->false){
         $room->{$pass} = undef;
@@ -1589,6 +1579,7 @@ any '/api' => sub {
         join_auth    => ($room->{join_password})  ? 'yes' : 'no',
         locked       => ($room->{locked})         ? 'yes' : 'no',
         ask_for_name => ($room->{ask_for_name})   ? 'yes' : 'no',
+        persistent   => ($room->{persistent})     ? 'yes' : 'no',
         notif        => $self->get_notification($room->{name}),
         status       => 'success'
       }
