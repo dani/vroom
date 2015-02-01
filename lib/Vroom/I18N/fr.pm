@@ -241,15 +241,14 @@ our %Lexicon = (
     "HELP"                                      => "Aide",
     "ABOUT"                                     => "À propos",
     "SECURE"                                    => "Sécurisé",
-    "P2P_COMMUNICATION"                         => "Avec VROOM, vos communications se font de pair à pair (directement entre utilisateurs), " .
-                                                   "et sont sécurisées",
+    "P2P_COMMUNICATION"                         => "Avec VROOM, vos communications se font directement entre utilisateurs, pas d'espionage ni " .
+                                                   "d'enregistrement de vos conversations",
     "WORKS_EVERYWHERE"                          => "Universel",
     "MODERN_BROWSERS"                           => "VROOM fonctionne avec les navigateurs modernes (Google Chrome, Mozilla Firefox, Opera), " .
                                                    "vous n'avez aucun plugin, codec, ou logiciel à installer",
     "MULTI_USER"                                => "Multi utilisateurs",
-    "THE_LIMIT_IS_YOUR_PIPE"                    => "Avec VROOM, vous n'avez pas de limite de participants, vous pouvez discuter à " .
-                                                   "plusieurs en même temps. La seule limite est la capacité de votre connexion Internet. " .
-                                                   "En général, vous pouvez discuter à 5~6 personnes sans problème.",
+    "THE_LIMIT_IS_YOUR_PIPE"                    => "Avec VROOM, vous pouvez discuter à plusieurs en même temps. La seule limite est " .
+                                                   "la capacité de votre connexion Internet.",
     "NO_SIGNIN"                                 => "Pas d'inscription",
     "YOU_DONT_HAVE_TO_REGISTER"                 => "Vous en avez marre de créer un compte sur tous les services possibles et imaginables ?" .
                                                    "Ça tombe bien, avec VROOM, il n'y a pas d'inscription",
@@ -260,7 +259,7 @@ our %Lexicon = (
                                                    "exceptionnelle. Grâce à cette fonctionnalité, diffusez n'importe quel contenu " .
                                                    "(images, présentations, documents etc...)",
     "TEXT_CHAT"                                 => "Tchat intégré",
-    "SECURED_TEXT_CHAT"                         => "La vidéo et le son ne vous suffisent pas ? Vous pouvez aussi utiliser le tchat intégré" .
+    "SECURED_TEXT_CHAT"                         => "La vidéo et le son ne vous suffisent pas ? Vous pouvez aussi utiliser le tchat intégré",
     "COLLABORATIVE_NOTETAKING"                  => "Prise de notes collaborative",
     "TAKE_NOTE_IN_REALTIME"                     => "Prenez des notes tous ensembles, en temps réel grâce à un bloc notes collaboratif",
     "SUPPORTED_BROWSERS"                        => "Navigateurs supportés",

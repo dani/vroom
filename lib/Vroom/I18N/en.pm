@@ -232,17 +232,16 @@ our %Lexicon = (
   "HELP"                                 => "Help",
   "ABOUT"                                => "About",
   "SECURE"                               => "Secure",
-  "P2P_COMMUNICATION"                    => "With VROOM, your communications are done peer to peer, and secured",
+  "P2P_COMMUNICATION"                    => "With VROOM, your communications are done directly between users. No spying or recording of " .
+                                            "your conversations",
   "WORKS_EVERYWHERE"                     => "Universal",
   "MODERN_BROWSERS"                      => "VROOM works with modern browsers (Chrome, Mozilla Firefox or Opera), " .
                                             "you don't have to install plugins, codecs, client software, then " .
                                             "send the tech documentation to all other parties. Just click, " .
                                             "and hangout",
   "MULTI_USER"                           => "Multi User",
-  "THE_LIMIT_IS_YOUR_PIPE"               => "VROOM doesn't have a limit on the number of participants, " .
-                                            "you can chat with several people at the same time. The only limit " .
-                                            "is the capacity of your Internet pipe. Usually, you can chat with " .
-                                            "up to 5~6 person without problem",
+  "THE_LIMIT_IS_YOUR_PIPE"               => "VROOM you can chat with several people at the same time. The only limit " .
+                                            "is the capacity of your Internet pipe.",
   "NO_SIGNIN"                            => "No need to register",
   "YOU_DONT_HAVE_TO_REGISTER"            => "Tired of creating an account on each and every service you can find ?" .
                                             "Well, great news, with VROOM, you do not need to register at all ",
