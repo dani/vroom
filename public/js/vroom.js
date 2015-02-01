@@ -157,6 +157,15 @@ function timeStamp2Date(sec){
   return d.toLocaleString();
 }
 
+// Convert dates from UTC to local TZ
+function utc2Local(date) {
+  var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+  var offset = date.getTimezoneOffset() / 60;
+  var hours = date.getHours();
+  newDate.setHours(hours - offset);
+  return newDate;   
+}
+
 // Temporarily suspend a button, prevent abuse
 function suspendButton(el){
   $(el).attr('disabled', true);
@@ -395,8 +404,14 @@ function initAdmin(){
       if (filter === '' || obj.name.match(filterRe)){
         matches++;
         if (i >= min && i < max){
+          var t = obj.create_date.split(/[- :]/);
+          var create = utc2Local(new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5])).toLocaleString();
+          t = obj.last_activity.split(/[- :]/);
+          var activity = utc2Local(new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5])).toLocaleString();
           $('#roomList').append($('<tr>')
             .append($('<td>').html(stringEscape(obj.name)))
+            .append($('<td>').html(stringEscape(create)).addClass('hidden-xs'))
+            .append($('<td>').html(stringEscape(activity)).addClass('hidden-xs'))
             .append($('<td>')
               .append($('<div>').addClass('btn-group')
                 .append($('<a>').addClass('btn btn-default').attr('href',rootUrl + obj.name)

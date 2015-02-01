@@ -28,6 +28,12 @@
             <th>
               <%=l 'ROOM_NAME' %>
             </th>
+            <th class="hidden-xs">
+              <%=l 'CREATION_DATE' %>
+            </th>
+            <th class="hidden-xs">
+              <%=l 'LAST_ACTIVITY' %>
+            </th>
             <th>
               <%=l 'MANAGE' %>
             </th>
