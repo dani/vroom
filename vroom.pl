@@ -76,9 +76,10 @@ plugin database => {
   username => $config->{'database.user'},
   password => $config->{'database.password'},
   options  => {
-    mysql_enable_utf8 => 1,
-    RaiseError        => 1,
-    PrintError        => 0
+    mysql_enable_utf8    => 1,
+    mysql_auto_reconnect => 1,
+    RaiseError           => 1,
+    PrintError           => 0
   }
 };
 
