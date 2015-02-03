@@ -178,10 +178,11 @@ function maxHeight(){
 function addEmailInputField(val){
   var parentEl = $('.email-list'),
       currentEntry = parentEl.find('.email-entry:last'),
-      newEntry = $(currentEntry.clone()).appendTo(parentEl);
+      newEntry = $(currentEntry.clone()).css('display', 'none').appendTo(parentEl);
   newEntry.find('input').val(val);
   newEntry.removeClass('has-error');
   adjustAddRemoveEmailButtons();
+  newEntry.show(100);
 }
 // Adjust add and remove buttons foir email notifications
 function adjustAddRemoveEmailButtons(){
@@ -201,7 +202,11 @@ $(document).on('click','button.btn-add-email',function(e){
 });
 $(document).on('click','button.btn-remove-email',function(e){
   e.preventDefault();
-  $(this).parents('.email-entry:first').remove();
+  el = $(this).parents('.email-entry:first');
+  el.hide(100);
+  setTimeout(function(){
+    el.remove();
+  }, 100);
 });
 
 // Handle owner/join password confirm
