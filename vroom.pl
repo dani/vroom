@@ -1690,7 +1690,25 @@ any '/api' => sub {
   # Return the role of a peer
   elsif ($req->{action} eq 'get_peer_role'){
     my $peer_id = $req->{param}->{peer_id};
+    if (!$peer_id){
+      return $self->render(
+        json => {
+          msg => $self->l('ERROR_PEER_ID_MISSING'),
+          err => 'ERROR_PEER_ID_MISSING'
+        },
+        status => 400
+      );
+    }
     my $role = $self->get_peer_role({room => $room->{name}, peer_id => $peer_id});
+    if (!$role){
+      return $self->render(
+        json => {
+          msg => $self->l('ERROR_PEER_NOT_FOUND'),
+          err => 'ERROR_PEER_NOT_FOUND'
+        },
+        status => 400
+      );
+    }
     return $self->render(
       json => {
         role => $role,

@@ -707,7 +707,13 @@ function initVroom(room) {
         })
       },
       error: function(data){
-        $.notify(locale.ERROR_OCCURRED, 'error');
+        data = data.responseJSON;
+        if (data.msg){
+          $.notify(data.msg, 'error');
+        }
+        else{
+          $.notify(locale.ERROR_OCCURRED, 'error');
+        }
       },
       success: function(data){
         if (peers[id]){
