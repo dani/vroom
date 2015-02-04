@@ -1638,6 +1638,10 @@ function initVroom(room) {
       success: function(data) {
         $('#recipient').val('');
         if (data.status == 'success'){
+          $('#inviteModal').modal('hide');
+          $('#email-list-invite').find('.email-entry:not(:last)').remove();
+          $('#email-list-invite').find('input').val('');
+          $('#message').val('');
           $.notify(data.msg, 'success');
         }
         else{
