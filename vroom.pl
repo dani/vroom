@@ -1300,14 +1300,6 @@ any '/api' => sub {
   }
   # Ok, now, we don't have to bother with authorization anymore
   if ($req->{action} eq 'invite_email'){
-    #if (!$req->{param}->{rcpts}){
-    #  return $self->render(
-    #    json => {
-    #      status => 'error',
-    #      msg    => $self->l('ERROR_MAIL_INVALID')
-    #    }
-    #  );
-    #}
     my $rcpts = $req->{param}->{rcpts};
     foreach my $addr (@$rcpts){
       if (!$self->valid_email($addr) && $addr ne ''){
@@ -1407,8 +1399,8 @@ any '/api' => sub {
     $room->{locked} = ($req->{param}->{locked}) ? '1' : '0';
     $room->{ask_for_name} = ($req->{param}->{ask_for_name}) ? '1' : '0';
     # Room persistence can only be set by admins
-    if ($self->key_can_do_this(token  => $token, action => 'set_persistent')){
-      $room->{persistent} = ($req->{param}->{persistent}) ? '1' : '0';
+    if ($self->key_can_do_this(token  => $token, action => 'set_persistent') && $req->{param}->{persistent} ne ''){
+      $room->{persistent} = ($req->{param}->{persistent} eq Mojo::JSON->true) ? '1' : '0';
     }
     foreach my $pass (qw/join_password owner_password/){
       if ($req->{param}->{$pass} eq Mojo::JSON->false){
