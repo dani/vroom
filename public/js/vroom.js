@@ -307,21 +307,21 @@ $('#configureRoomForm').submit(function(e){
         }
       })
     },
-    error: function() {
-      $.notify(locale.ERROR_OCCURRED, 'error');
+    error: function(data) {
+      data = data.responseJSON;
+      if (data.msg){
+        $.notify(data.msg, 'error');
+      }
+      else{
+        $.notify(locale.ERROR_OCCURRED, 'error');
+      }
     },
     success: function(data) {
       $('#ownerPass,#ownerPassConfirm,#joinPass,#joinPassConfirm').val('');
-      if (data.status == 'success'){
-        $('#configureModal').modal('hide');
-        // Hide passwords inputs too
-        $('#joinPassFields,#ownerPassFields').hide();
-        $.notify(data.msg, 'info');
-        $('#configureRoomForm').trigger('room_conf_updated');
-      }
-      else{
-        $.notify(data.msg, 'error');
-      }
+      $('#configureModal').modal('hide');
+      $('#joinPassFields,#ownerPassFields').hide();
+      $.notify(data.msg, 'info');
+      $('#configureRoomForm').trigger('room_conf_updated');
     }
   });
 });

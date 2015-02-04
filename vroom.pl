@@ -1455,8 +1455,10 @@ any '/api' => sub {
     return $self->render(
       json => {
         status => 'error',
-        msg    => $self->l('ERROR_OCCURRED')
-      }
+        msg    => $self->l('ERROR_OCCURRED'),
+        err    => 'ERROR_OCCURRED'
+      },
+      staus => 503
     );
   }
   # Handle password (join and owner)
