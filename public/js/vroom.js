@@ -1848,6 +1848,7 @@ function initVroom(room) {
         $('#authPass').val('');
         $('#ownerAuthModal').modal('hide');
         getRoomInfo();
+        $('#joinPassFields,#ownerPassFields').hide();
         $.notify(data.msg, 'success');
       }
     });
