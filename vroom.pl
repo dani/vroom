@@ -1668,8 +1668,10 @@ any '/api' => sub {
         return $self->render(
           json => {
             status => 'error',
-            msg    => $self->l('ERROR_OCCURRED')
-          }
+            msg    => $self->l('ERROR_OCCURRED'),
+            err    => 'ERROR_OCCURRED'
+          },
+          status => 503
         );
       }
     }
