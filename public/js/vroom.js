@@ -1638,20 +1638,21 @@ function initVroom(room) {
         })
       },
       error: function(data) {
-        $.notify(locale.ERROR_OCCURRED, 'error');
+        data = data.responseJSON;
+        if (data.msg){
+          $.notify(data.msg, 'error');
+        }
+        else{
+          $.notify(locale.ERROR_OCCURRED, 'error');
+        }
       },
       success: function(data) {
         $('#recipient').val('');
-        if (data.status == 'success'){
-          $('#inviteModal').modal('hide');
-          $('#email-list-invite').find('.email-entry:not(:last)').remove();
-          $('#email-list-invite').find('input').val('');
-          $('#message').val('');
-          $.notify(data.msg, 'success');
-        }
-        else{
-          $.notify(data.msg, 'error');
-        }
+        $('#inviteModal').modal('hide');
+        $('#email-list-invite').find('.email-entry:not(:last)').remove();
+        $('#email-list-invite').find('input').val('');
+        $('#message').val('');
+        $.notify(data.msg, 'success');
       }
     });
   });

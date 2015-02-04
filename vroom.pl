@@ -1251,9 +1251,10 @@ any '/api' => sub {
       return $self->render(
         json => {
           status => 'error',
-          msg    => 'UNSUPPORTED_LANG'
+          msg    => $self->l('UNSUPPORTED_LANG'),
+          err    => 'UNSUPPORTED_LANG'
         },
-        status => 503
+        status => 400
       );
     }
     $self->session(language => $req->{param}->{language});
@@ -1271,8 +1272,8 @@ any '/api' => sub {
     param  => $req->{param}
   );
 
-  # Here are mthod not tied to a room
-  if ($req->{action} eq 'get_room_list'){
+  # Here are method not tied to a room
+  if ($res && $req->{action} eq 'get_room_list'){
     my $rooms = $self->get_room_list;
     # Blank out a few param we don't need
     foreach my $r (keys %{$rooms}){
@@ -1293,9 +1294,10 @@ any '/api' => sub {
     return $self->render(
       json => {
         status => 'error',
-        msg    => 'NOT_ALLOWED'
+        msg    => $self->l('NOT_ALLOWED'),
+        err    => 'NOT_ALLOWED'
       },
-      status => '403'
+      status => '401'
     );
   }
   # Ok, now, we don't have to bother with authorization anymore
@@ -1306,8 +1308,10 @@ any '/api' => sub {
         return $self->render(
           json => {
             status => 'error',
-            msg    => $self->l('ERROR_MAIL_INVALID')
-          }
+            msg    => $self->l('ERROR_MAIL_INVALID'),
+            err    => 'ERROR_MAIL_INVALID'
+          },
+          status => 400
         );
       }
     }
@@ -1330,8 +1334,10 @@ any '/api' => sub {
         return $self->render(
           json => {
             status => 'error',
-            msg    => 'ERROR_OCCURRED'
-          }
+            msg    => $self->l('ERROR_OCCURRED'),
+            err    => 'ERROR_OCCURRED'
+          },
+          status => 400
         );
       }
       $self->app->log->info("Email invitation to join room " . $req->{param}->{room} . " sent to " . $addr);
@@ -1339,7 +1345,7 @@ any '/api' => sub {
     return $self->render(
       json => {
         status => 'success',
-        msg    => sprintf($self->l('INVITE_SENT_TO_s'), join("\n", @$rcpts))
+        msg    => sprintf($self->l('INVITE_SENT_TO_s'), join("\n", @$rcpts)),
        }
     );
   }
