@@ -28,7 +28,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="recipient" class="col-sm-4 control-label">
+                <label for="message" class="col-sm-4 control-label">
                   <%=l 'MESSAGE' %>
                 </label>
                 <div class="col-sm-8">
