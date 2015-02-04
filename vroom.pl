@@ -1547,8 +1547,10 @@ any '/api' => sub {
     return $self->render(
       json => {
         msg    => $self->l('ERROR_OCCURRED'),
+        err    => 'ERROR_OCCURRED',
         status => 'error'
-      }
+      },
+      status => 503
     );
   }
   # Add or remove an email address to the list of email notifications
@@ -1559,8 +1561,10 @@ any '/api' => sub {
       return $self->render(
         json => {
           msg    => $self->l('ERROR_MAIL_INVALID'),
+          err    => 'ERROR_MAIL_INVALID',
           status => 'error'
-        }
+        },
+        status => 400
       );
     }
     elsif ($set eq 'on' && $self->add_notification($room->{name},$email)){
@@ -1582,8 +1586,10 @@ any '/api' => sub {
     return $self->render(
       json => {
         msg    => $self->l('ERROR_OCCURRED'),
+        err    => 'ERROR_OCCURRED',
         status => 'error'
-      }
+      },
+      status => 503
     );
   }
   elsif ($req->{action} eq 'authenticate'){
@@ -1608,16 +1614,20 @@ any '/api' => sub {
       return $self->render(
         json => {
           status => 'error',
-          msg    => $self->l('WRONG_PASSWORD')
-        }
+          msg    => $self->l('WRONG_PASSWORD'),
+          err    => 'WRONG_PASSWORD'
+        },
+        status => 401
       );
     }
     # There's no owner password, so you cannot auth
     return $self->render(
       json => {
         msg    => $self->l('NOT_ALLOWED'),
+        err    => 'NOT_ALLOWED',
         status => 'error'
-      }
+      },
+      status => 403
     );
   }
   # Return just room config

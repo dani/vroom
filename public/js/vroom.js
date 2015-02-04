@@ -1836,18 +1836,19 @@ function initVroom(room) {
         })
       },
       error: function(data) {
-        $.notify(locale.ERROR_OCCURRED, 'error');
+        data = data.responseJSON;
+        if (data.msg){
+          $.notify(data.msg, 'error');
+        }
+        else{
+          $.notify(locale.ERROR_OCCURRED, 'error');
+        }
       },
       success: function(data) {
         $('#authPass').val('');
-        if (data.status == 'success'){
-          $('#ownerAuthModal').modal('hide');
-          getRoomInfo();
-          $.notify(data.msg, 'success');
-        }
-        else{
-          $.notify(data.msg, 'error');
-        }
+        $('#ownerAuthModal').modal('hide');
+        getRoomInfo();
+        $.notify(data.msg, 'success');
       }
     });
   });
