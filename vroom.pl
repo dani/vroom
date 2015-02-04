@@ -1272,8 +1272,20 @@ any '/api' => sub {
     param  => $req->{param}
   );
 
+  # This action isn't possible with the privs associated to the API Key
+  if (!$res){
+    return $self->render(
+      json => {
+        status => 'error',
+        msg    => $self->l('NOT_ALLOWED'),
+        err    => 'NOT_ALLOWED'
+      },
+      status => '401'
+    );
+  }
+
   # Here are method not tied to a room
-  if ($res && $req->{action} eq 'get_room_list'){
+  if ($req->{action} eq 'get_room_list'){
     my $rooms = $self->get_room_list;
     # Blank out a few param we don't need
     foreach my $r (keys %{$rooms}){
@@ -1289,17 +1301,29 @@ any '/api' => sub {
     );
   }
 
-  $room = $self->get_room_by_name($req->{param}->{room});
-  if (!$res || (!$room && $req->{param}->{room})){
+  if (!$req->{param}->{room}){
     return $self->render(
       json => {
         status => 'error',
-        msg    => $self->l('NOT_ALLOWED'),
-        err    => 'NOT_ALLOWED'
+        msg    => $self->l('ERROR_ROOM_NAME_MISSING'),
+        err    => 'ERROR_ROOM_NAME_MISSING'
       },
-      status => '401'
+      status => '400'
     );
   }
+
+  $room = $self->get_room_by_name($req->{param}->{room});
+  if (!$room){
+    return $self->render(
+      json => {
+        status => 'error',
+        msg    => sprintf($self->l('ERROR_ROOM_s_DOESNT_EXIST'), $req->{param}->{room}),
+        err    => 'ERROR_ROOM_DOESNT_EXIST'
+      },
+      status => '400'
+    );
+  }
+
   # Ok, now, we don't have to bother with authorization anymore
   if ($req->{action} eq 'invite_email'){
     my $rcpts = $req->{param}->{rcpts};
