@@ -178,11 +178,10 @@ function maxHeight(){
 function addEmailInputField(form, val){
   var parentEl = $('#' + form),
       currentEntry = parentEl.find('.email-entry:last'),
-      newEntry = $(currentEntry.clone()).css('display', 'none').appendTo(parentEl);
+      newEntry = $(currentEntry.clone()).appendTo(parentEl);
   newEntry.find('input').val(val);
   newEntry.removeClass('has-error');
   adjustAddRemoveEmailButtons(form);
-  newEntry.show(100);
 }
 // Adjust add and remove buttons foir email notifications
 function adjustAddRemoveEmailButtons(form){
@@ -503,15 +502,18 @@ function initAdmin(){
         $.notify(locale.ERROR_OCCURRED, 'error');
       },
       success: function(data){
-        // Reset the list of email displayed, so first remove evry input field but the first one
+        // Reset the list of email displayed, so first remove evry input field but the last one
         // We keep it so we can clone it again
-        $('.email-list').find('.email-entry:not(:first)').remove();
+        $('.email-list').find('.email-entry:not(:last)').remove();
         $.each(data.notif, function(index, obj){
           addEmailInputField('email-list-notification', obj.email);
         });
         // Now, remove the first one if the list is not empty
         if (Object.keys(data.notif).length > 0){
           $('.email-list').find('.email-entry:first').remove();
+        }
+        else{
+          $('.email-list').find('.email-entry:first').find('input:first').val('');
         }
         adjustAddRemoveEmailButtons();
         // Update config switches
@@ -649,15 +651,18 @@ function initVroom(room) {
         if (data.role == 'owner'){
           $('.unauthEl').hide(500);
           $('.ownerEl').show(500);
-          // Reset the list of email displayed, so first remove evry input field but the first one
+          // Reset the list of email displayed, so first remove evry input field but the last one
           // We keep it so we can clone it again
-          $('.email-list').find('.email-entry:not(:first)').remove();
+          $('.email-list').find('.email-entry:not(:last)').remove();
           $.each(data.notif, function(index, obj){
             addEmailInputField('email-list-notification', obj.email);
           });
           // Now, remove the first one if the list is not empty
           if (Object.keys(data.notif).length > 0){
             $('.email-list').find('.email-entry:first').remove();
+          }
+          else{
+            $('.email-list').find('.email-entry:first').find('input:first').val('');
           }
           adjustAddRemoveEmailButtons();
         }
