@@ -16,7 +16,7 @@ our %Lexicon = (
   "ERROR_NOT_LOGGED_IN"                  => "Sorry, your not logged in",
   "JS_REQUIRED"                          => "VROOM needs javascript to work properly",
   "EMAIL_INVITATION"                     => "Video conference invitation",
-  "INVITE_SENT_TO_s"                     => "An invitation was sent to %s",
+  "INVITE_SENT_TO_s"                     => "An invitation was sent to the following addresses\n%s",
   "YOU_ARE_INVITED_TO_A_MEETING"         => "You are awaited on a video conferecing room. " .
                                             "Before joining it, make sure you have all the necessary",
   "A_MODERN_BROWSER"                     => "A modern web browser, recent versions of Mozilla Firefox, Google Chrome or Opera will work",

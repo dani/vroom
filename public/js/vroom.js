@@ -175,22 +175,22 @@ function maxHeight(){
 }
 
 // Create a new input field
-function addEmailInputField(val){
-  var parentEl = $('.email-list'),
+function addEmailInputField(form, val){
+  var parentEl = $('#' + form),
       currentEntry = parentEl.find('.email-entry:last'),
       newEntry = $(currentEntry.clone()).css('display', 'none').appendTo(parentEl);
   newEntry.find('input').val(val);
   newEntry.removeClass('has-error');
-  adjustAddRemoveEmailButtons();
+  adjustAddRemoveEmailButtons(form);
   newEntry.show(100);
 }
 // Adjust add and remove buttons foir email notifications
-function adjustAddRemoveEmailButtons(){
-  $('.email-list').find('.email-entry:not(:last) .btn-add-email')
+function adjustAddRemoveEmailButtons(form){
+  $('#' + form).find('.email-entry:not(:last) .btn-add-email')
     .removeClass('btn-primary').removeClass('btn-add-email')
     .addClass('btn-danger').addClass('btn-remove-email')
     .html('<span class="glyphicon glyphicon-minus"></span>');
-  $('.email-list').find('.email-entry:last .btn-remove-email')
+  $('#' + form).find('.email-entry:last .btn-remove-email')
     .removeClass('btn-danger').removeClass('btn-remove-email')
     .addClass('btn-primary').addClass('btn-add-email')
     .html('<span class="glyphicon glyphicon-plus"></span>');
@@ -198,7 +198,7 @@ function adjustAddRemoveEmailButtons(){
 // Add emails input fields
 $(document).on('click','button.btn-add-email',function(e){
   e.preventDefault();
-  addEmailInputField('');
+  addEmailInputField($(this).parents('.email-list:first').attr('id'), '');
 });
 $(document).on('click','button.btn-remove-email',function(e){
   e.preventDefault();
@@ -506,7 +506,7 @@ function initAdmin(){
         // We keep it so we can clone it again
         $('.email-list').find('.email-entry:not(:first)').remove();
         $.each(data.notif, function(index, obj){
-          addEmailInputField(obj.email);
+          addEmailInputField('email-list-notification', obj.email);
         });
         // Now, remove the first one if the list is not empty
         if (Object.keys(data.notif).length > 0){
@@ -652,7 +652,7 @@ function initVroom(room) {
           // We keep it so we can clone it again
           $('.email-list').find('.email-entry:not(:first)').remove();
           $.each(data.notif, function(index, obj){
-            addEmailInputField(obj.email);
+            addEmailInputField('email-list-notification', obj.email);
           });
           // Now, remove the first one if the list is not empty
           if (Object.keys(data.notif).length > 0){
@@ -1597,20 +1597,35 @@ function initVroom(room) {
   // Handle Email Invitation
   $('#inviteEmail').submit(function(event) {
     event.preventDefault();
-    var rcpt    = $('#recipient').val();
+    var rcpts = [],
         message = $('#message').val();
+    $('input[name="invitation-recipients[]"]').each(function(){
+      rcpts.push($(this).val());
+    });
     // Simple email address verification
     // not fullproof, but email validation is a real nightmare
-    if (!rcpt.match(/\S+@\S+\.\S+/)){
-      $.notify(locale.ERROR_MAIL_INVALID, 'error');
-      return;
+    var validEmail = true;
+    $('.email-list').find('input').each(function(index, input){
+      if (!$(input).val().match(/\S+@\S+\.\S+/) && $(input).val() !== ''){
+        $(input).parent().addClass('has-error');
+        //$(input).parent().notify(locale.ERROR_MAIL_INVALID, 'error');
+        validEmail = false;
+        // Break the each loop
+        return false;
+      }
+      else{
+        $(input).parent().removeClass('has-error');
+      }
+    });
+    if (!validEmail){
+      return false;
     }
     $.ajax({
       data: {
         req: JSON.stringify({
           action: 'invite_email',
           param: {
-            rcpt: rcpt,
+            rcpts: rcpts,
             message: message,
             room: roomName
           }

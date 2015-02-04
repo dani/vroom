@@ -1300,42 +1300,55 @@ any '/api' => sub {
   }
   # Ok, now, we don't have to bother with authorization anymore
   if ($req->{action} eq 'invite_email'){
-    if (!$req->{param}->{rcpt} || $req->{param}->{rcpt}!~ m/\S+@\S+\.\S+$/){
-      return $self->render(
-        json => {
-          status => 'error',
-          msg    => 'ERROR_MAIL_INVALID'
-        }
-      );
+    #if (!$req->{param}->{rcpts}){
+    #  return $self->render(
+    #    json => {
+    #      status => 'error',
+    #      msg    => $self->l('ERROR_MAIL_INVALID')
+    #    }
+    #  );
+    #}
+    my $rcpts = $req->{param}->{rcpts};
+    foreach my $addr (@$rcpts){
+      if (!$self->valid_email($addr) && $addr ne ''){
+        return $self->render(
+          json => {
+            status => 'error',
+            msg    => $self->l('ERROR_MAIL_INVALID')
+          }
+        );
+      }
     }
-    my $token = $self->add_invitation(
-      $req->{param}->{room},
-      $req->{param}->{rcpt}
-    );
-    my $sent = $self->mail(
-      to      => $req->{param}->{rcpt},
-      subject => $self->l("EMAIL_INVITATION"),
-      data    => $self->render_mail('invite',
-        room     => $req->{param}->{room},
-        message  => $req->{param}->{message},
-        token    => $token,
-        joinPass => ($room->{join_password}) ? 'yes' : 'no'
-      )
-    );
-    if ($token && $sent){
-      $self->app->log->info("Email invitation to join room " . $req->{param}->{room} . " sent to " . $req->{param}->{rcpt});
-      return $self->render(
-        json => {
-          status => 'success',
-          msg    => sprintf($self->l('INVITE_SENT_TO_s'), $req->{param}->{rcpt})
-        }
+    foreach my $addr (@$rcpts){
+      my $token = $self->add_invitation(
+        $req->{param}->{room},
+        $addr
       );
+      my $sent = $self->mail(
+        to      => $addr,
+        subject => $self->l("EMAIL_INVITATION"),
+        data    => $self->render_mail('invite',
+          room     => $req->{param}->{room},
+          message  => $req->{param}->{message},
+          token    => $token,
+          joinPass => ($room->{join_password}) ? 'yes' : 'no'
+        )
+      );
+      if (!$token || !$sent){
+        return $self->render(
+          json => {
+            status => 'error',
+            msg    => 'ERROR_OCCURRED'
+          }
+        );
+      }
+      $self->app->log->info("Email invitation to join room " . $req->{param}->{room} . " sent to " . $addr);
     }
     return $self->render(
       json => {
-        status => 'error',
-        msg    => 'ERROR_OCCURRED'
-      }
+        status => 'success',
+        msg    => sprintf($self->l('INVITE_SENT_TO_s'), join("\n", @$rcpts))
+       }
     );
   }
   # Handle room lock/unlock

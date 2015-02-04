@@ -85,7 +85,7 @@
                 <label class="col-sm-4 control-label" for="emailNotifications">
                   <%=l 'NOTIFICATION_ON_JOIN' %>
                 </label>
-                <div class="col-sm-8 email-list">
+                <div class="col-sm-8 email-list" id="email-list-notification">
                   <div class="email-entry input-group col-sm-8">
                     <input class="form-control" autocomplete="off" name="emails[]" type="text" placeholder="<%=l 'EMAIL_PLACEHOLDER' %>" />
                     <span class="input-group-btn">
