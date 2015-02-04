@@ -1389,7 +1389,7 @@ any '/api' => sub {
     return $self->render(
       json => {
         msg    => $self->l('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED'
+        err    => 'ERROR_OCCURRED',
         status => 'error'
       },
       status => 503
@@ -1476,8 +1476,10 @@ any '/api' => sub {
     return $self->render(
       json => {
         msg    => $self->('ERROR_OCCURRED'),
+        err    => 'ERROR_OCCURRED',
         status => 'error'
-      }
+      },
+      status => 503
     );
   }
   elsif ($req->{action} eq 'set_owner_password'){
@@ -1485,8 +1487,10 @@ any '/api' => sub {
       return $self->render(
         json => {
           status => 'error',
-          msg    => $self->l('ERROR_COMMON_ROOM_NAME')
-        }
+          msg    => $self->l('ERROR_COMMON_ROOM_NAME'),
+          err    => 'ERROR_COMMON_ROOM_NAME'
+        },
+        status => 406
       );
     }
     $room->{owner_password} = ($req->{param}->{password} && $req->{param}->{password} ne '') ?
@@ -1502,8 +1506,10 @@ any '/api' => sub {
     return $self->render(
       json => {
         msg    => $self->('ERROR_OCCURRED'),
+        err    => 'ERROR_OCCURRED',
         status => 'error'
-      }
+      },
+      status => 503
     );
   }
   elsif ($req->{action} eq 'set_persistent'){
