@@ -1377,18 +1377,22 @@ any '/api' => sub {
   elsif ($req->{action} =~ m/(un)?lock_room/){
     $room->{locked} = ($req->{action} eq 'lock_room') ? '1':'0';
     if ($self->modify_room($room)){
+      my $m = ($req->{action} eq 'lock_room') ? 'ROOM_LOCKED' : 'ROOM_UNLOCKED';
       return $self->render(
         json => {
           status => 'success',
-          msg => $self->l(($req->{action} eq 'lock_room') ? 'ROOM_LOCKED' : 'ROOM_UNLOCKED')
+          msg    => $self->l($m),
+          err    => $m
         }
       );
     }
     return $self->render(
       json => {
         msg    => $self->l('ERROR_OCCURRED'),
+        err    => 'ERROR_OCCURRED'
         status => 'error'
-      }
+      },
+      status => 503
     );
   }
   # Handle activity pings sent every minute by each participant
