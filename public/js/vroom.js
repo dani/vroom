@@ -52,16 +52,17 @@ $('#switch_lang').change(function(){
         }
       })
     },
-    error: function() {
-      $.notify(locale.ERROR_OCCURRED, 'error');
-    },
-    success: function(data){
-      if (data.status === 'success'){
-        window.location.reload();
+    error: function(data) {
+      data = data.responseJSON;
+      if (data.msg){
+        $.notify(data.msg);
       }
       else{
-        $.notify(locale.ERROR_OCCURED, 'error');
+        $.notify(locale.ERROR_OCCURRED, 'error');
       }
+    },
+    success: function(data){
+      window.location.reload();
     }
   });
 });
