@@ -348,23 +348,24 @@ function initIndex(){
           roomName: $('#roomName').val(),
         },
         success: function(data) {
-          if (data.status == 'success'){
-            room = data.room;
-            window.location.assign(rootUrl + data.room);
-          }
-          else if (data.err && data.err == 'ERROR_NAME_CONFLICT' ){
+          room = data.room;
+          window.location.assign(rootUrl + data.room);
+        },
+        error: function(data){
+          data = data.responseJSON;
+          if (data.err && data.err == 'ERROR_NAME_CONFLICT' ){
             room = data.room;
             $('#conflictModal').modal('show');
           }
-          else{
+          else if (data.msg){
             $('#roomName').parent().parent().notify(data.msg, {
                class: 'error',
                position: 'bottom center'
             });
           }
-        },
-        error: function(){
-          $.notify(locale.ERROR_OCCURRED, 'error');
+          else{
+            $.notify(locale.ERROR_OCCURRED, 'error');
+          }
         }
       });
     }

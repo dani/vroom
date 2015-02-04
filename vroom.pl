@@ -1139,17 +1139,17 @@ post '/create' => sub {
   if (!$self->valid_room_name($name)){
     $json->{err} = 'ERROR_NAME_INVALID';
     $json->{msg} = $self->l('ERROR_NAME_INVALID');
-    return $self->render(json => $json);
+    return $self->render(json => $json, status => 400);
   }
   elsif ($self->get_room_by_name($name)){
     $json->{err} = 'ERROR_NAME_CONFLICT';
     $json->{msg} = $self->l('ERROR_NAME_CONFLICT');
-    return $self->render(json => $json);
+    return $self->render(json => $json, status => 409);
   }
   if (!$self->create_room($name,$self->session('name'))){
     $json->{err} = 'ERROR_OCCURRED';
     $json->{msg} = $self->l('ERROR_OCCURRED');
-    return $self->render(json => $json);
+    return $self->render(json => $json, status => 500);
   }
   $json->{status} = 'success';
   $json->{err}    = '';
