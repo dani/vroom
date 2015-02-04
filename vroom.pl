@@ -1526,8 +1526,10 @@ any '/api' => sub {
     return $self->render(
       json => {
         msg    => $self->l('ERROR_OCCURRED'),
+        err    => 'ERROR_OCCURRED',
         status => 'error'
-      }
+      },
+      status => 503
     );
   }
   # Set/unset askForName
