@@ -41,6 +41,17 @@ $.ajaxSetup({
   }
 });
 
+// Parse and display an error when an API call failed
+function showApiError(data){
+  data = data.responseJSON;
+  if (data.msg){
+    $.notify(data.msg, 'error');
+  }
+  else{
+    $.notify(locale.ERROR_OCCURRED, 'error');
+  }
+}
+
 // Handle lang switch
 $('#switch_lang').change(function(){
     $.ajax({
@@ -52,14 +63,8 @@ $('#switch_lang').change(function(){
         }
       })
     },
-    error: function(data) {
-      data = data.responseJSON;
-      if (data.msg){
-        $.notify(data.msg);
-      }
-      else{
-        $.notify(locale.ERROR_OCCURRED, 'error');
-      }
+    error: function(data){
+      showApiError(data);
     },
     success: function(data){
       window.location.reload();
@@ -307,16 +312,10 @@ $('#configureRoomForm').submit(function(e){
         }
       })
     },
-    error: function(data) {
-      data = data.responseJSON;
-      if (data.msg){
-        $.notify(data.msg, 'error');
-      }
-      else{
-        $.notify(locale.ERROR_OCCURRED, 'error');
-      }
+    error: function(data){
+      showApiError(data);
     },
-    success: function(data) {
+    success: function(data){
       $('#ownerPass,#ownerPassConfirm,#joinPass,#joinPassConfirm').val('');
       $('#configureModal').modal('hide');
       $('#joinPassFields,#ownerPassFields').hide();
@@ -342,9 +341,6 @@ function initIndex(){
     }
     else{
       $.ajax({
-        url: rootUrl + 'api',
-        type: 'POST',
-        dataType: 'json',
         data: {
           req: JSON.stringify({
             action: 'create_room',
@@ -478,13 +474,7 @@ function initAdmin(){
         })        
       },
       error: function(data){
-        data = responseJSON;
-        if (data.msg){
-          $.notify(data.msg, 'error');
-        }
-        else{
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        }
+        showApiError(data);
       },
       success: function(data){
         roomList = data.rooms;
@@ -507,7 +497,7 @@ function initAdmin(){
       },
       async: false,
       error: function(data){
-        $.notify(locale.ERROR_OCCURRED, 'error');
+        showApiError(data);
       },
       success: function(data){
         // Reset the list of email displayed, so first remove evry input field but the last one
@@ -563,13 +553,7 @@ function initAdmin(){
         })
       },
       error: function(data){
-        data = data.responseJSON;
-        if (data.msg){
-          $.notify(data.msg, 'error');
-        }
-        else{
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        }
+        showApiError(data);
       },
       success: function(data){
         $.notify(data.msg, 'success');
@@ -652,13 +636,7 @@ function initVroom(room) {
       },
       async: false,
       error: function(data){
-        data = data.responseJSON;
-        if (data.msg){
-          $.notify(data.msg, 'error');
-        }
-        else{
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        }
+        showApiError(data);
       },
       success: function(data){
         // Notify others if our role changed
@@ -719,13 +697,7 @@ function initVroom(room) {
         })
       },
       error: function(data){
-        data = data.responseJSON;
-        if (data.msg){
-          $.notify(data.msg, 'error');
-        }
-        else{
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        }
+        showApiError(data);
       },
       success: function(data){
         if (peers[id]){
@@ -1080,16 +1052,10 @@ function initVroom(room) {
             }
           })
         },
-        error: function(data) {
-          data = data.responseJSON;
-          if (data.msg){
-            $.notify(data.msg, 'error');
-          }
-          else{
-            $.notify(locale.ERROR_OCCURRED, 'error');
-          }
+        error: function(data){
+          showApiError(data);
         },
-        success: function(data) {
+        success: function(data){
           webrtc.sendToAll('owner_promoted', {peer: id});
           $.notify(data.msg, 'success');
         }
@@ -1185,13 +1151,7 @@ function initVroom(room) {
         },
         async: false,
         error: function(data){
-          data = data.responseJSON;
-          if (data.msg){
-            $.notify(data.msg, 'error');
-          }
-          else{
-            $.notify(locale.ERROR_OCCURRED, 'error');
-          }
+          showApiError(data);
         },
         success: function(data){
           if ($('#etherpadContainer').html() != ''){
@@ -1498,16 +1458,10 @@ function initVroom(room) {
             }
           })
         },
-        error: function(data) {
-          data = data.responseJSON;
-          if (data.msg){
-            $.notify(data.msg, 'error');
-          }
-          else{
-            $.notify(locale.ERROR_OCCURRED, 'error');
-          }
+        error: function(data){
+          showApiError(data);
         },
-        success: function(data) {
+        success: function(data){
           if (data.msg){
             $.notify(data.msg, 'success');
           }
@@ -1559,16 +1513,10 @@ function initVroom(room) {
           }
         })
       },
-      error: function(data) {
-        data = data.responseJSON;
-        if (data.msg){
-          $.notify(data.msg, 'error');
-        }
-        else{
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        }
+      error: function(data){
+        showApiError(data);
       },
-      success: function(data) {
+      success: function(data){
         if (data.msg){
           $.notify(data.msg, 'success');
         }
@@ -1671,16 +1619,10 @@ function initVroom(room) {
           }
         })
       },
-      error: function(data) {
-        data = data.responseJSON;
-        if (data.msg){
-          $.notify(data.msg, 'error');
-        }
-        else{
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        }
+      error: function(data){
+        showApiError(data);
       },
-      success: function(data) {
+      success: function(data){
         $('#recipient').val('');
         $('#inviteModal').modal('hide');
         $('#email-list-invite').find('.email-entry:not(:last)').remove();
@@ -1867,16 +1809,10 @@ function initVroom(room) {
           }
         })
       },
-      error: function(data) {
-        data = data.responseJSON;
-        if (data.msg){
-          $.notify(data.msg, 'error');
-        }
-        else{
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        }
+      error: function(data){
+        showApiError(data);
       },
-      success: function(data) {
+      success: function(data){
         $('#authPass').val('');
         $('#ownerAuthModal').modal('hide');
         getRoomInfo();
@@ -2049,16 +1985,10 @@ function initVroom(room) {
         })
       },
       async: false,
-      error: function(data) {
-        data = data.responseJSON;
-        if (data.msg){
-          $.notify(data.msg, 'error');
-        }
-        else{
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        }
+      error: function(data){
+        showApiError(data);
       },
-      success: function(data) {
+      success: function(data){
         if (data.msg && data.msg != ''){
           $.notify(data.msg, 'info');
         }
@@ -2071,7 +2001,7 @@ function initVroom(room) {
   if (etherpad.enabled){
     $('#etherpadButton').change(function(){
       var action = ($(this).is(':checked')) ? 'show':'hide';
-      if (action == 'show'){
+      if (action === 'show'){
         // If not already loaded, load etherpad in the iFrame
         if ($('#etherpadContainer').html() == ''){
           loadEtherpadIframe();
@@ -2099,13 +2029,7 @@ function initVroom(room) {
         })
       },
       error: function(data) {
-        data = data.responseJSON;
-        if (data.msg){
-          $.notify(data.msg, 'error');
-        }
-        else{
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        }
+        showApiError(data);
       },
       success: function(data) {
         if (data.msg && data.msg != ''){
