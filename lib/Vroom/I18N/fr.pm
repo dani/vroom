@@ -268,7 +268,8 @@ our %Lexicon = (
                                                    "Les technologies employées (WebRTC) étant encore jeunes, seules les versions " .
                                                    "récentes de Mozilla Firefox, Google Chrome et Opera fonctionnent pour l'instant. " .
                                                    "Les autres navigateurs (principalement Internet Explorer et Safari) " .
-                                                   "ne fonctionneront pas pour l'instant",
+                                                   "ne fonctionneront pas pour l'instant. Malheureusement cela inclus les appareils Apple " .
+                                                   "(iPhone, iPad, iPod) qui ne fonctionneront pas.",
     "I_DONT_HAVE_A_WEBCAM"                      => "Je n'ai pas de webcam",
     "HELP_I_DONT_HAVE_A_WEBCAM"                 => "Vous pourrez quand même participer. Si aucune webcam n'est disponible au moment " .
                                                    "de rejoindre un salon, un message apparaitra. Vous pouvez à ce moment cliquer " .
@@ -307,11 +308,12 @@ our %Lexicon = (
                                                    "les appels au support technique parce que la visio ne s'établie pas, les " .
                                                    "soucis d'H323 vs SIP vs ISDN. Tout ce qu'il vous faut désormais, c'est:" .
                                                    "<ul>" .
-                                                   "  <li>Un poste (PC, MAC, tablette, peu importe)</li>" .
+                                                   "  <li>Un poste (PC, MAC, tablette*, smartphone*)</li>" .
                                                    "  <li>Une webcam (optionnelle mais recommandée)</li>" .
                                                    "  <li>Un micro et des haut-parleurs (ou un casque)</li>" .
                                                    "  <li>Un navigateur web moderne</li>" .
-                                                   "</ul>",
+                                                   "</ul>" .
+                                                   "*: exceptés iPad et iPhone",
     "HOW_IT_WORKS"                              => "Comment ça marche ?",
     "ABOUT_HOW_IT_WORKS"                        => "WebRTC permet d'établir des connexions directement entre les navigateurs " .
                                                    "des participants. Cela permet d'une part d'offrir la meilleur latence possible ".
