@@ -1129,7 +1129,6 @@ post '/create' => sub {
   # Create a session for this user, but don't set a role for now
   $self->login;
   my $json = {
-    status => 'error',
     err    => 'ERROR_OCCURRED',
     msg    => $self->l('ERROR_OCCURRED'),
     room   => $name
@@ -1151,7 +1150,6 @@ post '/create' => sub {
     $json->{msg} = $self->l('ERROR_OCCURRED');
     return $self->render(json => $json, status => 500);
   }
-  $json->{status} = 'success';
   $json->{err}    = '';
   $self->session($name => {role => 'owner'});
   $self->associate_key_to_room(
@@ -1239,8 +1237,8 @@ any '/api' => sub {
   if ($err || !$req->{action} || !$req->{param}){
     return $self->render(
       json => {
-        status => 'error',
-        msg    => $err
+        msg => $err,
+        err => $err
       },
       status => 503
     );
@@ -1250,18 +1248,15 @@ any '/api' => sub {
     if (!grep { $req->{param}->{language} eq $_ } @supported_lang){
       return $self->render(
         json => {
-          status => 'error',
-          msg    => $self->l('UNSUPPORTED_LANG'),
-          err    => 'UNSUPPORTED_LANG'
+          msg => $self->l('UNSUPPORTED_LANG'),
+          err => 'UNSUPPORTED_LANG'
         },
         status => 400
       );
     }
     $self->session(language => $req->{param}->{language});
     return $self->render(
-      json => {
-        status => 'success',
-      }
+      json => {}
     );
   }
 
@@ -1276,9 +1271,8 @@ any '/api' => sub {
   if (!$res){
     return $self->render(
       json => {
-        status => 'error',
-        msg    => $self->l('NOT_ALLOWED'),
-        err    => 'NOT_ALLOWED'
+        msg => $self->l('NOT_ALLOWED'),
+        err => 'NOT_ALLOWED'
       },
       status => '401'
     );
@@ -1295,8 +1289,7 @@ any '/api' => sub {
     }
     return $self->render(
       json => {
-        status => 'success',
-        rooms  => $rooms
+        rooms => $rooms
       }
     );
   }
@@ -1304,9 +1297,8 @@ any '/api' => sub {
   if (!$req->{param}->{room}){
     return $self->render(
       json => {
-        status => 'error',
-        msg    => $self->l('ERROR_ROOM_NAME_MISSING'),
-        err    => 'ERROR_ROOM_NAME_MISSING'
+        msg => $self->l('ERROR_ROOM_NAME_MISSING'),
+        err => 'ERROR_ROOM_NAME_MISSING'
       },
       status => '400'
     );
@@ -1316,9 +1308,8 @@ any '/api' => sub {
   if (!$room){
     return $self->render(
       json => {
-        status => 'error',
-        msg    => sprintf($self->l('ERROR_ROOM_s_DOESNT_EXIST'), $req->{param}->{room}),
-        err    => 'ERROR_ROOM_DOESNT_EXIST'
+        msg => sprintf($self->l('ERROR_ROOM_s_DOESNT_EXIST'), $req->{param}->{room}),
+        err => 'ERROR_ROOM_DOESNT_EXIST'
       },
       status => '400'
     );
@@ -1331,9 +1322,8 @@ any '/api' => sub {
       if (!$self->valid_email($addr) && $addr ne ''){
         return $self->render(
           json => {
-            status => 'error',
-            msg    => $self->l('ERROR_MAIL_INVALID'),
-            err    => 'ERROR_MAIL_INVALID'
+            msg => $self->l('ERROR_MAIL_INVALID'),
+            err => 'ERROR_MAIL_INVALID'
           },
           status => 400
         );
@@ -1357,9 +1347,8 @@ any '/api' => sub {
       if (!$token || !$sent){
         return $self->render(
           json => {
-            status => 'error',
-            msg    => $self->l('ERROR_OCCURRED'),
-            err    => 'ERROR_OCCURRED'
+            msg => $self->l('ERROR_OCCURRED'),
+            err => 'ERROR_OCCURRED'
           },
           status => 400
         );
@@ -1368,8 +1357,7 @@ any '/api' => sub {
     }
     return $self->render(
       json => {
-        status => 'success',
-        msg    => sprintf($self->l('INVITE_SENT_TO_s'), join("\n", @$rcpts)),
+        msg => sprintf($self->l('INVITE_SENT_TO_s'), join("\n", @$rcpts)),
        }
     );
   }
@@ -1380,17 +1368,15 @@ any '/api' => sub {
       my $m = ($req->{action} eq 'lock_room') ? 'ROOM_LOCKED' : 'ROOM_UNLOCKED';
       return $self->render(
         json => {
-          status => 'success',
-          msg    => $self->l($m),
-          err    => $m
+          msg => $self->l($m),
+          err => $m
         }
       );
     }
     return $self->render(
       json => {
-        msg    => $self->l('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED',
-        status => 'error'
+        msg => $self->l('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED',
       },
       status => 503
     );
@@ -1423,8 +1409,7 @@ any '/api' => sub {
     }
     return $self->render(
       json => {
-        msg    => $msg,
-        status => 'success'
+        msg => $msg,
       }
     );
   }
@@ -1447,16 +1432,14 @@ any '/api' => sub {
     if ($self->modify_room($room) && $self->update_email_notifications($room->{name},$req->{param}->{emails})){
       return $self->render(
         json => {
-          status => 'success',
-          msg    => $self->l('ROOM_CONFIG_UPDATED')
+          msg => $self->l('ROOM_CONFIG_UPDATED')
         }
       );
     }
     return $self->render(
       json => {
-        status => 'error',
-        msg    => $self->l('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED'
+        msg => $self->l('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED'
       },
       staus => 503
     );
@@ -1468,16 +1451,14 @@ any '/api' => sub {
     if ($self->modify_room($room)){
       return $self->render(
         json => {
-          msg    => $self->l(($req->{param}->{password}) ? 'PASSWORD_PROTECT_SET' : 'PASSWORD_PROTECT_UNSET'),
-          status => 'success'
+          msg => $self->l(($req->{param}->{password}) ? 'PASSWORD_PROTECT_SET' : 'PASSWORD_PROTECT_UNSET'),
         }
       );
     }
     return $self->render(
       json => {
-        msg    => $self->('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED',
-        status => 'error'
+        msg => $self->('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED',
       },
       status => 503
     );
@@ -1486,9 +1467,8 @@ any '/api' => sub {
     if (grep { $req->{param}->{room} eq $_ } (split /[,;]/, $config->{'rooms.common_names'})){
       return $self->render(
         json => {
-          status => 'error',
-          msg    => $self->l('ERROR_COMMON_ROOM_NAME'),
-          err    => 'ERROR_COMMON_ROOM_NAME'
+          msg => $self->l('ERROR_COMMON_ROOM_NAME'),
+          err => 'ERROR_COMMON_ROOM_NAME'
         },
         status => 406
       );
@@ -1498,16 +1478,14 @@ any '/api' => sub {
     if ($self->modify_room($room)){
       return $self->render(
         json => {
-          msg    => $self->l(($req->{param}->{password}) ? 'ROOM_NOW_RESERVED' : 'ROOM_NO_MORE_RESERVED'),
-          status => 'success'
+          msg => $self->l(($req->{param}->{password}) ? 'ROOM_NOW_RESERVED' : 'ROOM_NO_MORE_RESERVED'),
         }
       );
     }
     return $self->render(
       json => {
-        msg    => $self->('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED',
-        status => 'error'
+        msg => $self->('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED',
       },
       status => 503
     );
@@ -1518,16 +1496,14 @@ any '/api' => sub {
     if ($self->modify_room($room)){
       return $self->render(
         json => {
-          status => 'success',
-          msg    => $self->l(($set eq 'on') ? 'ROOM_NOW_PERSISTENT' : 'ROOM_NO_MORE_PERSISTENT')
+          msg => $self->l(($set eq 'on') ? 'ROOM_NOW_PERSISTENT' : 'ROOM_NO_MORE_PERSISTENT')
         }
       );
     }
     return $self->render(
       json => {
-        msg    => $self->l('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED',
-        status => 'error'
+        msg => $self->l('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED',
       },
       status => 503
     );
@@ -1539,16 +1515,14 @@ any '/api' => sub {
     if ($self->modify_room($room)){
       return $self->render(
         json => {
-          status => 'success',
           msg => $self->l(($set eq 'on') ? 'FORCE_DISPLAY_NAME' : 'NAME_WONT_BE_ASKED')
         }
       );
     }
     return $self->render(
       json => {
-        msg    => $self->l('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED',
-        status => 'error'
+        msg => $self->l('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED',
       },
       status => 503
     );
@@ -1560,9 +1534,8 @@ any '/api' => sub {
     if (!$self->valid_email($email)){
       return $self->render(
         json => {
-          msg    => $self->l('ERROR_MAIL_INVALID'),
-          err    => 'ERROR_MAIL_INVALID',
-          status => 'error'
+          msg => $self->l('ERROR_MAIL_INVALID'),
+          err => 'ERROR_MAIL_INVALID',
         },
         status => 400
       );
@@ -1570,24 +1543,21 @@ any '/api' => sub {
     elsif ($set eq 'on' && $self->add_notification($room->{name},$email)){
       return $self->render(
         json => {
-          status => 'success',
-          msg    => sprintf($self->l('s_WILL_BE_NOTIFIED'), $email)
+          msg => sprintf($self->l('s_WILL_BE_NOTIFIED'), $email)
         }
       );
     }
     elsif ($set eq 'off' && $self->remove_notification($room->{name},$email)){
       return $self->render(
         json => {
-          status => 'success',
-          msg    => sprintf($self->l('s_WONT_BE_NOTIFIED_ANYMORE'), $email)
+          msg => sprintf($self->l('s_WONT_BE_NOTIFIED_ANYMORE'), $email)
         }
       );
     }
     return $self->render(
       json => {
-        msg    => $self->l('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED',
-        status => 'error'
+        msg => $self->l('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED',
       },
       status => 503
     );
@@ -1604,7 +1574,6 @@ any '/api' => sub {
       );
       return $self->render(
         json => {
-          status => 'success',
           msg    => $self->l('AUTH_SUCCESS')
         }
       );
@@ -1613,9 +1582,8 @@ any '/api' => sub {
     elsif ($room->{owner_password}){
       return $self->render(
         json => {
-          status => 'error',
-          msg    => $self->l('WRONG_PASSWORD'),
-          err    => 'WRONG_PASSWORD'
+          msg => $self->l('WRONG_PASSWORD'),
+          err => 'WRONG_PASSWORD'
         },
         status => 401
       );
@@ -1623,9 +1591,8 @@ any '/api' => sub {
     # There's no owner password, so you cannot auth
     return $self->render(
       json => {
-        msg    => $self->l('NOT_ALLOWED'),
-        err    => 'NOT_ALLOWED',
-        status => 'error'
+        msg => $self->l('NOT_ALLOWED'),
+        err => 'NOT_ALLOWED',
       },
       status => 403
     );
@@ -1640,7 +1607,6 @@ any '/api' => sub {
         ask_for_name => ($room->{ask_for_name})   ? 'yes' : 'no',
         persistent   => ($room->{persistent})     ? 'yes' : 'no',
         notif        => $self->get_notification($room->{name}),
-        status       => 'success'
       }
     );
   }
@@ -1667,9 +1633,8 @@ any '/api' => sub {
       if (!$res){
         return $self->render(
           json => {
-            status => 'error',
-            msg    => $self->l('ERROR_OCCURRED'),
-            err    => 'ERROR_OCCURRED'
+            msg => $self->l('ERROR_OCCURRED'),
+            err => 'ERROR_OCCURRED'
           },
           status => 503
         );
@@ -1683,7 +1648,6 @@ any '/api' => sub {
         locked       => ($room->{locked})         ? 'yes' : 'no',
         ask_for_name => ($room->{ask_for_name})   ? 'yes' : 'no',
         notif        => $self->get_notification($room->{name}),
-        status       => 'success'
       },
     );
   }
@@ -1712,7 +1676,6 @@ any '/api' => sub {
     return $self->render(
       json => {
         role => $role,
-        status => 'success'
       }
     );
   }
@@ -1734,9 +1697,7 @@ any '/api' => sub {
       );
     }
     return $self->render(
-      json => {
-        status => 'success'
-      }
+      json => {}
     );
   }
   # Promote a participant to be owner of a room
@@ -1745,9 +1706,8 @@ any '/api' => sub {
     if (!$peer_id){
       return $self->render(
         json => {
-          status => 'error',
-          msg    => $self->l('ERROR_PEER_ID_MISSING'),
-          err    => 'ERROR_PEER_ID_MISSING'
+          msg => $self->l('ERROR_PEER_ID_MISSING'),
+          err => 'ERROR_PEER_ID_MISSING'
         },
         status => 400
       );
@@ -1755,16 +1715,14 @@ any '/api' => sub {
     elsif ($self->promote_peer({room => $room->{name}, peer_id => $peer_id})){
       return $self->render(
         json => {
-          status => 'success',
-          msg    => $self->l('PEER_PROMOTED')
+          msg => $self->l('PEER_PROMOTED')
         }
       );
     }
     return $self->render(
       json => {
-        status => 'error',
-        msg    => $self->l('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED'
+        msg => $self->l('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED'
       },
       status => 503
     );
@@ -1776,16 +1734,14 @@ any '/api' => sub {
            $self->create_etherpad_session($room->{name}))){
       return $self->render(
         json => {
-          status => 'success',
-          msg    => $self->l('DATA_WIPED')
+          msg => $self->l('DATA_WIPED')
         }
       );
     }
     return $self->render(
       json => {
-        msg    => $self->l('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED',
-        status => 'error'
+        msg => $self->l('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED',
       },
       status => 503
     );
@@ -1795,16 +1751,14 @@ any '/api' => sub {
     if ($self->create_etherpad_session($room->{name})){
       return $self->render(
         json => {
-          status => 'success',
-          msg    => $self->l('SESSION_CREATED')
+          msg => $self->l('SESSION_CREATED')
         }
       );
     }
     return $self->render(
       json => {
-        msg    => $self->l('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED',
-        status => 'error'
+        msg => $self->l('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED',
       },
       styaus => 503
     );
@@ -1814,16 +1768,14 @@ any '/api' => sub {
     if ($self->delete_room($room->{name})){
       return $self->render(
         json => {
-          msg    => $self->l('ROOM_DELETED'),
-          status => 'success'
+          msg => $self->l('ROOM_DELETED'),
         }
       );
     }
     return $self->render(
       json => {
-        msg    => $self->l('ERROR_OCCURRED'),
-        err    => 'ERROR_OCCURRED',
-        status => 'error'
+        msg => $self->l('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED',
       },
       status => 503
     );
