@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'Short Stack';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/shortstack.woff2) format('woff2'), url(../fonts/shortstack.woff) format('woff');
+}
 #webRTCVideo {
   overflow-y: auto;
 }
@@ -260,6 +266,7 @@
 html,
 body {
   height: 100%;
+  font-family: 'Short Stack', cursive;
 }
 #wrap {
   min-height: 100%;
