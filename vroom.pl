@@ -1803,8 +1803,10 @@ any '/api' => sub {
     return $self->render(
       json => {
         msg    => $self->l('ERROR_OCCURRED'),
+        err    => 'ERROR_OCCURRED',
         status => 'error'
-      }
+      },
+      styaus => 503
     );
   }
   # Delete a room

@@ -1487,18 +1487,19 @@ function initVroom(room) {
           })
         },
         error: function(data) {
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        },
-        success: function(data) {
-          if (data.status == 'success'){
-            if (data.msg){
-              $.notify(data.msg, 'success');
-            }
-            loadEtherpadIframe();
-          }
-          else if (data.msg){
+          data = data.responseJSON;
+          if (data.msg){
             $.notify(data.msg, 'error');
           }
+          else{
+            $.notify(locale.ERROR_OCCURRED, 'error');
+          }
+        },
+        success: function(data) {
+          if (data.msg){
+            $.notify(data.msg, 'success');
+          }
+          loadEtherpadIframe();
         }
       });
     }
