@@ -472,19 +472,20 @@ function initAdmin(){
           param: {}
         })        
       },
-      error: function() {
-        $.notify(locale.ERROR_OCCURRED, 'error');
-      },
-      success: function(data){
-        if (data.status === 'success'){
-          roomList = data.rooms;
-          matches = Object.keys(roomList).length;
-          updateRoomList($('#searchRoom').val(), 0, itemPerPage);
-          updatePagination();
+      error: function(data){
+        data = responseJSON;
+        if (data.msg){
+          $.notify(data.msg, 'error');
         }
         else{
-          $.notify(locale.ERROR_OCCURED, 'error');
+          $.notify(locale.ERROR_OCCURRED, 'error');
         }
+      },
+      success: function(data){
+        roomList = data.rooms;
+        matches = Object.keys(roomList).length;
+        updateRoomList($('#searchRoom').val(), 0, itemPerPage);
+        updatePagination();
       }
     });
   }
@@ -1554,14 +1555,17 @@ function initVroom(room) {
         })
       },
       error: function(data) {
-        $.notify(locale.ERROR_OCCURRED, 'error');
+        data = data.responseJSON;
+        if (data.msg){
+          $.notify(data.msg, 'error');
+        }
+        else{
+          $.notify(locale.ERROR_OCCURRED, 'error');
+        }
       },
       success: function(data) {
-        if (data.status == 'success' && data.msg){
+        if (data.msg){
           $.notify(data.msg, 'success');
-        }
-        else if (data.msg){
-          $.notify(data.msg, 'error');
         }
       }
     });
@@ -2090,10 +2094,16 @@ function initVroom(room) {
         })
       },
       error: function(data) {
-        $.notify(locale.ERROR_OCCURRED, 'error');
+        data = data.responseJSON;
+        if (data.msg){
+          $.notify(data.msg, 'error');
+        }
+        else{
+          $.notify(locale.ERROR_OCCURRED, 'error');
+        }
       },
       success: function(data) {
-        if (data.status === 'success' && data.msg && data.msg != ''){
+        if (data.msg && data.msg != ''){
           $.notify(data.msg, {
             className: 'info',
             autoHide: false
