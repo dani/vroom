@@ -99,7 +99,7 @@ helper valid_room_name => sub {
   my ($name) = @_;
   my $ret = {};
   # A few names are reserved
-  my @reserved = qw(about help feedback feedback_thanks goodbye admin create localize api
+  my @reserved = qw(about help feedback feedback_thanks goodbye admin localize api
                     missing dies password kicked invitation js css img fonts snd);
   if ($name !~ m/^[\w\-]{1,49}$/ || grep { $name eq $_ } @reserved){
     return 0;
@@ -961,8 +961,13 @@ helper key_can_do_this => sub {
   my $self = shift;
   my (%data) = @_;
   my $data = \%data;
+  my $actions = API_ACTIONS;
   if (!$data->{action}){
     return 0;
+  }
+  # Anonymous actions
+  if ($actions->{anonymous}->{$data->{action}}){
+    return 1;
   }
   my $key = $self->get_key_by_token($data->{token});
   if (!$key){
@@ -992,7 +997,6 @@ helper key_can_do_this => sub {
   $sth->execute($key->{id},$data->{param}->{room});
   $sth->bind_columns(\$key->{role});
   $sth->fetch;
-  my $actions = API_ACTIONS;
   $self->app->log->debug("Key role: " . $key->{role} . " and action: " . $data->{action});
   # If this key has owner privileges on this room, allow both owner and partitipant actions
   if ($key->{role} eq 'owner' && ($actions->{owner}->{$data->{action}} || $actions->{participant}->{$data->{action}})){
@@ -1119,45 +1123,6 @@ any [qw(GET POST)] => '/invitation/:token' => { token => '' } => sub {
     }
     return $self->render('invitation_thanks');
   }
-};
-
-# This handler room creation
-post '/create' => sub {
-  my $self = shift;
-  # No name provided ? Lets generate one
-  my $name = $self->param('roomName') || $self->get_random_name();
-  # Create a session for this user, but don't set a role for now
-  $self->login;
-  my $json = {
-    err    => 'ERROR_OCCURRED',
-    msg    => $self->l('ERROR_OCCURRED'),
-    room   => $name
-  };
-  # Cleanup unused rooms before trying to create it
-  $self->purge_rooms;
-  if (!$self->valid_room_name($name)){
-    $json->{err} = 'ERROR_NAME_INVALID';
-    $json->{msg} = $self->l('ERROR_NAME_INVALID');
-    return $self->render(json => $json, status => 400);
-  }
-  elsif ($self->get_room_by_name($name)){
-    $json->{err} = 'ERROR_NAME_CONFLICT';
-    $json->{msg} = $self->l('ERROR_NAME_CONFLICT');
-    return $self->render(json => $json, status => 409);
-  }
-  if (!$self->create_room($name,$self->session('name'))){
-    $json->{err} = 'ERROR_OCCURRED';
-    $json->{msg} = $self->l('ERROR_OCCURRED');
-    return $self->render(json => $json, status => 500);
-  }
-  $json->{err}    = '';
-  $self->session($name => {role => 'owner'});
-  $self->associate_key_to_room(
-    room => $name,
-    key  => $self->session('key'),
-    role => 'owner'
-  );
-  return $self->render(json => $json);
 };
 
 # Translation for JS resources
@@ -1293,6 +1258,40 @@ any '/api' => sub {
       }
     );
   }
+  elsif ($req->{action} eq 'create_room'){
+    $req->{param}->{room} ||= $self->get_random_name();
+    my $json = {
+      err  => 'ERROR_OCCURRED',
+      msg  => $self->l('ERROR_OCCURRED'),
+      room => $req->{param}->{room}
+    };
+    $self->login;
+    # Cleanup unused rooms before trying to create it
+    $self->purge_rooms;
+    if (!$self->valid_room_name($req->{param}->{room})){
+      $json->{err} = 'ERROR_NAME_INVALID';
+      $json->{msg} = $self->l('ERROR_NAME_INVALID');
+      return $self->render(json => $json, status => 400);
+    }
+    elsif ($self->get_room_by_name($req->{param}->{room})){
+      $json->{err} = 'ERROR_NAME_CONFLICT';
+      $json->{msg} = $self->l('ERROR_NAME_CONFLICT');
+      return $self->render(json => $json, status => 409);
+    }
+    if (!$self->create_room($req->{param}->{room},$self->session('name'))){
+      $json->{err} = 'ERROR_OCCURRED';
+      $json->{msg} = $self->l('ERROR_OCCURRED');
+      return $self->render(json => $json, status => 500);
+    }
+    $json->{err}    = '';
+    $self->session($req->{param}->{room} => {role => 'owner'});
+    $self->associate_key_to_room(
+      room => $req->{param}->{room},
+      key  => $self->session('key'),
+      role => 'owner'
+    );
+    return $self->render(json => $json);
+  }
 
   if (!$req->{param}->{room}){
     return $self->render(
@@ -1302,6 +1301,40 @@ any '/api' => sub {
       },
       status => '400'
     );
+  }
+  # Create a new room
+  elsif ($req->{action} eq 'create_room'){
+    my $json = {
+      err    => 'ERROR_OCCURRED',
+      msg    => $self->l('ERROR_OCCURRED'),
+      room   => $req->{param}->{room}
+    };
+    $self->login;
+    # Cleanup unused rooms before trying to create it
+    $self->purge_rooms;
+    if (!$self->valid_room_name($req->{param}->{room})){
+      $json->{err} = 'ERROR_NAME_INVALID';
+      $json->{msg} = $self->l('ERROR_NAME_INVALID');
+      return $self->render(json => $json, status => 400);
+    }
+    elsif ($self->get_room_by_name($req->{param}->{room})){
+      $json->{err} = 'ERROR_NAME_CONFLICT';
+      $json->{msg} = $self->l('ERROR_NAME_CONFLICT');
+      return $self->render(json => $json, status => 409);
+    }
+    if (!$self->create_room($req->{param}->{room},$self->session('name'))){
+      $json->{err} = 'ERROR_OCCURRED';
+      $json->{msg} = $self->l('ERROR_OCCURRED');
+      return $self->render(json => $json, status => 500);
+    }
+    $json->{err}    = '';
+    $self->session($req->{param}->{room} => {role => 'owner'});
+    $self->associate_key_to_room(
+      room => $req->{param}->{room},
+      key  => $self->session('key'),
+      role => 'owner'
+    );
+    return $self->render(json => $json);
   }
 
   $room = $self->get_room_by_name($req->{param}->{room});

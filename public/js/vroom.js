@@ -342,11 +342,16 @@ function initIndex(){
     }
     else{
       $.ajax({
-        url: rootUrl + 'create',
+        url: rootUrl + 'api',
         type: 'POST',
         dataType: 'json',
         data: {
-          roomName: $('#roomName').val(),
+          req: JSON.stringify({
+            action: 'create_room',
+            param: {
+              room: $('#roomName').val()
+            }
+          })
         },
         success: function(data) {
           room = data.room;
@@ -1185,7 +1190,7 @@ function initVroom(room) {
             $.notify(data.msg, 'error');
           }
           else{
-            $.notify(locale.ERROR_OCCURRED, 'error');*
+            $.notify(locale.ERROR_OCCURRED, 'error');
           }
         },
         success: function(data){

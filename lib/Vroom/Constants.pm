@@ -176,6 +176,9 @@ use constant API_ACTIONS => {
     get_peer_role    => 1,
     join             => 1,
     get_padd_session => 1
+  },
+  anonymous => {
+    create_room => 1
   }
 };
 
