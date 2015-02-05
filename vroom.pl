@@ -1742,7 +1742,7 @@ any '/api' => sub {
   # Promote a participant to be owner of a room
   elsif ($req->{action} eq 'promote_peer'){
     my $peer_id = $req->{param}->{peer_id};
-    if (!$peer){
+    if (!$peer_id){
       return $self->render(
         json => {
           status => 'error',
@@ -1763,7 +1763,7 @@ any '/api' => sub {
     return $self->render(
       json => {
         status => 'error',
-        msg    => $self->l('ERROR_OCCURRED')
+        msg    => $self->l('ERROR_OCCURRED'),
         err    => 'ERROR_OCCURRED'
       },
       status => 503
