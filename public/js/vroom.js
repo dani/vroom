@@ -1069,16 +1069,17 @@ function initVroom(room) {
           })
         },
         error: function(data) {
-          $.notify(locale.ERROR_OCCURRED, 'error');
-        },
-        success: function(data) {
-          if (data.status == 'success' && data.msg){
-            webrtc.sendToAll('owner_promoted', {peer: id});
-            $.notify(data.msg, 'success');
-          }
-          else if (data.msg){
+          data = data.responseJSON;
+          if (data.msg){
             $.notify(data.msg, 'error');
           }
+          else{
+            $.notify(locale.ERROR_OCCURRED, 'error');
+          }
+        },
+        success: function(data) {
+          webrtc.sendToAll('owner_promoted', {peer: id});
+          $.notify(data.msg, 'success');
         }
       });
       suspendButton($('#actionPromote_' + id));

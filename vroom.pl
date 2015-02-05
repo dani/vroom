@@ -1742,7 +1742,17 @@ any '/api' => sub {
   # Promote a participant to be owner of a room
   elsif ($req->{action} eq 'promote_peer'){
     my $peer_id = $req->{param}->{peer_id};
-    if ($peer_id && $self->promote_peer({room => $room->{name}, peer_id => $peer_id})){
+    if (!$peer){
+      return $self->render(
+        json => {
+          status => 'error',
+          msg    => $self->l('ERROR_PEER_ID_MISSING'),
+          err    => 'ERROR_PEER_ID_MISSING'
+        },
+        status => 400
+      );
+    }
+    elsif ($self->promote_peer({room => $room->{name}, peer_id => $peer_id})){
       return $self->render(
         json => {
           status => 'success',
@@ -1754,7 +1764,9 @@ any '/api' => sub {
       json => {
         status => 'error',
         msg    => $self->l('ERROR_OCCURRED')
-      }
+        err    => 'ERROR_OCCURRED'
+      },
+      status => 503
     );
   }
   # Wipe room data (chat history and etherpad content)
