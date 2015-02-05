@@ -557,7 +557,13 @@ function initAdmin(){
         })
       },
       error: function(data){
-        $.notify(locale.ERROR_OCCURRED, 'error');
+        data = data.responseJSON;
+        if (data.msg){
+          $.notify(data.msg, 'error');
+        }
+        else{
+          $.notify(locale.ERROR_OCCURRED, 'error');
+        }
       },
       success: function(data){
         $.notify(data.msg, 'success');
@@ -2035,10 +2041,16 @@ function initVroom(room) {
       },
       async: false,
       error: function(data) {
-        $.notify(locale.ERROR_OCCURRED, 'error');
+        data = data.responseJSON;
+        if (data.msg){
+          $.notify(data.msg, 'error');
+        }
+        else{
+          $.notify(locale.ERROR_OCCURRED, 'error');
+        }
       },
       success: function(data) {
-        if (data.status == 'success' && data.msg && data.msg != ''){
+        if (data.msg && data.msg != ''){
           $.notify(data.msg, 'info');
         }
       }
