@@ -1126,12 +1126,10 @@ any [qw(GET POST)] => '/invitation/:token' => { token => '' } => sub {
 };
 
 # Translation for JS resources
-# As there's no way to list all the available translated strings
-# we just maintain a list of strings needed
 get '/localize/:lang' => { lang => 'en' } => sub {
   my $self = shift;
   my $strings = {};
-  foreach my $string (JS_STRINGS){
+  foreach my $string (keys %Vroom::I18N::en::Lexicon){
     $strings->{$string} = $self->l($string);
   }
   # Tell the client to cache it
