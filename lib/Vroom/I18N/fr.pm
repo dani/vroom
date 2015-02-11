@@ -313,7 +313,7 @@ our %Lexicon = (
                                                    "  <li>Un micro et des haut-parleurs (ou un casque)</li>" .
                                                    "  <li>Un navigateur web moderne</li>" .
                                                    "</ul>" .
-                                                   "*: exceptés iPad et iPhone",
+                                                   "*: exceptés ipad et iphone",
     "HOW_IT_WORKS"                              => "Comment ça marche ?",
     "ABOUT_HOW_IT_WORKS"                        => "WebRTC permet d'établir des connexions directement entre les navigateurs " .
                                                    "des participants. Cela permet d'une part d'offrir la meilleur latence possible ".
@@ -354,7 +354,7 @@ our %Lexicon = (
     "ABOUT_MUSICS"                              => "Merci également aux auteurs des morceaux de musique utilisés",
     "FROM_AUTHOR"                               => "de",
     "PAGE_NOT_FOUND"                            => "Cette page n'existe pas",
-    "SERVER_ERROR"                              => "Veuille nous excuser"
+    "SERVER_ERROR"                              => "Veuillez nous excuser"
 );
 
 1;
