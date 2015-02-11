@@ -517,6 +517,9 @@ function initAdmin(){
         $('#joinPassSet').bootstrapSwitch('state', data.join_auth == 'yes');
         $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth == 'yes');
         $('#persistentSet').bootstrapSwitch('state', data.persistent == 'yes');
+        // Hide the password inputs
+        $('#joinPassFields,#ownerPassFields').hide();
+        // And display the config modal dialog
         $('#configureModal').modal('show');
       }
     });
