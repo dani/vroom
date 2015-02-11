@@ -208,10 +208,7 @@ $(document).on('click','button.btn-add-email',function(e){
 $(document).on('click','button.btn-remove-email',function(e){
   e.preventDefault();
   el = $(this).parents('.email-entry:first');
-  el.hide(100);
-  setTimeout(function(){
-    el.remove();
-  }, 100);
+  el.remove();
 });
 
 // Handle owner/join password confirm
