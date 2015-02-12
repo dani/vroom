@@ -29,7 +29,7 @@
       </div>
       <input id="roomName" name="roomName" type="hidden" value="<%= $room %>"/>
       <div id="roomToolBar" class="collapse navbar-collapse">
-        <div class="navbar-form navbar-left input-group">
+        <div class="navbar-form navbar-btn-group navbar-left input-group">
           <div class="input-group">
             <input type="text" id="displayName" class="form-control help" placeholder="<%=l 'YOUR_NAME' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'NAME_SENT_TO_OTHERS' %>"/>
             <span class="input-group-btn">
@@ -40,7 +40,7 @@
             </span>
           </div>
         </div>
-        <div class="btn-group navbar-form navbar-left">
+        <div class="btn-group navbar-form navbar-btn-group navbar-left">
           <% if ($etherpad eq 'true'){ %>
           <div class="btn-group">
           <% } %>
@@ -63,7 +63,7 @@
           </div>
         </div>
         <% } %>
-        <div class="btn-group navbar-form navbar-left" data-toggle="buttons">
+        <div class="btn-group navbar-form navbar-btn-group navbar-left" data-toggle="buttons">
           <label class="btn btn-default help" id="muteMicLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_MIC' %>">
             <input type="checkbox" id="muteMicButton">
             <span class="glyphicon glyphicon-volume-off">
@@ -80,14 +80,14 @@
             </span>
           </label>
         </div>
-        <div class="btn-group navbar-form navbar-left hidden-xs aloneEl" data-toggle="buttons">
+        <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs aloneEl" data-toggle="buttons">
           <label class="btn btn-default help" id="pauseMohLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PAUSE_MOH' %>">
             <input type="checkbox" id="pauseMohButton">
             <span class="glyphicon glyphicon-music">
             </span>
           </label>
         </div>
-        <div class="btn-group navbar-form navbar-left">
+        <div class="btn-group navbar-form navbar-btn-group navbar-left">
           <div class="btn-group ownerEl">
             <button class="btn btn-default help" type="button" data-toggle="modal" data-target="#inviteModal" data-toggle="tooltip" data-placement="bottom" title="<%=l 'INVITE_PEOPLE' %>">
               <span class="glyphicon glyphicon-user">
@@ -101,13 +101,13 @@
             </button>
           </div>
         </div>
-        <div class="btn-group navbar-form navbar-left">
+        <div class="btn-group navbar-form navbar-btn-group navbar-left">
           <button class="btn btn-default dropdown-toggle help unauthEl" data-toggle="modal" data-target="#ownerAuthModal" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>">
             <span class="glyphicon glyphicon-log-in">
             </span>
           </button>
         </div>
-        <div class="navbar-form navbar-right hidden-xs" data-toggle="buttons" >
+        <div class="navbar-form navbar-btn-group navbar-right hidden-xs" data-toggle="buttons" >
           <div class="btn-group">
             <div class="btn btn-default disabled">
               <span class="glyphicon glyphicon glyphicon-hourglass">

@@ -4,6 +4,9 @@
   font-weight: 400;
   src: url(../fonts/shortstack.woff2) format('woff2'), url(../fonts/shortstack.woff) format('woff');
 }
+.navbar-btn-group {
+  border-color: transparent !important;
+}
 #webRTCVideo {
   overflow-y: auto;
 }
