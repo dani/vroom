@@ -1279,7 +1279,7 @@ any '/api' => sub {
       $json->{msg} = $self->l('ERROR_OCCURRED');
       return $self->render(json => $json, status => 500);
     }
-    $json->{err}    = '';
+    $json->{err} = '';
     $self->session($req->{param}->{room} => {role => 'owner'});
     $self->associate_key_to_room(
       room => $req->{param}->{room},
@@ -1297,40 +1297,6 @@ any '/api' => sub {
       },
       status => '400'
     );
-  }
-  # Create a new room
-  elsif ($req->{action} eq 'create_room'){
-    my $json = {
-      err    => 'ERROR_OCCURRED',
-      msg    => $self->l('ERROR_OCCURRED'),
-      room   => $req->{param}->{room}
-    };
-    $self->login;
-    # Cleanup unused rooms before trying to create it
-    $self->purge_rooms;
-    if (!$self->valid_room_name($req->{param}->{room})){
-      $json->{err} = 'ERROR_NAME_INVALID';
-      $json->{msg} = $self->l('ERROR_NAME_INVALID');
-      return $self->render(json => $json, status => 400);
-    }
-    elsif ($self->get_room_by_name($req->{param}->{room})){
-      $json->{err} = 'ERROR_NAME_CONFLICT';
-      $json->{msg} = $self->l('ERROR_NAME_CONFLICT');
-      return $self->render(json => $json, status => 409);
-    }
-    if (!$self->create_room($req->{param}->{room},$self->session('name'))){
-      $json->{err} = 'ERROR_OCCURRED';
-      $json->{msg} = $self->l('ERROR_OCCURRED');
-      return $self->render(json => $json, status => 500);
-    }
-    $json->{err}    = '';
-    $self->session($req->{param}->{room} => {role => 'owner'});
-    $self->associate_key_to_room(
-      room => $req->{param}->{room},
-      key  => $self->session('key'),
-      role => 'owner'
-    );
-    return $self->render(json => $json);
   }
 
   $room = $self->get_room_by_name($req->{param}->{room});
