@@ -606,7 +606,7 @@ function initVroom(room) {
   }
 
   // If browser doesn't support webRTC or dataChannels
-  if (!webrtc.capabilities.support || !webrtc.capabilities.dataChannel){
+  if (!webrtc.capabilities.support || !webrtc.capabilities.supportDataChannel){
     $('#noWebrtcSupport').modal('show');
   }
 
