@@ -600,14 +600,14 @@ function initVroom(room) {
 
   $('#name_local').css('background-color', peers.local.color);
 
-  // Screen sharing is only suported on chrome desktop > 26
-  if ( !$.browser.webkit || $.browser.android || $.browser.versionNumber < 26 ) {
-    $('#shareScreenLabel').remove();
+  // If browser doesn't support webRTC or dataChannels
+  if (!webrtc.capabilities.support || !webrtc.capabilities.supportGetUserMedia || !webrtc.capabilities.supportDataChannel){
+    $('#noWebrtcSupport').modal('show');
   }
 
-  // If browser doesn't support webRTC or dataChannels
-  if (!webrtc.capabilities.support || !webrtc.capabilities.supportDataChannel){
-    $('#noWebrtcSupport').modal('show');
+  // Hide screen sharing btn if not supported
+  if (!webrtc.capabilities.supportScreenSharing){
+    $('#shareScreenLabel').remove();
   }
 
   // Return the number of peers in the room
