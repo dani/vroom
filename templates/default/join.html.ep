@@ -133,19 +133,28 @@
             </h4>
           </div>
           <div class="modal-body">
-            <form role="form" class="well" id="displayNamePreForm">
-              <label for="displayNamePre">
+            <form role="form" class="form-horizontal" id="displayNamePreForm">
+              <p class="text-center">
                 <%=l 'SET_A_DISPLAY_NAME' %>
-              </label>
+              </p>
               <div class="form-group">
-                <input type="text" class="form-control" id="displayNamePre" name="displayNamePre" placeholder="<%=l 'YOUR_NAME' %>">
+                <label for="displayNamePre" class="col-sm-4 control-label">
+                  <%=l 'DISPLAY_NAME' %>
+                </label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" autocomplete="off" id="displayNamePre" name="displayNamePre" placeholder="<%=l 'YOUR_NAME' %>">
+                </div>
               </div>
-              <button id="displayNamePreButton" class="btn btn-primary disabled" type="submit">
-                <%=l 'SUBMIT' %>
-              </button>
-              <a class="btn btn-default" href="<%= $self->get_url('/') %>">
-                <%=l 'CANCEL' %>
-              </a>
+              <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-8">
+                  <button id="displayNamePreButton" class="btn btn-primary disabled" type="submit">
+                    <%=l 'SUBMIT' %>
+                  </button>
+                  <a class="btn btn-default" href="<%= $self->get_url('/') %>">
+                    <%=l 'CANCEL' %>
+                  </a>
+                </div>
+              </div>
             </form>
           </div>
         </div>
