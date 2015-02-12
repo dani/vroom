@@ -128,7 +128,6 @@ our %Lexicon = (
                                                    "rejoindre le salon",
     "ERROR_COMMON_ROOM_NAME"                    => "Désolé, le nom de ce salon est trop commun pour être réservé",
     "AUTHENTICATE"                              => "Authentification",
-    "AUTH_TO_MANAGE_THE_ROOM"                   => "Authentifiez-vous pour gérer le salon",
     "ADD_NOTIFICATION"                          => "Ajouter une notification",
     "ADD_THIS_ADDRESS"                          => "Ajouter cette adresse",
     "REMOVE_THIS_ADDRESS"                       => "Supprimer cette adresse",

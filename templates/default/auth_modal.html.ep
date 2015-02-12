@@ -6,14 +6,11 @@
               &times;
             </button>
             <h4 class="modal-title">
-              <%=l 'AUTHENTICATION' %>
+              <%=l 'AUTHENTICATE' %>
             </h4>
           </div>
           <div class="modal-body">
             <form class="form-horizontal" role="form" id="ownerAuthForm">
-              <p>
-                <%=l 'AUTH_TO_MANAGE_THE_ROOM' %>
-              </p>
               <div class="form-group">
                 <label for="ownerAuthPass" class="col-sm-4 control-label">
                   <%=l 'PASSWORD' %>

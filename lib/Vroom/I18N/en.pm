@@ -122,7 +122,6 @@ our %Lexicon = (
   "PROTECT_ROOM_WITH_PASSWORD"           => "If this password is set, participants will have to type it before the system let them in",
   "ERROR_COMMON_ROOM_NAME"               => "Sorry, this room name is too comon to be reserved",
   "AUTHENTICATE"                         => "Authentication",
-  "AUTH_TO_MANAGE_THE_ROOM"              => "Authenticate to manage the room",
   "ADD_NOTIFICATION"                     => "Add a notification",
   "ADD_THIS_ADDRESS"                     => "Add this address",
   "REMOVE_THIS_ADDRESS"                  => "Remove this address",
