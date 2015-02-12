@@ -14,7 +14,7 @@
 ; The turn server sent to cliet, you should set it to your own server
 ;turn_server = ''
 ; the realm used for turn accounts. You shouldn't have to change it
-;turn_realm = 'vroom'
+;realm = 'vroom'
 
 [email]
 ; Address set in the From field of email sent by VROOM
