@@ -1126,7 +1126,8 @@ function initVroom(room) {
   // Load etherpad in its iFrame
   function loadEtherpadIframe(){
     $('#etherpadContainer').pad({
-      host: etherpad.uri,
+      host: etherpad.host,
+      baseUrl: etherpad.path,
       padId: etherpad.group + '$' + room,
       showControls: true,
       showLineNumbers: false,

@@ -439,7 +439,11 @@
         setTimeout(function(){
           etherpad = {
             enabled: <%= $etherpad %>,
-            uri: "<%= $config->{'etherpad.uri'} %>",
+            <%
+              my $ethuri = URI->new($config->{'etherpad.uri'});
+            %>
+            host: "<%= $ethuri->scheme . '://' . $ethuri->authority %>",
+            path: "<%= $ethuri->path . '/p/' %>",
             group: "<%= $etherpadGroup %>"
           };
           <% if ($video eq 'false'){ %>

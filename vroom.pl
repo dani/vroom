@@ -18,6 +18,7 @@ use Etherpad::API;
 use Session::Token;
 use Config::Simple;
 use Email::Valid;
+use URI;
 use Data::Dumper;
 
 app->log->level('info');
