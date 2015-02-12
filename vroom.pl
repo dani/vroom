@@ -132,7 +132,6 @@ helper valid_email => sub {
 # Create a cookie based session
 helper login => sub {
   my $self = shift;
-  my $ret = {};
   if ($self->session('name')){
     return 1;
   }
