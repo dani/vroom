@@ -55,7 +55,7 @@
 ; the uri of your instance, and the API key
 ;uri = 'https://pad.example.com'
 ;api_key = 'be0f90cfc412b03c13e956e77d7944352c06a44e5d94da44ebfa79fb63d7e998'
-; If you run vroom and etherpad-llite on different subdomains, you have to set the common part here
+; If you run vroom and etherpad-lite on different subdomains, you have to set the common part here
 ; For exmple, if you use vroom.domain.tld and pad.domain.tld, set domain.tld here
 ;base_domain = 'example.com'
 
