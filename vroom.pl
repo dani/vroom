@@ -1841,6 +1841,8 @@ get '/:room' => sub {
     # pad doesn't exist yet ?
     if (!$data->{etherpad_group}){
       $self->create_pad($room);
+      # Reload data so we get the etherpad_group
+      $data = $self->get_room_by_name($room);
     }
     $self->create_etherpad_session($room);
   }
