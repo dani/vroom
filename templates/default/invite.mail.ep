@@ -1,6 +1,7 @@
 <%
   my $url = $self->url_for('/')->to_abs;
   $url .= ($url =~ m/\/$/) ? '' : '/';
+  $url =~ s/^http:/https:/;
 %>
 <p>
   <%=l 'YOU_ARE_INVITED_TO_A_MEETING' %>
