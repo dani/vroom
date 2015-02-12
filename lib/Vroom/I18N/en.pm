@@ -267,8 +267,10 @@ our %Lexicon = (
                                             "screen instead of your video.",
   "SCREEN_SHARING"                       => "Screen Sharing",
   "HELP_SCREEN_SHARING"                  => "VROOM lets you share your screen (or a single window) with the other members of the room. For now " .
-                                            "this feature is only available with Google Chrome, and you need to install an extension " .
-                                            "(you'll be prompted to install it the first time you try to share your screen)",
+                                            "this feature is only available with Google Chrome (requires a small extension, " .
+                                            "you'll be prompted to install it first time you try to share your screen) or Mozilla Firefox." .
+                                            "To enable this feature in Mozilla Firefox, you need to go in about:config, and add VROOM address " .
+                                            "usually vroom.im) to the list media.getusermedia.screensharing.allowed_domains",
   "OWNER_PRIVILEGES"                     => "Room creator's privileges",
   "HELP_OWNER_PRIVILEGES"                => "Room's creator (also called manager) has special privileges (compared to those who join " .
                                             "later, which are simple participants). For example, he can protect access with a password " .

@@ -279,9 +279,11 @@ our %Lexicon = (
     "SCREEN_SHARING"                            => "Partage d'écran",
     "HELP_SCREEN_SHARING"                       => "VROOM vous permet de partager votre écran (ou juste une fenêtre) avec les autres " .
                                                    "participants d'un salon. " .
-                                                   "Pour l'instant, le partage d'écran ne fonctionne qu'avec le navigateur Google Chrome, " .
-                                                   "et nécessite l'installation d'une petite extension (l'installation vous sera proposée " .
-                                                   "la première fois que vous essayez de partager votre écran)", 
+                                                   "Pour l'instant, le partage d'écran ne fonctionne qu'avec les navigateurs Google Chrome " .
+                                                   "(nécessite l'installation d'une petite extension qui vous sera proposée " .
+                                                   "la première fois que vous essayez de partager votre écran) et Mozilla Firefox. Pour activer " .
+                                                   "cette fonction avec Firefox, il faut aller dans about:config et ajouter l'adresse de VROOM " .
+                                                   "(en général vroom.im) dans la liste media.getusermedia.screensharing.allowed_domains",
     "OWNER_PRIVILEGES"                          => "Privilèges des créateurs de salon",
     "HELP_OWNER_PRIVILEGES"                     => "Le créateur d'un salon (aussi appelé gestionnaire) dispose de privilèges spéciaux " .
                                                    "sur ce dernier (par rapport à ceux qui rejoignent le salon après, qui ne seront que " .
