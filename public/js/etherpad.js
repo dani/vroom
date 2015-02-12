@@ -8,6 +8,7 @@
       'showChat'          : false,
       'showLineNumbers'   : false,
       'userName'          : 'unnamed',
+      'lang'              : '',
       'useMonospaceFont'  : false,
       'noColors'          : false,
       'userColor'         : false,
@@ -18,7 +19,8 @@
       'border'            : 0,
       'borderStyle'       : 'solid',
       'toggleTextOn'      : 'Disable Rich-text',
-      'toggleTextOff'     : 'Enable Rich-text'
+      'toggleTextOff'     : 'Enable Rich-text',
+      'rtl'               : false
     };
     
     var $self = this;
@@ -35,21 +37,25 @@
       }
       
       var iFrameLink = '<iframe id="'+epframeId;
-          iFrameLink = iFrameLink +'" name="'+epframeId;
-          iFrameLink = iFrameLink +'" src="'+settings.host+settings.baseUrl+settings.padId;
-          iFrameLink = iFrameLink + '?showControls='+settings.showControls;
-          iFrameLink = iFrameLink + '&showChat='+settings.showChat;
-          iFrameLink = iFrameLink + '&showLineNumbers='+settings.showLineNumbers;
-          iFrameLink = iFrameLink + '&useMonospaceFont='+settings.useMonospaceFont;
+          iFrameLink = iFrameLink +'" name="' + epframeId;
+          iFrameLink = iFrameLink +'" src="' + settings.host+settings.baseUrl+settings.padId;
+          iFrameLink = iFrameLink + '?showControls=' + settings.showControls;
+          iFrameLink = iFrameLink + '&showChat=' + settings.showChat;
+          iFrameLink = iFrameLink + '&showLineNumbers=' + settings.showLineNumbers;
+          iFrameLink = iFrameLink + '&useMonospaceFont=' + settings.useMonospaceFont;
           iFrameLink = iFrameLink + '&userName=' + settings.userName;
+          if (settings.lang) {
+            iFrameLink = iFrameLink + '&lang=' + settings.lang;
+          }
           iFrameLink = iFrameLink + '&noColors=' + settings.noColors;
           iFrameLink = iFrameLink + '&userColor=' + settings.userColor;
           iFrameLink = iFrameLink + '&hideQRCode=' + settings.hideQRCode;
           iFrameLink = iFrameLink + '&alwaysShowChat=' + settings.alwaysShowChat;
-          iFrameLink = iFrameLink +'" style="border:'+settings.border;
-          iFrameLink = iFrameLink +'; border-style:'+settings.borderStyle;
-          iFrameLink = iFrameLink +';" width="'+ '100%';//settings.width;
-          iFrameLink = iFrameLink +'" height="'+ settings.height; 
+          iFrameLink = iFrameLink + '&rtl=' + settings.rtl;
+          iFrameLink = iFrameLink +'" style="border:' + settings.border;
+          iFrameLink = iFrameLink +'; border-style:' + settings.borderStyle;
+          iFrameLink = iFrameLink +';" width="' + '100%';//settings.width;
+          iFrameLink = iFrameLink +'" height="' + settings.height; 
           iFrameLink = iFrameLink +'"></iframe>';
       
       
