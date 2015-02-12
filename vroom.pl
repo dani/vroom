@@ -118,7 +118,6 @@ helper valid_id => sub {
 };
 
 # Check email address
-# TODO: replace with Email::Valid
 helper valid_email => sub {
   my $self = shift;
   my ($email) = @_;
