@@ -63,6 +63,10 @@ if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key
     url => $config->{'etherpad.uri'},
     apikey => $config->{'etherpad.api_key'}
   });
+  if (!$ec->check_token){
+    app->log->info("Can't connect to Etherpad-Lite API, check your API key and uri");
+    $ec = undef;
+  }
 }
 
 # Load I18N, and declare supported languages
