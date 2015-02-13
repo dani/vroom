@@ -1892,6 +1892,15 @@ app->hook(before_dispatch => sub {
   }
   # Stash the configuration hashref
   $self->stash(config => $config);
+
+  # Check db is available
+  if (!$self->db){
+    $self->app->log->info("Connect connect to the database");
+    return $self->render('error',
+      msg => $self->l('ERROR_DB_UNAVAILABLE'),
+      err => 'ERROR_DB_UNAVAILABLE'
+    );
+  }
 });
 # Are we running in hypnotoad ?
 app->config(
