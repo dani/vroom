@@ -67,3 +67,5 @@
 ; server backend. Can be either morbo (DEV) or hypnotoad (PROD)
 ; default is hypnotoad
 ;backend = 'hypnotoad'
+; PID file, only used if backend is hypnotoad
+;pid_file = '/tmp/vroom.pird'

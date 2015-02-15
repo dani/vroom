@@ -52,6 +52,7 @@ $config->{'etherpad.base_domain'}              ||= '';
 $config->{'daemon.listen_ip'}                  ||= '127.0.0.1';
 $config->{'daemon.listen_port'}                ||= '8090';
 $config->{'daemon.backend'}                    ||= 'hypnotoad';
+$config->{'daemon.pid_file'}                   ||= '/tmp/vroom.pid';
 
 # Set log level
 app->log->level($config->{'log.level'});
@@ -1906,7 +1907,7 @@ app->hook(before_dispatch => sub {
 app->config(
   hypnotoad => {
     listen   => ['http://' . $config->{'daemon.listen_ip'} . ':' . $config->{'daemon.listen_port'}],
-    pid_file => '/tmp/vroom.pid',
+    pid_file => $config->{'daemon.pid_file'},
     proxy    => 1
   }
 );
