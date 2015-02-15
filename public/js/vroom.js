@@ -605,8 +605,8 @@ function initVroom(room) {
     $('#noWebrtcSupport').modal('show');
   }
 
-  // Hide screen sharing btn if not supported
-  if (!webrtc.capabilities.supportScreenSharing){
+  // Hide screen sharing btn if not supported, disable it on mobile
+  if (!webrtc.capabilities.supportScreenSharing || !$.browser.desktop){
     $('#shareScreenLabel').remove();
   }
 
