@@ -266,6 +266,10 @@
 .btn-full {
   width: 100% !important;
 }
+.btn {
+  white-space:normal !important;
+  word-wrap:break-word; 
+}
 html,
 body {
   height: 100%;
