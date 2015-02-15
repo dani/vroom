@@ -1713,7 +1713,7 @@ function initVroom(room) {
       webrtc.shareScreen(function(err){
         // An error occured while sharing our screen
         if(err){
-          if (err.name == 'EXTENSION_UNAVAILABLE'){
+          if (err.name === 'EXTENSION_UNAVAILABLE'){
             var ver = 34;
             if ($.browser.linux){
               ver = 35;
@@ -1727,7 +1727,10 @@ function initVroom(room) {
           }
           // This error usually means you have denied access (old flag way)
           // or you cancelled screen sharing (new extension way)
-          else if (err.name == 'PERMISSION_DENIED' || err.name == 'PermissionDeniedError'){
+          // or you select no window (in Firefox)
+          else if (err.name === 'PERMISSION_DENIED' ||
+                   err.name === 'PermissionDeniedError' ||
+                   err.name === 'ConstraintNotSatisfiedError'){
             cantShare(locale.SCREEN_SHARING_CANCELLED);
           }
           else{
