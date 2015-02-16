@@ -68,4 +68,4 @@
 ; default is hypnotoad
 ;backend = 'hypnotoad'
 ; PID file, only used if backend is hypnotoad
-;pid_file = '/tmp/vroom.pird'
+;pid_file = '/tmp/vroom.pid'
