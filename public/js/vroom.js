@@ -607,7 +607,7 @@ function initVroom(room) {
 
   // Hide screen sharing btn if not supported, disable it on mobile
   if (!webrtc.capabilities.supportScreenSharing || !$.browser.desktop){
-    $('#shareScreenLabel').remove();
+    $('.btn-share-screen').remove();
   }
 
   // Return the number of peers in the room
@@ -1697,8 +1697,8 @@ function initVroom(room) {
   });
 
   // ScreenSharing
-  $('#shareScreenButton').change(function() {
-    var action = ($(this).is(":checked")) ? 'share':'unshare';
+  $('.btn-share-screen').click(function() {
+    var action = ($(this).hasClass('btn-danger')) ? 'unshare':'share';
     function cantShare(err){
       $.notify(err, 'error');
       return;
@@ -1730,12 +1730,12 @@ function initVroom(room) {
           else{
             cantShare(locale.CANT_SHARE_SCREEN);
           }
-          $('#shareScreenLabel').removeClass('active');
+          $('.btn-share-screen').removeClass('active');
           return;
         }
         // Screen sharing worked, warn that everyone can see it
         else{
-          $("#shareScreenLabel").addClass('btn-danger');
+          $('.btn-share-screen').addClass('btn-danger').button('toggle');
           peers.local.screenShared = true;
           $.notify(locale.EVERYONE_CAN_SEE_YOUR_SCREEN, 'info');
         }
@@ -1744,7 +1744,7 @@ function initVroom(room) {
     else{
       peers.local.screenShared = false;
       webrtc.stopScreenShare();
-      $('#shareScreenLabel').removeClass('btn-danger');
+      $('.btn-share-screen').removeClass('btn-danger').button('toggle');
       $.notify(locale.SCREEN_UNSHARED, 'info');
     }
   });
@@ -1760,8 +1760,7 @@ function initVroom(room) {
       unmuteMic();
       $.notify(locale.MIC_UNMUTED, 'info');
     }
-    $('.btn-mute-mic').toggleClass('btn-danger');
-    $('.btn-mute-mic').button('toggle');
+    $('.btn-mute-mic').toggleClass('btn-danger').button('toggle');
   });
 
   // Disable suspend webcam button if no webcam
@@ -1780,8 +1779,7 @@ function initVroom(room) {
       resumeCam();
       $.notify(locale.CAM_RESUMED, 'info');
     }
-    $('.btn-suspend-cam').toggleClass('btn-danger');
-    $('.btn-suspend-cam').button('toggle');
+    $('.btn-suspend-cam').toggleClass('btn-danger').button('toggle');
   });
 
   // Handle auth to become room owner

@@ -69,7 +69,7 @@
           </div>
         </div>
         <% } %>
-        <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs" data-toggle="buttons">
+        <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs">
           <button class="btn btn-default btn-mute-mic help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_MIC' %>">
             <span class="glyphicon glyphicon-volume-off">
             </span>
@@ -78,11 +78,10 @@
             <span class="glyphicon glyphicon-facetime-video">
             </span>
           </button>
-          <label class="btn btn-default help" id="shareScreenLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SHARE_YOUR_SCREEN' %>">
-            <input type="checkbox" id="shareScreenButton">
+          <button class="btn btn-default help btn-share-screen" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SHARE_YOUR_SCREEN' %>">
             <span class="glyphicon glyphicon-expand">
             </span>
-          </label>
+          </button>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs aloneEl" data-toggle="buttons">
           <label class="btn btn-default help" id="pauseMohLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PAUSE_MOH' %>">
