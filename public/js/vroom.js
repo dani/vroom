@@ -1180,16 +1180,13 @@ function initVroom(room) {
       var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
       if (!peers.local.micMuted){
         muteMic();
-        $('#muteMicLabel').addClass('btn-danger active');
-        $('#muteMicButton').prop('checked', true);
         $.notify(sprintf(locale.s_IS_MUTING_YOU, who), 'info');
       }
       else {
         unmuteMic();
-        $('#muteMicLabel').removeClass('btn-danger active');
-        $('#muteMicButton').prop('checked', false);
         $.notify(sprintf(locale.s_IS_UNMUTING_YOU, who), 'info');
       }
+      $('.btn-mute-mic').toggleClass('btn-danger').button('toggle');
     }
     // It's another peer of the room
     else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
@@ -1213,16 +1210,13 @@ function initVroom(room) {
       var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
       if (!peers.local.videoPaused){
         suspendCam();
-        $('#suspendCamLabel').addClass('btn-danger active');
-        $('#suspendCamButton').prop('checked', true);
         $.notify(sprintf(locale.s_IS_SUSPENDING_YOU, who), 'info');
       }
       else{
         resumeCam();
-        $('#suspendCamLabel').removeClass('btn-danger active');
-        $('#suspendCamButton').prop('checked', false);
         $.notify(sprintf(locale.s_IS_RESUMING_YOU, who), 'info');
       }
+      $('.btn-suspend-cam').toggleClass('btn-danger').button('toggle');
     }
     else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
       var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
@@ -1756,39 +1750,38 @@ function initVroom(room) {
   });
 
   // Handle microphone mute/unmute
-  $('#muteMicButton').change(function() {
-    var action = ($(this).is(':checked')) ? 'mute':'unmute';
+  $('.btn-mute-mic').click(function() {
+    var action = ($(this).hasClass('btn-danger')) ? 'unmute':'mute';
     if (action === 'mute'){
       muteMic();
-      $('#muteMicLabel').addClass('btn-danger');
       $.notify(locale.MIC_MUTED, 'info');
     }
     else{
       unmuteMic();
-      $('#muteMicLabel').removeClass('btn-danger');
       $.notify(locale.MIC_UNMUTED, 'info');
     }
+    $('.btn-mute-mic').toggleClass('btn-danger');
+    $('.btn-mute-mic').button('toggle');
   });
 
   // Disable suspend webcam button if no webcam
   if (!videoConstraints){
-    $('#suspendCamButton').attr('disabled', true);
-    $('#suspendCamLabel').addClass('disabled');
+    $('.btn-suspend-cam').addClass('disabled');
   }
 
   // Suspend the webcam
-  $('#suspendCamButton').change(function() {
-    var action = ($(this).is(':checked')) ? 'pause':'resume';
+  $('.btn-suspend-cam').click(function() {
+    var action = ($(this).hasClass('btn-danger')) ? 'resume':'pause';
     if (action === 'pause'){
       suspendCam();
-      $('#suspendCamLabel').addClass('btn-danger');
       $.notify(locale.CAM_SUSPENDED, 'info');
     }
     else{
       resumeCam();
-      $('#suspendCamLabel').removeClass('btn-danger');
       $.notify(locale.CAM_RESUMED, 'info');
     }
+    $('.btn-suspend-cam').toggleClass('btn-danger');
+    $('.btn-suspend-cam').button('toggle');
   });
 
   // Handle auth to become room owner
@@ -1863,10 +1856,10 @@ function initVroom(room) {
   // Handle hangup/close window
   $('.btn-logout').click(function(){
     $('#quitModal').modal('show');
-    if (!$('#muteMicButton').is(':checked')){
+    if (!peers.local.micMuted){
       muteMic();
     }
-    if (!$('#suspendCamButton').is(':checked')){
+    if (!peers.local.videoPaused){
       suspendCam();
     }
   });
@@ -1874,10 +1867,12 @@ function initVroom(room) {
   // the modal is closed
   $('#quitModal').on('hide.bs.modal',function(){
     $('.btn-logout').removeClass('active');
-    if (!$('#muteMicButton').is(':checked')){
+    // Unmute the mic only if it wasn't manually muted
+    if (!$('.btn-mute-mic:first').hasClass('btn-danger')){
       unmuteMic();
     }
-    if (!$('#suspendCamButton').is(':checked')){
+    // Same for the camera
+    if (!$('.btn-suspend-cam:first').hasClass('btn-danger')){
       resumeCam();
     }
   });

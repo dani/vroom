@@ -270,6 +270,9 @@
   white-space:normal !important;
   word-wrap:break-word; 
 }
+.header-btn-group {
+  margin-left: 10px;
+}
 html,
 body {
   height: 100%;
