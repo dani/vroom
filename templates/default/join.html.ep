@@ -455,8 +455,8 @@
                    url: "<%= $config->{'signaling.uri'} %>",
                    peerConnectionConfig: {
                      iceServers: [
-                       {"url":"stun:<%= $config->{'turn.stun_server'} %>"},
-                       <%== ($config->{'turn.turn_server'} && $config->{'turn.turn_server'} ne '') ? "{\"url\":\"turn:$config->{'turn.turn_server'}\", \"username\":\"$room\", \"credential\":\"$turnPassword\"}":'' %>
+                       {"url":"<%= $config->{'turn.stun_server'} %>"},
+                       <%== ($config->{'turn.turn_server'} && $config->{'turn.turn_server'} ne '') ? "{\"url\":\"$config->{'turn.turn_server'}\", \"username\":\"$room\", \"credential\":\"$turnPassword\"}":'' %>
                      ]
                    },
                    localVideoEl: 'webRTCVideoLocal',
