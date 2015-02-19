@@ -4,20 +4,17 @@
     <nav id="toolbar" class="navbar navbar-default" role="toolbar">
       <div class="navbar-header">
         <div class="btn-group visible-xs-block header-btn-group">
-          <button class="btn btn-default navbar-btn btn-mute-mic">
+          <button class="btn btn-lg btn-default navbar-btn btn-mute-mic">
             <span class="glyphicon glyphicon-volume-off">
             </span>
           </button>
-          <button class="btn btn-default navbar-btn btn-suspend-cam">
+          <button class="btn btn-lg btn-default navbar-btn btn-suspend-cam">
             <span class="glyphicon glyphicon-facetime-video">
             </span>
           </button>
         </div>
         <div class="btn-group visible-xs-block header-btn-group col-xs-push-2">
-          <div id="timeCounter" class="btn btn-default navbar-btn disabled">
-            00:00
-          </div>
-          <button class="btn btn-default help btn-logout navbar-btn" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
+          <button class="btn btn-lg btn-default help btn-logout navbar-btn" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
             <span class="glyphicon glyphicon-log-out">
             </span>
           </button>
