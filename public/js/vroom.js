@@ -1996,20 +1996,19 @@ function initVroom(room) {
   });
 
   if (etherpad.enabled){
-    $('#etherpadButton').change(function(){
-      var action = ($(this).is(':checked')) ? 'show':'hide';
+    $('.btn-etherpad').click(function(){
+      var action = ($(this).hasClass('btn-danger')) ? 'hide':'show';
       if (action === 'show'){
         // If not already loaded, load etherpad in the iFrame
         if ($('#etherpadContainer').html() == ''){
           loadEtherpadIframe();
         }
-        $('#etherpadLabel').addClass('btn-danger');
         $('#etherpadContainer').slideDown('200');
       }
       else{
-        $('#etherpadLabel').removeClass('btn-danger');
         $('#etherpadContainer').slideUp('200');
       }
+      $('.btn-etherpad').toggleClass('btn-danger').button('toggle');
     });
   }
 
