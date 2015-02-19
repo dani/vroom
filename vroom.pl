@@ -1262,6 +1262,7 @@ any '/api' => sub {
   }
   elsif ($req->{action} eq 'create_room'){
     $req->{param}->{room} ||= $self->get_random_name();
+    $req->{param}->{room} = lc $req->{param}->{room};
     my $json = {
       err  => 'ERROR_OCCURRED',
       msg  => $self->l('ERROR_OCCURRED'),
