@@ -72,12 +72,11 @@
             </span>
           </button>
         </div>
-        <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs aloneEl" data-toggle="buttons">
-          <label class="btn btn-default help" id="pauseMohLabel" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PAUSE_MOH' %>">
-            <input type="checkbox" id="pauseMohButton">
+        <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs aloneEl">
+          <button class="btn btn-default help btn-moh" data-toggle="tooltip" data-placement="bottom" title="<%=l 'PAUSE_MOH' %>">
             <span class="glyphicon glyphicon-music">
             </span>
-          </label>
+          </button>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left">
           <div class="btn-group ownerEl">

@@ -1111,12 +1111,12 @@ function initVroom(room) {
   function checkMoh(){
     setTimeout(function(){
       if (countPeers() < 1){
-        if ($('#pauseMohButton').is(':checked')){
+        if ($('.btn-moh:first').hasClass('btn-danger')){
           $('#mohPlayer').get(0).volume = .25;
           $('#mohPlayer').get(0).play();
         }
         else{
-          $('#pauseMohButton').notify(locale.WAIT_WITH_MUSIC, 'info');
+          $('.btn-moh>span:first').notify(locale.WAIT_WITH_MUSIC, 'info');
         }
         $('.aloneEl').show(200);
       }
@@ -1840,15 +1840,14 @@ function initVroom(room) {
   });
 
   // Suspend/Play MoH
-  $('#pauseMohButton').change(function(){
-    if ($(this).is(":checked")){
-      $('#mohPlayer')[0].play();
-      $('#pauseMohLabel').addClass('btn-danger');
+  $('.btn-moh').click(function(){
+    if ($(this).hasClass('btn-danger')){
+      $('#mohPlayer')[0].pause();
     }
     else{
-      $('#mohPlayer')[0].pause();
-      $('#pauseMohLabel').removeClass('btn-danger');
+      $('#mohPlayer')[0].play();
     }
+    $('.btn-moh').toggleClass('btn-danger').button('toggle');
   });
 
   // Handle hangup/close window
