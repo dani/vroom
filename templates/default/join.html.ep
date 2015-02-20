@@ -455,8 +455,22 @@
                    url: "<%= $config->{'signaling.uri'} %>",
                    peerConnectionConfig: {
                      iceServers: [
-                       {"url":"<%= $config->{'turn.stun_server'} %>"},
-                       <%== ($config->{'turn.turn_server'} && $config->{'turn.turn_server'} ne '') ? "{\"url\":\"$config->{'turn.turn_server'}\", \"username\":\"$room\", \"credential\":\"$turnPassword\"}":'' %>
+                       {
+                         "url":"<%= $config->{'turn.stun_server'} %>"
+                       },
+                       <% if ($config->{'turn.turn_server'} && $config->{'turn.turn_server'} ne ''){ %>
+                       {
+                         "url":"<%= $config->{'turn.turn_server'} %>",
+                         <% if ($config->{'turn.turn_user'} && $config->{'turn.turn_user'} ne '' &&
+                                $config->{'turn.turn_password'} && $config->{'turn.turn_password'} ne '') { %>
+                         "username":"<%== $config->{'turn.turn_user'} %>",
+                         "credential":"<%== $config->{'turn.turn_password'} %>"
+                         <% } else { %>
+                         "username":"<%== $room %>",
+                         "credential":"<%== $turnPassword %>"
+                         <% } %>
+                       }
+                       <% } %>
                      ]
                    },
                    localVideoEl: 'webRTCVideoLocal',
