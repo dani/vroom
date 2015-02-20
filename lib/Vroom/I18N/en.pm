@@ -256,10 +256,9 @@ our %Lexicon = (
   "COLLABORATIVE_NOTETAKING"             => "Realtime notetaking",
   "TAKE_NOTE_IN_REALTIME"                => "Write your meating notes with others, all in real time with the included text pad",
   "SUPPORTED_BROWSERS"                   => "Supported browsers",
-  "HELP_BROWSERS_SUPPORTED"              => "VROOM works with any modern, standard compliant browsers, which means any " .
-                                            "recent Mozilla Firefox, Google Chrome or Opera. Other browsers (mainly Internet Explorer " .
-                                            "and Safari) won't work for now. Unfortunaly, this include Apple devices (iPhone, iPad, iPod) " .
-                                            "which won't work",
+  "HELP_BROWSERS_SUPPORTED"              => "The technologies behind VROOM are still at their early stages, so only recent versions " .
+                                            "of Mozilla Firefox, Google Chrome or Opera will work. Other browsers (mainly Internet Explorer and " .
+                                            "Safari, which include Apple's devices like iPhone, iPads and iPods) won't work for now.",
   "I_DONT_HAVE_A_WEBCAM"                 => "I don't have a webcam",
   "HELP_I_DONT_HAVE_A_WEBCAM"            => "You'll still be able to participate. If no webcam is detected when you join a room " .
                                             "you'll get a message. Click on the link at the bottom and you'll join with audio " .

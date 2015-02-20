@@ -264,12 +264,10 @@ our %Lexicon = (
     "COLLABORATIVE_NOTETAKING"                  => "Prise de notes collaborative",
     "TAKE_NOTE_IN_REALTIME"                     => "Prenez des notes tous ensembles, en temps réel grâce à un bloc notes collaboratif",
     "SUPPORTED_BROWSERS"                        => "Navigateurs supportés",
-    "HELP_BROWSERS_SUPPORTED"                   => "VROOM fonctionne avec tous les navigateurs modernes. " .
-                                                   "Les technologies employées (WebRTC) étant encore jeunes, seules les versions " .
+    "HELP_BROWSERS_SUPPORTED"                   => "Les technologies employées (WebRTC) étant encore jeunes, seules les versions " .
                                                    "récentes de Mozilla Firefox, Google Chrome et Opera fonctionnent pour l'instant. " .
-                                                   "Les autres navigateurs (principalement Internet Explorer et Safari) " .
-                                                   "ne fonctionneront pas pour l'instant. Malheureusement cela inclus les appareils Apple " .
-                                                   "(iPhone, iPad, iPod) qui ne fonctionneront pas.",
+                                                   "Les autres navigateurs (principalement Internet Explorer et Safari, ce qui inclus " .
+                                                   "les appareils Apple type iPhone, iPad ou iPod) ne fonctionneront pas.",
     "I_DONT_HAVE_A_WEBCAM"                      => "Je n'ai pas de webcam",
     "HELP_I_DONT_HAVE_A_WEBCAM"                 => "Vous pourrez quand même participer. Si aucune webcam n'est disponible au moment " .
                                                    "de rejoindre un salon, un message apparaitra. Vous pouvez à ce moment cliquer " .
