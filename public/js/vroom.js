@@ -14,7 +14,6 @@ $('.help').tooltip({
 });
 $('.popup').popover({
   container: 'body',
-  placement: 'right',
   trigger: 'focus'
 });
 $('.modal').on('show.bs.modal', function(){
@@ -1151,7 +1150,15 @@ function initVroom(room) {
           $('#mohPlayer').get(0).play();
         }
         else{
-          $('.btn-moh>span:first').notify(locale.WAIT_WITH_MUSIC, 'info');
+          $('.btn-moh').on('hidden.bs.popover', function(){
+            $('.btn-moh').popover('destroy');
+          });
+          setTimeout(function(){
+            $('.btn-moh').popover('show');
+          }, 200);
+          setTimeout(function(){
+            $('.btn-moh').popover('hide');
+          }, 5000);
         }
         $('.aloneEl').show(200);
       }
