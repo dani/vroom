@@ -4,7 +4,7 @@
       var api_key = '<%= ($self->session('key')) ? $self->session('key') : '' %>';
       var roomName;
     </script>
-    <% foreach my $js (qw(jquery-1.11.1.min.js bootstrap.min.js notify-combined.min.js bootstrap-switch.min.js jquery.bootpag.min.js vroom.js)){
+    <% foreach my $js (qw(jquery-1.11.2.min.js bootstrap.min.js notify-combined.min.js bootstrap-switch.min.js jquery.bootpag.min.js vroom.js)){
     %>
     <script type="text/javascript" src="<%= $self->get_url('/') %><%= $self->get_mtime("public/js/$js") %>/js/<%= $js %>"></script>
     <% } %>
