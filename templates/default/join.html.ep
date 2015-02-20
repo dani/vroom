@@ -68,7 +68,7 @@
             </span>
           </button>
           <button class="btn btn-default help btn-share-screen" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SHARE_YOUR_SCREEN' %>">
-            <span class="glyphicon glyphicon-expand">
+            <span class="glyphicon glyphicon-blackboard">
             </span>
           </button>
         </div>
