@@ -36,6 +36,7 @@ $config->{'turn.turn_server'}                  ||= undef;
 $config->{'turn.turn_user'}                    ||= undef;
 $config->{'turn.turn_password'}                ||= undef;
 $config->{'turn.realm'}                        ||= 'vroom';
+$config->{'video.frame_rate'}                  ||= 15;
 $config->{'email.from '}                       ||= 'vroom@example.com';
 $config->{'email.contact'}                     ||= 'admin@example.com';
 $config->{'email.sendmail'}                    ||= '/sbin/sendmail';
@@ -1262,6 +1263,7 @@ any '/api' => sub {
       }
     );
   }
+  # And here anonymous method, which do not require an API Key
   elsif ($req->{action} eq 'create_room'){
     $req->{param}->{room} ||= $self->get_random_name();
     $req->{param}->{room} = lc $req->{param}->{room};
@@ -1599,6 +1601,53 @@ any '/api' => sub {
         err => 'NOT_ALLOWED',
       },
       status => 403
+    );
+  }
+  # Return configuration for SimpleWebRTC
+  elsif ($req->{action} eq 'get_rtc_conf'){
+    my $resp = {
+      url => $config->{'signaling.uri'},
+      peerConnectionConfig => {
+        iceServers => [{
+          url => $config->{'turn.stun_server'} 
+        }]
+      },
+      autoRequestMedia => Mojo::JSON::true,
+      enableDataChannels => Mojo::JSON::true,
+      debug => Mojo::JSON::false,
+      detectSpeakingEvents => Mojo::JSON::true,
+      adjustPeerVolume => Mojo::JSON::false,
+      autoAdjustMic => Mojo::JSON::false,
+      harkOptions => {
+        interval => 300,
+        threshold => -20
+      },
+      media => {
+        audio => Mojo::JSON::true,
+        video => {
+          mandatory => {
+            maxFrameRate => $config->{'video.frame_rate'}
+          }
+        }
+      }
+    };
+    # TODO: Support several TURN server in config
+    if ($config->{'turn.turn_server'}){
+      my $turn = { url => $config->{'turn.turn_server'} };
+      if ($config->{'turn.turn_user'} && $config->{'turn.turn_password'}){
+        $turn->{username}   = $config->{'turn.turn_user'};
+        $turn->{credential} = $config->{'turn.turn_password'};
+      }
+      else{
+        $turn->{username}   = $room->{name};
+        $turn->{credential} = $room->{token};
+      }
+      push @{$resp->{peerConnectionConfig}->{iceServers}}, $turn;
+    }
+    return $self->render(
+      json => {
+        config => $resp
+      }
     );
   }
   # Return just room config

@@ -21,6 +21,9 @@ var locale = {};
 // When pagination is done, how many item per page
 var itemPerPage = 20;
 
+// Will store the global webrtc object
+var webrtc = undefined;
+
 // Localize the strings we need
 $.ajax({
   url: rootUrl + 'localize/' + currentLang,
@@ -575,6 +578,30 @@ function initAdmin(){
   });
 }
 
+function initJoin(room){
+  $.ajax({
+    data: {
+      req: JSON.stringify({
+        action: 'get_rtc_conf',
+        param: {
+          room: room,
+        }
+      })
+    },
+    error: function(data){
+      showApiError(data);
+    },
+    success: function(data){
+      if (!video){
+        data.config.media.video = false;
+      }
+      data.config.localVideoEl = 'webRTCVideoLocal';
+      webrtc = new SimpleWebRTC(data.config);
+      initVroom(room);
+    }
+  });
+}
+
 // This is the main function called when you join a room
 function initVroom(room) {
 
@@ -876,7 +903,7 @@ function initVroom(room) {
         // color can be sent through the signaling channel
         peer.send('peer_color', {color: peers.local.color});
         // if we don't have a video, just signal it to this peer
-        peer.send('media_info', {video: !!videoConstraints});
+        peer.send('media_info', {video: !!video});
         // We don't have chat history yet ? Lets ask to this new peer
         if(!peers.local.hasHistory && chatIndex == 0){
           peer.sendDirectly('vroom', 'getHistory', '');
@@ -1515,11 +1542,14 @@ function initVroom(room) {
         if (data.msg){
           $.notify(data.msg, 'success');
         }
+        $('#videoLocalContainer').show(200);
+        $('#timeCounterXs,#timeCounter').tinyTimer({ from: new Date });
+        setTimeout(function(){
+          $('#connecting').modal('hide');
+        }, 200);
       }
     });
     checkMoh();
-    $('#videoLocalContainer').show(200);
-    $('#timeCounterXs,#timeCounter').tinyTimer({ from: new Date });
   });
 
   // Handle new video stream added: someone joined the room
@@ -1764,7 +1794,7 @@ function initVroom(room) {
   });
 
   // Disable suspend webcam button if no webcam
-  if (!videoConstraints){
+  if (!video){
     $('.btn-suspend-cam').addClass('disabled');
   }
 

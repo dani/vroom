@@ -238,6 +238,8 @@ our %Lexicon = (
                                                    "en audio uniquement",
     "CONNECTION_LOST"                           => "Vous avez été déconnecté",
     "CHECK_INTERNET_ACCESS"                     => "Vérifiez votre connexion, et raffraîchissez cette page ensuite",
+    "CONNECTING"                                => "Connexion en cours",
+    "CONNECTING_PLEASE_WAIT"                    => "Veuillez patienter le temps d'établir la connexion",
     "HOME"                                      => "Accueil",
     "HELP"                                      => "Aide",
     "ABOUT"                                     => "À propos",

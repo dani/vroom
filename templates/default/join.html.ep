@@ -377,6 +377,24 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" role="dialog" id="connecting" aria-labelledby="connecting" aria-hidden="false" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              <%=l 'CONNECTING' %>
+            </h4>
+          </div>
+          <div class="modal-body">
+            <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/connecting.gif" alt="<%=l 'CONNECTING' %>"/>
+            <br>
+            <p class="text-center">
+              <%=l 'CONNECTING_PLEASE_WAIT' %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 %=include 'invite_modal'
 %=include 'configure_modal'
 %=include 'auth_modal'
@@ -432,7 +450,6 @@
     <script>
       var roomName = '<%= $room %>';
       $( document ).ready(function() {
-        setTimeout(function(){
           etherpad = {
             enabled: <%= $etherpad %>,
             <%
@@ -442,56 +459,10 @@
             path: "<%= $ethuri->path . '/p/' %>",
             group: "<%= $etherpadGroup %>"
           };
-          <% if ($video eq 'false'){ %>
-          videoConstraints = false;
-          <% } else{ %>
-          videoConstraints = {
-            mandatory: {
-              maxFrameRate: 15,
-            }
-          };
-          <% } %>
-          webrtc = new SimpleWebRTC({
-                   url: "<%= $config->{'signaling.uri'} %>",
-                   peerConnectionConfig: {
-                     iceServers: [
-                       {
-                         "url":"<%= $config->{'turn.stun_server'} %>"
-                       },
-                       <% if ($config->{'turn.turn_server'} && $config->{'turn.turn_server'} ne ''){ %>
-                       {
-                         "url":"<%= $config->{'turn.turn_server'} %>",
-                         <% if ($config->{'turn.turn_user'} && $config->{'turn.turn_user'} ne '' &&
-                                $config->{'turn.turn_password'} && $config->{'turn.turn_password'} ne '') { %>
-                         "username":"<%== $config->{'turn.turn_user'} %>",
-                         "credential":"<%== $config->{'turn.turn_password'} %>"
-                         <% } else { %>
-                         "username":"<%== $room %>",
-                         "credential":"<%== $turnPassword %>"
-                         <% } %>
-                       }
-                       <% } %>
-                     ]
-                   },
-                   localVideoEl: 'webRTCVideoLocal',
-                   autoRequestMedia: true,
-                   enableDataChannels: true,
-                   debug: false,
-                   detectSpeakingEvents: true,
-                   adjustPeerVolume: false,
-                   autoAdjustMic: false,
-                   harkOptions: {
-                     interval: 300,
-                     threshold: -20
-                   },
-                   media: {
-                     video: videoConstraints,
-                     audio: true
-                   }
-                 });
-          initVroom(roomName);
-        }, 300);
-      });
+          video = <%= ($video eq 'false') ? 'false' : 'true' %>;
+          initJoin(roomName);
+          $('#connecting').modal('show');
+        });
     </script>
   </div>
 %= include 'footer'

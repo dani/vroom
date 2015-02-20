@@ -20,6 +20,11 @@
 ; the realm used for turn accounts. Must match the realm of your turn server
 ;realm = 'vroom'
 
+[video]
+; Define the max frame rate for video
+; higher will produce better quality streams, but will also require more bandwidth and CPU power
+;frame_rate = 15
+
 [email]
 ; Address set in the From field of email sent by VROOM
 ;from = 'no-reply@example.com'
