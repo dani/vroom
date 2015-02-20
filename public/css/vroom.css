@@ -1,11 +1,14 @@
 @font-face {
-  font-family: 'Short Stack';
+  font-family: 'Happy Monkey';
   font-style: normal;
   font-weight: 400;
-  src: url(../fonts/shortstack.woff2) format('woff2'), url(../fonts/shortstack.woff) format('woff');
+  src: url(../fonts/happymonkey.woff2) format('woff2'), url(../fonts/happymonkey.woff) format('woff');
 }
 .navbar-btn-group {
   border-color: transparent !important;
+}
+a.popup>span {
+  color: grey;
 }
 #webRTCVideo {
   overflow-y: auto;
@@ -276,7 +279,7 @@
 html,
 body {
   height: 100%;
-  font-family: 'Short Stack', cursive;
+  font-family: 'Happy Monkey', cursive;
 }
 #wrap {
   min-height: 100%;
