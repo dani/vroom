@@ -132,7 +132,7 @@ our %Lexicon = (
     "ADD_NOTIFICATION"                          => "Ajouter une notification",
     "ADD_THIS_ADDRESS"                          => "Ajouter cette adresse",
     "REMOVE_THIS_ADDRESS"                       => "Supprimer cette adresse",
-    "NOTIFICATION_ON_JOIN"                      => "Email à notifier lorsque quelqu'un rejoint ce salon",
+    "NOTIFICATION_ON_JOIN"                      => "Notification lorsque quelqu'un rejoint ce salon",
     "s_WILL_BE_NOTIFIED"                        => "%s recevra une notification à chaque fois qu'une personne rejoint ce salon",
     "s_WONT_BE_NOTIFIED_ANYMORE"                => "%s ne recevra plus les notifications pour ce salon",
     "ROOM_CONFIG_UPDATED"                       => "La configuration du salon a été mise à jour",
@@ -163,6 +163,15 @@ our %Lexicon = (
     "JOIN_PASSWORD"                             => "Mot de passe d'accès au salon",
     "OWNER_PASSWORD"                            => "Mot de passe de gestionnaire",
     "PERSISTENT"                                => "Persistant",
+    "TOOLTIP_LOCK_ROOM"                         => "Une fois cette option activée, plus personne ne peut rejoindre le salon. " .
+                                                   "À n'activer qu'une fois que tout les participants vous ont rejoint, pour éviter " .
+                                                   "que d'autres personnes viennent troubler la réunion",
+    "TOOLTIP_ASK_FOR_NAME"                      => "Les participants devront saisir leur nom avant de pouvoir rejoindre le salon",
+    "TOOLTIP_PASSWORD_PROTECT"                  => "Ce mot de passe sera nécessaire pour rejoindre le salon",
+    "TOOLTIP_RESERVE_THIS_ROOM"                 => "Ce mot de passe vous permettra de récuperer l'accès aux " .
+                                                   "menus de gestion la prochaine fois que vous vous connecterez",
+    "TOOLTIP_PERSISTENT"                        => "Rend le salon persistant (sera conservé indéfiniement)",
+    "TOOLTIP_NOTIFICATION_ON_JOIN"              => "Une ou plusieurs adresses email qui recevront une notification dès que quulqu'un rejoint ce salon",
     "ROOM_NOW_PERSISTENT"                       => "Ce salon est maintenant persistant",
     "ROOM_NO_MORE_PERSISTENT"                   => "Ce salon n'est plus persistant",
     "EMAIL_INVITE"                              => "Invitation par email",
