@@ -162,7 +162,7 @@ our %Lexicon = (
                                             "your meeting",
   "TOOLTIP_ASK_FOR_NAME"                 => "Everyone will be be asked for their name before they can join the room",
   "TOOLTIP_PASSWORD_PROTECT"             => "This password will be needed to join the room",
-  "TOOLTIP_RESERVE_THIS_ROOM"            => "If this password is set, you'll be able to access the configuration menus ",
+  "TOOLTIP_RESERVE_THIS_ROOM"            => "If this password is set, you'll be able to access the configuration menus ".
                                             "next time you connect",
   "TOOLTIP_PERSISTENT"                   => "The room will be persistent (kept forever)",
   "TOOLTIP_NOTIFICATION_ON_JOIN"         => "One or more email addresse(s) which will be notified when someone joins the room",
