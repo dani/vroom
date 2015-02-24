@@ -34,9 +34,9 @@
       <div id="roomToolBar" class="collapse navbar-collapse">
         <div class="navbar-form navbar-btn-group navbar-left input-group">
           <div class="input-group">
-            <input type="text" id="displayName" class="form-control help" placeholder="<%=l 'YOUR_NAME' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'NAME_SENT_TO_OTHERS' %>"/>
+            <input type="text" id="displayName" class="form-control input-lg help" placeholder="<%=l 'YOUR_NAME' %>" data-toggle="tooltip" data-placement="bottom" title="<%=l 'NAME_SENT_TO_OTHERS' %>"/>
             <span class="input-group-btn">
-              <button id="changeColorButton" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CHANGE_COLOR' %>">
+              <button id="changeColorButton" class="btn btn-lg btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CHANGE_COLOR' %>">
                 <span class="glyphicon glyphicon-tag">
                 </span>
               </button>
@@ -44,7 +44,7 @@
           </div>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left">
-          <button id="chatDropdown" class="btn btn-default collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
+          <button id="chatDropdown" class="btn btn-lg btn-default collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
             <span class="glyphicon glyphicon-comment">
             </span>
             <span class="badge" id="unreadMsg">
@@ -52,58 +52,58 @@
             </span>
           </button>
           <% if ($etherpad eq 'true'){ %>
-          <button class="btn btn-default help btn-etherpad" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OPEN_ETHERPAD' %>">
+          <button class="btn btn-lg btn-default help btn-etherpad" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OPEN_ETHERPAD' %>">
             <span class="glyphicon glyphicon-pencil">
             </span>
           </button>
         <% } %>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs">
-          <button class="btn btn-default btn-mute-mic help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_MIC' %>">
+          <button class="btn btn-lg btn-default btn-mute-mic help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'MUTE_MIC' %>">
             <span class="glyphicon glyphicon-volume-off">
             </span>
           </button>
-          <button class="btn btn-default btn-suspend-cam help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUSPEND_CAM' %>">
+          <button class="btn btn-lg btn-default btn-suspend-cam help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SUSPEND_CAM' %>">
             <span class="glyphicon glyphicon-facetime-video">
             </span>
           </button>
-          <button class="btn btn-default help btn-share-screen" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SHARE_YOUR_SCREEN' %>">
+          <button class="btn btn-lg btn-default help btn-share-screen" data-toggle="tooltip" data-placement="bottom" title="<%=l 'SHARE_YOUR_SCREEN' %>">
             <span class="glyphicon glyphicon-blackboard">
             </span>
           </button>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs aloneEl">
-          <button class="btn btn-default popup btn-moh" data-toggle="popover" data-content="<%=l 'WAIT_WITH_MUSIC' %>" data-placement="bottom">
+          <button class="btn btn-lg btn-default popup btn-moh" data-toggle="popover" data-content="<%=l 'WAIT_WITH_MUSIC' %>" data-placement="bottom">
             <span class="glyphicon glyphicon-music">
             </span>
           </button>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left">
           <div class="btn-group ownerEl">
-            <button class="btn btn-default help" type="button" data-toggle="modal" data-target="#inviteModal" data-toggle="tooltip" data-placement="bottom" title="<%=l 'INVITE_PEOPLE' %>">
+            <button class="btn btn-lg btn-default help" type="button" data-toggle="modal" data-target="#inviteModal" data-toggle="tooltip" data-placement="bottom" title="<%=l 'INVITE_PEOPLE' %>">
               <span class="glyphicon glyphicon-user">
               </span>
             </button>
           </div>
           <div class="btn-group ownerEl">
-            <button class="btn btn-default help" type="button" data-toggle="modal" data-target="#configureModal" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
+            <button class="btn btn-lg btn-default help" type="button" data-toggle="modal" data-target="#configureModal" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CONFIGURE' %>">
               <span class="glyphicon glyphicon-cog">
               </span>
             </button>
           </div>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left">
-          <button class="btn btn-default dropdown-toggle help unauthEl" data-toggle="modal" data-target="#ownerAuthModal" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>">
+          <button class="btn btn-lg btn-default dropdown-toggle help unauthEl" data-toggle="modal" data-target="#ownerAuthModal" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%=l 'AUTHENTICATE' %>">
             <span class="glyphicon glyphicon-log-in">
             </span>
           </button>
         </div>
         <div class="navbar-form navbar-btn-group navbar-right hidden-xs" data-toggle="buttons" >
           <div class="btn-group">
-            <div id="timeCounter" class="btn btn-default disabled">
+            <div id="timeCounter" class="btn btn-lg btn-default disabled">
               00:00
             </div>
-            <button class="btn btn-default help btn-logout" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
+            <button class="btn btn-lg btn-default help btn-logout" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
               <span class="glyphicon glyphicon-log-out">
               </span>
             </button>
