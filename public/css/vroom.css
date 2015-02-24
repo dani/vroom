@@ -279,6 +279,10 @@ a.popup>span {
 html,
 body {
   height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  margin: 0px;
+  padding: 0px;
   font-family: 'Happy Monkey', cursive;
 }
 #wrap {
