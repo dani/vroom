@@ -73,7 +73,7 @@
           </button>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs aloneEl">
-          <button class="btn btn-lg btn-default popup btn-moh" data-toggle="popover" data-content="<%=l 'WAIT_WITH_MUSIC' %>" data-placement="bottom">
+          <button class="btn btn-lg btn-default btn-moh" data-toggle="popover" data-content="<%=l 'WAIT_WITH_MUSIC' %>" data-placement="bottom">
             <span class="glyphicon glyphicon-music">
             </span>
           </button>

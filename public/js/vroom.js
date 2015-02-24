@@ -1562,6 +1562,12 @@ function initVroom(room) {
         setTimeout(function(){
           $('#connecting').modal('hide');
         }, 200);
+        // Show MOH poup if the button is visible
+        if ($('.btn-moh:fist').css('display') !== 'none'){
+          $('.btn-moh').popover({
+            trigger: 'focus'
+          });
+        }
       }
     });
     checkMoh();
