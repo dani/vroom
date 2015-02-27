@@ -1145,20 +1145,9 @@ function initVroom(room) {
   function checkMoh(){
     setTimeout(function(){
       if (countPeers() < 1){
-        if ($('.btn-moh:first').hasClass('btn-danger')){
+        if ($('.btn-moh').first().hasClass('btn-danger')){
           $('#mohPlayer').get(0).volume = .25;
           $('#mohPlayer').get(0).play();
-        }
-        else{
-          $('.btn-moh').on('hidden.bs.popover', function(){
-            $('.btn-moh').popover('destroy');
-          });
-          setTimeout(function(){
-            $('.btn-moh').popover('show');
-          }, 200);
-          setTimeout(function(){
-            $('.btn-moh').popover('hide');
-          }, 5000);
         }
         $('.aloneEl').show(200);
       }
@@ -1562,12 +1551,6 @@ function initVroom(room) {
         setTimeout(function(){
           $('#connecting').modal('hide');
         }, 200);
-        // Show MOH poup if the button is visible
-        if ($('.btn-moh:fist').css('display') !== 'none'){
-          $('.btn-moh').popover({
-            trigger: 'focus'
-          });
-        }
       }
     });
     checkMoh();
