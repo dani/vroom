@@ -261,7 +261,7 @@
               <%=l 'EXTENSION_REQUIRED' %>
             </h4>
           </div>
-          <div clas="modal-body">
+          <div class="modal-body">
             <p>
               <%=l 'VROOM_CHROME_EXTENSION' %>
             </p>
