@@ -73,6 +73,9 @@ if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key
   }
 }
 
+# GLobal error check
+our $error = undef;
+
 # Load I18N, and declare supported languages
 plugin I18N => {
   namespace => 'Vroom::I18N',
@@ -136,6 +139,21 @@ helper valid_email => sub {
 ##########################
 #   Various helpers      #
 ##########################
+
+# Check if the database schema is the one we expect
+helper check_db_version => sub {
+  my $self = shift;
+  my $sth = eval {
+    $self->db->prepare('SELECT `value`
+                          FROM `config`
+                          WHERE `key`=\'schema_version\'');
+  };
+  $sth->execute;
+  my $ver = undef;
+  $sth->bind_columns(\$ver);
+  $sth->fetch;
+  return ($ver eq Vroom::Constants::DB_VERSION) ? '1' : '0';
+};
 
 # Create a cookie based session
 helper login => sub {
@@ -1962,14 +1980,21 @@ app->hook(before_dispatch => sub {
   $self->stash(config => $config);
 
   # Check db is available
-  if (!$self->db){
-    $self->app->log->info("Connect connect to the database");
+  if ($error){
     return $self->render('error',
-      msg => $self->l('ERROR_DB_UNAVAILABLE'),
-      err => 'ERROR_DB_UNAVAILABLE'
+      msg => $self->l($error),
+      err => $error,
+      room => ''
     );
   }
 });
+
+if (!app->db){
+  $error = 'ERROR_DB_UNAVAILABLE';
+}
+if (!app->check_db_version){
+  $error = 'ERROR_DB_VERSION_MISMATCH';
+}
 # Are we running in hypnotoad ?
 app->config(
   hypnotoad => {

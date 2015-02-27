@@ -16,6 +16,7 @@ our %Lexicon = (
   "ERROR_OCCURRED"                       => "An error occurred",
   "ERROR_NOT_LOGGED_IN"                  => "Sorry, your not logged in",
   "ERROR_DB_UNAVAILABLE"                 => "The database is not available",
+  "ERROR_DB_VERSION_MISMATCH"            => "The database must be updated",
   "JS_REQUIRED"                          => "VROOM needs javascript to work properly",
   "EMAIL_INVITATION"                     => "Video conference invitation",
   "INVITE_SENT_TO_s"                     => "An invitation was sent to the following addresses\n%s",
