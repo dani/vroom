@@ -4,7 +4,10 @@ use strict;
 use warnings;
 use base 'Exporter';
 
-our @EXPORT = qw/COMPONENTS MOH JS_STRINGS API_ACTIONS/;
+our @EXPORT = qw/DB_VERSION COMPONENTS MOH JS_STRINGS API_ACTIONS/;
+
+# Database version
+use constant DB_VERSION => 1;
 
 # Components used to generate the credits part
 use constant COMPONENTS => {
