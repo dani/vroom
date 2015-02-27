@@ -400,8 +400,8 @@ function initIndex(){
   });
 }
 
-// Used on the admin page
-function initAdmin(){
+// Used on the room admin page
+function initAdminRooms(){
   var roomList = {};
   var matches = 0;
 

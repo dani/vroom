@@ -1038,19 +1038,6 @@ get '/about' => sub {
 # Route for the help page
 get '/help' => 'help';
 
-# Route for the admin pages
-get '/admin' => sub {
-  my $self = shift;
-  # Someone accessing /admin is considered an admin
-  # For now, the auth is handled outside of VROOM itself
-  $self->login;
-  $self->make_key_admin($self->session('key'));
-  $self->purge_rooms;
-  return $self->render('admin',
-    admin => 1
-  );
-};
-
 # Routes for feedback. One get to display the form
 # and one post to get data from it
 get '/feedback' => 'feedback';
@@ -1834,6 +1821,33 @@ any '/api' => sub {
       status => 503
     );
   }
+};
+
+group {
+  under '/admin' => sub {
+    my $self = shift;
+    # For now, lets just pretend that anyone able to access
+    # /admin is already logged in (auth is managed outside of VROOM)
+    # TODO: support several auth method, including an internal one where user are managed
+    # in our DB, and another where auth is handled by the web server
+    $self->login;
+    $self->make_key_admin($self->session('key'));
+    $self->purge_rooms;
+    $self->stash(admin => 1);
+    return 1;
+  };
+
+  # Admin index
+  get '/' => sub {
+    my $self = shift;
+    return $self->render('admin');
+  };
+
+  # Room management
+  get '/rooms' => sub {
+    my $self = shift;
+    return $self->render('admin_manage_rooms');
+  };
 };
 
 # Catch all route: if nothing else match, it's the name of a room

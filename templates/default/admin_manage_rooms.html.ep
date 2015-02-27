@@ -1,0 +1,55 @@
+% title $self->l('ROOM_MANAGEMENT');
+%=include 'header'
+%=include 'public_toolbar'
+<div class="container-fluid">
+%= include 'noscript'
+%= include 'configure_modal'
+%= include 'delete_room_modal'
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="form-inline">
+        <div class="form-group">
+          <div class="input-group">
+            <input type="text" id="searchRoom" class="form-control" value=""/>
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-search">
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="text-center" id="pagination">
+      </div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>
+              <%=l 'ROOM_NAME' %>
+            </th>
+            <th class="hidden-xs">
+              <%=l 'CREATION_DATE' %>
+            </th>
+            <th class="hidden-xs">
+              <%=l 'LAST_ACTIVITY' %>
+            </th>
+            <th>
+              <%=l 'MANAGE' %>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="roomList">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+%=include 'js_common'
+<script>
+$(document).ready(function(){
+  initAdminRooms();
+});
+</script>
+%=include 'footer'

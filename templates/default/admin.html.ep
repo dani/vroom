@@ -1,55 +1,12 @@
-% title $self->l('ADMINISTRATION');
-%=include 'header'
-%=include 'public_toolbar'
-<div class="container-fluid">
-%= include 'noscript'
-%= include 'configure_modal'
-%= include 'delete_room_modal'
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <div class="form-inline">
-        <div class="form-group">
-          <div class="input-group">
-            <input type="text" id="searchRoom" class="form-control" value=""/>
-            <div class="input-group-addon">
-              <span class="glyphicon glyphicon-search">
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="panel-body">
-      <div class="text-center" id="pagination">
-      </div>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>
-              <%=l 'ROOM_NAME' %>
-            </th>
-            <th class="hidden-xs">
-              <%=l 'CREATION_DATE' %>
-            </th>
-            <th class="hidden-xs">
-              <%=l 'LAST_ACTIVITY' %>
-            </th>
-            <th>
-              <%=l 'MANAGE' %>
-            </th>
-          </tr>
-        </thead>
-        <tbody id="roomList">
-        </tbody>
-      </table>
-    </div>
-  </div>
+% title l('ADMINISTRATION');
+%= include 'header'
+%= include 'public_toolbar'
+
+<div class="col-sm-offset-3 col-md-offset-4 col-sm-6 col-md-4">
+  <a class="btn btn-primary btn-block" href="<%= $self->get_url('/admin/rooms') %>">
+    <%=l 'ROOM_MANAGEMENT' %>
+  </a>
 </div>
 
-%=include 'js_common'
-<script>
-$(document).ready(function(){
-  initAdmin();
-});
-</script>
-%=include 'footer'
+%= include 'js_common'
+%= include 'footer'
