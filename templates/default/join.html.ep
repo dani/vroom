@@ -275,6 +275,25 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" role="dialog" id="firefoxShareScreenModal" aria-labelledby="firefoxShareScreenModal" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title">
+              <%=l 'ALLOW_SCREEN_SHARING' %>
+            </h4>
+          </div>
+          <div class="modal-body">
+            <p>
+              <%== sprintf $self->l('ALLOW_SCREEN_SHARING_ON_FF_s'), $self->req->url->to_abs->host %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="modal fade" role="dialog" id="noWebrtcSupport" aria-labelledby="noWebrtcSupport" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">

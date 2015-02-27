@@ -220,6 +220,16 @@ our %Lexicon = (
   "SCREEN_SHARING_CANCELLED"             => "Screen sharing has been cancelled",
   "EXTENSION_REQUIRED"                   => "An extension is required",
   "VROOM_CHROME_EXTENSION"               => "To enable screen sharing, you need to install an extension. Click on the following link and refresh this page",
+  "ALLOW_SCREEN_SHARING"                 => "You have to allow screen sharing",
+  "ALLOW_SCREEN_SHARING_ON_FF_s"         => "For security reasons, your browser do not allow screen sharing by default. " .
+                                            "To enable it, please follow these steps:<br>" .
+                                              "<ol>" .
+                                              "  <li>Open a new tab, and type <b>about:config</b> in the address bar</li>" .
+                                              "  <li>Accept the warning by clicking on the \"<i>I'll be careful, I promise !</i>\" button</li>" .
+                                              "  <li>Search for <b>screensharing</b> in the search bar</li>" .
+                                              "  <li>Double click on <b>media.getusermedia.screensharing.allowed_domains</b> to edit it</li>" .
+                                              "  <li>Add <b>%s</b> at the end of the list</li>" .
+                                              "</ol>",
   "PAUSE_MOH"                            => "Play/Pause music",
   "WAIT_WITH_MUSIC"                      => "Why don't you listen to some music while waiting for others ?",
   "ALONE_IN_ROOM"                        => "Please wait a moment while nobody is here yet",

@@ -1773,6 +1773,9 @@ function initVroom(room) {
           // This error usually means you have denied access (old flag way)
           // or you cancelled screen sharing (new extension way)
           // or you select no window (in Firefox)
+          else if (err.name === 'PermissionDeniedError' && $.browser.mozilla){
+            $('#firefoxShareScreenModal').modal('show');
+          }
           else if (err.name === 'PERMISSION_DENIED' ||
                    err.name === 'PermissionDeniedError' ||
                    err.name === 'ConstraintNotSatisfiedError'){

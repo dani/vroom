@@ -228,6 +228,17 @@ our %Lexicon = (
     "EXTENSION_REQUIRED"                        => "Une extension est nécessaire",
     "VROOM_CHROME_EXTENSION"                    => "Pour activer le partage d'écran, vous devez installer une extension, cliquez sur le " .
                                                    "lien ci-dessous, puis raffraîchissez cette page",
+    "ALLOW_SCREEN_SHARING"                      => "Vous devez autoriser le partage d'écran",
+    "ALLOW_SCREEN_SHARING_ON_FF_s"              => "Par mesure de sécurité, votre navigateur n'autorise pas le partgage d'écran par défaut. " .
+                                                   "Pour l'activer, suivez ces étapes:<br>" .
+                                                   "<ol>" .
+                                                   "  <li>Ouvrez un nouvel onglet, et tapez <b>about:config</b> dans la barre d'adresse</li>" .
+                                                   "  <li>Validez l'avertissement en cliquant sur le bouton \"<i>Je ferai attention, promis !</i>\"</li>" .
+                                                   "  <li>Recherchez <b>screensharing</b> à l'aide de la barre de recherche</li>" .
+                                                   "  <li>Double cliquez sur <b>media.getusermedia.screensharing.allowed_domains</b> pour le modifier</li>" .
+                                                   "  <li>Ajoutez <b>%s</b> à la fin de la liste</li>" .
+                                                   "  <li>Vous pouvez désormais partager votre écran</li>" .
+                                                   "</ol>",
     "PAUSE_MOH"                                 => "Mettre en pause ou jouer la musique d'attente",
     "WAIT_WITH_MUSIC"                           => "Un peu de musique en attendant d'autres participants ?",
     "ALONE_IN_ROOM"                             => "Patientez quelques instants le temps que d'autres personnes vous rejoignent",
