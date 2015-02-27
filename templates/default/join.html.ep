@@ -288,7 +288,8 @@
           </div>
           <div class="modal-body">
             <p>
-              <%== sprintf $self->l('ALLOW_SCREEN_SHARING_ON_FF_s'), $self->req->url->to_abs->host %>
+              <%=l 'ALLOW_SCREEN_SHARING_ON_FF' %>
+              <%== sprintf $self->l('SCREE_SHARING_ABOUT_CONFIG_s'), $self->req->url->to_abs->host %>
             </p>
           </div>
         </div>

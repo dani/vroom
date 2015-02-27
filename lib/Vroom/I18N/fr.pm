@@ -229,9 +229,9 @@ our %Lexicon = (
     "VROOM_CHROME_EXTENSION"                    => "Pour activer le partage d'écran, vous devez installer une extension, cliquez sur le " .
                                                    "lien ci-dessous, puis raffraîchissez cette page",
     "ALLOW_SCREEN_SHARING"                      => "Vous devez autoriser le partage d'écran",
-    "ALLOW_SCREEN_SHARING_ON_FF_s"              => "Par mesure de sécurité, votre navigateur n'autorise pas le partgage d'écran par défaut. " .
-                                                   "Pour l'activer, suivez ces étapes:<br>" .
-                                                   "<ol>" .
+    "ALLOW_SCREEN_SHARING_ON_FF"                => "Par mesure de sécurité, votre navigateur n'autorise pas le partgage d'écran par défaut. " .
+                                                   "Pour l'activer, suivez ces étapes:",
+    "SCREE_SHARING_ABOUT_CONFIG_s"              => "<ol>" .
                                                    "  <li>Ouvrez un nouvel onglet, et tapez <b>about:config</b> dans la barre d'adresse</li>" .
                                                    "  <li>Validez l'avertissement en cliquant sur le bouton \"<i>Je ferai attention, promis !</i>\"</li>" .
                                                    "  <li>Recherchez <b>screensharing</b> à l'aide de la barre de recherche</li>" .
@@ -302,8 +302,7 @@ our %Lexicon = (
                                                    "Pour l'instant, le partage d'écran ne fonctionne qu'avec les navigateurs Google Chrome " .
                                                    "(nécessite l'installation d'une petite extension qui vous sera proposée " .
                                                    "la première fois que vous essayez de partager votre écran) et Mozilla Firefox. Pour activer " .
-                                                   "cette fonction avec Firefox, il faut aller dans about:config et ajouter l'adresse de VROOM " .
-                                                   "(en général vroom.im) dans la liste media.getusermedia.screensharing.allowed_domains",
+                                                   "cette fonction avec Firefox, suivez ces étapes:",
     "OWNER_PRIVILEGES"                          => "Privilèges des créateurs de salon",
     "HELP_OWNER_PRIVILEGES"                     => "Le créateur d'un salon (aussi appelé gestionnaire) dispose de privilèges spéciaux " .
                                                    "sur ce dernier (par rapport à ceux qui rejoignent le salon après, qui ne seront que " .

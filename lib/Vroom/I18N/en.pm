@@ -221,14 +221,15 @@ our %Lexicon = (
   "EXTENSION_REQUIRED"                   => "An extension is required",
   "VROOM_CHROME_EXTENSION"               => "To enable screen sharing, you need to install an extension. Click on the following link and refresh this page",
   "ALLOW_SCREEN_SHARING"                 => "You have to allow screen sharing",
-  "ALLOW_SCREEN_SHARING_ON_FF_s"         => "For security reasons, your browser do not allow screen sharing by default. " .
-                                            "To enable it, please follow these steps:<br>" .
-                                              "<ol>" .
+  "ALLOW_SCREEN_SHARING_ON_FF"           => "For security reasons, your browser do not allow screen sharing by default. " .
+                                            "To enable it, please follow these steps:",
+  "SCREE_SHARING_ABOUT_CONFIG_s"         => "<ol>" .
                                               "  <li>Open a new tab, and type <b>about:config</b> in the address bar</li>" .
                                               "  <li>Accept the warning by clicking on the \"<i>I'll be careful, I promise !</i>\" button</li>" .
                                               "  <li>Search for <b>screensharing</b> in the search bar</li>" .
                                               "  <li>Double click on <b>media.getusermedia.screensharing.allowed_domains</b> to edit it</li>" .
                                               "  <li>Add <b>%s</b> at the end of the list</li>" .
+                                              "  <li>You can now use the screen sharing feature</li>" .
                                               "</ol>",
   "PAUSE_MOH"                            => "Play/Pause music",
   "WAIT_WITH_MUSIC"                      => "Why don't you listen to some music while waiting for others ?",
@@ -289,8 +290,7 @@ our %Lexicon = (
   "HELP_SCREEN_SHARING"                  => "VROOM lets you share your screen (or a single window) with the other members of the room. For now " .
                                             "this feature is only available with Google Chrome (requires a small extension, " .
                                             "you'll be prompted to install it first time you try to share your screen) or Mozilla Firefox." .
-                                            "To enable this feature in Mozilla Firefox, you need to go in about:config, and add VROOM address " .
-                                            "usually vroom.im) to the list media.getusermedia.screensharing.allowed_domains",
+                                            "To enable this feature in Mozilla Firefox, follow these steps:",
   "OWNER_PRIVILEGES"                     => "Room creator's privileges",
   "HELP_OWNER_PRIVILEGES"                => "Room's creator (also called manager) has special privileges (compared to those who join " .
                                             "later, which are simple participants). For example, he can protect access with a password " .

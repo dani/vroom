@@ -42,7 +42,12 @@
       </div>
       <div id="collapseScreenShare" class="panel-collapse collapse">
         <div class="panel-body">
-          <%==l 'HELP_SCREEN_SHARING' %>
+          <p>
+            <%=l 'HELP_SCREEN_SHARING' %>
+          </p>
+          <p>
+            <%== sprintf $self->l('SCREE_SHARING_ABOUT_CONFIG_s'), $self->req->url->to_abs->host %>
+          </p>
         </div>
       </div>
     </div>
