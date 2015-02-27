@@ -1995,6 +1995,7 @@ if (!app->db){
 if (!app->check_db_version){
   $error = 'ERROR_DB_VERSION_MISMATCH';
 }
+
 # Are we running in hypnotoad ?
 app->config(
   hypnotoad => {
@@ -2003,6 +2004,8 @@ app->config(
     proxy    => 1
   }
 );
+
+app->log->info('Starting VROOM daemon');
 # And start, lets VROOM !!
 app->start;
 
