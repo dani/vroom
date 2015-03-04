@@ -58,3 +58,20 @@ if ($cur_ver == Vroom::Constants::DB_VERSION){
   exit 0;
 }
 
+if ($cur_ver < 2){
+  print "Upgrading the schema to version 2\n";
+  eval {
+    $dbh->begin_work;
+    $dbh->do(qq{ ALTER TABLE `room_participants` MODIFY `peer_id` VARCHAR(60) });
+    $dbh->do(qq{ UPDATE `config` SET `value`='2' WHERE `key`='schema_version' });
+    $dbh->commit;
+  };
+  if ($@){
+    print "An error occurred: " . $dbh->errstr . "\n";
+    local $dbh->{RaiseError} = 0;
+    $dbh->rollback;
+    exit 255;
+  };
+  print "Successfully upgraded to schema version 2\n";
+}
+

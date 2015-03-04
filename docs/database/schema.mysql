@@ -6,7 +6,7 @@ CREATE TABLE `config` (
   UNIQUE (`key`)
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 INSERT INTO `config` (`key`,`value`)
-  VALUES ('schema_version', '1');
+  VALUES ('schema_version', '2');
 
 CREATE TABLE `rooms` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -31,7 +31,7 @@ CREATE TABLE `room_participants` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `room_id` INT UNSIGNED NOT NULL,
   `participant` VARCHAR(60) NOT NULL,
-  `peer_id` VARCHAR(40) DEFAULT NULL,
+  `peer_id` VARCHAR(60) DEFAULT NULL,
   `role` VARCHAR(30) DEFAULT 'participant',
   `last_activity` DATETIME DEFAULT NULL,
   PRIMARY KEY (`id`),
