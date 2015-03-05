@@ -2088,14 +2088,6 @@ get '/:room' => sub {
     }
     $self->create_etherpad_session($room);
   }
-  # Short life cookie to negociate a session with the signaling server
-  $self->cookie(vroomsession => encode_base64(
-    $self->session('name') . ':' . $data->{name} . ':' . $data->{token}, ''),
-    {
-      expires => time + 60,
-      path => '/'
-    }
-  );
   # Add this user to the participants table
   if (!$self->add_participant_to_room($room, $self->session('name'))){
     return $self->render('error',
