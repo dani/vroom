@@ -19,6 +19,8 @@ use Session::Token;
 use Config::Simple;
 use Email::Valid;
 use URI;
+use Protocol::SocketIO::Handshake;
+use Protocol::SocketIO::Message;
 use Data::Dumper;
 
 app->log->level('info');
@@ -73,8 +75,11 @@ if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key
   }
 }
 
-# GLobal error check
+# Global error check
 our $error = undef;
+
+# Global client hash
+our $socket_peers = {};
 
 # Load I18N, and declare supported languages
 plugin I18N => {
@@ -170,9 +175,9 @@ helper login => sub {
   };
   $sth->execute($key);
   $self->session(
-    name => $login,
-    ip   => $self->tx->remote_address,
-    key  => $key
+    name    => $login,
+    ip      => $self->tx->remote_address,
+    key     => $key
   );
   $self->app->log->info($self->session('name') . " logged in from " . $self->tx->remote_address);
   return 1;
@@ -1035,6 +1040,152 @@ helper key_can_do_this => sub {
   $self->app->log->debug("API Key " . $data->{token} . " cannot run action " . $data->{action} . " on room " . $data->{param}->{room});
   return 0;
 };
+
+# Socket.IO handshake
+get '/socket.io/:ver' => sub {
+  my $self = shift;
+  $self->session(peer_id => $self->get_random(256));
+  my $handshake = Protocol::SocketIO::Handshake->new(
+      session_id        => $self->session('peer_id'),
+      heartbeat_timeout => 15,
+      close_timeout     => 20,
+      transports        => [qw/websocket/]
+  );
+  return $self->render(text => $handshake->to_bytes);
+};
+
+# WebSocket transport for the Socket.IO channel
+websocket '/socket.io/:ver/websocket/:id' => sub {
+  my $self = shift;
+  my $id = $self->stash('id');
+  if ($id ne $self->session('peer_id') || !$self->session('name')){
+    $self->app->log->debug('Sometyhing is wrong, peer ID is ' . $id . ' but should be ' . $self->session('peer_id'));
+    return $self->send('Bad session');
+  }
+
+  $socket_peers->{$id}->{socket} = $self->tx;
+  $socket_peers->{$id}->{last} = time;
+
+  $self->on('message' => sub {
+    my $self = shift;
+    my $msg = Protocol::SocketIO::Message->new->parse(shift);
+
+    if ($msg->type eq 'event'){
+      if ($msg->{data}->{name} eq 'join'){
+        my $room = $msg->{data}->{args}[0];
+        my $others = {};
+        foreach my $peers (keys %$socket_peers){
+          next if ($peers eq $id);
+          $others->{$peers} = $socket_peers->{$peers}->{details};
+        }
+        $socket_peers->{$id}->{details} = {
+          screen => \0,
+          video  => \1,
+          audio  => \0
+        };
+        $socket_peers->{$id}->{room} = $room;
+        $self->app->log->debug("client ID " . $id . " joined room " . $room);
+#        $self->app->log->debug(Dumper($others));
+        $self->send(
+          Protocol::SocketIO::Message->new(
+            type       => 'ack',
+            message_id => $msg->{id},
+            args => [
+              undef,
+              {
+                clients => $others
+              }
+            ]
+          )
+        );
+      }
+      elsif ($msg->{data}->{name} eq 'message'){
+        my $room = $socket_peers->{$id}->{room};
+        $self->app->log->debug("Message received from " . $id);
+        foreach my $peer (keys %$socket_peers){
+          next if ($peer eq $id);
+          next if $socket_peers->{$peer}->{room} ne $room;
+          #$self->app->log->debug("Relaying message from " . $id . " to " . $peer);
+          $msg->{data}->{args}[0]->{from} = $id;
+          #$self->app->log->debug(Dumper($msg));
+          $socket_peers->{$peer}->{socket}->send(
+            Protocol::SocketIO::Message->new(%$msg)
+          );
+        }
+      }
+      elsif ($msg->{data}->{name} eq 'shareScreen'){
+        $socket_peers->{$id}->{details}->{screen} = \1;
+      }
+      elsif ($msg->{data}->{name} eq 'unshareScreen'){
+        $socket_peers->{$id}->{details}->{screen} = \0;
+        foreach my $peer (keys %$socket_peers){
+          next if ($peer eq $id);
+          next if $socket_peers->{$peer}->{room} ne $socket_peers->{$id}->{room};
+          $self->app->log->debug("Notifying $peer that $id unshared its screen");
+          $socket_peers->{$peer}->{socket}->send(
+            Protocol::SocketIO::Message->new(
+              type => 'event',
+              data => {
+                name => 'remove',
+                args => [
+                  {
+                    id   => $id,
+                    type => 'screen'
+                  }
+                ]
+              }
+            )
+          );
+        }
+      }
+    }
+    elsif ($msg->type eq 'heartbeat'){
+      # Heartbeat reply, update timestamp
+      $socket_peers->{$id}->{last} = time;
+    }
+  });
+
+  $self->on(finish => sub {
+    my ($self, $code, $reason) = @_;
+    $self->app->log->debug("Client id " . $id . " closed websocket connection");
+    foreach my $peer (keys %$socket_peers){
+      next if ($peer eq $id);
+      next if $socket_peers->{$peer}->{room} ne $socket_peers->{$id}->{room};
+      $self->app->log->debug("Relaying message from " . $id . " to " . $peer);
+      $socket_peers->{$peer}->{socket}->send(
+        Protocol::SocketIO::Message->new(
+          type => 'event',
+          data => {
+            name => 'remove',
+            args => [
+              {
+                id   => $id,
+                type => 'video'
+              }
+            ]
+          }
+        )
+      );
+    }
+    delete $socket_peers->{$id};
+  });
+  $self->send(Protocol::SocketIO::Message->new( type => 'connect' ));
+};
+
+# Send heartbeats to all websocket clients
+Mojo::IOLoop->recurring( 2 => sub {
+  foreach my $peer ( keys %$socket_peers ) {
+    if ($socket_peers->{$peer}->{last} < time - 10){
+      app->log->debug("Peer $peer didn't reply in 10 sec, disconnecting");
+      $socket_peers->{$peer}->{socket}->finish;
+    }
+    else {
+      $socket_peers->{$peer}->{socket}->send(
+        Protocol::SocketIO::Message->new( type => 'heartbeat' )
+      );
+    }
+  }
+});
 
 # Route / to the index page
 get '/' => sub {
