@@ -1075,10 +1075,20 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
     if ($msg->type eq 'event'){
       if ($msg->{data}->{name} eq 'join'){
         my $room = $msg->{data}->{args}[0];
+        # Is this peer allowed to join the room ?
+        if (!$self->session($room) ||
+            !$self->session($room)->{role} ||
+            $self->session($room)->{role} !~ m/^owner|participant$/){
+          $self->app->log->debug("Failed to connect to the signaling channel, " . $self->session('name') .
+                                 " (session ID " . $self->session('id') . ") has no role for this room");
+          $self->send( Protocol::SocketIO::Message->new( type => 'disconnect' ) );
+          $self->finish;
+          return;
+        }
         my $others = {};
-        foreach my $peers (keys %$peers){
-          next if ($peers eq $id);
-          $others->{$peers} = $peers->{$peers}->{details};
+        foreach my $peer (keys %$peers){
+          next if ($peer eq $id);
+          $others->{$peer} = $peers->{$peer}->{details};
         }
         $peers->{$id}->{details} = {
           screen => \0,
@@ -1086,7 +1096,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           audio  => \0
         };
         $peers->{$id}->{room} = $room;
-        $self->app->log->debug("client ID " . $id . " joined room " . $room);
+        $self->app->log->debug("Client id " . $id . " joined room " . $room);
 #        $self->app->log->debug(Dumper($others));
         $self->send(
           Protocol::SocketIO::Message->new(
