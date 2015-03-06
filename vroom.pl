@@ -460,16 +460,6 @@ helper ping_room => sub {
                           WHERE `id`=?');
   };
   $sth->execute($data->{id});
-  $sth = eval {
-    $self->db->prepare('UPDATE `room_participants`
-                          SET `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')
-                          WHERE `id`=?
-                            AND `participant`=?');
-  };
-  $sth->execute(
-    $data->{id},
-    $self->session('name')
-  );
   $self->app->log->debug($self->session('name') . " pinged the room $name");
   return 1;
 };
