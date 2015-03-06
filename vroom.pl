@@ -1023,6 +1023,12 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           );
         }
       }
+      elsif ($msg->{data}->{name} =~ m/^leave|disconnect$/){
+        $peers->{$id}->{socket}->{finish};
+      }
+      else{
+        $self->app->log->debug("Unhandled SocketIO message\n" . Dumper $msg);
+      }
     }
     # Heartbeat reply, update timestamp
     elsif ($msg->type eq 'heartbeat'){
