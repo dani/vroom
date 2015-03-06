@@ -208,7 +208,7 @@ our %Lexicon = (
   "ALLOW_SCREEN_SHARING"                 => "You have to allow screen sharing",
   "ALLOW_SCREEN_SHARING_ON_FF"           => "For security reasons, your browser do not allow screen sharing by default. " .
                                             "To enable it, please follow these steps:",
-  "SCREE_SHARING_ABOUT_CONFIG_s"         => "<ol>" .
+  "SCREEN_SHARING_ABOUT_CONFIG_s"        => "<ol>" .
                                               "  <li>Open a new tab, and type <b>about:config</b> in the address bar</li>" .
                                               "  <li>Accept the warning by clicking on the \"<i>I'll be careful, I promise !</i>\" button</li>" .
                                               "  <li>Search for <b>screensharing</b> in the search bar</li>" .

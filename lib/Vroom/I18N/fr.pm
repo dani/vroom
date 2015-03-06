@@ -216,7 +216,7 @@ our %Lexicon = (
     "ALLOW_SCREEN_SHARING"                      => "Vous devez autoriser le partage d'écran",
     "ALLOW_SCREEN_SHARING_ON_FF"                => "Par mesure de sécurité, votre navigateur n'autorise pas le partgage d'écran par défaut. " .
                                                    "Pour l'activer, suivez ces étapes:",
-    "SCREE_SHARING_ABOUT_CONFIG_s"              => "<ol>" .
+    "SCREEN_SHARING_ABOUT_CONFIG_s"             => "<ol>" .
                                                    "  <li>Ouvrez un nouvel onglet, et tapez <b>about:config</b> dans la barre d'adresse</li>" .
                                                    "  <li>Validez l'avertissement en cliquant sur le bouton \"<i>Je ferai attention, promis !</i>\"</li>" .
                                                    "  <li>Recherchez <b>screensharing</b> à l'aide de la barre de recherche</li>" .
