@@ -606,7 +606,7 @@ helper add_invitation => sub {
   };
   $sth->execute(
     $data->{id},
-    $self->session('name'),
+    $self->session('id'),
     $token,
     $email
   );
@@ -1432,7 +1432,7 @@ any '/api' => sub {
       $self->purge_invitations;
     }
     # Check if we got any invitation response to process
-    my $invitations = $self->get_invitation_list($self->session('name'));
+    my $invitations = $self->get_invitation_list($self->session('id'));
     my $msg = '';
     foreach my $invit (keys %{$invitations}){
       $msg .= sprintf($self->l('INVITE_REPONSE_FROM_s'), $invitations->{$invit}->{email}) . "\n" ;
