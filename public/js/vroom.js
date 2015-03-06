@@ -636,7 +636,8 @@ function initVroom(room) {
 
   // If browser doesn't support webRTC or dataChannels
   if (!webrtc.capabilities.support || !webrtc.capabilities.supportGetUserMedia || !webrtc.capabilities.supportDataChannel){
-    $('#noWebrtcSupport').modal('show');
+    $('.connecting-msg').not('.connecting-msg').remove();
+    $('#no-webrtc-msg').slideDown();
   }
 
   // Hide screen sharing btn if not supported, disable it on mobile
@@ -1505,7 +1506,7 @@ function initVroom(room) {
     peers.local.id = webrtc.connection.socket.sessionid;
     getRoomInfo();
     if (roomInfo.ask_for_name && roomInfo.ask_for_name == 'yes'){
-      $('#setDisplayName').modal('show');
+      $('#display-name-pre').slideDown();
     }
     else{
       webrtc.joinRoom(room);
@@ -1568,7 +1569,7 @@ function initVroom(room) {
 
   // error opening the webcam or mic stream
   webrtc.on('localMediaError', function(){
-    $('#noWebcam').modal('show');
+    $('#no-webcam-msg').slideDown();
   });
 
   // Handle video stream removed: someone leaved the room
@@ -1720,7 +1721,8 @@ function initVroom(room) {
     event.preventDefault();
     var name = $('#displayNamePre').val();
     if (name.length > 0 && name.length < 50){
-      $('#setDisplayName').modal('hide');
+      //$('#setDisplayName').modal('hide');
+      $('#display-name-pre').slideUp();
       $('#displayName').val(name);
       peers.local.hasName = true;
       peers.local.displayName = name;

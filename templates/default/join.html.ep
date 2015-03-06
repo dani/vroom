@@ -111,42 +111,6 @@
         </div>
       </div>
     </nav>
-    <div class="modal fade" role="dialog" id="setDisplayName" aria-labelledby="setDisplayName" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="setDisplayNameTitle">
-              <%=l 'DISPLAY_NAME_REQUIRED' %>
-            </h4>
-          </div>
-          <div class="modal-body">
-            <form role="form" class="form-horizontal" id="displayNamePreForm">
-              <p class="text-center">
-                <%=l 'SET_A_DISPLAY_NAME' %>
-              </p>
-              <div class="form-group">
-                <label for="displayNamePre" class="col-sm-4 control-label">
-                  <%=l 'DISPLAY_NAME' %>
-                </label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" autocomplete="off" id="displayNamePre" name="displayNamePre" placeholder="<%=l 'YOUR_NAME' %>">
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-offset-4 col-sm-8">
-                  <button id="displayNamePreButton" class="btn btn-primary disabled" type="submit">
-                    <%=l 'SUBMIT' %>
-                  </button>
-                  <a class="btn btn-default" href="<%= $self->get_url('/') %>">
-                    <%=l 'CANCEL' %>
-                  </a>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="modal fade" role="dialog" id="wipeModal" aria-labelledby="wipeModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -295,87 +259,6 @@
         </div>
       </div>
     </div>
-    <div class="modal fade" role="dialog" id="noWebrtcSupport" aria-labelledby="noWebrtcSupport" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-              &times;
-            </button>
-            <h4 class="modal-title" id="noWebrtcSupportTitle">
-              <%=l 'BROWSER_NOT_SUPPORTED' %>
-            </h4>
-          </div>
-          <div class="modal-body">
-            <p>
-              <%=l 'NO_WEBRTC_SUPPORT' %>
-            </p>
-            <% if ($ua !~ m/iphone|ipad|ipod/i){ %>
-            <p>
-              <%=l 'DOWNLOAD_ONE_OF_THESE_BROWSERS' %>
-            </p>
-            <div class="row">
-              <%
-                my $ffurl = "http://www.mozilla.org/firefox/";
-                my $churl = "http://www.google.com/chrome/";
-                my $opurl = "http://www.opera.com";
-                if ($ua =~ m/android/i){
-                  $ffurl = "https://play.google.com/store/apps/details?id=org.mozilla.firefox";
-                  $churl = "https://play.google.com/store/apps/details?id=com.android.chrome";
-                  $opurl = "https://play.google.com/store/apps/details?id=com.opera.browser";
-                }
-              %>
-              <div class="col-xs-4">
-                <a href="<%= $ffurl %>" target="_blank">
-                  <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/firefox.png" alt="Mozilla Firefox"/>
-                </a>
-              </div>
-              <div class="col-xs-4">
-                <a href="<%= $churl %>" target="_blank">
-                  <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/chrome.png" alt="Google Chrome"/>
-                </a>
-              </div>
-              <div class="col-xs-4">
-                <a href="<%= $opurl %>" target="_blank">
-                  <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/opera.png" alt="Opera"/>
-                </a>
-              </div>
-            </div>
-            <% } %>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" role="dialog" id="noWebcam" aria-labelledby="noWebcam" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-              &times;
-            </button>
-            <h4 class="modal-title" id="noWebcamTitle">
-              <%=l 'NO_WEBCAM' %>
-            </h4>
-          </div>
-          <div class="modal-body">
-            <p class="text-center">
-              <%=l 'CANT_ACCESS_WEBCAM' %>
-            </p>
-            <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/webcam.png" alt="Webcam"/>
-            <br>
-            <p class="text-center">
-              <%=l 'CLICK_IF_NO_WEBCAM' %>
-            </p>
-            <p class="text-center">
-              <a class="btn btn-default btn-lg" href="<%= $self->get_url('/') . $room %>?video=false">
-                <span class="glyphicon glyphicon-headphones">
-                </span>
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="modal fade" role="dialog" id="disconnected" aria-labelledby="disconnected" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -406,11 +289,91 @@
             </h4>
           </div>
           <div class="modal-body">
-            <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/connecting.gif" alt="<%=l 'CONNECTING' %>"/>
-            <br>
-            <p class="text-center">
-              <%=l 'CONNECTING_PLEASE_WAIT' %>
-            </p>
+            <div id="connecting-msg" class="connecting-msg">
+              <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/connecting.gif" alt="<%=l 'CONNECTING' %>"/>
+              <br>
+              <p class="text-center">
+                <%=l 'CONNECTING_PLEASE_WAIT' %>
+              </p>
+            </div>
+            <div id="no-webcam-msg" class="connecting-msg" style="display: none">
+              <p class="text-center">
+                <%=l 'CANT_ACCESS_WEBCAM' %>
+              </p>
+              <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/webcam.png" alt="Webcam"/>
+              <br>
+              <p class="text-center">
+                <%=l 'CLICK_IF_NO_WEBCAM' %>
+              </p>
+              <p class="text-center">
+                <a class="btn btn-default btn-lg" href="<%= $self->get_url('/') . $room %>?video=false">
+                  <span class="glyphicon glyphicon-headphones">
+                  </span>
+                </a>
+              </p>
+            </div>
+            <div id="display-name-pre" class="connecting-msg" style="display: none">
+              <form role="form" class="form-horizontal" id="displayNamePreForm">
+                <p class="text-center">
+                  <%=l 'SET_A_DISPLAY_NAME' %>
+                </p>
+                <div class="form-group">
+                  <label for="displayNamePre" class="col-sm-4 control-label">
+                    <%=l 'DISPLAY_NAME' %>
+                  </label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control" autocomplete="off" id="displayNamePre" placeholder="<%=l 'YOUR_NAME' %>">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-offset-4 col-sm-8">
+                    <button id="displayNamePreButton" class="btn btn-primary disabled" type="submit">
+                      <%=l 'SUBMIT' %>
+                    </button>
+                    <a class="btn btn-default" href="<%= $self->get_url('/') %>">
+                      <%=l 'CANCEL' %>
+                    </a>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div id="no-webrtc-msg" class="connecting-msg" style="display: none">
+              <p>
+                <%=l 'NO_WEBRTC_SUPPORT' %>
+              </p>
+              <% if ($ua !~ m/iphone|ipad|ipod/i){ %>
+              <p>
+                <%=l 'DOWNLOAD_ONE_OF_THESE_BROWSERS' %>
+              </p>
+              <div class="row">
+                <%
+                  my $ffurl = "http://www.mozilla.org/firefox/";
+                  my $churl = "http://www.google.com/chrome/";
+                  my $opurl = "http://www.opera.com";
+                  if ($ua =~ m/android/i){
+                    $ffurl = "https://play.google.com/store/apps/details?id=org.mozilla.firefox";
+                    $churl = "https://play.google.com/store/apps/details?id=com.android.chrome";
+                    $opurl = "https://play.google.com/store/apps/details?id=com.opera.browser";
+                  }
+                %>
+                <div class="col-xs-4">
+                  <a href="<%= $ffurl %>" target="_blank">
+                    <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/firefox.png" alt="Mozilla Firefox"/>
+                  </a>
+                </div>
+                <div class="col-xs-4">
+                  <a href="<%= $churl %>" target="_blank">
+                    <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/chrome.png" alt="Google Chrome"/>
+                  </a>
+                </div>
+                <div class="col-xs-4">
+                  <a href="<%= $opurl %>" target="_blank">
+                    <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/opera.png" alt="Opera"/>
+                  </a>
+                </div>
+              </div>
+              <% } %>
+            </div>
           </div>
         </div>
       </div>
