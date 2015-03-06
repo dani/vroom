@@ -3,22 +3,6 @@
   <div class="container-fluid">
     <nav id="toolbar" class="navbar navbar-default" role="toolbar">
       <div class="navbar-header">
-        <div class="btn-group visible-xs-block header-btn-group">
-          <button class="btn btn-lg btn-default navbar-btn btn-mute-mic">
-            <span class="glyphicon glyphicon-volume-off">
-            </span>
-          </button>
-          <button class="btn btn-lg btn-default navbar-btn btn-suspend-cam">
-            <span class="glyphicon glyphicon-facetime-video">
-            </span>
-          </button>
-        </div>
-        <div class="btn-group visible-xs-block header-btn-group col-xs-push-2">
-          <button class="btn btn-lg btn-default help btn-logout navbar-btn" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
-            <span class="glyphicon glyphicon-log-out">
-            </span>
-          </button>
-        </div>
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#roomToolBar">
           <span class="sr-only">
           </span>
@@ -29,6 +13,22 @@
           <span class="icon-bar">
           </span>
         </button>
+        <div class="btn-group visible-xs-block header-btn-group">
+          <button class="btn btn-lg btn-default navbar-btn btn-mute-mic">
+            <span class="glyphicon glyphicon-volume-off">
+            </span>
+          </button>
+          <button class="btn btn-lg btn-default navbar-btn btn-suspend-cam">
+            <span class="glyphicon glyphicon-facetime-video">
+            </span>
+          </button>
+        </div>
+        <div class="btn-group visible-xs-block header-btn-group col-xs-push-1">
+          <button class="btn btn-lg btn-default help btn-logout navbar-btn" data-toggle="tooltip" data-placement="bottom" title="<%=l 'LOGOUT' %>">
+            <span class="glyphicon glyphicon-log-out">
+            </span>
+          </button>
+        </div>
       </div>
       <input id="roomName" name="roomName" type="hidden" value="<%= $room %>"/>
       <div id="roomToolBar" class="collapse navbar-collapse">
@@ -43,7 +43,7 @@
             </span>
           </div>
         </div>
-        <div class="btn-group navbar-form navbar-btn-group navbar-left">
+        <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs">
           <button id="chatDropdown" class="btn btn-lg btn-default collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%=l 'CLICK_TO_CHAT' %>">
             <span class="glyphicon glyphicon-comment">
             </span>
@@ -307,7 +307,7 @@
 %=include 'auth_modal'
 %=include 'noscript'
     <div class="frame">
-      <div id="chatMenu" class="nav-collapse collapse">
+      <div id="chatMenu" class="nav-collapse collapse hidden-xs">
         <div id="chatHistory" class="form-control">
         </div>
         <form role="form" id="chatForm">
@@ -340,7 +340,7 @@
         </div>
         <div id="mainView" class="col-xs-12 col-sm-8">
           <% if ($etherpad eq 'true'){ %>
-          <div id="etherpadContainer"></div>
+          <div id="etherpadContainer" class="hidden-xs"></div>
           <% } %>
           <div id="mainVideo">
           </div>
