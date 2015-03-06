@@ -921,6 +921,9 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
   $peers->{$id}->{socket} = $self->tx;
   # And set the initial "last seen" flag
   $peers->{$id}->{last} = time;
+  # Associate the unique ID and name
+  $peers->{$id}->{id} = $self->session('id');
+  $peers->{$id}->{name} = $self->session('name');
 
   # When we recive a message, lets parse it as e Socket.IO one
   $self->on('message' => sub {
@@ -972,13 +975,11 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
       }
       # We have a message from a peer
       elsif ($msg->{data}->{name} eq 'message'){
-        # We check the room this peer is in
-        my $room = $peers->{$id}->{room};
-        $self->app->log->debug("Signaling message received from " . $id);
+        $self->app->log->debug("Signaling message received from peer " . $id);
         # Forward this message to all other members of the same room
         foreach my $peer (keys %$peers){
           next if ($peer eq $id);
-          next if $peers->{$peer}->{room} ne $room;
+          next if $peers->{$peer}->{room} ne $peers->{$id}->{room};
           # Just set who's sending it
           $msg->{data}->{args}[0]->{from} = $id;
           $peers->{$peer}->{socket}->send(
@@ -1002,12 +1003,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
               type => 'event',
               data => {
                 name => 'remove',
-                args => [
-                  {
-                    id   => $id,
-                    type => 'screen'
-                  }
-                ]
+                args => [{ id => $id, type => 'screen' }]
               }
             )
           );
@@ -1039,12 +1035,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           type => 'event',
           data => {
             name => 'remove',
-            args => [
-              {
-                id   => $id,
-                type => 'video'
-              }
-            ]
+            args => [{ id => $id, type => 'video' }]
           }
         )
       );
@@ -1060,12 +1051,14 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
 # Every 3 seconds
 Mojo::IOLoop->recurring( 3 => sub {
   foreach my $peer ( keys %$peers ) {
-    # If we had no reply from this peer in the last 15 sec
-    # (5 heartbeat without response), we consider it dead and remove it
+    # This shouldn't happen, but better to log an error and fix it rather
+    # than looping indefinitly on a bogus entry if something went wrong
     if (!$peers->{$peer}->{socket}){
       app->log->debug("Garbage found in peers (peer $peer)\n" . Dumper($peers->{$peer}));
       delete $peers->{$peer};
     }
+    # If we had no reply from this peer in the last 15 sec
+    # (5 heartbeat without response), we consider it dead and remove it
     elsif ($peers->{$peer}->{last} < time - 15){
       app->log->debug("Peer $peer didn't reply in 15 sec, disconnecting");
       $peers->{$peer}->{socket}->finish;
