@@ -1015,13 +1015,6 @@ function initVroom(room) {
     chatIndex++;
   }
 
-  // Wipe the history
-  function wipeChatHistory(){
-    $('#chatHistory').html('');
-    chatHistory = {};
-    chatIndex = 0;
-  }
-
   // Update the displayName of the peer
   // and its screen if any
   function updateDisplayName(id){
@@ -1168,35 +1161,6 @@ function initVroom(room) {
       userColor: peers.local.color,
       userName: peers.local.displayName
     });
-  }
-
-  // Wipe data
-  function wipeRoomData(){
-    if (etherpad.enabled){
-      $.ajax({
-        data: {
-          req: JSON.stringify({
-            action: 'wipe_data',
-            param: {
-              room: roomName
-            }
-          })
-        },
-        async: false,
-        error: function(data){
-          showApiError(data);
-        },
-        success: function(data){
-          if ($('#etherpadContainer').html() != ''){
-            loadEtherpadIframe();
-          }
-        }
-      });
-    }
-    webrtc.sendToAll('wipe_data', {});
-    wipeChatHistory();
-    $('#wipeModal').modal('hide');
-    $.notify(locale.DATA_WIPED, 'info');
   }
 
   // An owner is muting/unmuting someone
@@ -1467,37 +1431,6 @@ function initVroom(room) {
       return;
     }
     getPeerRole(data.id);
-  });
-
-  // An owner has wiped data
-  webrtc.on('wipe_data', function(data){
-    if (data.roomType == 'screen' || peers[data.id].role != 'owner'){
-      return;
-    }
-    wipeChatHistory();
-    if (etherpad.enabled){
-      $.ajax({
-        data: {
-          req: JSON.stringify({
-            action: 'get_pad_session',
-            param: {
-              room: roomName
-            }
-          })
-        },
-        error: function(data){
-          showApiError(data);
-        },
-        success: function(data){
-          if (data.msg){
-            $.notify(data.msg, 'success');
-          }
-          loadEtherpadIframe();
-        }
-      });
-    }
-    var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
-    $.notify(sprintf(locale.ROOM_DATA_WIPED_BY_s, stringEscape(who)), 'info');
   });
 
   // Handle the readyToCall event: join the room
@@ -1987,51 +1920,6 @@ function initVroom(room) {
     }
   });
 
-  // Remove the active class on the help button
-  $('#helpModal').on('hide.bs.modal',function(){
-    $('#helpButton').removeClass('active');
-  });
-
-  // Display the wipe data modal
-  $('#wipeDataButton').click(function(){
-    $('#wipeModal').modal('show');
-  });
-  // Really wipe data
-  $('#confirmWipeButton').click(function(){
-    wipeRoomData();
-  });
-
-  // Display terminate room modal
-  $('#terminateRoomButton').click(function(){
-    $('#terminateModal').modal('show');
-  });
-  // Really terminate the room now
-  $('#confirmTerminateButton').click(function(){
-    // Ask all the peers to quit now
-    webrtc.sendToAll('terminate_room', {});
-    wipeRoomData();
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'delete_room',
-          param: {
-            room: roomName
-          }
-        })
-      },
-      async: false,
-      error: function(data){
-        showApiError(data);
-      },
-      success: function(data){
-        if (data.msg && data.msg != ''){
-          $.notify(data.msg, 'info');
-        }
-      }
-    });
-    hangupCall;
-    window.location.assign(rootUrl + 'goodbye/' + roomName);
-  });
 
   if (etherpad.enabled){
     $('.btn-etherpad').click(function(){
