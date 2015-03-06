@@ -75,3 +75,18 @@ if ($cur_ver < 2){
   print "Successfully upgraded to schema version 2\n";
 }
 
+if ($cur_ver < 3){
+  print "Upgrading the schema to version 3\n";
+  eval {
+    $dbh->begin_work;
+    $dbh->do(qq{ DROP TABLE `room_participants` });
+    $dbh->commit;
+  };
+  if ($@){
+    print "An error occurred: " . $dbh->errstr . "\n";
+    local $dbh->{RaiseError} = 0;
+    $dbh->rollback;
+    exit 255;
+  };
+  print "Successfully upgraded to schema version 3\n";
+}

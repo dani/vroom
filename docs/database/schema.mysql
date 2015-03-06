@@ -27,22 +27,6 @@ CREATE TABLE `rooms` (
   INDEX (`last_activity`)
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `room_participants` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `room_id` INT UNSIGNED NOT NULL,
-  `participant` VARCHAR(60) NOT NULL,
-  `peer_id` VARCHAR(60) DEFAULT NULL,
-  `role` VARCHAR(30) DEFAULT 'participant',
-  `last_activity` DATETIME DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE (`room_id`, `participant`),
-  UNIQUE (`room_id`, `peer_id`),
-  UNIQUE (`participant`,`peer_id`),
-  FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`)
-    ON UPDATE CASCADE
-    ON DELETE CASCADE
-) ENGINE INNODB DEFAULT CHARSET=utf8;
-
 CREATE TABLE `email_notifications` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `room_id` INT UNSIGNED NOT NULL,
