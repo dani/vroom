@@ -35,17 +35,11 @@ use constant COMPONENTS => {
   "sprintf.js" => {
     url => 'http://hexmen.com/blog/2007/03/printf-sprintf/'
   },
-  "node.js" => {
-    url => 'http://nodejs.org/'
-  },
   "Bootstrap" => {
     url => 'http://getbootstrap.com/'
   },
   "MariaDB" => {
     url => 'https://mariadb.org/'
-  },
-  "SignalMaster" => {
-    url => 'https://github.com/andyet/signalmaster/'
   },
   "rfc5766-turn-server" => {
     url => 'https://code.google.com/p/rfc5766-turn-server/'
