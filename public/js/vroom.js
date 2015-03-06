@@ -423,6 +423,7 @@ function initAdminRooms(){
             .append($('<td>').html(stringEscape(obj.name)))
             .append($('<td>').html(stringEscape(create)).addClass('hidden-xs'))
             .append($('<td>').html(stringEscape(activity)).addClass('hidden-xs'))
+            .append($('<td>').html(obj.members).addClass('hidden-xs'))
             .append($('<td>')
               .append($('<div>').addClass('btn-group')
                 .append($('<a>').addClass('btn btn-default').attr('href',rootUrl + obj.name)

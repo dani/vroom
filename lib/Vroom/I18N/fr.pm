@@ -162,6 +162,7 @@ our %Lexicon = (
     "EMAIL_INVITE"                              => "Invitation par email",
     "DELETE"                                    => "Supprimer",
     "CONFIRM_DELETE"                            => "Confirmer la suppression",
+    "ROOM_WILL_BE_DELETED"                      => "Le salon, ainsi que sa configuration seront définitivement supprimés",
     "LOGOUT"                                    => "Quitter le salon",
     "LEAVE_THIS_ROOM"                           => "Quitter le salon",
     "ARE_YOU_SURE_YOU_WANT_TO_LEAVE"            => "Êtes-vous sûr de vouloir quitter le salon ?",

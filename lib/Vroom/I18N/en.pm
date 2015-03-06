@@ -156,6 +156,7 @@ our %Lexicon = (
   "EMAIL_INVITE"                         => "Email invitation",
   "DELETE"                               => "Delete",
   "CONFIRM_DELETE"                       => "Confirm delation",
+  "ROOM_WILL_BE_DELETED"                 => "This room, and its configuration will be deleted",
   "LOGOUT"                               => "Leave the room",
   "LEAVE_THIS_ROOM"                      => "Leave the room",
   "ARE_YOU_SURE_YOU_WANT_TO_LEAVE"       => "Are you sure you want to leave this room ?",

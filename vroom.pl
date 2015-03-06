@@ -1290,10 +1290,15 @@ any '/api' => sub {
   # Here are method not tied to a room
   if ($req->{action} eq 'get_room_list'){
     my $rooms = $self->get_room_list;
-    # Blank out a few param we don't need
     foreach my $r (keys %{$rooms}){
+      # Blank out a few param we don't need
       foreach my $p (qw/join_password owner_password owner token etherpad_group/){
         delete $rooms->{$r}->{$p};
+      }
+      # Count active users
+      $rooms->{$r}->{members} = 0;
+      foreach my $peer (keys %$peers){
+        $rooms->{$r}->{members}++ if ($peers->{$peer}->{room} eq $r);
       }
     }
     return $self->render(
