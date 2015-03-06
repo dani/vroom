@@ -193,6 +193,11 @@ helper logout => sub {
   if ($ec && $self->session($room) && $self->session($room)->{etherpadSessionId}){
     $ec->delete_session($self->session($room)->{etherpadSessionId});
   }
+  if ($self->session('peer_id') && 
+      $peers->{$self->session('peer_id')} &&
+      $peers->{$self->session('peer_id')}->{socket}){
+    $peers->{$self->session('peer_id')}->{socket}->finish;
+  }
   $self->session( expires => 1 );
   $self->app->log->info($self->session('name') . " logged out");
   return 1;
@@ -316,104 +321,17 @@ helper modify_room => sub {
   return 1;
 };
 
-# Add a participant in the database. Used by the signaling server to check
-# if user is allowed
-helper add_participant_to_room => sub {
-  my $self = shift;
-  my ($name,$participant) = @_;
-  my $room = $self->get_room_by_name($name);
-  if (!$room){
-    return 0;
-  }
-  my $sth = eval {
-    $self->db->prepare('INSERT INTO `room_participants`
-                          (`room_id`,`participant`,`last_activity`)
-                          VALUES (?,?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'))
-                          ON DUPLICATE KEY UPDATE `last_activity`=CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')');
-  };
-  $sth->execute(
-    $room->{id},
-    $participant
-  );
-  $self->app->log->info($self->session('name') . " joined the room $name");
-  return 1;
-};
-
-# Remove participant from the DB
-# Takes two args: room name and user name
-helper remove_participant_from_room => sub {
-  my $self = shift;
-  my ($name,$participant) = @_;
-  my $room = $self->get_room_by_name($name);
-  if (!$room){
-    return 0;
-  }
-  my $sth = eval {
-    $self->db->prepare('DELETE FROM `room_participants`
-                          WHERE `id`=?
-                            AND `participant`=?');
-  };
-  $sth->execute(
-    $room->{id},
-    $participant
-  );
-  $self->app->log->info($self->session('name') . " leaved the room $name");
-  return 0;
-};
-
-# Get a list of participants of a room
-helper get_participants_list => sub {
-  my $self = shift;
-  my ($name) = @_;
-  my $room = $self->get_room_by_name($name);
-  if (!$room){
-    return 0;
-  }
-  my $sth = eval {
-    $self->db->prepare('SELECT `participant`,`room_id`
-                          FROM `room_participants`
-                          WHERE `room_id`=?');
-  };
-  $sth->execute($room->{id});
-  return $sth->fetchall_hashref('room_id');
-};
-
 # Set the role of a peer
 helper set_peer_role => sub {
   my $self = shift;
   my ($data) = @_;
-  # Check if this ID isn't the one from another peer first
-  my $sth = eval {
-    $self->db->prepare('SELECT COUNT(`p`.`id`)
-                          FROM `room_participants` `p`
-                          LEFT JOIN `rooms` `r` ON `p`.`room_id`=`r`.`id`
-                          WHERE `p`.`peer_id`=?
-                            AND `p`.`participant`!=?
-                            AND `r`.`name`=?');
-  };
-  $sth->execute($data->{peer_id},$data->{name},$data->{room});
-  my $num;
-  $sth->bind_columns(\$num);
-  $sth->fetch;
-  if ($num > 0){
+  # Check the peer exists and is already in the room
+  if (!$data->{peer_id} ||
+      !$peers->{$data->{peer_id}}){
     return 0;
   }
-  $sth = eval {
-    $self->db->prepare('UPDATE `room_participants` `p`
-                          LEFT JOIN `rooms` `r` ON `p`.`room_id`=`r`.`id`
-                          SET `p`.`peer_id`=?,
-                              `p`.`role`=?
-                          WHERE `p`.`participant`=?
-                            AND `r`.`name`=?');
-  };
-  $sth->execute(
-    $data->{peer_id},
-    $data->{role},
-    $data->{name},
-    $data->{room}
-  );
-  $self->app->log->info("User " . $data->{name} . " (peer id " . 
-                          $data->{peer_id} . ") has now the " .
+  $peers->{$data->{peer_id}}->{role} = $data->{role};
+  $self->app->log->info("Peer " . $data->{peer_id} . " has now the " .
                           $data->{role} . " role in room " . $data->{room});
   return 1;
 };
@@ -422,75 +340,18 @@ helper set_peer_role => sub {
 helper get_peer_role => sub {
   my $self = shift;
   my ($data) = @_;
-  my $sth = eval {
-    $self->db->prepare('SELECT `p`.`role`
-                          FROM `room_participants` `p`
-                          LEFT JOIN `rooms` `r` ON `p`.`room_id`=`r`.`id`
-                          WHERE `p`.`peer_id`=?
-                            AND `r`.`name`=?
-                          LIMIT 1');
-  };
-  $sth->execute(
-    $data->{peer_id},
-    $data->{room}
-  );
-  my $role;
-  $sth->bind_columns(\$role);
-  $sth->fetch;
-  return $role;
+  return $peers->{$data->{peer_id}}->{role};
 };
 
 # Promote a peer to owner
 helper promote_peer => sub {
   my $self = shift;
   my ($data) = @_;
-  my $sth = eval {
-    $self->db->prepare('UPDATE `room_participants` `p`
-                          LEFT JOIN `rooms` `r` ON `p`.`room_id`=`r`.`id`
-                          SET `p`.`role`=\'owner\'
-                          WHERE `p`.`peer_id`=?
-                            AND `r`.`name`=?');
-  };
-  $sth->execute(
-    $data->{peer_id},
-    $data->{room}
-  );
-  return 1;
-};
-
-# Check if a participant has joined a room
-# Takes a hashref room => room name and name => session name
-helper has_joined => sub {
-  my $self = shift;
-  my ($data) = @_;
-  my $sth = eval {
-    $self->db->prepare('SELECT COUNT(`r`.`id`)
-                          FROM `rooms` `r`
-                          LEFT JOIN `room_participants` `p` ON `r`.`id`=`p`.`room_id`
-                          WHERE `r`.`name`=?
-                            AND `p`.`participant`=?');
-  };
-  $sth->execute(
-    $data->{room},
-    $data->{name}
-  );
-  my $num;
-  $sth->bind_columns(\$num);
-  $sth->fetch;
-  return ($num == 1) ? 1 : 0 ;
-};
-
-# Purge disconnected participants from the DB
-helper purge_participants => sub {
-  my $self = shift;
-  $self->app->log->debug('Removing inactive participants from the database');
-  my $sth = eval {
-    $self->db->prepare('DELETE FROM `room_participants`
-                          WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL 10 MINUTE)
-                            OR `last_activity` IS NULL');
-  };
-  $sth->execute;
-  return 1;
+  return $self->set_peer_role({
+    peer_id => $data->{peer_id},
+    room    => $data->{room},
+    role    => 'owner'
+  });
 };
 
 # Purge api keys
@@ -1174,7 +1035,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
     my ($self, $code, $reason) = @_;
     $self->app->log->debug("Client id " . $id . " closed websocket connection");
     foreach my $peer (keys %$peers){
-      next if ($peer eq $id);
+      next if $peer eq $id;
       next if $peers->{$peer}->{room} ne $peers->{$id}->{room};
       $self->app->log->debug("Notifying $peer that $id leaved");
       $peers->{$peer}->{socket}->send(
@@ -1191,9 +1052,8 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           }
         )
       );
+      delete $peers->{$id};
     }
-    # Remove this peer from our global hash
-    delete $peers->{$id};
   });
 
   # This is just the end of the initial handshake, we indicate the client we're ready
@@ -1206,9 +1066,14 @@ Mojo::IOLoop->recurring( 3 => sub {
   foreach my $peer ( keys %$peers ) {
     # If we had no reply from this peer in the last 15 sec
     # (5 heartbeat without response), we consider it dead and remove it
-    if ($peers->{$peer}->{last} < time - 15){
+    if (!$peers->{$peer}->{socket}){
+      app->log->debug("Garbage found in peers (peer $peer)\n" . Dumper($peers->{$peer}));
+      delete $peers->{$peer};
+    }
+    elsif ($peers->{$peer}->{last} < time - 15){
       app->log->debug("Peer $peer didn't reply in 15 sec, disconnecting");
       $peers->{$peer}->{socket}->finish;
+      delete $peers->{$peer};
     }
     else {
       $peers->{$peer}->{socket}->send(Protocol::SocketIO::Message->new( type => 'heartbeat' ));
@@ -1258,10 +1123,11 @@ post '/feedback' => sub {
 get '/goodbye/(:room)' => sub {
   my $self = shift;
   my $room = $self->stash('room');
-  if ($self->get_room_by_name($room) && $self->session('name')){
-    $self->remove_participant_from_room(
-      $room,
-      $self->session('name')
+  if (!$self->get_room_by_name($room)){
+    return $self->render('error',
+      err  => 'ERROR_ROOM_s_DOESNT_EXIST',
+      msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
+      room => $room
     );
   }
   $self->logout($room);
@@ -1279,10 +1145,6 @@ get '/kicked/(:room)' => sub {
       room => $room
     );
   }
-  $self->remove_participant_from_room(
-    $room,
-    $self->session('name')
-  );
   $self->logout($room);
 } => 'kicked';
 
@@ -1579,7 +1441,6 @@ any '/api' => sub {
     if ((int (rand 100)) <= 10){
       $self->purge_rooms;
       $self->purge_invitations;
-      $self->purge_participants;
     }
     # Check if we got any invitation response to process
     my $invitations = $self->get_invitation_list($self->session('name'));
@@ -1865,7 +1726,6 @@ any '/api' => sub {
       }
       my $res = $self->set_peer_role({
         room    => $room->{name},
-        name    => $self->session('name'),
         peer_id => $peer_id,
         role    => $self->session($room->{name})->{role}
       });
@@ -2116,14 +1976,6 @@ get '/:room' => sub {
       $data = $self->get_room_by_name($room);
     }
     $self->create_etherpad_session($room);
-  }
-  # Add this user to the participants table
-  if (!$self->add_participant_to_room($room, $self->session('name'))){
-    return $self->render('error',
-      msg  => $self->l('ERROR_OCCURRED'),
-      err  => 'ERROR_OCCURRED',
-      room => $room
-    );
   }
   # Now display the room page
   return $self->render('join',
