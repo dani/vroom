@@ -447,7 +447,7 @@ helper get_room_list => sub {
 
 # Just update the activity timestamp
 # so we can detect unused rooms
-helper ping_room => sub {
+helper update_room_last_activity => sub {
   my $self = shift;
   my ($name) = @_;
   my $data = $self->get_room_by_name($name);
@@ -460,7 +460,6 @@ helper ping_room => sub {
                           WHERE `id`=?');
   };
   $sth->execute($data->{id});
-  $self->app->log->debug($self->session('name') . " pinged the room $name");
   return 1;
 };
 
@@ -935,7 +934,8 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
       if ($msg->{data}->{name} eq 'join'){
         my $room = $msg->{data}->{args}[0];
         # Is this peer allowed to join the room ?
-        if (!$self->session($room) ||
+        if (!$self->get_room_by_name($room) ||
+            !$self->session($room) ||
             !$self->session($room)->{role} ||
             $self->session($room)->{role} !~ m/^owner|participant$/){
           $self->app->log->debug("Failed to connect to the signaling channel, " . $self->session('name') .
@@ -972,6 +972,8 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
             ]
           )
         );
+        # Update room last activity
+        $self->update_room_last_activity($room);
       }
       # We have a message from a peer
       elsif ($msg->{data}->{name} eq 'message'){
@@ -1040,6 +1042,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
         )
       );
       delete $peers->{$id};
+      $self->update_room_last_activity($peers->{$id}->{room});
     }
   });
 
@@ -1425,7 +1428,7 @@ any '/api' => sub {
   }
   # Handle activity pings sent every minute by each participant
   elsif ($req->{action} eq 'ping'){
-    $self->ping_room($room->{name});
+    $self->update_room_last_activity($room->{name});
     # Cleanup expired rooms every ~10 pings
     if ((int (rand 100)) <= 10){
       $self->purge_rooms;
