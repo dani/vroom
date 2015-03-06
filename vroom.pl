@@ -1667,6 +1667,11 @@ any '/api' => sub {
             maxFrameRate => $config->{'video.frame_rate'}
           }
         }
+      },
+      localVideo => {
+        autoplay => Mojo::JSON::true,
+        mirror => Mojo::JSON::false,
+        muted => Mojo::JSON::true
       }
     };
     # TODO: Support several TURN server in config
