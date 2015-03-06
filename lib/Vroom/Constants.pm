@@ -119,7 +119,7 @@ use constant API_ACTIONS => {
     get_room_conf    => 1,
     get_peer_role    => 1,
     join             => 1,
-    get_padd_session => 1,
+    get_pad_session  => 1,
     get_rtc_conf     => 1 
   },
   anonymous => {
