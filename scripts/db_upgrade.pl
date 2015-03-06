@@ -80,6 +80,7 @@ if ($cur_ver < 3){
   eval {
     $dbh->begin_work;
     $dbh->do(qq{ DROP TABLE `room_participants` });
+    $dbh->do(qq{ UPDATE `config` SET `value`='3' WHERE `key`='schema_version' });
     $dbh->commit;
   };
   if ($@){
