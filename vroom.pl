@@ -1030,6 +1030,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
     $self->app->log->debug("Client id " . $id . " closed websocket connection");
     foreach my $peer (keys %$peers){
       next if $peer eq $id;
+      next if !$peers->{$peer}->{room};
       next if $peers->{$peer}->{room} ne $peers->{$id}->{room};
       $self->app->log->debug("Notifying $peer that $id leaved");
       $peers->{$peer}->{socket}->send(
