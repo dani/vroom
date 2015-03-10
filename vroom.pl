@@ -910,6 +910,22 @@ helper get_room_members => sub {
   return $cnt;
 };
 
+# Broadcast a SocketIO message to all the members of a room
+helper signal_broadcast_room => sub {
+  my $self = shift;
+  my $data = shift;
+
+  # Send a message to all members of the same room as the sender
+  # ecept the sender himself
+  foreach my $peer (keys %$peers){
+    next if ($peer eq $data->{from});
+    next if !$peers->{$peer}->{room};
+    next if $peers->{$peer}->{room} ne $peers->{$data->{from}}->{room};
+    $peers->{$peer}->{socket}->send($data->{msg});
+  }
+  return 1;
+};
+
 # Socket.IO handshake
 get '/socket.io/:ver' => sub {
   my $self = shift;
@@ -996,16 +1012,11 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
       elsif ($msg->{data}->{name} eq 'message'){
         $self->app->log->debug("Signaling message received from peer " . $id);
         # Forward this message to all other members of the same room
-        foreach my $peer (keys %$peers){
-          next if ($peer eq $id);
-          next if !$peers->{$peer}->{room};
-          next if $peers->{$peer}->{room} ne $peers->{$id}->{room};
-          # Just set who's sending it
-          $msg->{data}->{args}[0]->{from} = $id;
-          $peers->{$peer}->{socket}->send(
-            Protocol::SocketIO::Message->new(%$msg)
-          );
-        }
+        $msg->{data}->{args}[0]->{from} = $id;
+        $self->signal_broadcast_room({
+          from => $id,
+          msg  => Protocol::SocketIO::Message->new(%$msg)
+        });
       }
       # When a peer share its screen
       elsif ($msg->{data}->{name} eq 'shareScreen'){
@@ -1014,21 +1025,16 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
       # Or unshare it
       elsif ($msg->{data}->{name} eq 'unshareScreen'){
         $peers->{$id}->{details}->{screen} = \0;
-        foreach my $peer (keys %$peers){
-          next if ($peer eq $id);
-          next if !$peers->{$peer}->{room};
-          next if $peers->{$peer}->{room} ne $peers->{$id}->{room};
-          $self->app->log->debug("Notifying $peer that $id unshared its screen");
-          $peers->{$peer}->{socket}->send(
-            Protocol::SocketIO::Message->new(
-              type => 'event',
-              data => {
-                name => 'remove',
-                args => [{ id => $id, type => 'screen' }]
-              }
-            )
-          );
-        }
+        $self->signal_broadcast_room({
+          from => $id,
+          msg  => Protocol::SocketIO::Message->new(
+            type => 'event',
+            data => {
+              name => 'remove',
+              args => [{ id => $id, type => 'screen' }]
+            }
+          )
+        });
       }
       elsif ($msg->{data}->{name} =~ m/^leave|disconnect$/){
         $peers->{$id}->{socket}->{finish};
@@ -1047,23 +1053,19 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
   $self->on(finish => sub {
     my ($self, $code, $reason) = @_;
     $self->app->log->debug("Client id " . $id . " closed websocket connection");
-    foreach my $peer (keys %$peers){
-      next if $peer eq $id;
-      next if !$peers->{$peer}->{room};
-      next if $peers->{$peer}->{room} ne $peers->{$id}->{room};
-      $self->app->log->debug("Notifying $peer that $id leaved");
-      $peers->{$peer}->{socket}->send(
-        Protocol::SocketIO::Message->new(
-          type => 'event',
-          data => {
-            name => 'remove',
-            args => [{ id => $id, type => 'video' }]
-          }
-        )
-      );
-      delete $peers->{$id};
-      $self->update_room_last_activity($peers->{$id}->{room});
-    }
+    $self->app->log->debug("Notifying others that $id leaved");
+    $self->signal_broadcast_room({
+      from => $id,
+      msg  => Protocol::SocketIO::Message->new(
+        type => 'event',
+        data => {
+          name => 'remove',
+          args => [{ id => $id, type => 'video' }]
+        }
+      )
+    });
+    delete $peers->{$id};
+    $self->update_room_last_activity($peers->{$id}->{room});
   });
 
   # This is just the end of the initial handshake, we indicate the client we're ready
