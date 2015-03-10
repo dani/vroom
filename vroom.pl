@@ -50,6 +50,7 @@ $config->{'cookie.name'}                       ||= 'vroom';
 $config->{'rooms.inactivity_timeout'}          ||= 60;
 $config->{'rooms.reserved_inactivity_timeout'} ||= 86400;
 $config->{'rooms.common_names'}                ||= '';
+$config->{'rooms.max_members'}                 ||= 0;
 $config->{'log.level'}                         ||= 'info';
 $config->{'etherpad.uri'}                      ||= '';
 $config->{'etherpad.api_key'}                  ||= '';
@@ -919,6 +920,7 @@ helper signal_broadcast_room => sub {
   # ecept the sender himself
   foreach my $peer (keys %$peers){
     next if ($peer eq $data->{from});
+    next if !$peers->{$data->{from}}->{room};
     next if !$peers->{$peer}->{room};
     next if $peers->{$peer}->{room} ne $peers->{$data->{from}}->{room};
     $peers->{$peer}->{socket}->send($data->{msg});
@@ -973,6 +975,14 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
             $self->session($room)->{role} !~ m/^owner|participant$/){
           $self->app->log->debug("Failed to connect to the signaling channel, " . $self->session('name') .
                                  " (session ID " . $self->session('id') . ") has no role for this room");
+          $self->send( Protocol::SocketIO::Message->new( type => 'disconnect' ) );
+          $self->finish;
+          return;
+        }
+        # Are we under the limit of members ?
+        elsif ($config->{'rooms.max_members'} > 0 && $self->get_room_members($room) >= $config->{'rooms.max_members'}){
+          $self->app->log->debug("Failed to connect to the signaling channel, members limit (" . $config->{'rooms.max_members'} .
+                                 ") is reached");
           $self->send( Protocol::SocketIO::Message->new( type => 'disconnect' ) );
           $self->finish;
           return;
@@ -1969,6 +1979,14 @@ get '/:room' => sub {
       err => 'ERROR_ROOM_s_LOCKED',
       room => $room,
       ownerPass => ($data->{owner_password}) ? '1':'0'
+    );
+  }
+  # If we've reached the members' limit
+  if ($config->{'rooms.max_members'} > 0 && $self->get_room_members($room) >= $config->{'rooms.max_members'}){
+    return $self->render('error',
+      msg  => $self->l("ERROR_TOO_MANY_MEMBERS"),
+      err  => 'ERROR_TOO_MANY_MEMBERS',
+      room => $room,
     );
   }
   # Now, if the room is password protected and we're not a participant, nor the owner, lets prompt for the password
