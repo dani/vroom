@@ -1074,8 +1074,8 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
         }
       )
     });
-    delete $peers->{$id};
     $self->update_room_last_activity($peers->{$id}->{room});
+    delete $peers->{$id};
   });
 
   # This is just the end of the initial handshake, we indicate the client we're ready
