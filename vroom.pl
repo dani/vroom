@@ -899,8 +899,8 @@ get '/socket.io/:ver' => sub {
   $self->session(peer_id => $self->get_random(256));
   my $handshake = Protocol::SocketIO::Handshake->new(
       session_id        => $self->session('peer_id'),
-      heartbeat_timeout => 15,
-      close_timeout     => 20,
+      heartbeat_timeout => 20,
+      close_timeout     => 40,
       transports        => [qw/websocket/]
   );
   return $self->render(text => $handshake->to_bytes);
