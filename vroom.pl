@@ -893,6 +893,23 @@ helper key_can_do_this => sub {
   return 0;
 };
 
+# Get the number of participants currently in a room
+helper get_room_members => sub {
+  my $self = shift;
+  my $room = shift;
+  if (!$self->get_room_by_name($room)){
+    return 0;
+  }
+  my $cnt = 0;
+  foreach my $peer (keys $peers){
+    if ($peers->{$peer}->{room} &&
+        $peers->{$peer}->{room} eq $room){
+      $cnt++;
+    }
+  }
+  return $cnt;
+};
+
 # Socket.IO handshake
 get '/socket.io/:ver' => sub {
   my $self = shift;
@@ -981,6 +998,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
         # Forward this message to all other members of the same room
         foreach my $peer (keys %$peers){
           next if ($peer eq $id);
+          next if !$peers->{$peer}->{room};
           next if $peers->{$peer}->{room} ne $peers->{$id}->{room};
           # Just set who's sending it
           $msg->{data}->{args}[0]->{from} = $id;
@@ -998,6 +1016,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
         $peers->{$id}->{details}->{screen} = \0;
         foreach my $peer (keys %$peers){
           next if ($peer eq $id);
+          next if !$peers->{$peer}->{room};
           next if $peers->{$peer}->{room} ne $peers->{$id}->{room};
           $self->app->log->debug("Notifying $peer that $id unshared its screen");
           $peers->{$peer}->{socket}->send(
@@ -1297,10 +1316,7 @@ any '/api' => sub {
         delete $rooms->{$r}->{$p};
       }
       # Count active users
-      $rooms->{$r}->{members} = 0;
-      foreach my $peer (keys %$peers){
-        $rooms->{$r}->{members}++ if ($peers->{$peer}->{room} eq $r);
-      }
+      $rooms->{$r}->{members} = $self->get_room_members($r);
     }
     return $self->render(
       json => {
