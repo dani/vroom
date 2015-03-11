@@ -1463,6 +1463,31 @@ function initVroom(room) {
           });
         }
       }, 10000);
+      // Ping the room every minutes
+      // Used to detect inactive rooms
+      setInterval(function(){
+        $.ajax({
+          data: {
+            req: JSON.stringify({
+              action: 'ping',
+              param: {
+                room: roomName
+              }
+            })
+          },
+          error: function(data) {
+            showApiError(data);
+          },
+          success: function(data) {
+            if (data.msg && data.msg != ''){
+              $.notify(data.msg, {
+                className: 'info',
+                autoHide: false
+              });
+            }
+          }
+        });
+      }, 60000);
     }
     // Notify the server a new participant has joined (ourself)
     // If we were prompted for our display name before joining
@@ -1942,32 +1967,6 @@ function initVroom(room) {
       $('.btn-etherpad').toggleClass('btn-danger').button('toggle');
     });
   }
-
-  // Ping the room every minutes
-  // Used to detect inactive rooms
-  setInterval(function(){
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'ping',
-          param: {
-            room: roomName
-          }
-        })
-      },
-      error: function(data) {
-        showApiError(data);
-      },
-      success: function(data) {
-        if (data.msg && data.msg != ''){
-          $.notify(data.msg, {
-            className: 'info',
-            autoHide: false
-          });
-        }
-      }
-    });
-  }, 60000);
 
   // Ping all the peers every 5 sec to measure latency
   // Do this through dataChannel
