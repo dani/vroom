@@ -555,7 +555,7 @@ helper update_email_notifications => sub {
 };
 
 # Return the list of email addresses
-helper get_notification => sub {
+helper get_email_notifications => sub {
   my $self = shift;
   my ($room) = @_;
   $room = $self->get_room_by_name($room) || return undef;
@@ -1760,7 +1760,7 @@ any '/api' => sub {
         ask_for_name => ($room->{ask_for_name})   ? 'yes' : 'no',
         persistent   => ($room->{persistent})     ? 'yes' : 'no',
         max_members  => $room->{max_members},
-        notif        => $self->get_notification($room->{name}),
+        notif        => $self->get_email_notifications($room->{name}),
       }
     );
   }
@@ -1802,7 +1802,7 @@ any '/api' => sub {
         locked       => ($room->{locked})         ? 'yes' : 'no',
         ask_for_name => ($room->{ask_for_name})   ? 'yes' : 'no',
         max_members  => $room->{max_members},
-        notif        => $self->get_notification($room->{name}),
+        notif        => $self->get_email_notifications($room->{name}),
       },
     );
   }
@@ -1839,7 +1839,7 @@ any '/api' => sub {
     my $name = $req->{param}->{name} || '';
     my $subj = sprintf($self->l('s_JOINED_ROOM_s'), ($name eq '') ? $self->l('SOMEONE') : $name, $room->{name});
     # Send notifications
-    my $recipients = $self->get_notification($room->{name});
+    my $recipients = $self->get_email_notifications($room->{name});
     foreach my $rcpt (keys %{$recipients}){
       $self->app->log->debug('Sending an email to ' . $recipients->{$rcpt}->{email});
       my $sent = $self->mail(
