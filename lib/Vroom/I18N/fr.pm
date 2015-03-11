@@ -149,6 +149,7 @@ our %Lexicon = (
     "JOIN_PASSWORD"                             => "Mot de passe d'accès au salon",
     "OWNER_PASSWORD"                            => "Mot de passe de gestionnaire",
     "PERSISTENT"                                => "Persistant",
+    "MAX_MEMBERS"                               => "Limite de participants",
     "TOOLTIP_LOCK_ROOM"                         => "Une fois cette option activée, plus personne ne peut rejoindre le salon. " .
                                                    "À n'activer qu'une fois que tout les participants vous ont rejoint, pour éviter " .
                                                    "que d'autres personnes viennent troubler la réunion",
@@ -157,6 +158,8 @@ our %Lexicon = (
     "TOOLTIP_RESERVE_THIS_ROOM"                 => "Ce mot de passe vous permettra de récuperer l'accès aux " .
                                                    "menus de gestion la prochaine fois que vous vous connecterez",
     "TOOLTIP_PERSISTENT"                        => "Rend le salon persistant (sera conservé indéfiniement)",
+    "TOOLTIP_MAX_MEMBERS"                       => "Défini le nombre maximal de participants pouvant rejoindre le salon en même temps. Une valeur de 0" .
+                                                   "supprime toute limite. (Notez qu'une valeur maximale peut être définie par un administrateur)",
     "TOOLTIP_NOTIFICATION_ON_JOIN"              => "Une ou plusieurs adresses email qui recevront une notification dès que quulqu'un rejoint ce salon",
     "ROOM_NOW_PERSISTENT"                       => "Ce salon est maintenant persistant",
     "ROOM_NO_MORE_PERSISTENT"                   => "Ce salon n'est plus persistant",

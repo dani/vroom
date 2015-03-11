@@ -294,9 +294,14 @@ helper modify_room => sub {
   if (!$self->valid_room_name($room->{name})){
     return 0;
   }
+  if (!$room->{max_members} ||
+      ($room->{max_members} > $config->{'rooms.max_members'} && $config->{'rooms.max_members'} > 0)){
+    $room->{max_members} = 0;
+  }
   if (($room->{locked} && $room->{locked} !~ m/^0|1$/) ||
       ($room->{ask_for_name} && $room->{ask_for_name} !~ m/^0|1$/) ||
-      ($room->{persistent} && $room->{persistent} !~ m/^0|1$/)){
+      ($room->{persistent} && $room->{persistent} !~ m/^0|1$/) ||
+       $room->{max_members} !~ m/^\d+$/){
     return 0;
   }
   my $sth = eval {
@@ -306,7 +311,8 @@ helper modify_room => sub {
                               `ask_for_name`=?,
                               `join_password`=?,
                               `owner_password`=?,
-                              `persistent`=?
+                              `persistent`=?,
+                              `max_members`=?
                           WHERE `id`=?');
   };
   $sth->execute(
@@ -316,6 +322,7 @@ helper modify_room => sub {
     $room->{join_password},
     $room->{owner_password},
     $room->{persistent},
+    $room->{max_members},
     $room->{id}
   );
   $self->app->log->info("Room " . $room->{name} ." modified by " . $self->session('name'));
@@ -928,6 +935,20 @@ helper signal_broadcast_room => sub {
   return 1;
 };
 
+# Get the member limit for a room
+helper get_member_limit => sub {
+  my $self = shift;
+  my $name = shift;
+  my $room = $self->get_room_by_name($name);
+  if ($room->{max_members} > 0 && $room->{max_members} < $config->{'rooms.max_members'}){
+    return $room->{max_members};
+  }
+  elsif ($config->{'rooms.max_members'} > 0){
+    return $config->{'rooms.max_members'};
+  }
+  return 0;
+};
+
 # Socket.IO handshake
 get '/socket.io/:ver' => sub {
   my $self = shift;
@@ -980,7 +1001,8 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           return;
         }
         # Are we under the limit of members ?
-        elsif ($config->{'rooms.max_members'} > 0 && $self->get_room_members($room) >= $config->{'rooms.max_members'}){
+        my $limit = $self->get_member_limit($room);
+        if ($limit > 0 && $self->get_room_members($room) >= $limit){
           $self->app->log->debug("Failed to connect to the signaling channel, members limit (" . $config->{'rooms.max_members'} .
                                  ") is reached");
           $self->send( Protocol::SocketIO::Message->new( type => 'disconnect' ) );
@@ -1495,6 +1517,7 @@ any '/api' => sub {
   elsif ($req->{action} eq 'update_room_conf'){
     $room->{locked} = ($req->{param}->{locked}) ? '1' : '0';
     $room->{ask_for_name} = ($req->{param}->{ask_for_name}) ? '1' : '0';
+    $room->{max_members} = $req->{param}->{max_members};
     # Room persistence can only be set by admins
     if ($self->key_can_do_this(token  => $token, action => 'set_persistent') && $req->{param}->{persistent} ne ''){
       $room->{persistent} = ($req->{param}->{persistent} eq Mojo::JSON->true) ? '1' : '0';
@@ -1736,6 +1759,7 @@ any '/api' => sub {
         locked       => ($room->{locked})         ? 'yes' : 'no',
         ask_for_name => ($room->{ask_for_name})   ? 'yes' : 'no',
         persistent   => ($room->{persistent})     ? 'yes' : 'no',
+        max_members  => $room->{max_members},
         notif        => $self->get_notification($room->{name}),
       }
     );
@@ -1777,6 +1801,7 @@ any '/api' => sub {
         join_auth    => ($room->{join_password})  ? 'yes' : 'no',
         locked       => ($room->{locked})         ? 'yes' : 'no',
         ask_for_name => ($room->{ask_for_name})   ? 'yes' : 'no',
+        max_members  => $room->{max_members},
         notif        => $self->get_notification($room->{name}),
       },
     );
@@ -1982,7 +2007,8 @@ get '/:room' => sub {
     );
   }
   # If we've reached the members' limit
-  if ($config->{'rooms.max_members'} > 0 && $self->get_room_members($room) >= $config->{'rooms.max_members'}){
+  my $limit = $self->get_member_limit($room);
+  if ($limit > 0 && $self->get_room_members($room) >= $limit){
     return $self->render('error',
       msg  => $self->l("ERROR_TOO_MANY_MEMBERS"),
       err  => 'ERROR_TOO_MANY_MEMBERS',

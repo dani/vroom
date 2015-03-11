@@ -143,6 +143,7 @@ our %Lexicon = (
   "JOIN_PASSWORD"                        => "Password to join the room",
   "OWNER_PASSWORD"                       => "Password to manage the room",
   "PERSISTENT"                           => "Persistent",
+  "MAX_MEMBERS"                          => "Participants limit",
   "TOOLTIP_LOCK_ROOM"                    => "Once this option is enabled, no one else can join the room. " .
                                             "Only enable it after every participant is here. This way, nobody will be able to disturb " .
                                             "your meeting",
@@ -151,6 +152,8 @@ our %Lexicon = (
   "TOOLTIP_RESERVE_THIS_ROOM"            => "If this password is set, you'll be able to access the configuration menus ".
                                             "next time you connect",
   "TOOLTIP_PERSISTENT"                   => "The room will be persistent (kept forever)",
+  "TOOLTIP_MAX_MEMBERS"                  => "Define the upper limit of connected peer in the room. A value of 0 means no limit. " .
+                                            "(Note that an admin might define a limit anyway)",
   "TOOLTIP_NOTIFICATION_ON_JOIN"         => "One or more email addresse(s) which will be notified when someone joins the room",
   "ROOM_NOW_PERSISTENT"                  => "This room is now persistent",
   "ROOM_NO_MORE_PERSISTENT"              => "This rooms isn't persistent anymore",

@@ -22,6 +22,7 @@ CREATE TABLE `rooms` (
   `token` VARCHAR(160) NOT NULL,
   `realm` VARCHAR(160) DEFAULT NULL,
   `persistent` TINYINT UNSIGNED DEFAULT '0',
+  `max_members` TINYINT UNSIGNED DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE (`name`),
   INDEX (`last_activity`)

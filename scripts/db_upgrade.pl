@@ -91,3 +91,20 @@ if ($cur_ver < 3){
   };
   print "Successfully upgraded to schema version 3\n";
 }
+
+if ($cur_ver < 4){
+  print "Upgrading the schema to version 4\n";
+  eval {
+    $dbh->begin_work;
+    $dbh->do(qq{ ALTER TABLE `rooms` ADD COLUMN `max_members` TINYINT UNSIGNED DEFAULT '0' AFTER `persistent` });
+    $dbh->do(qq{ UPDATE `config` SET `value`='4' WHERE `key`='schema_version' });
+    $dbh->commit;
+  };
+  if ($@){
+    print "An error occurred: " . $dbh->errstr . "\n";
+    local $dbh->{RaiseError} = 0;
+    $dbh->rollback;
+    exit 255;
+  };
+  print "Successfully upgraded to schema version 4\n";
+}

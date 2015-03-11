@@ -55,7 +55,8 @@
 ; A comma separated list of room names you don't want to be reservable
 ;common_names = 'test,test1,test123,0,1,2,3,4,5,6,7,8,9,123,1234,12345,a,aa,abc,azerty,qwerty,vroom,foo,bar,baz'
 ; A limit of member in any room. As trafic is really p2p, a high number of peers can make things slow
-; or even crash browsers. You can set a limit to garantee a good user experience. Default is unlimited
+; or even crash browsers. You can set a limit to garantee a good user experience. 0 (default value) means unlimited
+; This is the upper limit, you can set a different limit per room
 ;max_members = 0
 
 [log]

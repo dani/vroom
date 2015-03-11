@@ -300,6 +300,8 @@ $('#configureRoomForm').submit(function(e){
                    $('#ownerPass').val() : false,
       persist = ($('#persistentSet').length > 0) ?
                    $('#persistentSet').bootstrapSwitch('state') : '',
+      members = ($('#maxMembers').length > 0) ?
+                   $('#maxMembers').val() : 0,
       emails = [];
   $('input[name="emails[]"]').each(function(){
     emails.push($(this).val());
@@ -315,6 +317,7 @@ $('#configureRoomForm').submit(function(e){
           join_password: joinPass,
           owner_password: ownerPass,
           persistent: persist,
+          max_members: members,
           emails: emails
         }
       })
@@ -528,6 +531,7 @@ function initAdminRooms(){
         $('#joinPassSet').bootstrapSwitch('state', data.join_auth == 'yes');
         $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth == 'yes');
         $('#persistentSet').bootstrapSwitch('state', data.persistent == 'yes');
+        $('#maxMembers').val(data.max_members);
         // Hide the password inputs
         $('#joinPassFields,#ownerPassFields').hide();
         // And display the config modal dialog
