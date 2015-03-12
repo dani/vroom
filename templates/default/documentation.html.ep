@@ -3,11 +3,11 @@
 %= include 'public_toolbar'
 <div class="container-fluid">
   <div class="row-fluid">
-    <div class="hidden-xs col-sm-2">
+    <div class="hidden-xs col-sm-3">
       <div id="doc-toc">
       </div>
     </div>
-    <div class="col-sm-10" id="doc-content">
+    <div class="col-sm-9" id="doc-content">
       <h1 id="intro">
         Introduction
       </h1>
