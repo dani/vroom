@@ -360,6 +360,11 @@ our %Lexicon = (
                                                    "      chiffrées parfaitement inintelligibles, la confidentialité des communications " .
                                                    "      n'est donc pas compromise (la latence sera par contre affectée)</li>".
                                                    "</ol>",
+    "WHO_IS_BEHIND_VROOM"                       => "Qui développe VROOM ?",
+    "ABOUT_WHO_IS_BEHIND_VROOM"                 => "VROOM a démarré comme un simple projet personnel, développé par une seule personne " .
+                                                   "(Daniel Berteaud) sur mon temps libre. Ce projet n'en serait pas " .
+                                                   "là sans l'aide de mon enreprise, <a href='http://www.firewall-services.com'>Firewall Services</a> " .
+                                                   "qui assure entre autre l'hébergement de <a href='http://vroom.im'>l'instance de référence</a>",
     "THANKS"                                    => "Remerciements",
     "ABOUT_THANKS"                              => "VROOM utilise les composants suivants, merci donc aux auteurs respectifs :-)",
     "ABOUT_MUSICS"                              => "Merci également aux auteurs des morceaux de musique utilisés",

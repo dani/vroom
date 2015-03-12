@@ -38,6 +38,20 @@
       </p>
     </div>
   </div>
+  <% if ($config->{'interface.demo'}){ %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <%=l 'WHO_IS_BEHIND_VROOM' %>
+      </h3>
+    </div>
+    <div class="panel-body">
+      <p>
+        <%==l 'ABOUT_WHO_IS_BEHIND_VROOM' %>
+      </p>
+    </div>
+  </div>
+  <% } %>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">

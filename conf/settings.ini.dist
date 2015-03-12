@@ -40,6 +40,10 @@
 ;template = 'default'
 ; ID of the chrome extension which will be proposed when sharing screen on Chrome
 ;chrome_extension_id = 'ecicdpoejfllflombfanbhfpgcimjddn'
+; demo can be 0 or 1 (anything else is considered 1). When set to 1, it'll display a few
+; pages which would be hidden otherwise (documentation on how to install it for example)
+; Default to 0
+;demo = 0
 
 [cookie]
 ; Secret passphrase used to sign cookies. You must set this

@@ -331,6 +331,11 @@ our %Lexicon = (
                                             "      But even in those cases, the server only relays ciphered packets, and has no access to the data " .
                                             "      so confidentiality is not compromised (only latency will be affected)</li>".
                                             "</ol>",
+  "WHO_IS_BEHIND_VROOM"                  => "Who's behind VROOM ?",
+  "ABOUT_WHO_IS_BEHIND_VROOM"            => "VROOM started as a simple personal project, developped by a single person " .
+                                            "(Daniel Berteaud) on my spare time. This project wouldn't be that far without my employer " .
+                                            "<a href='http://www.firewall-services.com'>Firewall Services</a> " .
+                                            "who hosts <a href='http://vroom.im'>the demo instance</a>",
   "THANKS"                               => "Thanks",
   "ABOUT_THANKS"                         => "VROOM uses the following components, so, thanks to their respective authors :-)",
   "ABOUT_MUSICS"                         => "Also thanks to the authors of songs used",

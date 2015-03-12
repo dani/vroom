@@ -45,6 +45,7 @@ $config->{'email.sendmail'}                    ||= '/sbin/sendmail';
 $config->{'interface.powered_by'}              ||= '<a href="http://www.firewall-services.com" target="_blank">Firewall Services</a>';
 $config->{'interface.template'}                ||= 'default';
 $config->{'interface.chrome_extension_id'}     ||= 'ecicdpoejfllflombfanbhfpgcimjddn';
+$config->{'interface.chrome_extension_id'}     ||= 0;
 $config->{'cookie.secret'}                     ||= 'secret';
 $config->{'cookie.name'}                       ||= 'vroom';
 $config->{'rooms.inactivity_timeout'}          ||= 60;
