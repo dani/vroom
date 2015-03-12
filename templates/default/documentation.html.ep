@@ -1,0 +1,6 @@
+% title $self->l('DOCUMENTATION');
+%= include 'header'
+%= include 'public_toolbar'
+<div class="container-fluid">
+</div>
+%= include 'footer'

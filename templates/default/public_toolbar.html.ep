@@ -28,6 +28,11 @@
           <li>
             <a href="<%= $self->get_url('/feedback') %>"><%=l 'FEEDBACK' %></a>
           </li>
+          <% if ($config->{'interface.demo'}){ %>
+          <li>
+            <a href="<%= $self->get_url('/documentation') %>"><%=l 'DOCUMENTATION' %></a>
+          </li>
+          <% } %>
           <li class="hidden-xs">
             <select class="form-control navbar-btn" id="switch_lang">
               <% foreach my $lang (qw(en fr)){ %>
