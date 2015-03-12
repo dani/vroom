@@ -1,7 +1,9 @@
   <nav class="navbar navbar-default" role="navigation">
+    <% if ($config->{'interface.demo'}){ %>
     <a href="https://github.com/dani/vroom">
       <img id="forkMeRibbon" src="<%= $self->get_url('/') %>img/fork_me_on_gh.png" alt="Fork me on GitHub" class="hidden-xs"/>
     </a>
+    <% } %>
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#toolBar">
