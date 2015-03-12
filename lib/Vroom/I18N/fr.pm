@@ -370,7 +370,8 @@ our %Lexicon = (
     "ABOUT_MUSICS"                              => "Merci également aux auteurs des morceaux de musique utilisés",
     "FROM_AUTHOR"                               => "de",
     "PAGE_NOT_FOUND"                            => "Cette page n'existe pas",
-    "SERVER_ERROR"                              => "Veuillez nous excuser"
+    "SERVER_ERROR"                              => "Veuillez nous excuser",
+    "DOCUMENTATION"                             => "Documentation"
 );
 
 1;

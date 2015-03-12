@@ -405,22 +405,24 @@ function initIndex(){
 
 // The documentation page
 function initDoc(){
-  $('#doc-toc').width($('#doc-toc').parents().width());
-  $('#doc-toc').toc({
+
+  $('#toc').width($('#toc').parents().width());
+
+  $('#toc').toc({
     elementClass: 'toc',
     ulClass: 'nav',
-    heading: 'Content',
+    heading: 'Table of content',
     indexingFormats: 'number'
   });
 
- // Scroll to the table of content section when user scroll the mouse
+  // Scroll to the table of content section when user scroll the mouse
   $('body').scrollspy({
-    target: '#doc-toc',
+    target: '#toc',
     offset: $('#headerNav').outerHeight(true) + 40
   });
 
   setTimeout(function() {
-    var $sideBar = $('#doc-toc');
+    var $sideBar = $('#toc');
     $sideBar.affix({
       offset: {
         top: function() {
@@ -434,7 +436,7 @@ function initDoc(){
         }
       }
     });
-  }, 100);
+  }, 200);
 }
 
 // Used on the room admin page

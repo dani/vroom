@@ -276,7 +276,6 @@ a.popup>span {
 .header-btn-group {
   margin-left: 10px;
 }
-html,
 body {
   height: 100%;
   width: 100%;
@@ -284,6 +283,7 @@ body {
   margin: 0px;
   padding: 0px;
   font-family: 'Happy Monkey', cursive;
+  position: relative;
 }
 #wrap {
   min-height: 100%;

@@ -4,7 +4,7 @@
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="hidden-xs col-sm-3">
-      <div id="doc-toc">
+      <div id="toc">
       </div>
     </div>
     <div class="col-sm-9" id="doc-content">

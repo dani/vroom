@@ -341,7 +341,8 @@ our %Lexicon = (
   "ABOUT_MUSICS"                         => "Also thanks to the authors of songs used",
   "FROM_AUTHOR"                          => "from",
   "PAGE_NOT_FOUND"                       => "This page does not exist",
-  "SERVER_ERROR"                         => "Sorry for the inconvinience"
+  "SERVER_ERROR"                         => "Sorry for the inconvinience",
+  "DOCUMENTATION"                        => "Documentation"
 ); 
 
 1;
