@@ -1,4 +1,4 @@
-  <nav class="navbar navbar-default" role="navigation">
+  <nav class="navbar navbar-default" role="navigation" id="headerNav">
     <% if ($config->{'interface.demo'}){ %>
     <a href="https://github.com/dani/vroom">
       <img id="forkMeRibbon" src="<%= $self->get_url('/') %>img/fork_me_on_gh.png" alt="Fork me on GitHub" class="hidden-xs"/>

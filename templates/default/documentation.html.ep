@@ -2,5 +2,137 @@
 %= include 'header'
 %= include 'public_toolbar'
 <div class="container-fluid">
+  <div class="row-fluid">
+    <div class="hidden-xs col-sm-2">
+      <div id="doc-toc">
+      </div>
+    </div>
+    <div class="col-sm-10">
+      <h2>
+        Introduction
+      </h2>
+      <p>
+        VROOM (short for <strong>V</strong>ideo <strong>ROOM</strong>) is a simple to use, web-based and opensource (MIT licence) video conferencing application.
+        It's based on several other softwares, most notably the excellent <a href="http://simplewebrtc.com/" target="_blank">SimpleWebRTC</a> lib.
+      </p>
+      <p>
+        VROOM uses the latest WebRTC technologies to allow video conferencing through a web browser without any plugin.
+        There are several more or less similar hosted solutions available (like
+          <a href="https://talky.io/" target="_blank">talky.io</a>,
+          <a href="https://appear.in/" target="_blank">appear.in</a>,
+          <a href="https://vline.com/" target="_blank">vLine.com</a> for example).
+        Most of them are more polished than VROOM, but I've found none entirely opensource, so I started this project.
+      </p>
+      <h2>
+        Features
+      </h2>
+      <p>
+        VROOM implements the following features:
+        <ul>
+          <li>Video/audio conversations (no limit on the number of peers)</li>
+          <li>Text chat (and you can save history)</li>
+          <li>Screen sharing</li>
+          <li>Email invitations</li>
+          <li>Email notification when someone joins one of your rooms</li>
+          <li>Persistent/reserved rooms</li>
+          <li>Chairman functionnalities (mute/pause/kick other peers)</li>
+          <li>Grant chairman role to other peers</li>
+          <li>Password protected rooms (different passwords for access and chairman)</li>
+          <li>Music on hold (when you're alone in a room)</li>
+          <li>Can be optionaly integrated with <a href="https://github.com/ether/etherpad-lite" target="_blank">Etherpad-Lite</a></li>
+        </ul>
+      </p>
+      <p>
+        VROOM is translated in French and English. You're welcome to submit patches or pull requests to enhance localization, or add new ones.
+      </p>
+      <h2>
+        Install your own VROOM instance
+      </h2>
+      The following guide will help you installing VROOM on your own server
+      <h3>
+        Requirements
+      </h3>
+      <p>
+        If you want to run your own server, you'll need the following components
+        <ul>
+          <li><a href="http://mojolicio.us" target="_blank">Mojolicious</a> 5 or better</li>
+          <li>A MySQL compatible server (MySQL or MariaDB)</li>
+          <li>A webserver supporting HTTPS and reverse proxying, including websocket reverse proxying (Apache can do this with mod_proxy_ws)</li>
+          <li>The following perl modules
+            <ul>
+              <li>Mojolicious::Plugin::Mail</li>
+              <li>Mojolicious::Plugin::Database</li>
+              <li>Crypt::SaltedHash</li>
+              <li>MIME::Base64</li>
+              <li>Etherpad::API</li>
+              <li>Session::Token</li>
+              <li>Config::Simple</li>
+              <li>Email::Valid</li>
+              <li>URI</li>
+              <li>Protocol::SocketIO::Handshake</li>
+              <li>Protocol::SocketIO::Message</li>
+            </ul>
+          </ul>
+        </ul>
+        It's also advised to run VROOM on a systemd powered distribution (simply because that's what I use and I include service units for VROOM). For the same reason, I recommend running Apache as webserver (others like Nginx probably work too, but I provide configuration sample only for Apache)
+      </p>
+      <p>
+        While VROOM should run on any distro, it's only tested on CentOS 7 x86_64, so it's the recommended platform.
+        Also, I provide packages for all dependencies in my repository, so it'll be much easier to install it this way.
+        If you have it running on another system, please send me your notes so I can update this documentation.
+      </p>
+      <h3>
+        Install on CentOS 7 x86_64
+      </h3>
+      <p class="alert alert-info">
+        This guide assumes that you have installed a minimal CentOS 7 x86_64 system
+      </p>
+      <h4>
+        Configure the required repositories
+      </h4>
+      <p>
+        You need to configure both EPEL and FWS repo<br>
+        <pre>
+cat <<'_EOF' > /etc/yum.repos.d/fws.repo
+[fws]
+enabled=1
+baseurl=http://repo.firewall-services.com/centos/$releasever/
+name=Firewall Services
+gpgcheck=1
+gpgkey=http://repo.firewall-services.com/RPM-GPG-KEY
+enablegroups=0
+ 
+[fws-testing]
+enabled=0
+baseurl=http://repo.firewall-services.com/centos-testing/$releasever/
+name=Firewall Services Testing
+gpgcheck=1
+gpgkey=http://repo.firewall-services.com/RPM-GPG-KEY
+enablegroups=0
+_EOF
+yum install epel-release
+        </pre>
+      </p>
+      <h4>
+        Install dependencies
+      </h4>
+      <p>
+        The follwoing command will install everything required to run VROOM
+        <pre>
+yum install git tar wget httpd mod_ssl openssl mariadb-server \\
+           'perl(Mojolicious)' 'perl(Mojolicious::Plugin::I18N)' 'perl(Mojolicious::Plugin::Mail)' \\
+           'perl(Crypt::SaltedHash)' 'perl(Etherpad::API)' 'perl(LWP::Protocol::https)' \\
+           'perl(Sesion::Token)' 'perl(Mojolicious::Plugin::Database)' 'perl(Email::Valid)' \\
+           'perl(Config::Simple)' 'perl(Session::Token)' 'perl(URI)'
+        </pre>
+      </p> 
+    </div>
+  </div>
 </div>
+%= include 'js_common'
+    <script>
+      $(document).ready(function() {
+        initDoc();
+      });
+    </script>
 %= include 'footer'
