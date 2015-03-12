@@ -5,7 +5,7 @@ our %Lexicon = (
   _AUTO => 1,
   "WELCOME"                              => "Welcome on VROOM !!",
   "VROOM_DESC"                           => "VROOM is a simple video conferencing solution",
-  "VROOM_IS_FREE_SOFTWARE"               => "VROOM is a free software",
+  "VROOM_IS_FREE_SOFTWARE"               => "<a href='https://github.com/dani/vroom' target='_blank'>VROOM</a> is a free software",
   "POWERED_BY"                           => "Powered by",
   "ERROR_NAME_INVALID"                   => "This name is not valid",
   "ERROR_ROOM_NAME_MISSING"              => "Vous devez fournir un nom de salon",
