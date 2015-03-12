@@ -55,6 +55,9 @@ use constant COMPONENTS => {
   },
   "bootpag" => {
     url => "http://botmonster.com/jquery-bootpag/"
+  },
+  "tocjs" => {
+    url => "https://github.com/nghuuphuoc/tocjs"
   }
 };
 

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="description" content=" <%=l 'VROOM_DESC' %>" />
   <%
-    foreach my $css (qw(bootstrap.min.css bootstrap-switch.min.css vroom.css)){
+    foreach my $css (qw(bootstrap.min.css bootstrap-switch.min.css toc-scroll.min.css vroom.css)){
   %>
   <link href="<%= $self->get_url('/') %><%= $self->get_mtime("public/css/$css") %>/css/<%= $css %>" rel="stylesheet" type="text/css">
   <% } %>
