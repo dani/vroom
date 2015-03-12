@@ -7,10 +7,10 @@
       <div id="doc-toc">
       </div>
     </div>
-    <div class="col-sm-10">
-      <h2>
+    <div class="col-sm-10" id="doc-content">
+      <h1 id="intro">
         Introduction
-      </h2>
+      </h1>
       <p>
         VROOM (short for <strong>V</strong>ideo <strong>ROOM</strong>) is a simple to use, web-based and opensource (MIT licence) video conferencing application.
         It's based on several other softwares, most notably the excellent <a href="http://simplewebrtc.com/" target="_blank">SimpleWebRTC</a> lib.
@@ -23,9 +23,9 @@
           <a href="https://vline.com/" target="_blank">vLine.com</a> for example).
         Most of them are more polished than VROOM, but I've found none entirely opensource, so I started this project.
       </p>
-      <h2>
+      <h1 id="features">
         Features
-      </h2>
+      </h1>
       <p>
         VROOM implements the following features:
         <ul>
@@ -45,13 +45,13 @@
       <p>
         VROOM is translated in French and English. You're welcome to submit patches or pull requests to enhance localization, or add new ones.
       </p>
-      <h2>
+      <h1 id="install_your_own">
         Install your own VROOM instance
-      </h2>
+      </h1>
       The following guide will help you installing VROOM on your own server
-      <h3>
+      <h2 id="requirements">
         Requirements
-      </h3>
+      </h2>
       <p>
         If you want to run your own server, you'll need the following components
         <ul>
@@ -81,15 +81,15 @@
         Also, I provide packages for all dependencies in my repository, so it'll be much easier to install it this way.
         If you have it running on another system, please send me your notes so I can update this documentation.
       </p>
-      <h3>
+      <h2 id="install_on_c7">
         Install on CentOS 7 x86_64
-      </h3>
+      </h2>
       <p class="alert alert-info">
         This guide assumes that you have installed a minimal CentOS 7 x86_64 system
       </p>
-      <h4>
+      <h3 id="c7_repo">
         Configure the required repositories
-      </h4>
+      </h3>
       <p>
         You need to configure both EPEL and FWS repo<br>
         <pre>
@@ -113,9 +113,9 @@ _EOF
 yum install epel-release
         </pre>
       </p>
-      <h4>
+      <h3 id="c7_dependencies">
         Install dependencies
-      </h4>
+      </h3>
       <p>
         The follwoing command will install everything required to run VROOM
         <pre>
@@ -125,7 +125,90 @@ yum install git tar wget httpd mod_ssl openssl mariadb-server \\
            'perl(Sesion::Token)' 'perl(Mojolicious::Plugin::Database)' 'perl(Email::Valid)' \\
            'perl(Config::Simple)' 'perl(Session::Token)' 'perl(URI)'
         </pre>
-      </p> 
+      </p>
+      <h3 id="c7_clone_git">
+        Clone the repository
+      </h3>
+      <p>
+        Lets install VROOM in <strong>/opt/vroom</strong>
+        <pre>
+cd /opt
+git clone https://github.com/dani/vroom.git
+        </pre>
+      </p>
+      <h3 id="c7_database">
+        Database
+      </h3>
+      <p>
+        A database will be used to store rooms configuration, you must enable the server.
+        <pre>
+systemctl enable mariadb.service
+systemctl start mariadb.service
+        </pre>
+        Now, create a new database for VROOM 
+        <pre>
+mysql -uroot
+        </pre>
+        <pre>
+CREATE DATABASE `vroom` CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON `vroom`.* TO 'vroom'@'localhost' IDENTIFIED BY 'MySuperPassw0rd';
+FLUSH PRIVILEGES;
+        </pre>
+      </p>
+      <p class="alert alert-info">
+        It's better to generate a long, random password here. Just write it somewhere, you'll need it later
+      </p>
+      <p>
+        Now that we have our MySQL database, we can create the tables
+        <pre>
+mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql
+        </pre>
+      </p>
+      <h3 id="c7_apache">
+        Setup Apache
+      </h3>
+      <p>
+        Two sample apache configurations are provided in the <strong>conf</strong> directory
+        <ul>
+          <li><strong>httpd_alias.conf</strong> should work out of the box, VROOM will be available at <em>https://yourservername/vroom</em></li>
+          <li><strong>httpd_vhost.conf</strong> is an alternative which you can use if you prefer working with named virtualhost (but will require additional config adjustments, especially in ssl.conf, which is out of scope for this guide)</li>
+        </ul>
+        Copy the config you want in /etc/httpd/conf.d/
+      </p>
+      <p class="alert alert-info">
+        In either case, you might want to adjust the apache configuration
+      </p>
+      <p class="alert alert-danger">
+        The admin interface of VROOM will be available on /vroom/admin (alias) or /admin (vhost) must be protected by your web server. VROOM provides no authentication at all. In the sample configuration, the access is restriucted to localhost, but you can change this to anything you want
+      </p>
+      <p>
+        You also have to make sure the <strong>mod_proxy_ws</strong> module is enabled, which is not the case by default on CentOS 7
+        <pre>
+echo "LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so" \\
+ > /etc/httpd/conf.modules.d/00-proxy_ws.conf
+        </pre>
+      </p>
+      <h3 id="c7_systemd_unit">
+        Setup systemd units
+      </h3>
+      <p>
+        Here, we'll copy the sample vroom.service unit so that systemd picks it up
+        <pre>
+cp /opt/vroom/docs/systemd/vroom.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable vroom
+        </pre>
+      </p>
+      <h2 id="config_vroom">
+        Configure VROOM
+      </h2>
+      <p>
+        Now, we just need to configure vroom itself. Just copy the sample conf file
+        <pre>
+cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini
+        </pre>
+        And edit it to your need
+      </p>
     </div>
   </div>
 </div>
