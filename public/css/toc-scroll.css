@@ -39,7 +39,7 @@
   .toc .toc-link-6 {
     padding-left: 125px; }
 
-@media screen and (min-width: 992px) and (min-height: 700px) {
+@media screen and (min-width: 992px) and (min-height: 600px) {
   .toc.affix {
     position: fixed; }
   .toc .nav > .active > ul {
