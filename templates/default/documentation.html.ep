@@ -209,6 +209,39 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini
         </pre>
         And edit it to your need
       </p>
+      <h1 id="customize">
+        Customize
+      </h1>
+      <h2 id="moh">
+        Music on hold
+      </h2>
+      <p>
+        VROOM include 5 different songs available as music on hold. If you want to add more, 
+        just drop your files in <strong>public/snd/moh</strong>. When loading the page, VROOM will
+        randomly choose one file from this directory
+      </p>
+      <h2 id="appearence">
+        Appearence
+      </h2>
+      <p>
+        If you want to customize the look and feel of VROOM, you can create your own templates.
+        To do so, just copy the existing ones
+        <pres>
+cp -a /opt/vroom/templates/default /opt/vroom/templates/my_template
+        </pres>
+        Then edit <strong>/opt/vroom/conf/settings.ini</strong> and set <kbd>template = 'my_template'</kbd>
+        Restart VROOM so the configuration change is applied
+        <pres>
+systemctl restart vroom.service
+        </pres>
+        And you can start modifying your template.
+        <p class="alert alert-danger">
+          As VROOM is still in early development, you'll have to closely follow how the default template evolve and merge the changes in your own template
+        </p>
+        <p class="alert alert-info">
+          While working on your new template, it's recommanded to switch to the <strong>morbo</strong> backend.
+        </p>
+      </p>
     </div>
   </div>
 </div>
