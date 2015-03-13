@@ -393,6 +393,126 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         </ul>
       </p>
 
+
+      <h1 id="turn_server">
+        Setup rfc5766-turn-server
+      </h1>
+      <p>
+        You can run any TURN server you want, but VROOM integrates well with <a href="https://code.google.com/p/rfc5766-turn-server/" target="_blank">rfc5766-turn-server</a>.
+        To make use of it, follow those steps
+      </p>
+
+
+      <h2 id="turn_download">
+        Download turnserver
+      </h2>
+      <p>
+        Download the latest version from <a href="http://turnserver.open-sys.org/downloads/">here</a> and extract the archive
+      </p>
+      <p class="alert alert-info">
+        Only the 3.x branch is supported
+      </p>
+
+
+      <h2 id="turn_install">
+        Install the RPMS
+      </h2>
+      <p>
+        You can now install the extracted RPMS
+        <pre>
+yum localinstall turnserver-*/*.rpm</pre>
+
+      </p>
+
+
+      <h2 id="turn_configure">
+        Configure turnserver
+      </h2>
+      <p>
+        Here's a sample configuration:
+        <pre>
+mv /etc/turnserver/turnserver.conf /etc/turnserver/turnserver.conf.default
+cat <<'EOF' > /etc/turnserver/turnserver.conf
+mysql-userdb "host=localhost dbname=vroom user=vroom password=MySuperPassw0rd connect_timeout=5"
+verbose
+syslog
+fingerprint
+lt-cred-mech
+no-sslv2
+no-sslv3
+no-tcp
+no-udp
+tls-listening-port 5349
+alt-tls-listening-port 3478
+no-loopback-peers
+no-multicast-peers
+realm vroom
+cert /etc/turnserver/cert.pem
+pkey /etc/turnserver/key.pem
+proc-user turnserver
+proc-group turnserver
+EOF</pre>
+      </p>
+      <div class="alert alert-info">
+        <ul>
+          <li>An SSL certificate is needed for everything to work correctly and securely (<strong>/etc/turnserver/cert.pem</strong> and <strong>/etc/turnserver/key.pem</strong> in this example)</li>
+          <li>Both key and certificate must be readable by turnserver user and/or group</li>
+          <li>You can comment no-tcp, no-udp and alt-tls-listening-port if you want to test without encryption</li>
+          <li>If you have intermediate(s) CA, you have to put them in the cert.pem file, but after your certificate</li>
+        </ul>
+      </div>
+
+
+      <h2 id="turn_start">
+        Enable and start turnserver
+      </h2>
+      <p>
+        You can now start and enable turnserver
+        <pre>
+systemctl enable turnserver
+systemctl start turnserver</pre>
+      </p>
+      <p>
+        You can check it's working with
+        <pre>
+journalctl -fl -u turnserver.service</pre>
+      </p>
+      <div class="alert alert-info">
+        Configuration of your firewall is out of scope for this doc, but you have to ensure the following ports are open:
+        <ul>
+          <li>TCP 3478, 3479, 5349, 5350 and 49152 to 65535</li>
+          <li>UDP 3478, 3479, 5349, 5350 and 49152 to 65535</li>
+        </ul>
+        If you use <strong>firewalld</strong> you can open the correct ports with the following commands
+        <pre>
+firewall-cmd --add-port 80/tcp \\
+             --add-port 443/tcp \\
+             --add-port 3478/tcp \\
+             --add-port 3479/tcp \\
+             --add-port 5349/tcp \\
+             --add-port 5350/tcp \\
+             --add-port 49152-65535/tcp
+firewall-cmd --add-port 3478/udp \\
+             --add-port 3479/udp \\
+             --add-port 5349/udp \\
+             --add-port 5350/udp \\
+             --add-port 49152-65535/udp
+firewall-cmd --permanent \\
+             --add-port 80/tcp \\
+             --add-port 443/tcp \\
+             --add-port 3478/tcp \\
+             --add-port 3479/tcp \\
+             --add-port 5349/tcp \\
+             --add-port 5350/tcp \\
+             --add-port 49152-65535/tcp
+firewall-cmd --permanent \\
+             --add-port 3478/udp \\
+             --add-port 3479/udp \\
+             --add-port 5349/udp \\
+             --add-port 5350/udp \\
+             --add-port 49152-65535/udp</pre>
+      </div>
+
       <h1 id="customize">
         Customize
       </h1>
