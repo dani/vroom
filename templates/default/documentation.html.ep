@@ -321,6 +321,74 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       </p>
 
 
+      <h3 id="settings_cookie">
+        cookie
+      </h3>
+      <p>
+        This section controls the cookie used for VROOM sessions. The available settings are
+        <ul>
+          <li><strong>secret</strong>: A secret passphrase to sign cookies. Must be changed !!!
+          <li><strong>name</strong>: The name of the cookie. Default is <strong>vroom</strong></li>
+        </ul>
+      </p>
+
+      <h3 id="settings_rooms">
+        rooms
+      </h3>
+      <p>
+        This section controls rooms behavior. The available settings are
+        <ul>
+          <li><strong>inactivity_timeout</strong>: The time (in minutes) after which a room without activity will be deleted</li>
+          <li><strong>reserved_inactivity_timeout</strong>: The same, but for rooms which have been reserved (owner password set).
+            You can set it to 0 if you do not want reserved room to expire</li>
+          <li><strong>common_names</strong>: a comma separated list of names you don't want anyone to be able to reserve. Rooms with
+            those names can be created, but not reserved. This is to prevent cybersquatting</li>
+          <li><strong>max_members</strong>: This is the maximum number of peer able to be in a room at the same time. You can define a limit
+            per room if you want. But the limit set here cannot be exceeded.</li>
+        </ul>
+      </p>
+
+      <h3 id="settings_logs">
+        log
+      </h3>
+      <p>
+        This section controls logging of the VROOM daemon. The following settings are available
+        <ul>
+          <li><strong>level</strong>: Set the logging level. Can be one of debug, info, warn, error or fatal</li>
+        </ul>
+      </p>
+
+      <h3 id="settings_ertherpad">
+        etherpad
+      </h3>
+      <p>
+        Controls <a href="https://github.com/ether/etherpad-lite" target="_blank">Etherpad-Lite</a> integration. The following settings are available
+        <ul>
+          <li><strong>uri</strong>: The URI to reach your Etherpad Lite instance. This instance must share the same base domaine as VROOM because
+            of the way sessions are created (Etherpad Lite sessions are created by VROOM directly and sent as a cookie to the clients)</li>
+          <li><strong>api_key</strong>: The API key of your Etherpad-Lite instance. You can find it in the file <strong>APIKEY.txt</strong> at the root
+            of your Etherpad Lite installation</li>
+          <li><strong>base_domain</strong>: This is the common part of your domain between VROOM and Etherpad-Lite. For example, if you have VROOM running
+            on https://vroom.example.net/ and Etherpad-Lite as https://pads.example.net, you'd put <kbd>base_domain = 'example.net'</kbd> here</li>
+        </ul>
+      </p>
+
+      <h3 id="settings_daemon">
+        daemon
+      </h3>
+      <p>
+        Controls how VROOM daemon behaves. The following settings are available
+        <ul>
+          <li><strong>listen_ip</strong>: This is the IP the daemon will listen on. Most of the time, you'll let <strong>127.0.0.1</strong> here as VROOM will
+            be accessed through a reverse proxy</li>
+          <li><strong>listen_port</strong>: The port VROOM daemon will bind to. Default is <strong>8090</strong>. Just be sure to adjust your reverse proxy
+            configuration if you change this.</li>
+          <li><strong>backend</strong>: The backend used to run VROOM. Can be either
+            <a href="http://mojolicio.us/perldoc/Mojo/Server/Morbo" target="_blank"><strong>morbo</strong></a> (recommended for developments) or
+            <a href="http://mojolicio.us/perldoc/Mojo/Server/Hypnotoad" target="_blank"><strong>hypnotoad</strong></a> (recommanded for production).</li>
+          <li><strong>pid_file</strong>: Where to store the PID file of VROOM daemon (has no effect when using the morbo backend)</li>
+        </ul>
+      </p>
 
       <h1 id="customize">
         Customize
