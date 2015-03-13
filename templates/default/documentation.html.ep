@@ -8,6 +8,9 @@
       </div>
     </div>
     <div class="col-sm-9" id="doc-content">
+
+
+
       <h1 id="intro">
         Introduction
       </h1>
@@ -23,6 +26,9 @@
           <a href="https://vline.com/" target="_blank">vLine.com</a> for example).
         Most of them are more polished than VROOM, but I've found none entirely opensource, so I started this project.
       </p>
+
+
+
       <h1 id="features">
         Features
       </h1>
@@ -45,10 +51,15 @@
       <p>
         VROOM is translated in French and English. You're welcome to submit patches or pull requests to enhance localization, or add new ones.
       </p>
+
+
+
       <h1 id="install_your_own">
         Install your own VROOM instance
       </h1>
       The following guide will help you installing VROOM on your own server
+
+
       <h2 id="requirements">
         Requirements
       </h2>
@@ -74,19 +85,27 @@
             </ul>
           </ul>
         </ul>
-        It's also advised to run VROOM on a systemd powered distribution (simply because that's what I use and I include service units for VROOM). For the same reason, I recommend running Apache as webserver (others like Nginx probably work too, but I provide configuration sample only for Apache)
+        It's also advised to run VROOM on a systemd powered distribution (simply because that's what I use and I include service units for VROOM). 
+        For the same reason, I recommend running Apache as webserver (others like Nginx probably work too, but I provide configuration sample only for Apache)
       </p>
-      <p>
+      <p class="alert alert-info">
+        VROOM can probably with other DB engine (like PostgreSQL) with minor modifications.
+        If you're interrested in adding support for other engines, you're welcome to help
+      </p>
+      <p class="alert alert-info">
         While VROOM should run on any distro, it's only tested on CentOS 7 x86_64, so it's the recommended platform.
         Also, I provide packages for all dependencies in my repository, so it'll be much easier to install it this way.
         If you have it running on another system, please send me your notes so I can update this documentation.
       </p>
+
+
       <h2 id="install_on_c7">
         Install on CentOS 7 x86_64
       </h2>
       <p class="alert alert-info">
         This guide assumes that you have installed a minimal CentOS 7 x86_64 system
       </p>
+
       <h3 id="c7_repo">
         Configure the required repositories
       </h3>
@@ -112,6 +131,7 @@ enablegroups=0
 _EOF
 yum install epel-release</pre>
       </p>
+
       <h3 id="c7_dependencies">
         Install dependencies
       </h3>
@@ -124,6 +144,7 @@ yum install git tar wget httpd mod_ssl openssl mariadb-server \\
            'perl(Sesion::Token)' 'perl(Mojolicious::Plugin::Database)' 'perl(Email::Valid)' \\
            'perl(Config::Simple)' 'perl(Session::Token)' 'perl(URI)'</pre>
       </p>
+
       <h3 id="c7_clone_git">
         Clone the repository
       </h3>
@@ -133,6 +154,7 @@ yum install git tar wget httpd mod_ssl openssl mariadb-server \\
 cd /opt
 git clone https://github.com/dani/vroom.git</pre>
       </p>
+
       <h3 id="c7_database">
         Database
       </h3>
@@ -157,6 +179,7 @@ FLUSH PRIVILEGES;</pre>
         <pre>
 mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
       </p>
+
       <h3 id="c7_apache">
         Setup Apache
       </h3>
@@ -164,7 +187,8 @@ mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
         Two sample apache configurations are provided in the <strong>conf</strong> directory
         <ul>
           <li><strong>httpd_alias.conf</strong> should work out of the box, VROOM will be available at <em>https://yourservername/vroom</em></li>
-          <li><strong>httpd_vhost.conf</strong> is an alternative which you can use if you prefer working with named virtualhost (but will require additional config adjustments, especially in ssl.conf, which is out of scope for this guide)</li>
+          <li><strong>httpd_vhost.conf</strong> is an alternative which you can use if you prefer working with named virtualhost 
+              (but will require additional config adjustments, especially in ssl.conf, which is out of scope for this guide)</li>
         </ul>
         Copy the config you want in /etc/httpd/conf.d/
       </p>
@@ -172,7 +196,9 @@ mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
         In either case, you might want to adjust the apache configuration
       </p>
       <p class="alert alert-danger">
-        The admin interface of VROOM will be available on /vroom/admin (alias) or /admin (vhost) must be protected by your web server. VROOM provides no authentication at all. In the sample configuration, the access is restriucted to localhost, but you can change this to anything you want
+        The admin interface of VROOM will be available on /vroom/admin (alias) or /admin (vhost) must be protected by your web server.
+        VROOM provides no authentication at all. In the sample configuration, the access is restriucted to localhost, 
+        but you can change this to anything you want
       </p>
       <p>
         You also have to make sure the <strong>mod_proxy_ws</strong> module is enabled, which is not the case by default on CentOS 7
@@ -180,6 +206,7 @@ mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
 echo "LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so" \\
  > /etc/httpd/conf.modules.d/00-proxy_ws.conf</pre>
       </p>
+
       <h3 id="c7_systemd_unit">
         Setup systemd units
       </h3>
@@ -190,6 +217,8 @@ cp /opt/vroom/docs/systemd/vroom.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable vroom</pre>
       </p>
+
+
       <h2 id="config_vroom">
         Configure VROOM
       </h2>
@@ -197,19 +226,77 @@ systemctl enable vroom</pre>
         Now, we just need to configure vroom itself. Just copy the sample conf file
         <pre>
 cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
-        And edit it to your need
+        And edit it to your need. settings.ini has plenty of comments, but here's an explanation of the different sections and settings
       </p>
+
+      <h3 id="settings_database">
+       database
+      </h3>
+      <p>
+        This section is where you define access to the database used by VROOM. The following settings are available
+        <ul>
+          <li><strong>dsn</strong>: The <strong>D</strong>ata <strong>S</strong>ource <strong>N</strong>ame for your database.
+              For example <kbd>dsn = 'DBI:mysql:database=vroom;host=localhost'</kbd>. See perl DBI documentation if you want more information</li>
+          <li><strong>user</strong>: This is the username for your database</li>
+          <li><strong>password</strong>: The password for your database</li>
+        </ul>
+      </p>
+
+      <h3 id="settings_signaling">
+       signaling
+      </h3>
+      <p>
+        This section is where you define your signaling server settings.
+        This is because VROOM was using a modified <a href="https://github.com/andyet/signalmaster">SignalMaster</a>
+        as signaling server, which could run on a separate server. Now, the signaling server is directly included in VROOM daemon
+        so this section might be removed in the future
+        <ul>
+          <li><strong>uri</strong>: The uri to reach VROOM (/socket.io will be added to reach the SocketIO server)</li>
+        </ul>
+      </p>
+
+      <h3 id="settings_turn">
+       turn
+      </h3>
+      <p>
+        This section defines which <a href="http://en.wikipedia.org/wiki/STUN" target="_blank">STUN</a> and 
+        <a href="http://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT" target="_blank">TURN</a> servers
+        will be used by the <a href="http://en.wikipedia.org/wiki/Interactive_Connectivity_Establishment" target="_blank">ICE</a> process. 
+        If you plan to use VROOM only on a local network, where each peer can connect to each others, you can just omit this part. But if you want
+        VROOM to work from anywhere, you'll need use STUN and most likely TURN too. 
+        <ul>
+          <li><strong>stun_server</strong>: The STUN server to use. For example <kbd>stun_server = 'stun:stun.l.google.com:19302'</kbd>. 
+          This must be a full STUN URI as defined by <a href="https://tools.ietf.org/html/rfc7064" target="_blank">rfc7064</a></li>
+          <li><strong>turn_server</strong>: The TURN server to use (for now you can only define one, it should be possible to define
+          several). For example <kbd>turn_server = 'turns:my-turn-server.net:5349?transport=tcp'</kbd>.
+          This must be a full STUN URI as defined by <a href="https://tools.ietf.org/html/rfc7065" target="_blank">rfc7065</a></li>
+          <li><strong>turn_user</strong> and <strong>turn_password</strong>: To use your TURN server, you'll most likely require credentials.
+          You can either enter them here. If you let this empty, VROOM assumes that you're using
+          <a href="https://code.google.com/p/rfc5766-turn-server/" target="_blank">rfc5766-turn-server</a> and will generate one user and password
+          for each room. See the Configure rfc5766-turn-server section</li>
+          <li><strong>realm</strong>: If you use rfc5766-turn-server with dynamic credentials, you must set here the realm configured in
+          <strong>/etc/turnserver/turnserver.conf</strong>
+        </ul>
+      </p>
+
+
+
+
       <h1 id="customize">
         Customize
       </h1>
+
+
       <h2 id="moh">
         Music on hold
       </h2>
       <p>
-        VROOM include 5 different songs available as music on hold. If you want to add more, 
-        just drop your files in <strong>public/snd/moh</strong>. When loading the page, VROOM will
+        VROOM includes 5 different songs available as music on hold. If you want to add more, 
+        just drop your files in <strong>public/snd/moh</strong>. When joining a room, VROOM will
         randomly choose one file from this directory
       </p>
+
+
       <h2 id="appearence">
         Appearence
       </h2>
@@ -224,15 +311,17 @@ cp -a /opt/vroom/templates/default /opt/vroom/templates/my_template</pre>
 systemctl restart vroom.service</pre>
         And you can start modifying your template.
         <p class="alert alert-danger">
-          As VROOM is still in early development, you'll have to closely follow how the default template evolve and merge the changes in your own template
+          As VROOM is still in early development, you'll have to closely follow how the default templates evolve and merge the changes in your own template
         </p>
         <p class="alert alert-info">
-          While working on your new template, it's recommanded to switch to the <strong>morbo</strong> backend.
+          While working on your new template, it's recommanded to switch to the <strong>morbo</strong> backend as templates will be 
+          reloaded automatically after each modification
         </p>
       </p>
     </div>
   </div>
 </div>
+
 %= include 'js_common'
     <script>
       $(document).ready(function() {
