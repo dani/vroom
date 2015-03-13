@@ -513,6 +513,59 @@ firewall-cmd --permanent \\
              --add-port 49152-65535/udp</pre>
       </div>
 
+
+
+      <h1 id="etherpad">
+        Etherpad-Lite integration
+      </h1>
+      <p>
+        If you want to integrate VROOM with Etherpad-Lite, you'll have to get your instance running. First, install the dependencies
+        <pre>
+yum groupinstall "Development Tools"</pre>
+        Then, Create a user, clone the repository and prepare the config
+        <pre>
+useradd etherpad
+cd /opt
+git clone https://github.com/ether/etherpad-lite.git
+chown -R etherpad:etherpad ./etherpad-lite
+cp -a etherpad-lite/settings.json.template etherpad-lite/settings.json</pre>
+      </p>
+      <div class="alert alert-info">
+        Adapt /opt/etherpad-lite/settings.json to your need. The important settings are
+        <ul>
+          <li><kbd>"requireSession" : true</kbd></li>
+          <li><kbd>"editOnly" : true</kbd></li>
+          <li><kbd>"requireAuthentication": false</kbd></li>
+        </ul>
+      </div>
+      <p>
+        Now, create a systemd unit
+        <pre>
+cat <<'_EOF' > /etc/systemd/system/etherpad.service
+[Unit]
+Description=Run Etherpad-lite, the collaborative editor.
+After=syslog.target network.target
+ 
+[Service]
+Type=simple
+ExecStart=/opt/etherpad-lite/bin/run.sh 2>$1 < /dev/null
+Restart=on-failure
+StandardOutput=syslog
+SyslogIdentifier=Etherpad-Lite
+User=etherpad
+Group=etherpad
+ 
+[Install]
+WantedBy=multi-user.target
+_EOF
+systemctl daemon-reload
+systemctl enable etherpad
+systemctl start etherpad</pre>
+        And uncomment the corresponding lines in your httpd configuration (/etc/httpd/conf.d/vroom_alias.conf or /etc/httpd/conf.d/vroom_vhost.conf)
+      </p>
+      
+
+
       <h1 id="customize">
         Customize
       </h1>
