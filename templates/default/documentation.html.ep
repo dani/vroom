@@ -105,6 +105,9 @@
       <p class="alert alert-info">
         This guide assumes that you have installed a minimal CentOS 7 x86_64 system
       </p>
+      <p class="alert alert-danger">
+        For now, VROOM requires SELinux to be disabled, or permissive. You can set this in <strong>/etc/selinux/config</strong>
+      </p>
 
       <h3 id="c7_repo">
         Configure the required repositories
