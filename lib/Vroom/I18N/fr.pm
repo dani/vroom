@@ -325,41 +325,6 @@ our %Lexicon = (
                                                    "  <li>Un navigateur web moderne</li>" .
                                                    "</ul>" .
                                                    "*: exceptés ipad et iphone",
-    "HOW_IT_WORKS"                              => "Comment ça marche ?",
-    "ABOUT_HOW_IT_WORKS"                        => "WebRTC permet d'établir des connexions directement entre les navigateurs " .
-                                                   "des participants. Cela permet d'une part d'offrir la meilleur latence possible ".
-                                                   "en évitant les allés-retours avec un serveur, ce qui est toujours important " .
-                                                   "lors de communications en temps réel. D'autre part, cela permet aussi de " .
-                                                   "garantir la confidentialité de vos communications.",
-    "SERVERLESS"                                => "Aucun serveur, vraiment ?",
-    "ABOUT_SERVERLESS"                          => "On parle de pair à pair depuis tout à l'heure. En réalité, vous avez toujours " .
-                                                   "besoin d'un serveur quelque part. Dans les applications WebRTC, le serveur " .
-                                                   "remplis plusieurs rôles:" .
-                                                   "<ol>" .
-                                                   "  <li>Le point de rendez-vous: permet à tous les participants de se " .
-                                                   "      retrouver et de s'échanger les informations nécessaires pour " .
-                                                   "      établir les connexions en direct</li>" .
-                                                   "  <li>Le client: il n'y a rien à installer sur le poste, mais votre navigateur " .
-                                                   "      doit cependant télécharger un ensembles de scripts (la majorité étant du " .
-                                                   "      JavaScript)</li>" .
-                                                   "  <li>Le signalement: certaines données sans caractère confidentiel transitent " .
-                                                   "      par ce qu'on appel le canal de signalement. Ce canal passe par un serveur. " .
-                                                   "      Cependant, ce canal ne transmet aucune information personnelle ou sensible. Il " .
-                                                   "      est par exemple utilisé pour synchroniser les couleurs associées à chaque " .
-                                                   "      participant, quand un nouveau participant arrive, quelqu'un coupe son micro " .
-                                                   "      ou encore verrouille le salon</li>" .
-                                                   "  <li>Aide aux contournements du NAT: le mechanisme " .
-                                                   "<a href='http://en.wikipedia.org/wiki/Interactive_Connectivity_Establishment'>ICE</a> " .
-                                                   "      est utilisé pour permettre aux clients derrière un NAT d'établir leurs connexions. " .
-                                                   "      Tant que c'est possible, les cannaux par lesquels les données sensibles transitent " .
-                                                   "      (appelés canaux de données) sont établis en direct, cependant, dans certaines " .
-                                                   "      situations, celà n'est pas possible. Un serveur " .
-                                                   "<a href='http://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT'>TURN</a> " .
-                                                   "      est utilisé pour relayer les données. Même dans ces situations, le serveur " .
-                                                   "      n'a pas accès aux données, il ne fait que relayer des trames " .
-                                                   "      chiffrées parfaitement inintelligibles, la confidentialité des communications " .
-                                                   "      n'est donc pas compromise (la latence sera par contre affectée)</li>".
-                                                   "</ol>",
     "WHO_IS_BEHIND_VROOM"                       => "Qui développe VROOM ?",
     "ABOUT_WHO_IS_BEHIND_VROOM"                 => "VROOM a démarré comme un simple projet personnel, développé par une seule personne " .
                                                    "(Daniel Berteaud) sur mon temps libre. Ce projet n'en serait pas " .

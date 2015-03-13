@@ -53,6 +53,26 @@
       </p>
 
 
+      <h1 id="how_it_works">
+        How it works
+      </h1>
+      <p>
+        WebRTC allows browsers to browsers direct connections. This allows the best latency as it avoids round trip through a server,
+        which is important with real time communications. But it also ensures the privacy of your communications. VROOM takes advantage of those
+        new WebRTC technologies, and does the following:
+        <ul>
+          <li>When a client joins a room, it establishes a Websocket link to VROOM. This is called the signaling channel. With this, all peers are able
+              to exchange small messages between them. But messages sent through this channels is routed through VROOM server, so it's not yet peer to peer</li>
+          <li>When a second peer joins the same room, he get through this signaling channel informations about how to connedct directly to the other one</li>*
+          <li>Now, both peer exchange their video and audio stream directly</li>
+          <li>The signaling channel stays open and is used to transmit non sensitive informations (peer colors synchronization, notification of muting/kicking etc...)</li>
+          <li>Everything else (audio/video/text chat) is sent through data channels
+        </ul>
+      </p>
+      <div class="alert alert-info">
+        As long as possible, data channels are established directly between peers, but in some situations, this is not possible. In those case
+        data streams are relayed through a TURN server
+      </div>
 
       <h1 id="install_your_own">
         Install your own VROOM instance

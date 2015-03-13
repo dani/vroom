@@ -307,30 +307,6 @@ our %Lexicon = (
                                             "  <li>A web browser</li>" .
                                             "</ul>" .
                                             "*: except iPad and iPhone",
-  "HOW_IT_WORKS"                         => "How it works ?",
-  "ABOUT_HOW_IT_WORKS"                   => "WebRTC allows browsers to browsers direct connections. This allows the best latency " .
-                                            "as it avoids round trip through a server, which is important with real time communications. " .
-                                            "But it also ensures the privacy of your communications.",
-  "SERVERLESS"                           => "Serverless, really ?",
-  "ABOUT_SERVERLESS"                     => "We're talking about peer to peer, but, in reality, a server is still needed somewhere" .
-                                            "In WebRTC applications, server fulfil several roles: " .
-                                            "<ol>" .
-                                            "  <li>A meeting point: lets clients exchange each other the needed information to establish peer to peers connections</li>" .
-                                            "  <li>Provides the client! you don't have anything to install, but your browser still need to download a few scripts" .
-                                            "      (the core is written in JavaScript)</li>" .
-                                            "  <li>Signaling: some data without any confidential or private meaning are sent through " .
-                                            "      what we call the signaling channel. This channel is routed through a server. However, " .
-                                            "      this channel doesn't transport any sensible information. It's used for example to " .
-                                            "      sync colors between peers, notify when someone join the room, when someone mute his mic " .
-                                            "      or when the rooom is locked</li>" .
-                                            "  <li>NAT traversal helper: the <a href='http://en.wikipedia.org/wiki/Interactive_Connectivity_Establishment'>ICE</a> " .
-                                            "      mechanism is used to allow clients behind a NAT router to establish their connections. " .
-                                            "      As long as possible, channels through which sensible informations are sent (called data channels) " .
-                                            "      are established peer to peer, but in some situations, this is not possible. A  " .
-                                            "<a href='http://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT'>TURN</a> server is used to relay data. " .
-                                            "      But even in those cases, the server only relays ciphered packets, and has no access to the data " .
-                                            "      so confidentiality is not compromised (only latency will be affected)</li>".
-                                            "</ol>",
   "WHO_IS_BEHIND_VROOM"                  => "Who's behind VROOM ?",
   "ABOUT_WHO_IS_BEHIND_VROOM"            => "VROOM started as a simple personal project, developped by a single person " .
                                             "(Daniel Berteaud) on my spare time. This project wouldn't be that far without my employer " .

@@ -14,30 +14,6 @@
       </p>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <%=l 'HOW_IT_WORKS' %>
-      </h3>
-    </div>
-    <div class="panel-body">
-      <p>
-        <%==l 'ABOUT_HOW_IT_WORKS' %>
-      </p>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <%=l 'SERVERLESS' %>
-      </h3>
-    </div>
-    <div class="panel-body">
-      <p>
-        <%==l 'ABOUT_SERVERLESS' %>
-      </p>
-    </div>
-  </div>
   <% if ($config->{'interface.demo'}){ %>
   <div class="panel panel-default">
     <div class="panel-heading">
