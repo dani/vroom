@@ -88,26 +88,26 @@
         It's also advised to run VROOM on a systemd powered distribution (simply because that's what I use and I include service units for VROOM). 
         For the same reason, I recommend running Apache as webserver (others like Nginx probably work too, but I provide configuration sample only for Apache)
       </p>
-      <p class="alert alert-info">
+      <div class="alert alert-info">
         VROOM can probably with other DB engine (like PostgreSQL) with minor modifications.
         If you're interrested in adding support for other engines, you're welcome to help
-      </p>
-      <p class="alert alert-info">
+      </div>
+      <div class="alert alert-info">
         While VROOM should run on any distro, it's only tested on CentOS 7 x86_64, so it's the recommended platform.
         Also, I provide packages for all dependencies in my repository, so it'll be much easier to install it this way.
         If you have it running on another system, please send me your notes so I can update this documentation.
-      </p>
+      </div>
 
 
       <h2 id="install_on_c7">
         Install on CentOS 7 x86_64
       </h2>
-      <p class="alert alert-info">
+      <div class="alert alert-info">
         This guide assumes that you have installed a minimal CentOS 7 x86_64 system
-      </p>
-      <p class="alert alert-danger">
+      </div>
+      <div class="alert alert-danger">
         For now, VROOM requires SELinux to be disabled, or permissive. You can set this in <strong>/etc/selinux/config</strong>
-      </p>
+      </div>
 
       <h3 id="c7_repo">
         Configure the required repositories
@@ -174,9 +174,9 @@ CREATE DATABASE `vroom` CHARACTER SET utf8 COLLATE utf8_general_ci;
 GRANT ALL PRIVILEGES ON `vroom`.* TO 'vroom'@'localhost' IDENTIFIED BY 'MySuperPassw0rd';
 FLUSH PRIVILEGES;</pre>
       </p>
-      <p class="alert alert-info">
+      <div class="alert alert-info">
         It's better to generate a long, random password here. Just write it somewhere, you'll need it later
-      </p>
+      </div>
       <p>
         Now that we have our MySQL database, we can create the tables
         <pre>
@@ -195,14 +195,14 @@ mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
         </ul>
         Copy the config you want in /etc/httpd/conf.d/
       </p>
-      <p class="alert alert-info">
+      <div class="alert alert-info">
         In either case, you might want to adjust the apache configuration
-      </p>
-      <p class="alert alert-danger">
+      </div>
+      <div class="alert alert-danger">
         The admin interface of VROOM will be available on /vroom/admin (alias) or /admin (vhost) must be protected by your web server.
         VROOM provides no authentication at all. In the sample configuration, the access is restriucted to localhost, 
         but you can change this to anything you want
-      </p>
+      </div>
       <p>
         You also have to make sure the <strong>mod_proxy_ws</strong> module is enabled, which is not the case by default on CentOS 7
         <pre>
@@ -409,9 +409,9 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       <p>
         Download the latest version from <a href="http://turnserver.open-sys.org/downloads/">here</a> and extract the archive
       </p>
-      <p class="alert alert-info">
+      <div class="alert alert-info">
         Only the 3.x branch is supported
-      </p>
+      </div>
 
 
       <h2 id="turn_install">
@@ -541,13 +541,13 @@ cp -a /opt/vroom/templates/default /opt/vroom/templates/my_template</pre>
         <pre>
 systemctl restart vroom.service</pre>
         And you can start modifying your template.
-        <p class="alert alert-danger">
+        <div class="alert alert-danger">
           As VROOM is still in early development, you'll have to closely follow how the default templates evolve and merge the changes in your own template
-        </p>
-        <p class="alert alert-info">
+        </div>
+        <div class="alert alert-info">
           While working on your new template, it's recommanded to switch to the <strong>morbo</strong> backend as templates will be 
           reloaded automatically after each modification
-        </p>
+        </div>
       </p>
     </div>
   </div>
