@@ -279,6 +279,46 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         </ul>
       </p>
 
+      <h3 id="settings_video">
+        video
+      </h3>
+      <p>
+        This section is for video quality settings. the available settings are
+        <ul>
+          <li><strong>frame_rate</strong>: Number of frames per seconds for webcam streams. A bigger number will provide a better quality stream
+          but will also require more bandwidth and CPU on each peer. The default is 15 fps
+        </ul>
+      </p>
+
+      <h3 id="settings_email">
+        email
+      </h3>
+      <p>
+        This section is for emails sent by VROOM (invitations, notifications, feedback form etc...). The available settings are
+        <ul>
+          <li><strong>from</strong>: The address used in the From field of emails sent by VROOM.</li>
+          <li><strong>contact</strong>: The email address which will get feedback form submissions.</li>
+          <li><strong>sendmail</strong>: The path to the sendmail compatible binary to use (default is /usr/bin/sendmail and will probably won'd need to be changed)</li>
+        </ul>
+      </p>
+
+      <h3 id="settings_interface">
+        interface
+      </h3>
+      <p>
+        This section controls the web interface. The available settings are
+        <ul>
+          <li><strong>powered_by</strong>: will be displayed in the footer. You can put HTML code here.</li>
+          <li><strong>template</strong>: The name of the template to use. Must be a directory under <strong>template</strong>. The default, 
+          and only tempalte provided is called <strong>default</strong>. But you can copy it and customize it to your taste</li>
+          <li><strong>chrome_extension_id</strong>: This is the ID of the Chrome extension proposed to clients when trying to share screen for the first time
+          (obviously, only for Chrome users). The reason this is configurable is because the extension requires the allowed websites to be listed.
+          Two extensions are provided, the default (ecicdpoejfllflombfanbhfpgcimjddn) will work everywhere but allow to capture screen on any website,
+          which can be a security risk. The other extension (lfkdfilifapafomlhaaihfdglamkmdme) only works on <a href="https://vroom.im" target="_blank">https://vroom.im</a>.
+          You can create your own extension which will only work for your site, and submit it to Google Chrome Store if you want.</li>
+          <li><strong>demo</strong>: If enabled, a few more pages and elements will be displayed, like the documentation you're reading right now.</li>
+        </ul>
+      </p>
 
 
 
