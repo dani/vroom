@@ -39,7 +39,7 @@
           <li>Text chat (and you can save history)</li>
           <li>Screen sharing</li>
           <li>Email invitations</li>
-          <li>Email notification when someone joins one of your rooms</li>
+          <li>Email notifications when someone joins one of your rooms</li>
           <li>Persistent/reserved rooms</li>
           <li>Chairman functionnalities (mute/pause/kick other peers)</li>
           <li>Grant chairman role to other peers</li>
@@ -49,7 +49,7 @@
         </ul>
       </p>
       <p>
-        VROOM is translated in French and English. You're welcome to submit patches or pull requests to enhance localization, or add new ones.
+        VROOM is available in French and English. You're welcome to submit patches or pull requests to enhance localization, or add new ones.
       </p>
 
 
@@ -57,20 +57,20 @@
         How it works
       </h1>
       <p>
-        WebRTC allows browsers to browsers direct connections. This allows the best latency as it avoids round trip through a server,
+        WebRTC allows browsers to browsers direct connections. This provides the best latency as it avoids round trip through a server,
         which is important with real time communications. But it also ensures the privacy of your communications. VROOM takes advantage of those
         new WebRTC technologies, and does the following:
         <ul>
           <li>When a client joins a room, it establishes a Websocket link to VROOM. This is called the signaling channel. With this, all peers are able
               to exchange small messages between them. But messages sent through this channels is routed through VROOM server, so it's not yet peer to peer</li>
-          <li>When a second peer joins the same room, he get through this signaling channel informations about how to connedct directly to the other one</li>*
+          <li>When a second peer joins the same room, he gets through this signaling channel informations about how to connect directly to the other one(s)</li>
           <li>Now, both peer exchange their video and audio stream directly</li>
           <li>The signaling channel stays open and is used to transmit non sensitive informations (peer colors synchronization, notification of muting/kicking etc...)</li>
           <li>Everything else (audio/video/text chat) is sent through data channels
         </ul>
       </p>
       <div class="alert alert-info">
-        As long as possible, data channels are established directly between peers, but in some situations, this is not possible. In those case
+        As long as possible, data channels are established directly between peers, but in some situations, this is not possible (NAT, firewalls etc...). In those case
         data streams are relayed through a TURN server
       </div>
 
@@ -109,7 +109,7 @@
         For the same reason, I recommend running Apache as webserver (others like Nginx probably work too, but I provide configuration sample only for Apache)
       </p>
       <div class="alert alert-info">
-        VROOM can probably with other DB engine (like PostgreSQL) with minor modifications.
+        VROOM can probably work with other DB engine (like PostgreSQL) with minor modifications.
         If you're interrested in adding support for other engines, you're welcome to help
       </div>
       <div class="alert alert-info">
@@ -210,7 +210,7 @@ mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
         Two sample apache configurations are provided in the <strong>conf</strong> directory
         <ul>
           <li><strong>httpd_alias.conf</strong> should work out of the box, VROOM will be available at <em>https://yourservername/vroom</em></li>
-          <li><strong>httpd_vhost.conf</strong> is an alternative which you can use if you prefer working with named virtualhost 
+          <li><strong>httpd_vhost.conf</strong> is an alternative which you can use if you prefer working with named virtualhosts 
               (but will require additional config adjustments, especially in ssl.conf, which is out of scope for this guide)</li>
         </ul>
         Copy the config you want in /etc/httpd/conf.d/
@@ -219,8 +219,8 @@ mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
         In either case, you might want to adjust the apache configuration
       </div>
       <div class="alert alert-danger">
-        The admin interface of VROOM will be available on /vroom/admin (alias) or /admin (vhost) must be protected by your web server.
-        VROOM provides no authentication at all. In the sample configuration, the access is restriucted to localhost, 
+        The admin interface of VROOM will be available on /vroom/admin (alias) or /admin (vhost) and <strong>must</strong> be protected by your web server.
+        VROOM provides <strong>no authentication at all</strong>. In the sample configuration, the access is restricted to localhost, 
         but you can change this to anything you want
       </div>
       <p>
@@ -286,7 +286,7 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         <a href="http://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT" target="_blank">TURN</a> servers
         will be used by the <a href="http://en.wikipedia.org/wiki/Interactive_Connectivity_Establishment" target="_blank">ICE</a> process. 
         If you plan to use VROOM only on a local network, where each peer can connect to each others, you can just omit this part. But if you want
-        VROOM to work from anywhere, you'll need use STUN and most likely TURN too. 
+        VROOM to work from anywhere, you'll need use STUN and most likely TURN too.
         <ul>
           <li><strong>stun_server</strong>: The STUN server to use. For example <kbd>stun_server = 'stun:stun.l.google.com:19302'</kbd>. 
           This must be a full STUN URI as defined by <a href="https://tools.ietf.org/html/rfc7064" target="_blank">rfc7064</a></li>
@@ -321,7 +321,7 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         <ul>
           <li><strong>from</strong>: The address used in the From field of emails sent by VROOM.</li>
           <li><strong>contact</strong>: The email address which will get feedback form submissions.</li>
-          <li><strong>sendmail</strong>: The path to the sendmail compatible binary to use (default is /usr/bin/sendmail and will probably won'd need to be changed)</li>
+          <li><strong>sendmail</strong>: The path to the sendmail compatible binary to use (default is /usr/bin/sendmail and will probably won't need to be changed)</li>
         </ul>
       </p>
 
@@ -332,11 +332,11 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         This section controls the web interface. The available settings are
         <ul>
           <li><strong>powered_by</strong>: will be displayed in the footer. You can put HTML code here.</li>
-          <li><strong>template</strong>: The name of the template to use. Must be a directory under <strong>template</strong>. The default, 
-          and only tempalte provided is called <strong>default</strong>. But you can copy it and customize it to your taste</li>
+          <li><strong>template</strong>: The name of the template to use. Must be a directory under <strong>templates</strong>. The default, 
+          and only template provided is called <strong>default</strong>. But you can copy it and customize it to your needs</li>
           <li><strong>chrome_extension_id</strong>: This is the ID of the Chrome extension proposed to clients when trying to share screen for the first time
           (obviously, only for Chrome users). The reason this is configurable is because the extension requires the allowed websites to be listed.
-          Two extensions are provided, the default (ecicdpoejfllflombfanbhfpgcimjddn) will work everywhere but allow to capture screen on any website,
+          Two extensions are provided, the default (ecicdpoejfllflombfanbhfpgcimjddn) will work everywhere but allows screen capture on any website,
           which can be a security risk. The other extension (lfkdfilifapafomlhaaihfdglamkmdme) only works on <a href="https://vroom.im" target="_blank">https://vroom.im</a>.
           You can create your own extension which will only work for your site, and submit it to Google Chrome Store if you want.</li>
           <li><strong>demo</strong>: If enabled, a few more pages and elements will be displayed, like the documentation you're reading right now.</li>
@@ -366,7 +366,7 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
             You can set it to 0 if you do not want reserved room to expire</li>
           <li><strong>common_names</strong>: a comma separated list of names you don't want anyone to be able to reserve. Rooms with
             those names can be created, but not reserved. This is to prevent cybersquatting</li>
-          <li><strong>max_members</strong>: This is the maximum number of peer able to be in a room at the same time. You can define a limit
+          <li><strong>max_members</strong>: This is the maximum number of peers able to be in a room at the same time. You can define a limit
             per room if you want. But the limit set here cannot be exceeded.</li>
         </ul>
       </p>
@@ -377,7 +377,8 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       <p>
         This section controls logging of the VROOM daemon. The following settings are available
         <ul>
-          <li><strong>level</strong>: Set the logging level. Can be one of debug, info, warn, error or fatal</li>
+          <li><strong>level</strong>: Set the logging level. Can be one of <strong>debug</strong>, <strong>info</strong>, <strong>warn</strong>,
+            <strong>error</strong> or <strong>fatal</strong></li>
         </ul>
       </p>
 
@@ -387,7 +388,7 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       <p>
         Controls <a href="https://github.com/ether/etherpad-lite" target="_blank">Etherpad-Lite</a> integration. The following settings are available
         <ul>
-          <li><strong>uri</strong>: The URI to reach your Etherpad Lite instance. This instance must share the same base domaine as VROOM because
+          <li><strong>uri</strong>: The URI to reach your Etherpad Lite instance. This instance must share the same base domain as VROOM because
             of the way sessions are created (Etherpad Lite sessions are created by VROOM directly and sent as a cookie to the clients)</li>
           <li><strong>api_key</strong>: The API key of your Etherpad-Lite instance. You can find it in the file <strong>APIKEY.txt</strong> at the root
             of your Etherpad Lite installation</li>
