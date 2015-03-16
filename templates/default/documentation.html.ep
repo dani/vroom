@@ -101,6 +101,7 @@
               <li>URI</li>
               <li>Protocol::SocketIO::Handshake</li>
               <li>Protocol::SocketIO::Message</li>
+              <li>Data::Dumper</li>
             </ul>
           </ul>
         </ul>
