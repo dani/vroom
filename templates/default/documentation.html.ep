@@ -288,15 +288,16 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         If you plan to use VROOM only on a local network, where each peer can connect to each others, you can just omit this part. But if you want
         VROOM to work from anywhere, you'll need use STUN and most likely TURN too.
         <ul>
-          <li><strong>stun_server</strong>: The STUN server to use. For example <kbd>stun_server = 'stun:stun.l.google.com:19302'</kbd>. 
-          This must be a full STUN URI as defined by <a href="https://tools.ietf.org/html/rfc7064" target="_blank">rfc7064</a></li>
-          <li><strong>turn_server</strong>: The TURN server to use (for now you can only define one, it should be possible to define
-          several). For example <kbd>turn_server = 'turns:my-turn-server.net:5349?transport=tcp'</kbd>.
-          This must be a full STUN URI as defined by <a href="https://tools.ietf.org/html/rfc7065" target="_blank">rfc7065</a></li>
+          <li><strong>stun_server</strong>: The STUN server(s) to use. For example*
+            <kbd>stun_server = 'stun:stun.l.google.com:19302','stun:vroom.example.net:3478'</kbd>. 
+          This must be a comma separated list of full STUN URI as defined by <a href="https://tools.ietf.org/html/rfc7064" target="_blank">rfc7064</a></li>
+          <li><strong>turn_server</strong>: The TURN server(s) to use. For example
+            <kbd>turn_server = 'turns:vroom.example.net:5349','turns:vroom.example.net:5349?transport=tcp'</kbd>.
+          This must be a comma separated list of full STUN URI as defined by <a href="https://tools.ietf.org/html/rfc7065" target="_blank">rfc7065</a></li>
           <li><strong>turn_user</strong> and <strong>turn_password</strong>: To use your TURN server, you'll most likely require credentials.
           You can either enter them here. If you let this empty, VROOM assumes that you're using
           <a href="https://code.google.com/p/rfc5766-turn-server/" target="_blank">rfc5766-turn-server</a> and will generate one user and password
-          for each room. See the Configure rfc5766-turn-server section</li>
+          for each room. See the Configure rfc5766-turn-server section. Note that the same credentials will be used for every TURN server you define</li>
           <li><strong>realm</strong>: If you use rfc5766-turn-server with dynamic credentials, you must set here the realm configured in
           <strong>/etc/turnserver/turnserver.conf</strong>
         </ul>

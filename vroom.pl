@@ -1708,9 +1708,7 @@ any '/api' => sub {
     my $resp = {
       url => $config->{'signaling.uri'},
       peerConnectionConfig => {
-        iceServers => [{
-          url => $config->{'turn.stun_server'} 
-        }]
+        iceServers => []
       },
       autoRequestMedia => Mojo::JSON::true,
       enableDataChannels => Mojo::JSON::true,
@@ -1736,18 +1734,30 @@ any '/api' => sub {
         muted => Mojo::JSON::true
       }
     };
-    # TODO: Support several TURN server in config
+    if ($config->{'turn.stun_server'}){
+      if (ref $config->{'turn.stun_server'} ne 'ARRAY'){
+        $config->{'turn.stun_server'} = [ $config->{'turn.stun_server'} ];
+      }
+      foreach my $s (@{$config->{'turn.stun_server'}}){
+        push @{$resp->{peerConnectionConfig}->{iceServers}}, { url => $s };
+      }
+    }
     if ($config->{'turn.turn_server'}){
-      my $turn = { url => $config->{'turn.turn_server'} };
-      if ($config->{'turn.turn_user'} && $config->{'turn.turn_password'}){
-        $turn->{username}   = $config->{'turn.turn_user'};
-        $turn->{credential} = $config->{'turn.turn_password'};
+      if (ref $config->{'turn.turn_server'} ne 'ARRAY'){
+        $config->{'turn.turn_server'} = [ $config->{'turn.turn_server'} ];
       }
-      else{
-        $turn->{username}   = $room->{name};
-        $turn->{credential} = $room->{token};
+      foreach my $t (@{$config->{'turn.turn_server'}}){
+        my $turn = { url => $t };
+        if ($config->{'turn.turn_user'} && $config->{'turn.turn_password'}){
+          $turn->{username}   = $config->{'turn.turn_user'};
+          $turn->{credential} = $config->{'turn.turn_password'};
+        }
+        else{
+          $turn->{username}   = $room->{name};
+          $turn->{credential} = $room->{token};
+        }
+        push @{$resp->{peerConnectionConfig}->{iceServers}}, $turn;
       }
-      push @{$resp->{peerConnectionConfig}->{iceServers}}, $turn;
     }
     return $self->render(
       json => {

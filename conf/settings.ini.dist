@@ -9,9 +9,11 @@
 ;uri = 'https://vroom.exmple.com'
 
 [turn]
-; The stun server sent to client. You can set it to your own stun server. Takes a full stun uri as defined by rfc7064
-;stun_server = 'stun:stun.l.google.com:19302'
-; The turn server sent to cliet, you should set it to your own server. Takes a full turn uri as defined by rfc7065
+; The stun server sent to client. You can set it to your own stun server. Takes a comma separated list of full 
+; stun uri as defined by rfc7064
+;stun_server = 'stun:stun.l.google.com:19302','stun:vroom.example.net:3478'
+; The turn server sent to cliet, you should set it to your own server. Takes a comma separated list of full
+; turn uri as defined by rfc7065
 ;turn_server = 'turns:my-turn-server.net:5349?transport=tcp'
 ; You can use fixed username/login to access turn. If you omit this, VROOM will generate credentials on the fly
 ; for rfc5766-turn-server in its database
