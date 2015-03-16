@@ -1,5 +1,5 @@
     <%
-      foreach my $js (qw(simplewebrtc.bundle.js jquery.browser.min.js sprintf.js FileSaver.js jquery.tinytimer.min.js etherpad.js)){
+      foreach my $js (qw(simplewebrtc.bundle.js jquery.browser.min.js sprintf.js FileSaver.min.js jquery.tinytimer.min.js etherpad.js)){
     %>
     <script type="text/javascript" src="<%= $self->get_url('/') %><%= $self->get_mtime("public/js/$js") %>/js/<%= $js %>"></script>
     <% } %>
