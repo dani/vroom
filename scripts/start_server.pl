@@ -19,7 +19,7 @@ $config->{'daemon.backend'}     ||= 'hypnotoad';
 $ENV{'PERL5LIB'} = 'lib';
 
 if ($config->{'daemon.backend'} eq 'morbo'){
-  exec ('/usr/bin/morbo', '-l', 'http://' . $config->{'daemon.listen_ip'} . ':' . $config->{'daemon.listen_port'}, '-v', 'vroom.pl');
+  exec ('/usr/bin/morbo', '-l', 'http://' . $config->{'daemon.listen_ip'} . ':' . $config->{'daemon.listen_port'}, '-w', 'conf/settings.ini', '-v', 'vroom.pl');
 }
 else{
   exec ('/usr/bin/hypnotoad', '-f', 'vroom.pl');
