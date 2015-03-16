@@ -16,7 +16,6 @@
       </h1>
       <p>
         VROOM (short for <strong>V</strong>ideo <strong>ROOM</strong>) is a simple to use, web-based and opensource (MIT licence) video conferencing application.
-        It's based on several other softwares, most notably the excellent <a href="http://simplewebrtc.com/" target="_blank">SimpleWebRTC</a> lib.
       </p>
       <p>
         VROOM uses the latest WebRTC technologies to allow video conferencing through a web browser without any plugin.
