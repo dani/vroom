@@ -238,7 +238,7 @@ our %Lexicon = (
     "ERROR_MAIL_INVALID"                        => "Veuillez saisir une adresse email valide",
     "SCREEN_s"                                  => "Écran de %s",
     "BROWSER_NOT_SUPPORTED"                     => "Navigateur non supporté",
-    "NO_WEBRTC_SUPPORT"                         => "Désolé, la vidéo conférence ne fonctionnera pas (ou pas correctement) car votre navigateur " .
+    "NO_WEBRTC_SUPPORT"                         => "Désolé, la vidéo conférence ne fonctionnera pas car votre navigateur " .
                                                    "ne dispose pas des fonctions nécessaires.",
     "DOWNLOAD_ONE_OF_THESE_BROWSERS"            => "Nous recommandons de télécharger un des navigateurs suivants, qui supportent les dernières " .
                                                    "technologies nécessaires à l'utilisation de VROOM",
