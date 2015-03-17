@@ -1743,7 +1743,7 @@ any '/api' => sub {
   # Return configuration for SimpleWebRTC
   elsif ($req->{action} eq 'get_rtc_conf'){
     my $resp = {
-      url => $config->{'signaling.uri'},
+      url => Mojo::URL->new($self->url_for('/')->to_abs)->scheme('https'),
       peerConnectionConfig => {
         iceServers => []
       },

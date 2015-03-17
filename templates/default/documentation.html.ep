@@ -280,19 +280,6 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         </ul>
       </p>
 
-      <h3 id="settings_signaling">
-       signaling
-      </h3>
-      <p>
-        This section is where you define your signaling server settings.
-        This is because VROOM was using a modified <a href="https://github.com/andyet/signalmaster">SignalMaster</a>
-        as signaling server, which could run on a separate server. Now, the signaling server is directly included in VROOM daemon
-        so this section might be removed in the future
-        <ul>
-          <li><strong>uri</strong>: The uri to reach VROOM (/socket.io will be added to reach the SocketIO server)</li>
-        </ul>
-      </p>
-
       <h3 id="settings_turn">
        turn
       </h3>

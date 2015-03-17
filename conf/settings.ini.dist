@@ -4,10 +4,6 @@
 ;user = 'vroom'
 ;password = 'password'
 
-[signaling]
-; URI sent to clients where they can find the signaling server
-;uri = 'https://vroom.exmple.com'
-
 [turn]
 ; The stun server sent to client. You can set it to your own stun server. Takes a comma separated list of full 
 ; stun uri as defined by rfc7064
