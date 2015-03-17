@@ -232,19 +232,6 @@ a.popup>span {
   float: left;
   position: absolute;
 }
-#toolBar {
-  padding-top: 15px;
-  margin-right: 100px;
-  min-height: 60px;
-}
-#forkMeRibbon {
-  position: absolute;
-  top: 0;
-  right: 0;
-  border: 0;
-  width: 149px;
-  height: 149px;
-}
 .carouselLogo {
   margin: auto;
   padding: 20px;
@@ -278,6 +265,7 @@ a.popup>span {
 }
 .toc {
   overflow-y: auto;
+  margin-top: 20px;
 }
 html {
   height: 100%;
