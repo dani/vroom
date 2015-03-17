@@ -233,11 +233,11 @@ helper create_room => sub {
                           VALUES (?,
                                   CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
                                   CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
-                                  ?');
+                                  ?)');
   };
   $sth->execute(
     $name,
-    $owner,
+    $owner
   );
   $self->app->log->info("Room $name created by " . $self->session('name'));
   # Etherpad integration ? If so, create the corresponding pad
