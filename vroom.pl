@@ -64,9 +64,6 @@ $config->{'daemon.backend'}                    ||= 'hypnotoad';
 $config->{'daemon.log_level'}                  ||= 'warn';
 $config->{'daemon.pid_file'}                   ||= '/tmp/vroom.pid';
 
-# Set log level
-app->log->level($config->{'daemon.log_level'});
-
 # Create etherpad api client if required
 our $ec = undef;
 if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key'} ne ''){
@@ -2141,6 +2138,8 @@ app->config(
   }
 );
 
+# Set log level
+app->log->level($config->{'daemon.log_level'});
 app->log->info('Starting VROOM daemon');
 # And start, lets VROOM !!
 app->start;
