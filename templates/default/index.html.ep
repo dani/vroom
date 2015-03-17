@@ -8,7 +8,7 @@
     <h1 class="text-center">
       <%=l 'CREATE_ROOM' %>
     </h1>
-    <form id="createRoom" class="form-horizontal" action="<%= $self->get_url('/create') %>" method="post">
+    <form id="createRoom" class="form-horizontal">
       <fieldset>
         <div class="input-group input-group-lg">
           <span class="input-group-addon hidden-xs">
