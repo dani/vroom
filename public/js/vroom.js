@@ -1490,7 +1490,7 @@ function initVroom(room) {
   // When we joined the room
   webrtc.on('joinedRoom', function(){
     // Check if sound is detected and warn if it hasn't
-    if (window.webkitAudioContext || window.AudioContext){
+    if (window.AudioContext){
       setTimeout(function (){
         if (maxVol < -80){
           $.notify(locale.NO_SOUND_DETECTED, {
