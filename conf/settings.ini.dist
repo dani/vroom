@@ -73,10 +73,6 @@ credentials = 'rest'
 ; This is the upper limit, you can set a different limit per room
 ;max_members = 0
 
-[log]
-; Verbosity of the web interface. Can be debug, info, warn, error or fatal
-;level = 'warn'
-
 [etherpad]
 ; If you want to enabled etherpad-lite integratio, you must set
 ; the uri of your instance, and the API key
@@ -94,5 +90,7 @@ credentials = 'rest'
 ; server backend. Can be either morbo (DEV) or hypnotoad (PROD)
 ; default is hypnotoad
 ;backend = 'hypnotoad'
+; Log level of the daemon. Can be debug, info, warn, error or fatal
+; log_level = 'warn'
 ; PID file, only used if backend is hypnotoad
 ;pid_file = '/tmp/vroom.pid'

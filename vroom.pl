@@ -55,17 +55,17 @@ $config->{'rooms.inactivity_timeout'}          ||= 60;
 $config->{'rooms.reserved_inactivity_timeout'} ||= 86400;
 $config->{'rooms.common_names'}                ||= '';
 $config->{'rooms.max_members'}                 ||= 0;
-$config->{'log.level'}                         ||= 'info';
 $config->{'etherpad.uri'}                      ||= '';
 $config->{'etherpad.api_key'}                  ||= '';
 $config->{'etherpad.base_domain'}              ||= '';
 $config->{'daemon.listen_ip'}                  ||= '127.0.0.1';
 $config->{'daemon.listen_port'}                ||= '8090';
 $config->{'daemon.backend'}                    ||= 'hypnotoad';
+$config->{'daemon.log_level'}                  ||= 'warn';
 $config->{'daemon.pid_file'}                   ||= '/tmp/vroom.pid';
 
 # Set log level
-app->log->level($config->{'log.level'});
+app->log->level($config->{'daemon.log_level'});
 
 # Create etherpad api client if required
 our $ec = undef;
