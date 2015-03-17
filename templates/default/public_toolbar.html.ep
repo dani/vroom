@@ -7,7 +7,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <img id="navBarLogo" src="<%= $self->get_url('/') %>img/logo_vroom_alpha.png" class="hidden-xs"/>
+        %= image '/img/logo_vroom_alpha.png', id => "navBarLogo", class => "hidden-xs"
       </div>
       <div class="collapse navbar-collapse" id="toolbar">
         <ul class="nav navbar-nav navbar-right">

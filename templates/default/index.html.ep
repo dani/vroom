@@ -72,7 +72,7 @@
         </ol>
         <div id="carouselIndexContent" class="carousel-inner">
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/lock.png" alt="<%=l 'SECURE' %>">
+            %= image '/img/lock.png', alt => $self->l('SECURE'), class => "img-responsive carouselLogo"
             <p>
               <%=l 'P2P_COMMUNICATION' %>
             </p>
@@ -83,7 +83,7 @@
             </div>
           </div>
           <div class="item active carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/universal.png" alt="<%=l 'WORKS_EVERYWHERE' %>">
+            %= image '/img/universal.png', alt => $self->l('WORKS_EVERYWHERE'), class => "img-responsive carouselLogo"
             <p>
               <%=l 'MODERN_BROWSERS' %>
             </p>
@@ -94,7 +94,7 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/multi.png" alt="<%=l 'MULTI_USER' %>">
+            %= image '/img/multi.png', alt => $self->l('MULTI_USER'), class => "img-responsive carouselLogo"
             <p>
               <%=l 'THE_LIMIT_IS_YOUR_PIPE' %>
             </p>
@@ -105,7 +105,7 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/signin.png" alt="<%=l 'NO_SIGNIN' %>">
+            %= image '/img/signin.png', alt => $self->l('NO_SIGNIN'), class => "img-responsive carouselLogo"
             <p>
               <%=l 'YOU_DONT_HAVE_TO_REGISTER' %>
             </p>
@@ -116,7 +116,7 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/clock.png" alt="<%=l 'QUICK' %>">
+            %= image '/img/clock.png', alt => $self->l('QUICK'), class => "img-responsive carouselLogo"
             <p>
               <%=l 'STOP_WASTING_TIME' %>
             </p>
@@ -127,7 +127,7 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/screen.png" alt="<%=l 'SCREEN_SHARING' %>">
+            %= image '/img/screen.png', alt => $self->l('SCREEN_SHARING'), class => "img-responsive carouselLogo"
             <p>
               <%=l 'SHARE_DESKTOP_OR_WINDOW' %>
             </p>
@@ -138,7 +138,7 @@
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/chat.png" alt="<%=l 'TEXT_CHAT' %>">
+            %= image '/img/chat.png', alt => $self->l('TEXT_CHAT'), class => "img-responsive carouselLogo"
             <p>
               <%=l 'SECURED_TEXT_CHAT' %>
             </p>
@@ -150,7 +150,7 @@
           </div>
           <% if ($etherpad eq 'true') { %>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
-            <img class="img-responsive carouselLogo" src="<%= $self->get_url('/') %>img/note.png" alt="<%=l 'COLLABORATIVE_NOTETAKING' %>">
+            %= image '/img/note.png', alt => $self->l('COLLABORATIVE_NOTETAKING'), class => "img-responsive carouselLogo"
             <p>
               <%=l 'TAKE_NOTE_IN_REALTIME' %>
             </p>

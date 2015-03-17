@@ -195,7 +195,7 @@
             </h4>
           </div>
           <div class="modal-body">
-            <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/flash.png" alt="<%=l 'CONNECTION_LOST' %>"/>
+            %= image '/img/flash.png', alt => $self->l('CONNECTION_LOST'), class => "img-responsive center-block"
             <br>
             <p class="text-center">
               <%=l 'CHECK_INTERNET_ACCESS' %>
@@ -214,7 +214,7 @@
           </div>
           <div class="modal-body">
             <div id="connecting-msg" class="connecting-msg">
-              <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/connecting.gif" alt="<%=l 'CONNECTING' %>"/>
+              %= image '/img/connecting.gif', alt => $self->l('CONNECTING'), class => "img-responsive center-block"
               <br>
               <p class="text-center">
                 <%=l 'CONNECTING_PLEASE_WAIT' %>
@@ -224,7 +224,7 @@
               <p class="text-center">
                 <%=l 'CANT_ACCESS_WEBCAM' %>
               </p>
-              <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/webcam.png" alt="Webcam"/>
+              %= image '/img/webcam.png', alt => "Webcam", class => "img-responsive center-block"
               <br>
               <p class="text-center">
                 <%=l 'CLICK_IF_NO_WEBCAM' %>
@@ -282,17 +282,17 @@
                 %>
                 <div class="col-xs-4">
                   <a href="<%= $ffurl %>" target="_blank">
-                    <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/firefox.png" alt="Mozilla Firefox"/>
+                    %= image '/img/firefox.png', alt => "Mozilla Firefox", class => "img-responsive center-block"
                   </a>
                 </div>
                 <div class="col-xs-4">
                   <a href="<%= $churl %>" target="_blank">
-                    <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/chrome.png" alt="Google Chrome"/>
+                    %= image '/img/chrome.png', alt => "Google Chrome", class => "img-responsive center-block"
                   </a>
                 </div>
                 <div class="col-xs-4">
                   <a href="<%= $opurl %>" target="_blank">
-                    <img class="img-responsive center-block" src="<%= $self->get_url('/') %>img/opera.png" alt="Opera"/>
+                    %= image '/img/opera.png', alt => "Opera", class => "img-responsive center-block"
                   </a>
                 </div>
               </div>
