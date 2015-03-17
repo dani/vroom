@@ -231,6 +231,16 @@ echo "LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so" \\
  > /etc/httpd/conf.modules.d/00-proxy_ws.conf</pre>
       </p>
 
+      <h3 id="c7_cache_dir_perm">
+        Set permissions on the cache directory
+      </h3>
+      <p>
+        The <strong>cache</directory> must be writeable for the user running the VROOM daemon, which is apache in the privided systemd unit
+        <pre>
+chown -R apache ./cache
+chmod 700 ./cache</pre>
+      </p>
+
       <h3 id="c7_systemd_unit">
         Setup systemd units
       </h3>
@@ -383,16 +393,6 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         </ul>
       </p>
 
-      <h3 id="settings_logs">
-        log
-      </h3>
-      <p>
-        This section controls logging of the VROOM daemon. The following settings are available
-        <ul>
-          <li><strong>level</strong>: Set the logging level. Can be one of <strong>debug</strong>, <strong>info</strong>, <strong>warn</strong>,
-            <strong>error</strong> or <strong>fatal</strong></li>
-        </ul>
-      </p>
 
       <h3 id="settings_ertherpad">
         etherpad
@@ -422,6 +422,8 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
           <li><strong>backend</strong>: The backend used to run VROOM. Can be either
             <a href="http://mojolicio.us/perldoc/Mojo/Server/Morbo" target="_blank"><strong>morbo</strong></a> (recommended for developments) or
             <a href="http://mojolicio.us/perldoc/Mojo/Server/Hypnotoad" target="_blank"><strong>hypnotoad</strong></a> (recommanded for production).</li>
+          <li><strong>log_level</strong>: Set the logging level. Can be one of <strong>debug</strong>, <strong>info</strong>, <strong>warn</strong>,
+            <strong>error</strong> or <strong>fatal</strong></li>
           <li><strong>pid_file</strong>: Where to store the PID file of VROOM daemon (has no effect when using the morbo backend)</li>
         </ul>
       </p>
