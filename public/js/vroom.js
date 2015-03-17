@@ -826,14 +826,14 @@ function initVroom(room) {
   function handlePreviewClick(el, id){
     var wait = 1;
     // There's already a main video, let's hide it
-    // and delay the new one so the fade out as time to complete
+    // and delay the new one so the fade out has time to complete
     if ($('#mainVideo video').length > 0){
       $('#mainVideo').hide(200);
       wait = 200;
-      // Play all preview
+      // Play all previews
       // the one in the mainVid was muted
       $('#webRTCVideo video').each(function(){
-        if ($(this).get(0).volume == 0){
+        if ($(this).get(0).volume == 0 && $(this).attr('id') !== 'webRTCVideoLocal'){
           $(this).get(0).volume= .7;
         }
       });
@@ -873,8 +873,13 @@ function initVroom(room) {
               $(this).get(0).play();
             }
           });
-          el.get(0).volume = 0;
-          $('#mainVideo video').get(0).volume = 1;
+          if (el.attr('id') !== 'webRTCVideoLocal'){
+            el.get(0).volume = 0;
+            $('#mainVideo video').get(0).volume = 1;
+          }
+          else {
+            $('#mainVideo video').get(0).volume = 0;
+          }
         }
         $('#mainVideo').show(200);
       }
