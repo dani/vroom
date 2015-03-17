@@ -360,7 +360,7 @@
           etherpad = {
             enabled: <%= $etherpad %>,
             <%
-              my $ethuri = URI->new($config->{'etherpad.uri'});
+              my $ethuri = Mojo::URL->new($config->{'etherpad.uri'});
             %>
             host: "<%= $ethuri->scheme . '://' . $ethuri->authority %>",
             path: "<%= $ethuri->path . '/p/' %>",

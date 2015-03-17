@@ -20,7 +20,6 @@ use Etherpad::API;
 use Session::Token;
 use Config::Simple;
 use Email::Valid;
-use URI;
 use Protocol::SocketIO::Handshake;
 use Protocol::SocketIO::Message;
 use Data::Dumper;

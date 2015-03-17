@@ -103,7 +103,6 @@
               <li>Session::Token</li>
               <li>Config::Simple</li>
               <li>Email::Valid</li>
-              <li>URI</li>
               <li>Protocol::SocketIO::Handshake</li>
               <li>Protocol::SocketIO::Message</li>
               <li>Data::Dumper</li>
@@ -169,8 +168,9 @@ yum install epel-release</pre>
 yum install git tar wget httpd mod_ssl openssl mariadb-server \\
            'perl(Mojolicious)' 'perl(Mojolicious::Plugin::I18N)' 'perl(Mojolicious::Plugin::Mail)' \\
            'perl(Crypt::SaltedHash)' 'perl(Etherpad::API)' 'perl(LWP::Protocol::https)' \\
-           'perl(Sesion::Token)' 'perl(Mojolicious::Plugin::Database)' 'perl(Email::Valid)' \\
-           'perl(Config::Simple)' 'perl(Session::Token)' 'perl(URI)'</pre>
+           'perl(Sesion::Token)' 'perl(Mojolicious::Plugin::Database)' \\
+           'perl(Mojolicious::Plugin::StaticCompressor' 'perl(Email::Valid)' \\
+           'perl(Config::Simple)' 'perl(Session::Token)'</pre>
       </p>
 
       <h3 id="c7_clone_git">

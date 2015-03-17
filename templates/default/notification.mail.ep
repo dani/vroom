@@ -1,7 +1,6 @@
 <%
-  my $url = $self->url_for('/')->to_abs;
+  my $url = Mojo::URL->new($self->url_for('/')->to_abs)->scheme('https');
   $url .= ($url =~ m/\/$/) ? '' : '/';
-  $url =~ s/^http:/https:/;
 %>
 <p>
   <%=l 'SOMEONE_JOINED_A_ROOM' %>
