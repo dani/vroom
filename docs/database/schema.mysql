@@ -6,7 +6,7 @@ CREATE TABLE `config` (
   UNIQUE (`key`)
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 INSERT INTO `config` (`key`,`value`)
-  VALUES ('schema_version', '2');
+  VALUES ('schema_version', '5');
 
 CREATE TABLE `rooms` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -80,31 +80,4 @@ CREATE TABLE `room_keys` (
     ON UPDATE CASCADE
     ON DELETE CASCADE
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
-
-#DROP TABLE IF EXISTS `turnusers_lt`;
-#CREATE TABLE `turnusers_lt` (
-#  name VARCHAR(512) PRIMARY KEY,
-#  hmackey char(32)
-#);
-CREATE VIEW `turnusers_lt` AS 
-  SELECT `name` AS `name`,
-  MD5(CONCAT(CONCAT(CONCAT(CONCAT(`name`,':'),`realm`),':'),`token`)) AS `hmackey`
-  FROM `rooms`;
-
-CREATE TABLE `turnusers_st` (
-  `name` VARCHAR(512) PRIMARY KEY,
-  `password` VARCHAR(512)
-) ENGINE INNODB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `turn_secret` (
-  `value` VARCHAR(512)
-) ENGINE INNODB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `allowed_peer_ip` (
-  `ip_range` VARCHAR(256)
-) ENGINE INNODB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `denied_peer_ip` (
-  `ip_range` VARCHAR(256)
-) ENGINE INNODB DEFAULT CHARSET=latin1;
 

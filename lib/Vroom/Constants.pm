@@ -7,7 +7,7 @@ use base 'Exporter';
 our @EXPORT = qw/DB_VERSION COMPONENTS MOH JS_STRINGS API_ACTIONS/;
 
 # Database version
-use constant DB_VERSION => 4;
+use constant DB_VERSION => 5;
 
 # Components used to generate the credits part
 use constant COMPONENTS => {
@@ -40,9 +40,6 @@ use constant COMPONENTS => {
   },
   "MariaDB" => {
     url => 'https://mariadb.org/'
-  },
-  "rfc5766-turn-server" => {
-    url => 'https://code.google.com/p/rfc5766-turn-server/'
   },
   "FileSaver" => {
     url => 'https://github.com/eligrey/FileSaver.js'

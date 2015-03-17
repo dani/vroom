@@ -40,7 +40,6 @@ $config->{'turn.credentials'}                  ||= 'static';
 $config->{'turn.secret_key'}                   ||= '';
 $config->{'turn.turn_user'}                    ||= '';
 $config->{'turn.turn_password'}                ||= '';
-$config->{'turn.realm'}                        ||= 'vroom';
 $config->{'video.frame_rate'}                  ||= 15;
 $config->{'email.from '}                       ||= 'vroom@example.com';
 $config->{'email.contact'}                     ||= 'admin@example.com';
@@ -230,21 +229,15 @@ helper create_room => sub {
                           (`name`,
                            `create_date`,
                            `last_activity`,
-                           `owner`,
-                           `token`,
-                           `realm`)
+                           `owner`)
                           VALUES (?,
                                   CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
                                   CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
-                                  ?,
-                                  ?,
-                                  ?)');
+                                  ?');
   };
   $sth->execute(
     $name,
     $owner,
-    $self->get_random(256),
-    $config->{'turn.realm'}
   );
   $self->app->log->info("Room $name created by " . $self->session('name'));
   # Etherpad integration ? If so, create the corresponding pad
@@ -965,14 +958,10 @@ helper get_turn_creds => sub {
   elsif ($config->{'turn.credentials'} eq 'static'){
     return ($config->{'turn.turn_user'},$config->{'turn.turn_password'});
   }
-  elsif ($config->{'turn.credentials'} eq 'rfc-5766-turn-server'){
-    return ($room->{name},$room->{token});
-  }
   elsif ($config->{'turn.credentials'} eq 'rest'){
     my $expire = time + 300;
     my $user = $expire . ':' . $room->{name};
     my $pass = encode_base64(hmac_sha1($user, $config->{'turn.secret_key'}));
-#    my $pass = encode_base64(Digest::HMAC_SHA1->new($config->{'turn.secret_key'})->add($user)->digest);
     chomp $pass;
     return ($user,$pass);
   }
@@ -1381,7 +1370,7 @@ any '/api' => sub {
     my $rooms = $self->get_room_list;
     foreach my $r (keys %{$rooms}){
       # Blank out a few param we don't need
-      foreach my $p (qw/join_password owner_password owner token etherpad_group/){
+      foreach my $p (qw/join_password owner_password owner etherpad_group/){
         delete $rooms->{$r}->{$p};
       }
       # Count active users
@@ -2083,7 +2072,6 @@ get '/:room' => sub {
   # Now display the room page
   return $self->render('join',
     moh           => $self->choose_moh(),
-    turnPassword  => $data->{token},
     video         => $video,
     etherpad      => ($ec) ? 'true' : 'false',
     etherpadGroup => $data->{etherpad_group},

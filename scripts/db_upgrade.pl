@@ -108,3 +108,27 @@ if ($cur_ver < 4){
   };
   print "Successfully upgraded to schema version 4\n";
 }
+
+if ($cur_ver < 5){
+  print "Upgrading the schema to version 5\n";
+  eval {
+    $dbh->begin_work;
+    $dbh->do(qq{ DROP TABLE `denied_peer_ip` });
+    $dbh->do(qq{ DROP TABLE `allowed_peer_ip` });
+    $dbh->do(qq{ DROP TABLE `turn_secret` });
+    $dbh->do(qq{ DROP TABLE `turnusers_st` });
+    $dbh->do(qq{ DROP VIEW `turnusers_lt` });
+    $dbh->do(qq{ ALTER TABLE `rooms` DROP COLUMN `token` });
+    $dbh->do(qq{ ALTER TABLE `rooms` DROP COLUMN `realm` });
+    $dbh->do(qq{ UPDATE `config` SET `value`='5' WHERE `key`='schema_version' });
+    $dbh->commit;
+  };
+  if ($@){
+    print "An error occurred: " . $dbh->errstr . "\n";
+    local $dbh->{RaiseError} = 0;
+    $dbh->rollback;
+    exit 255;
+  };
+  print "Successfully upgraded to schema version 5\n";
+}
+

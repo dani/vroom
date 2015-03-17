@@ -23,17 +23,12 @@
 ;         to the secret key you set in your turn server. See http://tools.ietf.org/html/draft-uberti-behave-turn-rest-00
 ;         This has been tested with rfc-5766-turn-server but should work with any compatible turn server
 ;
-; * rfc-5766-turn-server: In this mode, a MySQL view is used to manage one turn username per room
-;                         It works only with rfc-5766-turn-server but it's recommanded to use rest now
-;                         even when using rfc-5766-turn-server
 credentials = 'rest'
 ; Credentials to use with the "static" method
 ;turn_user = 'foo'
 ;turn_password = 'bar'
 ; Secret key shared with the turn server when using the "rest" method
 ;secret_key = 'secret'
-; the realm used for turn accounts. Only needed when using the rfc-5766-turn-server method
-;realm = 'vroom'
 
 [video]
 ; Define the max frame rate for video
