@@ -23,7 +23,8 @@ $('.modal').on('show.bs.modal', function(){
 $('.bs-switch').bootstrapSwitch();
 
 // Strings we need translated
-var locale = {};
+var locale = {},
+    def_locale = {};
 
 // When pagination is done, how many item per page
 var itemPerPage = 20;
@@ -41,6 +42,18 @@ $.ajax({
   }
 });
 
+// If current locale isn't EN, retrieve EN locale as a fallback
+if (currentLang !== 'en'){
+  $.ajax({
+    url: rootUrl + 'localize/en',
+    type: 'GET',
+    dataType: 'json',
+    success: function(data) {
+      def_locale = data;
+    }
+  });
+}
+
 // Default ajax setup
 $.ajaxSetup({
   url: rootUrl + 'api',
@@ -55,6 +68,9 @@ $.ajaxSetup({
 function localize(string){
   if (locale[string]){
     return locale[string];
+  }
+  else if (def_locale[string]){
+    return def_locale[string];
   }
   return string;
 }
