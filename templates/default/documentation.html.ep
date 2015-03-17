@@ -288,18 +288,28 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         If you plan to use VROOM only on a local network, where each peer can connect to each others, you can just omit this part. But if you want
         VROOM to work from anywhere, you'll need use STUN and most likely TURN too.
         <ul>
-          <li><strong>stun_server</strong>: The STUN server(s) to use. For example*
+          <li><strong>stun_server</strong>: The STUN server(s) to use. For example
             <kbd>stun_server = 'stun:stun.l.google.com:19302','stun:vroom.example.net:3478'</kbd>. 
           This must be a comma separated list of full STUN URI as defined by <a href="https://tools.ietf.org/html/rfc7064" target="_blank">rfc7064</a></li>
+
           <li><strong>turn_server</strong>: The TURN server(s) to use. For example
             <kbd>turn_server = 'turns:vroom.example.net:5349','turns:vroom.example.net:5349?transport=tcp'</kbd>.
           This must be a comma separated list of full STUN URI as defined by <a href="https://tools.ietf.org/html/rfc7065" target="_blank">rfc7065</a></li>
+
+          <li><strong>credentials</strong>: This defines what TURN credentials are sent to clients. It can take two values:
+            <ul>
+              <li><strong>static</strong>: With this mode, you're using a single set of credentials (set with <strong>turn_user</strong> and
+                <strong>turn_password</strong>) and they will be used by every peer in every room</li>
+              <li><strong>rest</strong>: In this mode, VROOM will generate <a href="https://tools.ietf.org/html/draft-uberti-rtcweb-turn-rest-00" target="_blank">TURN REST API</a>
+                compatible credentials for each room. Each credentials set will be valid only for 5 minutes. You must set <strong>secret_key</strong> to the same secret key
+                set in your TURN server</li>
+            </ul>
+          </li>
+
           <li><strong>turn_user</strong> and <strong>turn_password</strong>: To use your TURN server, you'll most likely require credentials.
-          You can either enter them here. If you let this empty, VROOM assumes that you're using
-          <a href="https://code.google.com/p/rfc5766-turn-server/" target="_blank">rfc5766-turn-server</a> and will generate one user and password
-          for each room. See the Configure rfc5766-turn-server section. Note that the same credentials will be used for every TURN server you define</li>
-          <li><strong>realm</strong>: If you use rfc5766-turn-server with dynamic credentials, you must set here the realm configured in
-          <strong>/etc/turnserver/turnserver.conf</strong>
+            If using static credentials, you must set this to the username and password the clients will use</li>
+
+          <li><strong>secret_key</strong>: When using the <strong>rest</strong> credentials method, set this to the secret key shared with the turn server</li>          
         </ul>
       </p>
 
@@ -417,10 +427,11 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
 
 
       <h1 id="turn_server">
-        Setup rfc5766-turn-server
+        Setup coturn or rfc5766-turn-server
       </h1>
       <p>
-        You can run any TURN server you want, but VROOM integrates well with <a href="https://code.google.com/p/rfc5766-turn-server/" target="_blank">rfc5766-turn-server</a>.
+        You can run any TURN server you want, but VROOM is mainly tested <a href="https://code.google.com/p/rfc5766-turn-server/" target="_blank">rfc5766-turn-server</a>
+        or <a href="https://code.google.com/p/coturn/" target="_blank">coturn</a> (which are very similar). The reference instance https://vroom.im is using coturn.
         To make use of it, follow those steps
       </p>
 
@@ -432,7 +443,7 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         Download the latest version from <a href="http://turnserver.open-sys.org/downloads/">here</a> and extract the archive
       </p>
       <div class="alert alert-info">
-        Only the 3.x branch is supported
+        Branch 3.x is rfc5766-turn-server and 4.x is coturn. 4.x is recommanded
       </div>
 
 
@@ -455,11 +466,10 @@ yum localinstall turnserver-*/*.rpm</pre>
         <pre>
 mv /etc/turnserver/turnserver.conf /etc/turnserver/turnserver.conf.default
 cat <<'EOF' > /etc/turnserver/turnserver.conf
-mysql-userdb "host=localhost dbname=vroom user=vroom password=MySuperPassw0rd connect_timeout=5"
 verbose
-syslog
 fingerprint
 lt-cred-mech
+syslog
 no-sslv2
 no-sslv3
 no-tcp
@@ -473,6 +483,8 @@ cert /etc/turnserver/cert.pem
 pkey /etc/turnserver/key.pem
 proc-user turnserver
 proc-group turnserver
+use-auth-secret
+static-auth-secret SuperSecretPassword
 EOF</pre>
       </p>
       <div class="alert alert-info">
@@ -481,6 +493,9 @@ EOF</pre>
           <li>Both key and certificate must be readable by turnserver user and/or group</li>
           <li>You can comment no-tcp, no-udp and alt-tls-listening-port if you want to test without encryption</li>
           <li>If you have intermediate(s) CA, you have to put them in the cert.pem file, but after your certificate</li>
+          <li>In this example, the turn server will use TURN REST API compatible authentication, so you must set
+            <kbd>credentials='rest'</kbd> and <kbd>secret_key='SuperSecretPassword'</kbd> in the <strong>turn</strong> section of VROOM's <strong>settings.ini</strong>
+          </li> 
         </ul>
       </div>
 
