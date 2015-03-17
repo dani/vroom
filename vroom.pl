@@ -11,6 +11,7 @@ use Mojolicious::Plugin::Mail;
 use Mojolicious::Plugin::Database;
 use Vroom::Constants;
 use Crypt::SaltedHash;
+use Digest::HMAC_SHA1 qw(hmac_sha1);
 use MIME::Base64;
 use File::stat;
 use File::Basename;
@@ -35,8 +36,10 @@ $config->{'database.password'}                 ||= 'vroom';
 $config->{'signaling.uri'}                     ||= 'https://vroom.example.com/';
 $config->{'turn.stun_server'}                  ||= 'stun.l.google.com:19302';
 $config->{'turn.turn_server'}                  ||= undef;
-$config->{'turn.turn_user'}                    ||= undef;
-$config->{'turn.turn_password'}                ||= undef;
+$config->{'turn.credentials'}                  ||= 'static';
+$config->{'turn.secret_key'}                   ||= '';
+$config->{'turn.turn_user'}                    ||= '';
+$config->{'turn.turn_password'}                ||= '';
 $config->{'turn.realm'}                        ||= 'vroom';
 $config->{'video.frame_rate'}                  ||= 15;
 $config->{'email.from '}                       ||= 'vroom@example.com';
@@ -951,6 +954,33 @@ helper get_member_limit => sub {
   return 0;
 };
 
+
+# Get credentials for the turn servers. Return an array (username,password)
+helper get_turn_creds => sub {
+  my $self = shift;
+  my $room = $self->get_room_by_name(shift);
+  if (!$room){
+    return (undef,undef);
+  }
+  elsif ($config->{'turn.credentials'} eq 'static'){
+    return ($config->{'turn.turn_user'},$config->{'turn.turn_password'});
+  }
+  elsif ($config->{'turn.credentials'} eq 'rfc-5766-turn-server'){
+    return ($room->{name},$room->{token});
+  }
+  elsif ($config->{'turn.credentials'} eq 'rest'){
+    my $expire = time + 300;
+    my $user = $expire . ':' . $room->{name};
+    my $pass = encode_base64(hmac_sha1($user, $config->{'turn.secret_key'}));
+#    my $pass = encode_base64(Digest::HMAC_SHA1->new($config->{'turn.secret_key'})->add($user)->digest);
+    chomp $pass;
+    return ($user,$pass);
+  }
+  else {
+    return (undef,undef);
+  }
+};
+
 # Socket.IO handshake
 get '/socket.io/:ver' => sub {
   my $self = shift;
@@ -1748,14 +1778,7 @@ any '/api' => sub {
       }
       foreach my $t (@{$config->{'turn.turn_server'}}){
         my $turn = { url => $t };
-        if ($config->{'turn.turn_user'} && $config->{'turn.turn_password'}){
-          $turn->{username}   = $config->{'turn.turn_user'};
-          $turn->{credential} = $config->{'turn.turn_password'};
-        }
-        else{
-          $turn->{username}   = $room->{name};
-          $turn->{credential} = $room->{token};
-        }
+        ($turn->{username},$turn->{credential}) = $self->get_turn_creds($room->{name});
         push @{$resp->{peerConnectionConfig}->{iceServers}}, $turn;
       }
     }
