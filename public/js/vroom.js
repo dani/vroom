@@ -51,6 +51,14 @@ $.ajaxSetup({
   }
 });
 
+// Localize a string, or just print it if localization doesn't exist
+function localize(string){
+  if (locale[string]){
+    return locale[string];
+  }
+  return string;
+}
+
 // Parse and display an error when an API call failed
 function showApiError(data){
   data = data.responseJSON;
@@ -58,7 +66,7 @@ function showApiError(data){
     $.notify(data.msg, 'error');
   }
   else{
-    $.notify(locale.ERROR_OCCURRED, 'error');
+    $.notify(localize('ERROR_OCCURRED'), 'error');
   }
 }
 
@@ -266,13 +274,13 @@ $('#configureRoomForm').submit(function(e){
   // check if passwords match
   if ($('#joinPassSet').bootstrapSwitch('state')){
     if ($('#joinPass').val() !== $('#joinPassConfirm').val()){
-      $('#joinPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
+      $('#joinPassConfirm').notify(localize('PASSWORDS_DO_NOT_MATCH'), 'error');
       return false;
     }
   }
   if ($('#ownerPassSet').bootstrapSwitch('state')){
     if ($('#ownerPass').val() !== $('#ownerPassConfirm').val()){
-      $('#ownerPassConfirm').notify(locale.PASSWORDS_DO_NOT_MATCH, 'error');
+      $('#ownerPassConfirm').notify(localize('PASSWORDS_DO_NOT_MATCH'), 'error');
       return false;
     }
   }
@@ -280,7 +288,7 @@ $('#configureRoomForm').submit(function(e){
   $('.email-list').find('input').each(function(index, input){
     if (!$(input).val().match(/\S+@\S+\.\S+/) && $(input).val() !== ''){
       $(input).parent().addClass('has-error');
-      //$(input).parent().notify(locale.ERROR_MAIL_INVALID, 'error');
+      //$(input).parent().notify(localize('ERROR_MAIL_INVALID'), 'error');
       validEmail = false;
       // Break the each loop
       return false;
@@ -344,7 +352,7 @@ function initIndex(){
     e.preventDefault();
     // Do not submit if we know the name is invalid
     if (!$('#roomName').val().match(/^[\w\-]{0,49}$/)){
-      $('#roomName').parent().parent().notify(locale.ERROR_NAME_INVALID, {
+      $('#roomName').parent().parent().notify(localize('ERROR_NAME_INVALID'), {
          class: 'error',
          position: 'bottom center'
       });
@@ -376,7 +384,7 @@ function initIndex(){
             });
           }
           else{
-            $.notify(locale.ERROR_OCCURRED, 'error');
+            $.notify(localize('ERROR_OCCURRED'), 'error');
           }
         }
       });
@@ -903,22 +911,22 @@ function initVroom(room) {
            class: 'actionMute btn btn-default btn-sm',
            id: 'actionMute_' + id,
            click: function() { mutePeer(id) },
-         }).prop('title', locale.MUTE_PEER))
+         }).prop('title', localize('.MUTE_PEER')))
         .append($('<button></button>', {
            class: 'actionPause btn btn-default btn-sm',
            id: 'actionPause_' + id,
            click: function() { pausePeer(id) },
-         }).prop('title', locale.SUSPEND_PEER))
+         }).prop('title', localize('SUSPEND_PEER')))
         .append($('<button></button>', {
            class: 'actionPromote btn btn-default btn-sm',
            id: 'actionPromote_' + id,
            click: function() { promotePeer(id) },
-         }).prop('title', locale.PROMOTE_PEER))
+         }).prop('title', localize('PROMOTE_PEER')))
         .append($('<button></button>', {
            class: 'actionKick btn btn-default btn-sm',
            id: 'actionKick_' + id,
            click: function() { kickPeer(id) },
-         }).prop('title', locale.KICK_PEER)));
+         }).prop('title', localize('KICK_PEER'))));
       // Display the menu now if we're a owner, but add some delay
       // as those actions won't work until all the channels are ready
       setTimeout (function(){
@@ -1069,7 +1077,7 @@ function initVroom(room) {
     // so check if the object exists before using it, or fallback with empty values
     var display = (peers[id] && peers[id].hasName) ? stringEscape(peers[id].displayName) : '';
     var color = (peers[id] && peers[id].color) ? peers[id].color : chooseColor();
-    var screenName = (peers[id] && peers[id].hasName) ? sprintf(locale.SCREEN_s, stringEscape(peers[id].displayName)) : '';
+    var screenName = (peers[id] && peers[id].hasName) ? sprintf(localize('SCREEN_s'), stringEscape(peers[id].displayName)) : '';
     $('#name_' + id).html(display).css('background-color', color);
     $('#name_' + id + '_screen').html(screenName).css('background-color', color);
   }
@@ -1080,10 +1088,10 @@ function initVroom(room) {
       if (!globalAction ||
           (!peers[id].micMuted && globalAction == 'mute') ||
           (peers[id].micMuted && globalAction == 'unmute')){
-        var msg = locale.YOU_HAVE_MUTED_s;
-        var who = (peers[id].hasName) ? peers[id].displayName : locale.A_PARTICIPANT;
+        var msg = localize('YOU_HAVE_MUTED_s');
+        var who = (peers[id].hasName) ? peers[id].displayName : localize('A_PARTICIPANT');
         if (peers[id].micMuted){
-          msg = locale.YOU_HAVE_UNMUTED_s
+          msg = localize('YOU_HAVE_UNMUTED_s')
         }
         // notify everyone that we have muted this peer
         webrtc.sendToAll('owner_toggle_mute', {peer: id});
@@ -1092,7 +1100,7 @@ function initVroom(room) {
     }
     // We cannot mute another owner
     else if (!globalAction){
-      $.notify(locale.CANT_MUTE_OWNER, 'error');
+      $.notify(localize('CANT_MUTE_OWNER'), 'error');
     }
   }
   // Pause a peer
@@ -1101,17 +1109,17 @@ function initVroom(room) {
       if (!globalAction ||
           (!peers[id].videoPaused && globalAction == 'pause') ||
           (peers[id].videoPaused && globalAction == 'resume')){
-        var msg    = locale.YOU_HAVE_SUSPENDED_s;
-        var who = (peers[id].hasName) ? peers[id].displayName : locale.A_PARTICIPANT;
+        var msg    = localize('YOU_HAVE_SUSPENDED_s');
+        var who = (peers[id].hasName) ? peers[id].displayName : localize('A_PARTICIPANT');
         if (peers[id].videoPaused){
-          msg    = locale.YOU_HAVE_RESUMED_s;
+          msg    = localize('YOU_HAVE_RESUMED_s');
         }
         webrtc.sendToAll('owner_toggle_pause', {peer: id});
         $.notify(sprintf(msg, who), 'info');
       }
     }
     else if (!globalAction){
-      $.notify(locale.CANT_SUSPEND_OWNER, 'error');
+      $.notify(localize('CANT_SUSPEND_OWNER'), 'error');
     }
   }
   // Promote a peer (he will be owner)
@@ -1138,7 +1146,7 @@ function initVroom(room) {
       suspendButton($('#actionPromote_' + id));
     }
     else if (peers[id]){
-      $.notify(locale.CANT_PROMOTE_OWNER, 'error');
+      $.notify(localize('CANT_PROMOTE_OWNER'), 'error');
     }
   }
   // Kick a peer
@@ -1152,11 +1160,11 @@ function initVroom(room) {
           peers[id].obj.end();
         }
       }, 2000);
-      var who = (peers[id].hasName) ? peers[id].displayName : locale.A_PARTICIPANT;
-      $.notify(sprintf(locale.YOU_HAVE_KICKED_s, who), 'info');
+      var who = (peers[id].hasName) ? peers[id].displayName : localize('A_PARTICIPANT');
+      $.notify(sprintf(localize('YOU_HAVE_KICKED_s'), who), 'info');
     }
     else{
-      $.notify(locale.CANT_KICK_OWNER, 'error');
+      $.notify(localize('CANT_KICK_OWNER'), 'error');
     }
   }
 
@@ -1220,26 +1228,26 @@ function initVroom(room) {
     // We are the one being (un)muted, and we're not owner
     // Be nice and obey
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
-      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : localize('A_ROOM_ADMIN');
       if (!peers.local.micMuted){
         muteMic();
-        $.notify(sprintf(locale.s_IS_MUTING_YOU, who), 'info');
+        $.notify(sprintf(localize('s_IS_MUTING_YOU'), who), 'info');
       }
       else {
         unmuteMic();
-        $.notify(sprintf(locale.s_IS_UNMUTING_YOU, who), 'info');
+        $.notify(sprintf(localize('s_IS_UNMUTING_YOU'), who), 'info');
       }
       $('.btn-mute-mic').toggleClass('btn-danger').button('toggle');
     }
     // It's another peer of the room
     else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
-      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
-      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : locale.A_PARTICIPANT;
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : localize('A_ROOM_ADMIN');
+      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : localize('A_PARTICIPANT');
       if (peers[data.payload.peer].micMuted){
-        $.notify(sprintf(locale.s_IS_UNMUTING_s, who, target), 'info');
+        $.notify(sprintf(localize('s_IS_UNMUTING_s'), who, target), 'info');
       }
       else{
-        $.notify(sprintf(locale.s_IS_MUTING_s, who, target), 'info');
+        $.notify(sprintf(localize('s_IS_MUTING_s'), who, target), 'info');
       }
     }
   });
@@ -1250,34 +1258,34 @@ function initVroom(room) {
       return;
     }
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
-      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : localize('A_ROOM_ADMIN');
       if (!peers.local.videoPaused){
         suspendCam();
-        $.notify(sprintf(locale.s_IS_SUSPENDING_YOU, who), 'info');
+        $.notify(sprintf(localize('s_IS_SUSPENDING_YOU'), who), 'info');
       }
       else{
         resumeCam();
-        $.notify(sprintf(locale.s_IS_RESUMING_YOU, who), 'info');
+        $.notify(sprintf(localize('s_IS_RESUMING_YOU'), who), 'info');
       }
       $('.btn-suspend-cam').toggleClass('btn-danger').button('toggle');
     }
     else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
-      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
-      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : locale.A_PARTICIPANT;
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : localize('A_ROOM_ADMIN');
+      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : localize('A_PARTICIPANT');
       if (peers[data.payload.peer].videoPaused){
-        $.notify(sprintf(locale.s_IS_RESUMING_s, who, target), 'info');
+        $.notify(sprintf(localize('s_IS_RESUMING_s'), who, target), 'info');
       }
       else{
-        $.notify(sprintf(locale.s_IS_SUSPENDING_s, who, target), 'info');
+        $.notify(sprintf(localize('s_IS_SUSPENDING_s'), who, target), 'info');
       }
     }
   });
 
   // Room config has been updated
   webrtc.on('room_conf_updated', function(data){
-    var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
+    var who = (peers[data.id].hasName) ? peers[data.id].displayName : localize('A_ROOM_ADMIN');
     getRoomInfo();
-    $.notify(sprintf(locale.s_CHANGED_ROOM_CONFIG, who), 'success');
+    $.notify(sprintf(localize('s_CHANGED_ROOM_CONFIG'), who), 'success');
   });
 
   // This peer indicates he has no webcam
@@ -1295,16 +1303,16 @@ function initVroom(room) {
       return;
     }
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
-      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : localize('A_ROOM_ADMIN');
       getRoomInfo();
       if (peers.local.role == 'owner'){
-        $.notify(sprintf(locale.s_IS_PROMOTING_YOU, who), 'success');
+        $.notify(sprintf(localize('s_IS_PROMOTING_YOU'), who), 'success');
       }
     }
     else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
-      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
-      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : locale.A_PARTICIPANT;
-      $.notify(sprintf(locale.s_IS_PROMOTING_s, who, target), 'info');
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : localize('A_ROOM_ADMIN');
+      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : localize('A_PARTICIPANT');
+      $.notify(sprintf(localize('s_IS_PROMOTING_s'), who, target), 'info');
     }
   });
 
@@ -1318,9 +1326,9 @@ function initVroom(room) {
       window.location.assign(rootUrl + 'kicked/' + roomName);
     }
     else if (data.payload.peer != peers.local.id && peers[data.payload.peer] && peers[data.payload.peer].role != 'owner'){
-      var who = (peers[data.id].hasName) ? peers[data.id].displayName : locale.A_ROOM_ADMIN;
-      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : locale.A_PARTICIPANT;
-      $.notify(sprintf(locale.s_IS_KICKING_s, who, target), 'info');
+      var who = (peers[data.id].hasName) ? peers[data.id].displayName : localize('A_ROOM_ADMIN');
+      var target = (peers[data.payload.peer].hasName) ? peers[data.payload.peer].displayName : localize('A_PARTICIPANT');
+      $.notify(sprintf(localize('s_IS_KICKING_s'), who, target), 'info');
       // Wait a bit for the peer to leave, but end connection if it's still here
       // after 2 seconds
       setTimeout(function(){
@@ -1493,7 +1501,7 @@ function initVroom(room) {
     if (window.AudioContext){
       setTimeout(function (){
         if (maxVol < -80){
-          $.notify(locale.NO_SOUND_DETECTED, {
+          $.notify(localize('NO_SOUND_DETECTED'), {
             className: 'error',
             autoHide: false
           });
@@ -1625,7 +1633,7 @@ function initVroom(room) {
     $('.email-list').find('input').each(function(index, input){
       if (!$(input).val().match(/\S+@\S+\.\S+/) && $(input).val() !== ''){
         $(input).parent().addClass('has-error');
-        //$(input).parent().notify(locale.ERROR_MAIL_INVALID, 'error');
+        //$(input).parent().notify(localize('ERROR_MAIL_INVALID'), 'error');
         validEmail = false;
         // Break the each loop
         return false;
@@ -1667,7 +1675,7 @@ function initVroom(room) {
     var name = $('#displayName').val();
     if (name.length > 50){
       $('#displayName').parent().addClass('has-error');
-      $('#displayName').notify(locale.DISPLAY_NAME_TOO_LONG, 'error');
+      $('#displayName').notify(localize('DISPLAY_NAME_TOO_LONG'), 'error');
       return;
     }
     else{
@@ -1680,7 +1688,7 @@ function initVroom(room) {
     }
     // And disable it again if you remove your display name
     else if (name == ''){
-      $('#chatBox').attr('disabled', true).attr('placeholder', locale.SET_YOUR_NAME_TO_CHAT);
+      $('#chatBox').attr('disabled', true).attr('placeholder', localize('SET_YOUR_NAME_TO_CHAT'));
       peers.local.hasName = false;
     }
     peers.local.displayName = name;
@@ -1708,10 +1716,10 @@ function initVroom(room) {
       $('#displayNamePreButton').addClass('disabled');
       $('#displayNamePre').parent().addClass('has-error');
       if (name.length < 1){
-        $('#displayNamePre').notify(locale.DISPLAY_NAME_REQUIRED, 'error');
+        $('#displayNamePre').notify(localize('DISPLAY_NAME_REQUIRED'), 'error');
       }
       else{
-        $('#displayNamePre').notify(locale.DISPLAY_NAME_TOO_LONG, 'error');
+        $('#displayNamePre').notify(localize('DISPLAY_NAME_TOO_LONG'), 'error');
       }
     }
   });
@@ -1751,7 +1759,7 @@ function initVroom(room) {
               $('#chromeExtMessage').modal('show');
             }
             else{
-              cantShare(locale.SCREEN_SHARING_ONLY_FOR_CHROME);
+              cantShare(localize('SCREEN_SHARING_ONLY_FOR_CHROME'));
             }
           }
           // This error usually means you have denied access (old flag way)
@@ -1763,10 +1771,10 @@ function initVroom(room) {
           else if (err.name === 'PERMISSION_DENIED' ||
                    err.name === 'PermissionDeniedError' ||
                    err.name === 'ConstraintNotSatisfiedError'){
-            cantShare(locale.SCREEN_SHARING_CANCELLED);
+            cantShare(localize('SCREEN_SHARING_CANCELLED'));
           }
           else{
-            cantShare(locale.CANT_SHARE_SCREEN);
+            cantShare(localize('CANT_SHARE_SCREEN'));
           }
           $('.btn-share-screen').removeClass('active');
           return;
@@ -1775,7 +1783,7 @@ function initVroom(room) {
         else{
           $('.btn-share-screen').addClass('btn-danger').button('toggle');
           peers.local.screenShared = true;
-          $.notify(locale.EVERYONE_CAN_SEE_YOUR_SCREEN, 'info');
+          $.notify(localize('EVERYONE_CAN_SEE_YOUR_SCREEN'), 'info');
         }
       });
     }
@@ -1783,7 +1791,7 @@ function initVroom(room) {
       peers.local.screenShared = false;
       webrtc.stopScreenShare();
       $('.btn-share-screen').removeClass('btn-danger').button('toggle');
-      $.notify(locale.SCREEN_UNSHARED, 'info');
+      $.notify(localize('SCREEN_UNSHARED'), 'info');
     }
   });
 
@@ -1792,11 +1800,11 @@ function initVroom(room) {
     var action = ($(this).hasClass('btn-danger')) ? 'unmute':'mute';
     if (action === 'mute'){
       muteMic();
-      $.notify(locale.MIC_MUTED, 'info');
+      $.notify(localize('MIC_MUTED'), 'info');
     }
     else{
       unmuteMic();
-      $.notify(locale.MIC_UNMUTED, 'info');
+      $.notify(localize('MIC_UNMUTED'), 'info');
     }
     $('.btn-mute-mic').toggleClass('btn-danger').button('toggle');
   });
@@ -1811,11 +1819,11 @@ function initVroom(room) {
     var action = ($(this).hasClass('btn-danger')) ? 'resume':'pause';
     if (action === 'pause'){
       suspendCam();
-      $.notify(locale.CAM_SUSPENDED, 'info');
+      $.notify(localize('CAM_SUSPENDED'), 'info');
     }
     else{
       resumeCam();
-      $.notify(locale.CAM_RESUMED, 'info');
+      $.notify(localize('CAM_RESUMED'), 'info');
     }
     $('.btn-suspend-cam').toggleClass('btn-danger').button('toggle');
   });
