@@ -431,6 +431,7 @@ function initIndex(){
 function initDoc(){
 
   $('#toc').width($('#toc').parents().width());
+  $('#toc').css('height', maxHeight() - 100 + 'px');
 
   $('#toc').toc({
     elementClass: 'toc',

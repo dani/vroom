@@ -276,6 +276,9 @@ a.popup>span {
 .header-btn-group {
   margin-left: 10px;
 }
+.toc {
+  overflow-y: auto;
+}
 html {
   height: 100%;
 }
