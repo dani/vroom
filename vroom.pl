@@ -1064,12 +1064,24 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
       # We have a message from a peer
       elsif ($msg->{data}->{name} eq 'message'){
         $self->app->log->debug("Signaling message received from peer " . $id);
-        # Forward this message to all other members of the same room
         $msg->{data}->{args}[0]->{from} = $id;
-        $self->signal_broadcast_room({
-          from => $id,
-          msg  => Protocol::SocketIO::Message->new(%$msg)
-        });
+        my $to = $msg->{data}->{args}[0]->{to};
+        # Unicast message ? Check the dest is in the same room
+        # and send
+        if ($to &&
+            $peers->{$to} &&
+            $peers->{$to}->{room} &&
+            $peers->{$to}->{room} eq $peers->{$id}->{room} &&
+            $peers->{$to}->{socket}){
+          $peers->{$to}->{socket}->send(Protocol::SocketIO::Message->new(%$msg));
+        }
+        # No dest, multicast this to every memebrs of the room
+        else{
+          $self->signal_broadcast_room({
+            from => $id,
+            msg  => Protocol::SocketIO::Message->new(%$msg)
+          });
+        }
       }
       # When a peer share its screen
       elsif ($msg->{data}->{name} eq 'shareScreen'){
