@@ -542,7 +542,6 @@ function initAdminRooms(){
           }
         })
       },
-      async: false,
       error: function(data){
         showApiError(data);
       },
@@ -699,7 +698,7 @@ function initVroom(room) {
   }
 
   // Get our role and other room settings from the server
-  function getRoomInfo(){
+  function getRoomInfo(ev){
     $.ajax({
       data: {
         req: JSON.stringify({
@@ -710,7 +709,6 @@ function initVroom(room) {
           }
         })
       },
-      async: false,
       error: function(data){
         showApiError(data);
       },
@@ -756,6 +754,14 @@ function initVroom(room) {
         $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name == 'yes');
         $('#joinPassSet').bootstrapSwitch('state', data.join_auth == 'yes');
         $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth == 'yes');
+        if (ev === 'join'){
+          if (data.ask_for_name && data.ask_for_name === 'yes'){
+            $('#display-name-pre').slideDown();
+          }
+          else{
+            webrtc.joinRoom(room);
+          }
+        }
       }
     });
   }
@@ -1478,13 +1484,7 @@ function initVroom(room) {
   // Or prompt for a name first
   webrtc.once('readyToCall', function () {
     peers.local.id = webrtc.connection.socket.sessionid;
-    getRoomInfo();
-    if (roomInfo.ask_for_name && roomInfo.ask_for_name == 'yes'){
-      $('#display-name-pre').slideDown();
-    }
-    else{
-      webrtc.joinRoom(room);
-    }
+    getRoomInfo('join');
   });
 
   // When we joined the room
