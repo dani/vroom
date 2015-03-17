@@ -20,6 +20,7 @@ our %Lexicon = (
     "ERROR_DB_UNAVAILABLE"                      => "La base de données n'est pas accessible",
     "ERROR_DB_VERSION_MISMATCH"                 => "La base de donnée doit être mise à jour",
     "ERROR_TOO_MANY_MEMBERS"                    => "Ce salon a atteint sa limite de participants",
+    "ERROR_ESTABLISHING_P2P"                    => "Impossible d'établir une connexion avec un des participants",
     "JS_REQUIRED"                               => "VROOM nécessite l'activation du javascript",
     "EMAIL_INVITATION"                          => "Invitation à une conférence vidéo",
     "YOU_ARE_INVITED_TO_A_MEETING"              => "Vous êtes attendu sur un salon de vidéo conférence. " .

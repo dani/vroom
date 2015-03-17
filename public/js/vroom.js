@@ -1631,6 +1631,18 @@ function initVroom(room) {
     }
   });
 
+  // Display an error if an error occures during p2p connection
+  function p2pFailure(peer){
+    peer.end();
+    $.notify(localize('ERROR_ESTABLISHING_P2P'));
+  }
+  webrtc.on('iceFailed', function(peer){
+    p2pFailure(peer);
+  });
+  webrtc.on('connectivityError', function(peer){
+    p2pFailure(peer);
+  });
+
   // Detect connection lost
   webrtc.connection.socket.on('disconnect', function(){
     setTimeout(function(){
