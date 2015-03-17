@@ -3,7 +3,7 @@
 %= include 'public_toolbar'
 <div class="container-fluid">
   <div class="well publicForm">
-    <form role="form" action="<%= $self->get_url('/feedback') %>" method="post">
+    <form role="form" action="<%= $self->url_for('/feedback') %>" method="post">
       <legend class=text-center">
         <%=l 'GIVE_US_YOUR_FEEDBACK' %>
       </legend>
@@ -24,7 +24,7 @@
       <button type="submit" class="btn btn-primary">
         <%=l 'SUBMIT' %>
       </button>
-      <a href="<%= $self->get_url('/') %>" class="btn btn-default">
+      <a href="<%= $self->url_for('/') %>" class="btn btn-default">
         <%=l 'CANCEL' %>
       </a>
     </form>

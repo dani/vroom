@@ -1,5 +1,7 @@
     <script type="text/javascript">
-      var rootUrl = '<%= $self->get_url('/'); %>';
+      <% my $url = $self->url_for('/');
+         $url .= ($url =~ m/\/$/) ? '' : '/'; %>
+      var rootUrl = '<%= $url %>';
       var currentLang = '<%= $self->languages %>';
       var api_key = '<%= ($self->session('key')) ? $self->session('key') : '' %>';
       var roomName;

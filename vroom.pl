@@ -498,14 +498,6 @@ helper get_mtime => sub {
   return stat($file)->mtime;
 };
 
-# Wrapper arround url_for which adds a trailing / if needed
-helper get_url => sub {
-  my $self = shift;
-  my $url = $self->url_for(shift);
-  $url .= ($url =~ m/\/$/) ? '' : '/';
-  return $url;
-};
-
 # Add an email address to the list of notifications
 helper add_notification => sub {
   my $self = shift;

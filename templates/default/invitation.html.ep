@@ -37,7 +37,7 @@
           <%=l 'CLICK_SEND_OR_JOIN_NOW' %>
         </p>
       </div>
-        <a class="btn btn-default btn-lg" role="button" href="<%= $self->get_url('/') . $room %><% if ($token ne ''){ %>?token=<%= $token %><% } %>">
+        <a class="btn btn-default btn-lg" role="button" href="<%= $self->url_for("/$room") %><% if ($token ne ''){ %>?token=<%= $token %><% } %>">
           <%=l 'JOIN_THIS_ROOM' %>
         </a>
         <button type="submit" class="btn btn-primary btn-lg">

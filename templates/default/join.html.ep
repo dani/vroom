@@ -230,7 +230,7 @@
                 <%=l 'CLICK_IF_NO_WEBCAM' %>
               </p>
               <p class="text-center">
-                <a class="btn btn-default btn-lg" href="<%= $self->get_url('/') . $room %>?video=false">
+                <a class="btn btn-default btn-lg" href="<%= $self->url_for("/$room") %>?video=false">
                   <span class="glyphicon glyphicon-headphones">
                   </span>
                 </a>
@@ -254,7 +254,7 @@
                     <button id="displayNamePreButton" class="btn btn-primary disabled" type="submit">
                       <%=l 'SUBMIT' %>
                     </button>
-                    <a class="btn btn-default" href="<%= $self->get_url('/') %>">
+                    <a class="btn btn-default" href="<%= $self->url_for('/') %>">
                       <%=l 'CANCEL' %>
                     </a>
                   </div>
@@ -326,7 +326,7 @@
           </div>
         </form>
       </div>
-      <audio id="mohPlayer" src="<%= $self->get_url('/') %>snd/moh/<%= $moh %>" loop></audio>
+      <audio id="mohPlayer" src="<%= $self->url_for('/snd/moh/' . $moh) %>" loop></audio>
       <div id="view" class="view row-fluid">
         <div id="webRTCVideo" class="col-xs-12 col-sm-4">
           <div class="col-xs-3 col-sm-12 col-lg-6 previewContainer" id="videoLocalContainer">

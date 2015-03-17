@@ -6,7 +6,7 @@
   <meta name="description" content=" <%=l 'VROOM_DESC' %>" />
   <% my @css = qw(css/bootstrap.css css/bootstrap-switch.css css/toc-scroll.css css/vroom.css); %>
   <%=css @css %>
-  <link rel="icon" type="image/png" href="<%= $self->get_url('/') %>img/favicon.png" />
+  <link rel="icon" type="image/png" href="<%= $self->url_for('/img/favicon.png') %>" />
 </head>
 <body>
   <div id="wrap">
