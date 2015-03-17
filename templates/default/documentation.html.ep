@@ -92,6 +92,7 @@
             <ul>
               <li>Mojolicious::Plugin::Mail</li>
               <li>Mojolicious::Plugin::Database</li>
+              <li>Mojolicious::Plugin::StaticCompressor</li>
               <li>Crypt::SaltedHash</li>
               <li>MIME::Base64</li>
               <li>Etherpad::API</li>

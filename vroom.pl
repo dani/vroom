@@ -9,6 +9,7 @@ use lib 'lib';
 use Mojolicious::Lite;
 use Mojolicious::Plugin::Mail;
 use Mojolicious::Plugin::Database;
+use Mojolicious::Plugin::StaticCompressor;
 use Vroom::Constants;
 use Crypt::SaltedHash;
 use Digest::HMAC_SHA1 qw(hmac_sha1);
@@ -108,6 +109,11 @@ plugin database => {
 plugin mail => {
   from => $config->{'email.from'},
   type => 'text/html',
+};
+
+# Static resources compressor
+plugin StaticCompressor => {
+  url_path_prefix => 'cache'
 };
 
 ##########################
