@@ -865,21 +865,18 @@ function initVroom(room) {
         el.addClass('selected');
         mainVid = el.attr('id');
         // Cut the volume the corresponding preview
-        // but only on screen > 768
-        // On smaller screens, the main video is hidden
-        if ($(window).width() > 768){
-          $('#webRTCVideo video').each(function(){
-            if ($(this).get(0).paused){
-              $(this).get(0).play();
-            }
-          });
-          if (el.attr('id') !== 'webRTCVideoLocal'){
-            el.get(0).volume = 0;
-            $('#mainVideo video').get(0).volume = 1;
+        $('#webRTCVideo video').each(function(){
+          if ($(this).get(0).paused){
+            $(this).get(0).play();
           }
-          else {
-            $('#mainVideo video').get(0).volume = 0;
-          }
+        });
+        if (el.attr('id') !== 'webRTCVideoLocal'){
+          el.get(0).volume = 0;
+          $('#mainVideo video').get(0).volume = 1;
+        }
+        else {
+          // If we put our own video in the main div, we need to mute it
+          $('#mainVideo video').get(0).volume = 0;
         }
         $('#mainVideo').show(200);
       }
