@@ -1749,6 +1749,11 @@ any '/api' => sub {
     # Auth succeed ? lets promote him to owner of the room
     if ($room->{owner_password} && Crypt::SaltedHash->validate($room->{owner_password}, $pass)){
       $self->session($room->{name}, {role => 'owner'});
+      $self->set_peer_role({
+        room    => $room->{name},
+        peer_id => $self->session('peer_id'),
+        role    => 'owner'
+      });
       $self->associate_key_to_room(
         room => $room->{name},
         key  => $self->session('key'),
