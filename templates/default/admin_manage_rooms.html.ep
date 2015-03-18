@@ -9,7 +9,7 @@
     <div class="panel-heading">
       <div class="form-inline">
         <div class="form-group">
-          <div class="input-group">
+          <div class="input-group input-group-lg">
             <input type="text" id="searchRoom" class="form-control" value=""/>
             <div class="input-group-addon">
               <span class="glyphicon glyphicon-search">
@@ -34,7 +34,7 @@
             <th class="hidden-xs">
               <%=l 'LAST_ACTIVITY' %>
             </th>
-            <th class="hidden-xs">
+            <th class="hidden-xs hidden-sm">
               <%=l 'NUMBER_OF_PARTICIPANTS' %>
             </th>
             <th>
