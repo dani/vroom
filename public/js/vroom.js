@@ -36,24 +36,14 @@ var webrtc = undefined;
 $('#lnk_' + page).addClass('active');
 
 // Localize the strings we need
-$.ajax({
-  url: rootUrl + 'localize/' + currentLang,
-  type: 'GET',
-  dataType: 'json',
-  success: function(data) {
-    locale = data;
-  }
+$.getJSON(rootUrl + 'localize/' + currentLang, function(data){
+  locale = data;
 });
 
 // If current locale isn't EN, retrieve EN locale as a fallback
 if (currentLang !== 'en'){
-  $.ajax({
-    url: rootUrl + 'localize/en',
-    type: 'GET',
-    dataType: 'json',
-    success: function(data) {
-      def_locale = data;
-    }
+  $.getJSON(rootUrl + 'localize/en' , function(data){
+    def_locale = data;
   });
 }
 

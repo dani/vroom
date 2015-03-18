@@ -1298,8 +1298,6 @@ get '/localize/:lang' => { lang => 'en' } => sub {
     $strings->{$string} = $self->l($string);
   }
   $self->languages($l);
-  # Tell the client to cache it
-  $self->res->headers->cache_control('private,max-age=3600');
   return $self->render(json => $strings);
 };
 
