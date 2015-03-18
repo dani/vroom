@@ -586,11 +586,11 @@ function initAdminRooms(){
         }
         adjustAddRemoveEmailButtons();
         // Update config switches
-        $('#lockedSet').bootstrapSwitch('state', data.locked == 'yes');
-        $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name == 'yes');
-        $('#joinPassSet').bootstrapSwitch('state', data.join_auth == 'yes');
-        $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth == 'yes');
-        $('#persistentSet').bootstrapSwitch('state', data.persistent == 'yes');
+        $('#lockedSet').bootstrapSwitch('state', data.locked);
+        $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name);
+        $('#joinPassSet').bootstrapSwitch('state', data.join_auth);
+        $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth);
+        $('#persistentSet').bootstrapSwitch('state', data.persistent);
         $('#maxMembers').val(data.max_members);
         // Hide the password inputs
         $('#joinPassFields,#ownerPassFields').hide();
@@ -767,7 +767,7 @@ function initVroom(room) {
         else{
           // Hide owner reserved elements
           $('.ownerEl').hide(500);
-          if (data.owner_auth == 'yes'){
+          if (data.owner_auth){
             $('.unauthEl').show(500);
           }
           else{
@@ -775,12 +775,12 @@ function initVroom(room) {
           }
         }
         // Update config switches
-        $('#lockedSet').bootstrapSwitch('state', data.locked == 'yes');
-        $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name == 'yes');
-        $('#joinPassSet').bootstrapSwitch('state', data.join_auth == 'yes');
-        $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth == 'yes');
+        $('#lockedSet').bootstrapSwitch('state', data.locked);
+        $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name);
+        $('#joinPassSet').bootstrapSwitch('state', data.join_auth);
+        $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth);
         if (ev === 'join'){
-          if (data.ask_for_name && data.ask_for_name === 'yes'){
+          if (data.ask_for_name){
             $('#display-name-pre').slideDown();
           }
           else{

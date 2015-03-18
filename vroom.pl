@@ -964,6 +964,21 @@ helper get_turn_creds => sub {
   }
 };
 
+# Format room config as a hash to be sent in JSON response
+helper get_room_conf => sub {
+  my $self = shift;
+  my $room = shift;
+  return {
+    owner_auth   => ($room->{owner_password}) ? Mojo::JSON::true : Mojo::JSON::false,
+    join_auth    => ($room->{join_password})  ? Mojo::JSON::true : Mojo::JSON::false,
+    locked       => ($room->{locked})         ? Mojo::JSON::true : Mojo::JSON::false,
+    ask_for_name => ($room->{ask_for_name})   ? Mojo::JSON::true : Mojo::JSON::false,
+    persistent   => ($room->{persistent})     ? Mojo::JSON::true : Mojo::JSON::false,
+    max_members  => $room->{max_members},
+    notif        => $self->get_email_notifications($room->{name})
+  };
+};
+
 # Socket.IO handshake
 get '/socket.io/:ver' => sub {
   my $self = shift;
@@ -1789,15 +1804,7 @@ any '/api' => sub {
   # Return just room config
   elsif ($req->{action} eq 'get_room_conf'){
     return $self->render(
-      json => {
-        owner_auth   => ($room->{owner_password}) ? 'yes' : 'no',
-        join_auth    => ($room->{join_password})  ? 'yes' : 'no',
-        locked       => ($room->{locked})         ? 'yes' : 'no',
-        ask_for_name => ($room->{ask_for_name})   ? 'yes' : 'no',
-        persistent   => ($room->{persistent})     ? 'yes' : 'no',
-        max_members  => $room->{max_members},
-        notif        => $self->get_email_notifications($room->{name}),
-      }
+      json => $self->get_room_conf($room)
     );
   }
   # Return your role and various info about the room
@@ -1830,16 +1837,10 @@ any '/api' => sub {
         );
       }
     }
+    my $conf = $self->get_room_conf($room);
+    $conf->{role} = $self->session($room->{name})->{role};
     return $self->render(
-      json => {
-        role         => $self->session($room->{name})->{role},
-        owner_auth   => ($room->{owner_password}) ? 'yes' : 'no',
-        join_auth    => ($room->{join_password})  ? 'yes' : 'no',
-        locked       => ($room->{locked})         ? 'yes' : 'no',
-        ask_for_name => ($room->{ask_for_name})   ? 'yes' : 'no',
-        max_members  => $room->{max_members},
-        notif        => $self->get_email_notifications($room->{name}),
-      },
+      json => $conf
     );
   }
   # Return the role of a peer
