@@ -433,8 +433,12 @@ function initIndex(){
 // The documentation page
 function initDoc(){
 
+  window.onresize = function (){
+    $('#toc').width($('#toc').parents().width());
+    $('#toc').css('max-height', maxHeight() - 100 + 'px');
+  };
   $('#toc').width($('#toc').parents().width());
-  $('#toc').css('height', maxHeight() - 100 + 'px');
+  $('#toc').css('max-height', maxHeight() - 100 + 'px');
 
   $('#toc').toc({
     elementClass: 'toc',
