@@ -724,10 +724,9 @@ function initVroom(room) {
     $.ajax({
       data: {
         req: JSON.stringify({
-          action: 'get_room_info',
+          action: 'get_room_conf',
           param: {
             room: roomName,
-            peer_id: peers.local.id
           }
         })
       },
@@ -735,42 +734,21 @@ function initVroom(room) {
         showApiError(data);
       },
       success: function(data){
-        // Notify others if our role changed
-        if (data.role != peers.local.role){
-          webrtc.sendToAll('role_change', {});
-        }
-        peers.local.role = data.role;
         roomInfo = data;
-        // Enable owner reserved menu
-        if (data.role == 'owner'){
-          $('.unauthEl').hide(500);
-          $('.ownerEl').show(500);
-          // Reset the list of email displayed, so first remove evry input field but the last one
-          // We keep it so we can clone it again
-          $('.email-list').find('.email-entry:not(:last)').remove();
-          $.each(data.notif, function(index, obj){
-            addEmailInputField('email-list-notification', obj.email);
-          });
-          // Now, remove the first one if the list is not empty
-          if (Object.keys(data.notif).length > 0){
-            $('.email-list').find('.email-entry:first').remove();
-          }
-          else{
-            $('.email-list').find('.email-entry:first').find('input:first').val('');
-          }
-          adjustAddRemoveEmailButtons();
+        // Reset the list of email displayed, so first remove evry input field but the last one
+        // We keep it so we can clone it again
+        $('.email-list').find('.email-entry:not(:last)').remove();
+        $.each(data.notif, function(index, obj){
+          addEmailInputField('email-list-notification', obj.email);
+        });
+        // Now, remove the first one if the list is not empty
+        if (Object.keys(data.notif).length > 0){
+          $('.email-list').find('.email-entry:first').remove();
         }
-        // We're are not owner of the room
         else{
-          // Hide owner reserved elements
-          $('.ownerEl').hide(500);
-          if (data.owner_auth){
-            $('.unauthEl').show(500);
-          }
-          else{
-            $('.unauthEl').hide(500);
-          }
+          $('.email-list').find('.email-entry:first').find('input:first').val('');
         }
+        adjustAddRemoveEmailButtons();
         // Update config switches
         $('#lockedSet').bootstrapSwitch('state', data.locked);
         $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name);
@@ -804,7 +782,23 @@ function initVroom(room) {
         showApiError(data);
       },
       success: function(data){
-        if (peers[id]){
+        if (id === peers.local.id){
+          if (data.role != peers.local.role){
+            webrtc.sendToAll('role_change', {});
+          }
+          peers.local.role = data.role;
+          if (data.role == 'owner'){
+            $('.unauthEl').hide(500);
+            $('.ownerEl').show(500);
+          }
+          else {
+            if (roomInfo.owner_auth){
+              $('.unauthEl').show(500);
+            }
+            $('.ownerEl').hide(500);
+          }
+        }
+        else if (peers[id]){
           peers[id].role = data.role;
           if (data.role == 'owner'){
             // If this peer is a owner, we add the mark on its preview
@@ -1320,7 +1314,7 @@ function initVroom(room) {
     }
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
       var who = (peers[data.id].hasName) ? peers[data.id].displayName : localize('A_ROOM_ADMIN');
-      getRoomInfo();
+      getPeerRole(peers.local.id);
       if (peers.local.role == 'owner'){
         $.notify(sprintf(localize('s_IS_PROMOTING_YOU'), who), 'success');
       }
@@ -1523,32 +1517,32 @@ function initVroom(room) {
           });
         }
       }, 10000);
-      // Ping the room every minutes
-      // Used to detect inactive rooms
-      setInterval(function(){
-        $.ajax({
-          data: {
-            req: JSON.stringify({
-              action: 'ping',
-              param: {
-                room: roomName
-              }
-            })
-          },
-          error: function(data) {
-            showApiError(data);
-          },
-          success: function(data) {
-            if (data.msg && data.msg != ''){
-              $.notify(data.msg, {
-                className: 'info',
-                autoHide: false
-              });
-            }
-          }
-        });
-      }, 60000);
     }
+    // Ping the room every minutes
+    // Used to detect inactive rooms
+    setInterval(function(){
+      $.ajax({
+        data: {
+          req: JSON.stringify({
+            action: 'ping',
+            param: {
+              room: roomName
+            }
+          })
+        },
+        error: function(data) {
+          showApiError(data);
+        },
+        success: function(data) {
+          if (data.msg && data.msg != ''){
+            $.notify(data.msg, {
+              className: 'info',
+              autoHide: false
+            });
+          }
+        }
+      });
+    }, 60000);
     // Notify the server a new participant has joined (ourself)
     // If we were prompted for our display name before joining
     // we send it. Not that I like sending this kind of data to the server
@@ -1559,7 +1553,8 @@ function initVroom(room) {
           action: 'join',
           param: {
             room: roomName,
-            name: (peers.local.hasName) ? peers.local.displayName : ''
+            name: (peers.local.hasName) ? peers.local.displayName : '',
+            peer_id: peers.local.id
           }
         })
       },
@@ -1572,6 +1567,7 @@ function initVroom(room) {
         }
         $('#videoLocalContainer').show(200);
         $('#timeCounterXs,#timeCounter').tinyTimer({ from: new Date });
+        getPeerRole(peers.local.id);
         setTimeout(function(){
           $('#connecting').modal('hide');
         }, 200);
@@ -1884,7 +1880,7 @@ function initVroom(room) {
       success: function(data){
         $('#authPass').val('');
         $('#ownerAuthModal').modal('hide');
-        getRoomInfo();
+        getPeerRole(peers.local.id);
         $('#joinPassFields,#ownerPassFields').hide();
         $.notify(data.msg, 'success');
       }

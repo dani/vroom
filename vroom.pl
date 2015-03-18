@@ -838,6 +838,35 @@ helper make_key_admin => sub {
   return 1;
 };
 
+# Get the role of an API key for a room
+helper get_key_role => sub {
+  my $self = shift;
+  my ($token,$room) = @_;
+  my $key = $self->get_key_by_token($token);
+  if (!$key){
+    $self->app->log->debug("Invalid API key");
+    return 0;
+  }
+  # An admin key is considered owner of any room
+  if ($key->{admin}){
+    return 'owner';
+  }
+  # Now, lookup the DB the role of this key for this room
+  my $sth = eval {
+    $self->db->prepare('SELECT `role`
+                          FROM `room_keys`
+                          LEFT JOIN `rooms` ON `room_keys`.`room_id`=`rooms`.`id`
+                          WHERE `room_keys`.`key_id`=?
+                            AND `rooms`.`name`=?
+                          LIMIT 1');
+  };
+  $sth->execute($key->{id},$room);
+  $sth->bind_columns(\$key->{role});
+  $sth->fetch;
+  $self->app->log->debug("Key $token has role:" . $key->{role} . " in room $room");
+  return $key->{role};
+};
+
 # Check if a key can perform an action against a room
 helper key_can_do_this => sub {
   my $self = shift;
@@ -866,19 +895,8 @@ helper key_can_do_this => sub {
     $self->app->log->debug("Invalid room ID");
     return 0;
   }
+  $key->{role} = $self->get_key_role($data->{token}, $data->{param}->{room});
 
-  # Now, lookup the DB the role of this key for this room
-  my $sth = eval {
-    $self->db->prepare('SELECT `role`
-                          FROM `room_keys`
-                          LEFT JOIN `rooms` ON `room_keys`.`room_id`=`rooms`.`id`
-                          WHERE `room_keys`.`key_id`=?
-                            AND `rooms`.`name`=?
-                          LIMIT 1');
-  };
-  $sth->execute($key->{id},$data->{param}->{room});
-  $sth->bind_columns(\$key->{role});
-  $sth->fetch;
   $self->app->log->debug("Key role: " . $key->{role} . " and action: " . $data->{action});
   # If this key has owner privileges on this room, allow both owner and partitipant actions
   if ($key->{role} eq 'owner' && ($actions->{owner}->{$data->{action}} || $actions->{participant}->{$data->{action}})){
@@ -1823,42 +1841,6 @@ any '/api' => sub {
       json => $self->get_room_conf($room)
     );
   }
-  # Return your role and various info about the room
-  elsif ($req->{action} eq 'get_room_info'){
-    my $peer_id = $req->{param}->{peer_id};
-    if ($self->session($room->{name}) && $self->session($room->{name})->{role}){
-      # If we just have been promoted to owner
-      if ($self->session($room->{name})->{role} ne 'owner' &&
-          $self->get_peer_role({room => $room->{name}, peer_id => $peer_id}) &&
-          $self->get_peer_role({room => $room->{name}, peer_id => $peer_id}) eq 'owner'){
-        $self->session($room->{name})->{role} = 'owner';
-        $self->associate_key_to_room(
-          room => $room->{name},
-          key  => $self->session('key'),
-          role => 'owner'
-        );
-      }
-      my $res = $self->set_peer_role({
-        room    => $room->{name},
-        peer_id => $peer_id,
-        role    => $self->session($room->{name})->{role}
-      });
-      if (!$res){
-        return $self->render(
-          json => {
-            msg => $self->l('ERROR_OCCURRED'),
-            err => 'ERROR_OCCURRED'
-          },
-          status => 503
-        );
-      }
-    }
-    my $conf = $self->get_room_conf($room);
-    $conf->{role} = $self->session($room->{name})->{role};
-    return $self->render(
-      json => $conf
-    );
-  }
   # Return the role of a peer
   elsif ($req->{action} eq 'get_peer_role'){
     my $peer_id = $req->{param}->{peer_id};
@@ -1870,6 +1852,33 @@ any '/api' => sub {
         },
         status => 400
       );
+    }
+    if ($self->session('peer_id') && $self->session('peer_id') eq $peer_id){
+      # If we just have been promoted to owner
+      if ($self->session($room->{name})->{role} ne 'owner' &&
+          $self->get_peer_role({room => $room->{name}, peer_id => $peer_id}) &&
+          $self->get_peer_role({room => $room->{name}, peer_id => $peer_id}) eq 'owner'){
+        $self->session($room->{name})->{role} = 'owner';
+        $self->associate_key_to_room(
+          room => $room->{name},
+          key  => $self->session('key'),
+          role => 'owner'
+        );
+        my $res = $self->set_peer_role({
+          room    => $room->{name},
+          peer_id => $peer_id,
+          role    => $self->session($room->{name})->{role}
+        });
+        if (!$res){
+          return $self->render(
+            json => {
+              msg => $self->l('ERROR_OCCURRED'),
+              err => 'ERROR_OCCURRED'
+            },
+            status => 503
+          );
+        }
+      }
     }
     my $role = $self->get_peer_role({room => $room->{name}, peer_id => $peer_id});
     if (!$role){
@@ -1890,6 +1899,21 @@ any '/api' => sub {
   # Notify the backend when we join a room
   elsif ($req->{action} eq 'join'){
     my $name = $req->{param}->{name} || '';
+    my $peer_id = $req->{param}->{peer_id};
+    my $res = $self->set_peer_role({
+      room    => $room->{name},
+      peer_id => $peer_id,
+      role    => $self->session($room->{name})->{role}
+    });
+    if (!$res){
+      return $self->render(
+        json => {
+          msg => $self->l('ERROR_OCCURRED'),
+          err => 'ERROR_OCCURRED'
+        },
+        status => 503
+      );
+    }
     my $subj = sprintf($self->l('s_JOINED_ROOM_s'), ($name eq '') ? $self->l('SOMEONE') : $name, $room->{name});
     # Send notifications
     my $recipients = $self->get_email_notifications($room->{name});
