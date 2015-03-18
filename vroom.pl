@@ -1173,6 +1173,7 @@ Mojo::IOLoop->recurring( 3 => sub {
 get '/' => sub {
   my $self = shift;
   $self->stash(
+    page     => 'index',
     etherpad => ($ec) ? 'true' : 'false'
   );
 } => 'index';
@@ -1181,20 +1182,37 @@ get '/' => sub {
 get '/about' => sub {
   my $self = shift;
   $self->stash(
+    page       => 'about',
     components => COMPONENTS,
     musics     => MOH
   );
 } => 'about';
 
 # Documentation
-get '/documentation' => 'documentation';
+get '/documentation' => sub {
+  my $self = shift;
+  $self->stash(
+    page => 'documentation'
+  );
+} => 'documentation';
 
 # Route for the help page
-get '/help' => 'help';
+get '/help' => sub {
+  my $self = shift;
+  $self->stash(
+    page => 'help'
+  );
+} => 'help';
 
 # Routes for feedback. One get to display the form
 # and one post to get data from it
-get '/feedback' => 'feedback';
+get '/feedback' => sub {
+  my $self = shift;
+  $self->stash(
+    page => 'feedback'
+  );
+} => 'feedback';
+
 post '/feedback' => sub {
   my $self = shift;
   my $email = $self->param('email') || '';

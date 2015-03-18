@@ -4,6 +4,7 @@
       var rootUrl = '<%= $url %>';
       var currentLang = '<%= $self->languages %>';
       var api_key = '<%= ($self->session('key')) ? $self->session('key') : '' %>';
+      var page = '<%= stash('page') ? stash('page') : "" %>';
       var roomName;
     </script>
     <%

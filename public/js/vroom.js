@@ -32,6 +32,9 @@ var itemPerPage = 20;
 // Will store the global webrtc object
 var webrtc = undefined;
 
+// Mark current page link as active
+$('#lnk_' + page).addClass('active');
+
 // Localize the strings we need
 $.ajax({
   url: rootUrl + 'localize/' + currentLang,
