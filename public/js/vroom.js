@@ -784,6 +784,7 @@ function initVroom(room) {
       success: function(data){
         if (id === peers.local.id){
           if (data.role != peers.local.role){
+            getRoomInfo();
             webrtc.sendToAll('role_change', {});
           }
           peers.local.role = data.role;

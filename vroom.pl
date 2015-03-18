@@ -1837,8 +1837,9 @@ any '/api' => sub {
   # Return just room config
   elsif ($req->{action} eq 'get_room_conf'){
     my $resp = $self->get_room_conf($room);
-    my $role = $self->get_key_role($token,$room);
-    if (!$role || $role !~ m/admin|owner$/){
+    my $role = $self->get_key_role($token,$room->{name});
+    if (!$role || $role !~ m/^admin|owner$/){
+      $self->app->log->debug("API Key $token is not admin, nor owner of room " . $room->{name} . ", blanking out sensible data");
       $resp->{notif} = {};
     }
     return $self->render(
