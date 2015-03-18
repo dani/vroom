@@ -2080,6 +2080,7 @@ get '/:room' => sub {
   }
   # Now display the room page
   return $self->render('join',
+    page          => 'room',
     moh           => $self->choose_moh(),
     video         => $video,
     etherpad      => ($ec) ? 'true' : 'false',

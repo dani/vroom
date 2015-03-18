@@ -1,2 +1,0 @@
-    <% my @js = qw(js/simplewebrtc.bundle.js js/jquery.browser.js js/sprintf.js js/FileSaver.js js/jquery.tinytimer.js js/etherpad.js); %>
-    <%=js @js %>
