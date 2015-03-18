@@ -849,7 +849,7 @@ helper get_key_role => sub {
   }
   # An admin key is considered owner of any room
   if ($key->{admin}){
-    return 'owner';
+    return 'admin';
   }
   # Now, lookup the DB the role of this key for this room
   my $sth = eval {
@@ -880,14 +880,14 @@ helper key_can_do_this => sub {
   if ($actions->{anonymous}->{$data->{action}}){
     return 1;
   }
-  my $key = $self->get_key_by_token($data->{token});
-  if (!$key){
-    $self->app->log->debug("Invalid API key");
+  my $role = $self->get_key_role($data->{token}, $data->{param}->{room});
+  if (!$role){
+    $self->app->log->debug("Key " . $data->{token} . " has no role in room " . $data->{param}->{room});
     return 0;
   }
   # API key is an admin one ?
-  if ($key->{admin}){
-    $self->app->log->debug("Admin API Key");
+  if ($role eq 'admin'){
+    $self->app->log->debug("Admin API Key, every actions are allowed");
     return 1;
   }
   # Global actions can only be performed by admin keys
@@ -895,15 +895,14 @@ helper key_can_do_this => sub {
     $self->app->log->debug("Invalid room ID");
     return 0;
   }
-  $key->{role} = $self->get_key_role($data->{token}, $data->{param}->{room});
 
-  $self->app->log->debug("Key role: " . $key->{role} . " and action: " . $data->{action});
+  $self->app->log->debug("Key role: " . $role . " and action: " . $data->{action});
   # If this key has owner privileges on this room, allow both owner and partitipant actions
-  if ($key->{role} eq 'owner' && ($actions->{owner}->{$data->{action}} || $actions->{participant}->{$data->{action}})){
+  if ($role eq 'owner' && ($actions->{owner}->{$data->{action}} || $actions->{participant}->{$data->{action}})){
     return 1;
   }
   # If this key as simple partitipant priv in this room, only allow participant actions
-  elsif ($key->{role} eq 'participant' && $actions->{participant}->{$data->{action}}){
+  elsif ($role eq 'participant' && $actions->{participant}->{$data->{action}}){
     return 1;
   }
   # Else, deny
@@ -1837,8 +1836,13 @@ any '/api' => sub {
   }
   # Return just room config
   elsif ($req->{action} eq 'get_room_conf'){
+    my $resp = $self->get_room_conf($room);
+    my $role = $self->get_key_role($token,$room);
+    if (!$role || $role !~ m/admin|owner$/){
+      $resp->{notif} = {};
+    }
     return $self->render(
-      json => $self->get_room_conf($room)
+      json => $resp
     );
   }
   # Return the role of a peer
