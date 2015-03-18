@@ -205,8 +205,8 @@ helper logout => sub {
       $peers->{$self->session('peer_id')}->{socket}){
     $peers->{$self->session('peer_id')}->{socket}->finish;
   }
-  $self->session( expires => 1 );
   $self->app->log->info($self->session('name') . " logged out");
+  $self->session( expires => 1 );
   return 1;
 };
 
