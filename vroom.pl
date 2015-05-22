@@ -694,12 +694,12 @@ helper check_invite_token => sub {
   my ($room,$token) = @_;
   # Expire invitations before checking if it's valid
   $self->purge_invitations;
-  $self->app->log->debug("Checking if invitation with token $token is valid for room $room");
   my $ret = 0;
   my $data = $self->get_room_by_name($room);
   if (!$data || !$token){
     return 0;
   }
+  $self->app->log->debug("Checking if invitation with token $token is valid for room $room");
   my $sth = eval {
     $self->db->prepare('SELECT COUNT(`id`)
                           FROM `email_invitations`
