@@ -1356,7 +1356,7 @@ any [qw(GET POST)] => '/password/(:room)' => sub {
         key  => $self->session('key'),
         role => 'participant'
       );
-      return $self->redirect_to($self->get_url('/') . $room);
+      return $self->redirect_to($self->url_for('/') . $room);
     }
     # Else, it's a wrong password, display an error page
     else{
@@ -2108,7 +2108,7 @@ get '/:room' => sub {
      (!$self->session($room) ||
       $self->session($room)->{role} !~ m/^participant|owner$/) &&
      !$self->check_invite_token($room,$token)){
-    return $self->redirect_to($self->get_url('/password') . $room);
+    return $self->redirect_to($self->url_for('/password/') . $room);
   }
   # Set this peer as a simple participant if he has no role yet (shouldn't happen)
   if (!$self->session($room) || !$self->session($room)->{role}){
