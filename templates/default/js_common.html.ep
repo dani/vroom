@@ -8,7 +8,7 @@
       var roomName;
     </script>
     <%
-      my @js = qw(js/jquery-1.11.2.js js/bootstrap.js js/notify-combined.js js/bootstrap-switch.js js/jquery.bootpag.js js/toc.js js/vroom.js);
+      my @js = qw(js/jquery-1.11.3.js js/bootstrap.js js/notify-combined.js js/bootstrap-switch.js js/jquery.bootpag.js js/toc.js js/vroom.js);
       if (stash('page') && stash('page') eq 'room'){
         push @js, qw(js/simplewebrtc.bundle.js js/jquery.browser.js js/sprintf.js js/FileSaver.js js/jquery.tinytimer.js js/etherpad.js);
       }
