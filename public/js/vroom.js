@@ -1502,7 +1502,7 @@ function initVroom(room) {
   // Handle the readyToCall event: join the room
   // Or prompt for a name first
   webrtc.once('readyToCall', function () {
-    peers.local.id = webrtc.connection.socket.sessionid;
+    peers.local.id = webrtc.connection.connection.socket.sessionid;
     getRoomInfo('join');
   });
 
@@ -1638,7 +1638,7 @@ function initVroom(room) {
   });
 
   // Detect connection lost
-  webrtc.connection.socket.on('disconnect', function(){
+  webrtc.connection.connection.socket.on('disconnect', function(){
     setTimeout(function(){
       $('#disconnected').modal('show');
     }, 2000);
