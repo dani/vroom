@@ -1506,6 +1506,17 @@ function initVroom(room) {
     getRoomInfo('join');
   });
 
+  //Notification from the server
+  webrtc.connection.connection.on('notification', function(data) {
+    if (!data.payload.class || !data.payload.class.match(/^(success)|(info)|(warning)|(error)$/)){
+      data.payload.class = 'info';
+    }
+    $.notify(data.payload.msg, {
+      className: data.payload.class,
+      autoHide: false
+    });
+  });
+
   // When we joined the room
   webrtc.on('joinedRoom', function(){
     // Check if sound is detected and warn if it hasn't

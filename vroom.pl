@@ -135,7 +135,7 @@ helper valid_room_name => sub {
 helper valid_id => sub {
   my $self = shift;
   my ($id) = @_;
-  if ($id !~ m/^\d+$/){
+  if (!$id || $id !~ m/^\d+$/){
     return 0;
   }
   return 1;
@@ -1019,6 +1019,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
     return $self->send('Bad session');
   }
 
+  $self->app->log->debug("Adding new peer $id to the global peer hash");
   # We create the peer in the global hash
   $peers->{$id}->{socket} = $self->tx;
   # And set the initial "last seen" flag
@@ -1026,6 +1027,9 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
   # Associate the unique ID and name
   $peers->{$id}->{id} = $self->session('id');
   $peers->{$id}->{name} = $self->session('name');
+  # Register the i18n stash, for localization will be available in the main IOLoop
+  # Outside of Mojo controller
+  $peers->{$id}->{i18n} = $self->stash->{i18n};
 
   # When we recive a message, lets parse it as e Socket.IO one
   $self->on('message' => sub {
@@ -1166,22 +1170,49 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
 # Send heartbeats to all websocket clients
 # Every 3 seconds
 Mojo::IOLoop->recurring( 3 => sub {
-  foreach my $peer ( keys %$peers ) {
+  foreach my $id (keys %{$peers}){
     # This shouldn't happen, but better to log an error and fix it rather
-    # than looping indefinitly on a bogus entry if something went wrong
-    if (!$peers->{$peer}->{socket}){
-      app->log->debug("Garbage found in peers (peer $peer)\n" . Dumper($peers->{$peer}));
-      delete $peers->{$peer};
+    # than looping indefinitly on a bogus entry if something went wron
+    if (!$peers->{$id}->{socket}){
+      app->log->debug("Garbage found in peers (peer $id has no socket)\n");
+      delete $peers->{$id};
     }
     # If we had no reply from this peer in the last 15 sec
     # (5 heartbeat without response), we consider it dead and remove it
-    elsif ($peers->{$peer}->{last} < time - 15){
-      app->log->debug("Peer $peer didn't reply in 15 sec, disconnecting");
-      $peers->{$peer}->{socket}->finish;
-      delete $peers->{$peer};
+    elsif ($peers->{$id}->{last} < time - 15){
+      app->log->debug("Peer $id didn't reply in 15 sec, disconnecting");
+      $peers->{$id}->{socket}->finish;
+      delete $peers->{$id};
     }
     else {
-      $peers->{$peer}->{socket}->send(Protocol::SocketIO::Message->new( type => 'heartbeat' ));
+      my $invitations = app->get_invitation_list($peers->{$id}->{id});
+      foreach my $invit (keys %{$invitations}){
+        my $msg = '';
+        $msg .= sprintf($peers->{$id}->{i18n}->localize('INVITE_REPONSE_FROM_s'), $invitations->{$invit}->{email}) . "\n" ;
+        if ($invitations->{$invit}->{response} && $invitations->{$invit}->{response} eq 'later'){
+          $msg .= $peers->{$id}->{i18n}->localize('HE_WILL_TRY_TO_JOIN_LATER');
+        }
+        else{
+          $msg .= $peers->{$id}->{i18n}->localize('HE_WONT_JOIN');
+        }
+        if ($invitations->{$invit}->{message} && $invitations->{$invit}->{message} ne ''){
+          $msg .= "\n" . $peers->{$id}->{i18n}->localize('MESSAGE') . ":\n" . $invitations->{$invit}->{message} . "\n";
+        }
+        app->mark_invitation_processed($invitations->{$invit}->{token});
+        $peers->{$id}->{socket}->send(
+          Protocol::SocketIO::Message->new(
+            type => 'event',
+            data  => {
+              name => 'notification',
+              args => [{
+                payload => {msg => $msg, class => 'success'}
+              }]
+            }
+          )
+        );
+      }
+      # Send the heartbeat
+      $peers->{$id}->{socket}->send(Protocol::SocketIO::Message->new( type => 'heartbeat' ))
     }
   }
 });
@@ -1572,28 +1603,7 @@ any '/api' => sub {
   # Handle activity pings sent every minute by each participant
   elsif ($req->{action} eq 'ping'){
     $self->update_room_last_activity($room->{name});
-    # Check if we got any invitation response to process
-    my $invitations = $self->get_invitation_list($self->session('id'));
-    my $msg = '';
-    foreach my $invit (keys %{$invitations}){
-      $msg .= sprintf($self->l('INVITE_REPONSE_FROM_s'), $invitations->{$invit}->{email}) . "\n" ;
-      if ($invitations->{$invit}->{response} && $invitations->{$invit}->{response} eq 'later'){
-        $msg .= $self->l('HE_WILL_TRY_TO_JOIN_LATER');
-      }
-      else{
-        $msg .= $self->l('HE_WONT_JOIN');
-      }
-      if ($invitations->{$invit}->{message} && $invitations->{$invit}->{message} ne ''){
-        $msg .= "\n" . $self->l('MESSAGE') . ":\n" . $invitations->{$invit}->{message} . "\n";
-      }
-      $msg .= "\n";
-      $self->mark_invitation_processed($invitations->{$invit}->{token});
-    }
-    return $self->render(
-      json => {
-        msg => $msg,
-      }
-    );
+    return $self->render(json => {});
   }
   # Update room configuration
   elsif ($req->{action} eq 'update_room_conf'){
