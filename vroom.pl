@@ -1205,7 +1205,7 @@ Mojo::IOLoop->recurring( 3 => sub {
             data  => {
               name => 'notification',
               args => [{
-                payload => {msg => $msg, class => 'success'}
+                payload => {msg => $msg, class => 'info'}
               }]
             }
           )
