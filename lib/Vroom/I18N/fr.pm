@@ -50,7 +50,7 @@ our %Lexicon = (
     "OOOPS"                                     => "Oups",
     "GOODBYE"                                   => "Au revoir",
     "THANKS_SEE_YOU_SOON"                       => "Merci et à bientôt",
-    "THANKS_FOR_USING"                          => "Nous vous remmercions de votre confiance, et espérons que " .
+    "THANKS_FOR_USING"                          => "Nous vous remercions de votre confiance, et espérons que " .
                                                    "vous avez passé une agréable réunion.",
     "BACK_TO_MAIN_MENU"                         => "Retour au menu principal",
     "JOIN_THIS_ROOM"                            => "Rejoindre ce salon",
