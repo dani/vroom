@@ -1186,6 +1186,12 @@ Mojo::IOLoop->recurring( 3 => sub {
   }
 });
 
+# Purge every 5 minutes
+Mojo::IOLoop->recurring( 300 => sub {
+  app->purge_rooms;
+  app->purge_invitations;
+});
+
 # Route / to the index page
 get '/' => sub {
   my $self = shift;
@@ -1566,11 +1572,6 @@ any '/api' => sub {
   # Handle activity pings sent every minute by each participant
   elsif ($req->{action} eq 'ping'){
     $self->update_room_last_activity($room->{name});
-    # Cleanup expired rooms every ~10 pings
-    if ((int (rand 100)) <= 10){
-      $self->purge_rooms;
-      $self->purge_invitations;
-    }
     # Check if we got any invitation response to process
     my $invitations = $self->get_invitation_list($self->session('id'));
     my $msg = '';
