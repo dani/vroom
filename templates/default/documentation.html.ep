@@ -239,7 +239,7 @@ echo "LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so" \\
         Set permissions on the cache directory
       </h3>
       <p>
-        The <strong>cache</strong> directory must be writeable for the user running the VROOM daemon, which is apache in the privided systemd unit
+        The <strong>cache</strong> directory must be writeable for the user running the VROOM daemon, which is apache in the provided systemd unit
         <pre>
 chown -R apache ./cache
 chmod 700 ./cache</pre>
