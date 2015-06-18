@@ -916,21 +916,21 @@ helper key_can_do_this => sub {
   return 0;
 };
 
-# Get the number of participants currently in a room
+# Get the list of members of a room
 helper get_room_members => sub {
   my $self = shift;
   my $room = shift;
   if (!$self->get_room_by_name($room)){
     return 0;
   }
-  my $cnt = 0;
+  my @p;
   foreach my $peer (keys $peers){
     if ($peers->{$peer}->{room} &&
         $peers->{$peer}->{room} eq $room){
-      $cnt++;
+      push @p, $peer;
     }
   }
-  return $cnt;
+  return @p;
 };
 
 # Broadcast a SocketIO message to all the members of a room
@@ -1059,7 +1059,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
         }
         # Are we under the limit of members ?
         my $limit = $self->get_member_limit($room);
-        if ($limit > 0 && $self->get_room_members($room) >= $limit){
+        if ($limit > 0 && scalar $self->get_room_members($room) >= $limit){
           $self->app->log->debug("Failed to connect to the signaling channel, members limit (" . $config->{'rooms.max_members'} .
                                  ") is reached");
           $self->send( Protocol::SocketIO::Message->new( type => 'disconnect' ) );
@@ -1474,7 +1474,7 @@ any '/api' => sub {
         delete $rooms->{$r}->{$p};
       }
       # Count active users
-      $rooms->{$r}->{members} = $self->get_room_members($r);
+      $rooms->{$r}->{members} = scalar $self->get_room_members($r);
     }
     return $self->render(
       json => {
@@ -2112,7 +2112,7 @@ get '/:room' => sub {
   }
   # If we've reached the members' limit
   my $limit = $self->get_member_limit($room);
-  if ($limit > 0 && $self->get_room_members($room) >= $limit){
+  if ($limit > 0 && scalar $self->get_room_members($room) >= $limit){
     return $self->render('error',
       msg  => $self->l("ERROR_TOO_MANY_MEMBERS"),
       err  => 'ERROR_TOO_MANY_MEMBERS',
