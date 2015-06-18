@@ -26,7 +26,7 @@
         Most of them are more polished than VROOM, but I've found none entirely opensource, so I started this project.
       </p>
       <p>
-        You can get the source, and folow the development of VROOM on the <a href="https://github.com/dani/vroom" target="_blank">github page</a>
+        You can get the source, and follow the development of VROOM on the <a href="https://github.com/dani/vroom" target="_blank">github page</a>
         of the project.
       </p>
 
@@ -38,11 +38,11 @@
       <p>
         VROOM implements the following features:
         <ul>
-          <li>Video/audio conversations (no limit on the number of peers)</li>
-          <li>Text chat (and you can save history)</li>
-          <li>Screen sharing</li>
-          <li>Email invitations</li>
-          <li>Email notifications when someone joins one of your rooms</li>
+          <li>Audio/Video conversations (no limit on the number of peers per room)</li>
+          <li>Text chat (with possibility to save the history)</li>
+          <li>Screen or single windows sharing sharing</li>
+          <li>Invite anyone by email</li>
+          <li>Be notified (by email) when someone joins one of your rooms</li>
           <li>Persistent/reserved rooms</li>
           <li>Chairman functionnalities (mute/pause/kick other peers)</li>
           <li>Grant chairman role to other peers</li>
@@ -52,7 +52,7 @@
         </ul>
       </p>
       <p>
-        VROOM is available in French and English. You're welcome to submit patches or pull requests to enhance localization, or add new ones.
+        VROOM is available in French and English. You're welcome to submit patches or pull requests to enhance existing localizations, or add new ones.
       </p>
 
 
@@ -62,19 +62,20 @@
       <p>
         WebRTC allows browsers to browsers direct connections. This provides the best latency as it avoids round trip through a server,
         which is important with real time communications. But it also ensures the privacy of your communications. VROOM takes advantage of those
-        new WebRTC technologies, and does the following:
+        new technologies, and does the following:
         <ul>
-          <li>When a client joins a room, it establishes a Websocket link to VROOM. This is called the signaling channel. With this, all peers are able
-              to exchange small messages between them. But messages sent through this channels is routed through VROOM server, so it's not yet peer to peer</li>
-          <li>When a second peer joins the same room, he gets through this signaling channel informations about how to connect directly to the other one(s)</li>
+          <li>When a client joins a room, it establishes a <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">websocket</a> connection to VROOM server. 
+              This is called the signaling channel. With this, all peers are able to exchange small messages with each other. But messages sent through this channels are 
+              routed through VROOM server, so it's not yet peer to peer</li>
+          <li>When a second peer joins the same room, he gets informations about how to connect directly to the other one(s) through this signaling channel.</li>
           <li>Now, both peer exchange their video and audio stream directly</li>
           <li>The signaling channel stays open and is used to transmit non sensitive informations (peer colors synchronization, notification of muting/kicking etc...)</li>
-          <li>Everything else (audio/video/text chat) is sent through data channels
+          <li>Everything else (audio/video/text chat) is sent through data channels</li>
         </ul>
       </p>
-      <div class="alert alert-info">
-        As long as possible, data channels are established directly between peers, but in some situations, this is not possible (NAT, firewalls etc...). In those case
-        data streams are relayed through a TURN server
+      <div class="alert alert-warning">
+        As long as possible, data channels and audio/video streams are established directly between peers, but in some situations, this is not possible (NAT, firewalls etc...). In those case
+        data streams are relayed through a <a href="https://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT" target="_blank">TURN</a> server
       </div>
 
       <h1 id="install_your_own">
@@ -82,12 +83,11 @@
       </h1>
       The following guide will help you installing VROOM on your own server
 
-
       <h2 id="requirements">
         Requirements
       </h2>
       <p>
-        If you want to run your own server, you'll need the following components
+        If you want to run your own VROOM instance, you'll need the following components
         <ul>
           <li><a href="http://mojolicio.us" target="_blank">Mojolicious</a> 5 or better</li>
           <li>A MySQL compatible server (MySQL or MariaDB)</li>
@@ -112,13 +112,14 @@
         It's also advised to run VROOM on a systemd powered distribution (simply because that's what I use and I include service units for VROOM). 
         For the same reason, I recommend running Apache as webserver (others like Nginx probably work too, but I provide configuration sample only for Apache)
       </p>
-      <div class="alert alert-info">
+      <div class="alert alert-warning">
         VROOM can probably work with other DB engine (like PostgreSQL) with minor modifications.
         If you're interrested in adding support for other engines, you're welcome to help
       </div>
-      <div class="alert alert-info">
+      <div class="alert alert-warning">
         While VROOM should run on any distro, it's only tested on CentOS 7 x86_64, so it's the recommended platform.
-        Also, I provide packages for all dependencies in my repository, so it'll be much easier to install it this way.
+        Also, all dependencies are available as RPM in <a href="http://repo.firewall-services.com/centos/" target="_blank">Firewall Services'</a> 
+        repository, so installation will be easier on CentOS 7. 
         If you have it running on another system, please send me your notes so I can update this documentation.
       </div>
 
@@ -126,7 +127,7 @@
       <h2 id="install_on_c7">
         Install on CentOS 7 x86_64
       </h2>
-      <div class="alert alert-info">
+      <div class="alert alert-warning">
         This guide assumes that you have installed a minimal CentOS 7 x86_64 system
       </div>
       <div class="alert alert-danger">
@@ -163,7 +164,7 @@ yum install epel-release</pre>
         Install dependencies
       </h3>
       <p>
-        The follwoing command will install everything required to run VROOM
+        The following command will install everything required to run VROOM
         <pre>
 yum install git tar wget httpd mod_ssl openssl mariadb-server \\
            'perl(Mojolicious)' 'perl(Mojolicious::Plugin::I18N)' 'perl(Mojolicious::Plugin::Mail)' \\
@@ -199,7 +200,7 @@ CREATE DATABASE `vroom` CHARACTER SET utf8 COLLATE utf8_general_ci;
 GRANT ALL PRIVILEGES ON `vroom`.* TO 'vroom'@'localhost' IDENTIFIED BY 'MySuperPassw0rd';
 FLUSH PRIVILEGES;</pre>
       </p>
-      <div class="alert alert-info">
+      <div class="alert alert-warning">
         It's better to generate a long, random password here. Just write it somewhere, you'll need it later
       </div>
       <p>
@@ -220,7 +221,7 @@ mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
         </ul>
         Copy the config you want in /etc/httpd/conf.d/
       </p>
-      <div class="alert alert-info">
+      <div class="alert alert-warning">
         In either case, you might want to adjust the apache configuration
       </div>
       <div class="alert alert-danger">
@@ -288,7 +289,7 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         <a href="http://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT" target="_blank">TURN</a> servers
         will be used by the <a href="http://en.wikipedia.org/wiki/Interactive_Connectivity_Establishment" target="_blank">ICE</a> process. 
         If you plan to use VROOM only on a local network, where each peer can connect to each others, you can just omit this part. But if you want
-        VROOM to work from anywhere, you'll need use STUN and most likely TURN too.
+        VROOM to work from anywhere, you'll need to use STUN and most likely TURN too.
         <ul>
           <li><strong>stun_server</strong>: The STUN server(s) to use. For example
             <kbd>stun_server = 'stun:stun.l.google.com:19302','stun:vroom.example.net:3478'</kbd>. 
@@ -321,7 +322,7 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       <p>
         This section is for video quality settings. the available settings are
         <ul>
-          <li><strong>frame_rate</strong>: Number of frames per seconds for webcam streams. A bigger number will provide a better quality stream
+          <li><strong>frame_rate</strong>: Number of frames per second for webcam streams. A bigger number will provide a better quality stream
           but will also require more bandwidth and CPU on each peer. The default is 15 fps
         </ul>
       </p>
@@ -446,7 +447,7 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       <p>
         Download the latest version from <a href="http://turnserver.open-sys.org/downloads/">here</a> and extract the archive
       </p>
-      <div class="alert alert-info">
+      <div class="alert alert-warning">
         Branch 3.x is rfc5766-turn-server and 4.x is coturn. 4.x is recommanded
       </div>
 
@@ -491,7 +492,7 @@ use-auth-secret
 static-auth-secret SuperSecretPassword
 EOF</pre>
       </p>
-      <div class="alert alert-info">
+      <div class="alert alert-warning">
         <ul>
           <li>An SSL certificate is needed for everything to work correctly and securely (<strong>/etc/turnserver/cert.pem</strong> and <strong>/etc/turnserver/key.pem</strong> in this example)</li>
           <li>Both key and certificate must be readable by turnserver user and/or group</li>
@@ -518,7 +519,7 @@ systemctl start turnserver</pre>
         <pre>
 journalctl -fl -u turnserver.service</pre>
       </p>
-      <div class="alert alert-info">
+      <div class="alert alert-warning">
         Configuration of your firewall is out of scope for this doc, but you have to ensure the following ports are open:
         <ul>
           <li>TCP 3478, 3479, 5349, 5350 and 49152 to 65535</li>
@@ -571,7 +572,7 @@ git clone https://github.com/ether/etherpad-lite.git
 chown -R etherpad:etherpad ./etherpad-lite
 cp -a etherpad-lite/settings.json.template etherpad-lite/settings.json</pre>
       </p>
-      <div class="alert alert-info">
+      <div class="alert alert-warning">
         Adapt /opt/etherpad-lite/settings.json to your need. The important settings are
         <ul>
           <li><kbd>"requireSession" : true</kbd></li>
@@ -638,7 +639,7 @@ systemctl restart vroom.service</pre>
         <div class="alert alert-danger">
           As VROOM is still in early development, you'll have to closely follow how the default templates evolve and merge the changes in your own template
         </div>
-        <div class="alert alert-info">
+        <div class="alert alert-warning">
           While working on your new template, it's recommanded to switch to the <strong>morbo</strong> backend as templates will be 
           reloaded automatically after each modification
         </div>
