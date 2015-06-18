@@ -78,6 +78,11 @@ credentials = 'rest'
 ; For exmple, if you use vroom.domain.tld and pad.domain.tld, set domain.tld here
 ;base_domain = 'example.com'
 
+[directories]
+; Where to store cache data. Defaults to the cache subdirectory
+; User running VROOM daemon must have write access
+;cache = 'cache'
+
 [daemon]
 ; IP the hypnotoad daemon will listen on. You can use * to bind on every IP/Interface
 ;listen_ip = '127.0.0.1'

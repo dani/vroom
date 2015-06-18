@@ -21,6 +21,7 @@ use Config::Simple;
 use Email::Valid;
 use Protocol::SocketIO::Handshake;
 use Protocol::SocketIO::Message;
+use File::Path qw(make_path);
 use Data::Dumper;
 
 app->log->level('info');
@@ -62,6 +63,16 @@ $config->{'daemon.listen_port'}                ||= '8090';
 $config->{'daemon.backend'}                    ||= 'hypnotoad';
 $config->{'daemon.log_level'}                  ||= 'warn';
 $config->{'daemon.pid_file'}                   ||= '/tmp/vroom.pid';
+
+# Try to create the cache dir if they doesn't exist
+foreach my $dir (qw/assets/){
+  if (!-d $config->{'directories.cache'} . '/' . $dir){
+    make_path($config->{'directories.cache'} . '/' . $dir, { mode => 0770 });
+  }
+  elsif (!-w $config->{'directories.cache'} . '/' . $dir){
+    die $config->{'directories.cache'} . '/' . "$dir is not writable";
+  }
+}
 
 # Create etherpad api client if enabled
 our $ec = undef;
@@ -113,7 +124,8 @@ plugin mail => {
 
 # Static resources compressor
 plugin StaticCompressor => {
-  url_path_prefix => 'cache'
+  url_path_prefix => 'assets',
+  file_cache_path => $config->{'directories.cache'} . '/assets/'
 };
 
 ##########################
@@ -2159,6 +2171,7 @@ get '/:room' => sub {
 
 # use the templates defined in the config
 push @{app->renderer->paths}, 'templates/'.$config->{'interface.template'};
+
 # Set the secret used to sign cookies
 app->secrets([$config->{'cookie.secret'}]);
 app->sessions->secure(1);

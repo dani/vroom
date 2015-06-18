@@ -400,6 +400,16 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         </ul>
       </p>
 
+      <h3 id="settings_directories">
+        directories
+      </h3>
+      <p>
+        Controls where to find some specific directories
+        <ul>
+          <li><strong>cache</strong>: This is where VROOM will store its cache (including auto generated and compressed assets like JS and CSS bundles)</li>
+        </ul>
+      </p>
+
       <h3 id="settings_daemon">
         daemon
       </h3>
