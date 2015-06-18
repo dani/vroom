@@ -1,9 +1,8 @@
 #!/usr/bin/env perl
 
 # This file is part of the VROOM project
-# released under the MIT licence
-# Copyright 2014 Firewall Services
-# Daniel Berteaud <daniel@firewall-services.com>
+# Released under the MIT licence
+# Copyright 2014-2015 Daniel Berteaud <daniel@firewall-services.com>
 
 use lib 'lib';
 use Mojolicious::Lite;
@@ -25,6 +24,7 @@ use Protocol::SocketIO::Message;
 use Data::Dumper;
 
 app->log->level('info');
+
 # Read conf file, and set default values
 my $cfg = new Config::Simple();
 $cfg->read('conf/settings.ini');
@@ -63,7 +63,7 @@ $config->{'daemon.backend'}                    ||= 'hypnotoad';
 $config->{'daemon.log_level'}                  ||= 'warn';
 $config->{'daemon.pid_file'}                   ||= '/tmp/vroom.pid';
 
-# Create etherpad api client if required
+# Create etherpad api client if enabled
 our $ec = undef;
 if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key'} ne ''){
   $ec = Etherpad::API->new({
@@ -79,16 +79,20 @@ if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key
 # Global error check
 our $error = undef;
 
-# Global client hash
+# Global peers hash
 our $peers = {};
 
 # Load I18N, and declare supported languages
 plugin I18N => {
   namespace => 'Vroom::I18N',
 };
+
+# Supported languages must be declared here
+# Used to generate the dropdown menu
 our @supported_lang = qw(en fr);
 
 # Connect to the database
+# Only MySQL supported for now
 plugin database => {
   dsn      => $config->{'database.dsn'},
   username => $config->{'database.user'},
@@ -116,7 +120,7 @@ plugin StaticCompressor => {
 #  Validation helpers    #
 ##########################
 
-# take a string as argument and check if it's a valid room name
+# Take a string as argument and check if it's a valid room name
 helper valid_room_name => sub {
   my $self = shift;
   my ($name) = @_;
@@ -131,7 +135,7 @@ helper valid_room_name => sub {
   return 1;
 };
 
-# Check id arg is a valid ID number
+# Check arg is a valid ID number
 helper valid_id => sub {
   my $self = shift;
   my ($id) = @_;
@@ -141,7 +145,7 @@ helper valid_id => sub {
   return 1;
 };
 
-# Check email address
+# Check email address format
 helper valid_email => sub {
   my $self = shift;
   my ($email) = @_;
@@ -168,6 +172,7 @@ helper check_db_version => sub {
 };
 
 # Create a cookie based session
+# And a new API key
 helper login => sub {
   my $self = shift;
   if ($self->session('name')){
@@ -192,7 +197,7 @@ helper login => sub {
   return 1;
 };
 
-# Expire the cookie
+# Force the session cookie to expire on logout
 helper logout => sub {
   my $self = shift;
   my ($room) = @_;
@@ -250,7 +255,8 @@ helper create_room => sub {
 };
 
 # Take a string as argument
-# Return corresponding room data in ->{data}
+# Return a room object if a room with that name is found
+# Else return undef
 helper get_room_by_name => sub {
   my $self = shift;
   my ($name) = @_;
@@ -267,7 +273,7 @@ helper get_room_by_name => sub {
   return $sth->fetchall_hashref('name')->{$name}
 };
 
-# Same as before, but take a room ID as argument
+# Same as get_room_by_name, but take a room ID as argument
 helper get_room_by_id => sub {
   my $self = shift;
   my ($id) = @_;
@@ -283,7 +289,7 @@ helper get_room_by_id => sub {
   return $sth->fetchall_hashref('id')->{$id};
 };
 
-# Update a room, take a room object as a hashref
+# Update a room, take a room object as argument (hashref)
 # TODO: log modified fields
 helper modify_room => sub {
   my $self = shift;
@@ -344,7 +350,7 @@ helper set_peer_role => sub {
   return 1;
 };
 
-# Return the role of a peer, from it's signaling ID
+# Return the role of a peer, take a peer object as arg ($data = { peer_id => XYZ })
 helper get_peer_role => sub {
   my $self = shift;
   my ($data) = @_;
@@ -420,7 +426,7 @@ helper purge_rooms => sub {
   return 1;
 };
 
-# delete just a specific room
+# delete just a specific room, by name
 helper delete_room => sub {
   my $self = shift;
   my ($room) = @_;
@@ -1096,7 +1102,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
         $self->app->log->debug("Signaling message received from peer " . $id);
         $msg->{data}->{args}[0]->{from} = $id;
         my $to = $msg->{data}->{args}[0]->{to};
-        # Unicast message ? Check the dest is in the same room
+        # Unicast message ? Check if the dest is in the same room
         # and send
         if ($to &&
             $peers->{$to} &&
@@ -1105,7 +1111,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
             $peers->{$to}->{socket}){
           $peers->{$to}->{socket}->send(Protocol::SocketIO::Message->new(%$msg));
         }
-        # No dest, multicast this to every memebrs of the room
+        # No dest, multicast this to every members of the room
         else{
           $self->signal_broadcast_room({
             from => $id,
