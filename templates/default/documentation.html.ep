@@ -91,7 +91,7 @@
         <ul>
           <li><a href="http://mojolicio.us" target="_blank">Mojolicious</a> 5 or better</li>
           <li>A MySQL compatible server (MySQL or MariaDB)</li>
-          <li>A webserver supporting HTTPS and reverse proxying, including websocket reverse proxying (Apache can do this with mod_proxy_ws)</li>
+          <li>A webserver supporting HTTPS and reverse proxying, including websocket reverse proxying (Apache can do this with mod_proxy_wstunnel)</li>
           <li>The following perl modules
             <ul>
               <li>Mojolicious::Plugin::Mail</li>
@@ -229,10 +229,10 @@ mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
         but you can change this to anything you want
       </div>
       <p>
-        You also have to make sure the <strong>mod_proxy_ws</strong> module is enabled, which is not the case by default on CentOS 7
+        You also have to make sure the <strong>mod_proxy_wstunnel</strong> module is enabled, which is not the case by default on CentOS 7
         <pre>
 echo "LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so" \\
- > /etc/httpd/conf.modules.d/00-proxy_ws.conf</pre>
+ > /etc/httpd/conf.modules.d/00-proxy_wstunnel.conf</pre>
       </p>
 
       <h3 id="c7_cache_dir_perm">
