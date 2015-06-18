@@ -1554,7 +1554,7 @@ function initVroom(room) {
           }
         }
       });
-    }, 60000);
+    }, 120000);
     // Notify the server a new participant has joined (ourself)
     // If we were prompted for our display name before joining
     // we send it. Not that I like sending this kind of data to the server
