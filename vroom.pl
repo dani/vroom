@@ -22,6 +22,7 @@ use Email::Valid;
 use Protocol::SocketIO::Handshake;
 use Protocol::SocketIO::Message;
 use File::Path qw(make_path);
+use File::Basename;
 use Data::Dumper;
 
 app->log->level('info');
@@ -57,14 +58,10 @@ our $error = undef;
 # Global peers hash
 our $peers = {};
 
-# Load I18N, and declare supported languages
+# Initialize localization
 plugin I18N => {
   namespace => 'Vroom::I18N',
 };
-
-# Supported languages must be declared here
-# Used to generate the dropdown menu
-our @supported_lang = qw(en fr);
 
 # Connect to the database
 # Only MySQL supported for now
@@ -451,6 +448,12 @@ helper update_room_last_activity => sub {
   };
   $sth->execute($data->{id});
   return 1;
+};
+
+# Return an array of supported languages
+helper get_supported_lang => sub {
+  my $self = shift;
+  return map { basename(s/\.pm$//r) } glob('lib/Vroom/I18N/*.pm');
 };
 
 # Generate a random token
@@ -1408,7 +1411,7 @@ any '/api' => sub {
   }   
   # Handle requests authorized for anonymous users righ now
   if ($req->{action} eq 'switch_lang'){
-    if (!grep { $req->{param}->{language} eq $_ } @supported_lang){
+    if (!grep { $req->{param}->{language} eq $_ } $self->get_supported_lang()){
       return $self->render(
         json => {
           msg => $self->l('UNSUPPORTED_LANG'),
