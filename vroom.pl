@@ -10,6 +10,7 @@ use Mojolicious::Plugin::Mail;
 use Mojolicious::Plugin::Database;
 use Mojolicious::Plugin::StaticCompressor;
 use Vroom::Constants;
+use Vroom::Conf;
 use Crypt::SaltedHash;
 use Digest::HMAC_SHA1 qw(hmac_sha1);
 use MIME::Base64;
@@ -17,7 +18,6 @@ use File::stat;
 use File::Basename;
 use Etherpad::API;
 use Session::Token;
-use Config::Simple;
 use Email::Valid;
 use Protocol::SocketIO::Handshake;
 use Protocol::SocketIO::Message;
@@ -26,44 +26,7 @@ use Data::Dumper;
 
 app->log->level('info');
 
-# Read conf file, and set default values
-my $cfg = new Config::Simple();
-$cfg->read('conf/settings.ini');
-our $config = $cfg->vars();
-
-$config->{'database.dsn'}                      ||= 'DBI:mysql:database=vroom;host=localhost';
-$config->{'database.user'}                     ||= 'vroom';
-$config->{'database.password'}                 ||= 'vroom';
-$config->{'signaling.uri'}                     ||= 'https://vroom.example.com/';
-$config->{'turn.stun_server'}                  ||= 'stun.l.google.com:19302';
-$config->{'turn.turn_server'}                  ||= undef;
-$config->{'turn.credentials'}                  ||= 'static';
-$config->{'turn.secret_key'}                   ||= '';
-$config->{'turn.turn_user'}                    ||= '';
-$config->{'turn.turn_password'}                ||= '';
-$config->{'video.frame_rate'}                  ||= 15;
-$config->{'email.from '}                       ||= 'vroom@example.com';
-$config->{'email.contact'}                     ||= 'admin@example.com';
-$config->{'email.sendmail'}                    ||= '/sbin/sendmail';
-$config->{'interface.powered_by'}              ||= '<a href="http://www.firewall-services.com" target="_blank">Firewall Services</a>';
-$config->{'interface.template'}                ||= 'default';
-$config->{'interface.chrome_extension_id'}     ||= 'ecicdpoejfllflombfanbhfpgcimjddn';
-$config->{'interface.chrome_extension_id'}     ||= 0;
-$config->{'cookie.secret'}                     ||= 'secret';
-$config->{'cookie.name'}                       ||= 'vroom';
-$config->{'rooms.inactivity_timeout'}          ||= 60;
-$config->{'rooms.reserved_inactivity_timeout'} ||= 86400;
-$config->{'rooms.common_names'}                ||= '';
-$config->{'rooms.max_members'}                 ||= 0;
-$config->{'etherpad.uri'}                      ||= '';
-$config->{'etherpad.api_key'}                  ||= '';
-$config->{'etherpad.base_domain'}              ||= '';
-$config->{'directories.cache'}                 ||= 'cache';
-$config->{'daemon.listen_ip'}                  ||= '127.0.0.1';
-$config->{'daemon.listen_port'}                ||= '8090';
-$config->{'daemon.backend'}                    ||= 'hypnotoad';
-$config->{'daemon.log_level'}                  ||= 'warn';
-$config->{'daemon.pid_file'}                   ||= '/tmp/vroom.pid';
+our $config = Vroom::Conf::get_conf();
 
 # Try to create the cache dir if they doesn't exist
 foreach my $dir (qw/assets/){
