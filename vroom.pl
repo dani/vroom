@@ -1593,7 +1593,7 @@ any '/api' => sub {
     $room->{ask_for_name} = ($req->{param}->{ask_for_name}) ? '1' : '0';
     $room->{max_members} = $req->{param}->{max_members};
     # Room persistence can only be set by admins
-    if ($self->key_can_do_this(token  => $token, action => 'set_persistent') && $req->{param}->{persistent} ne ''){
+    if ($req->{param}->{persistent} ne '' && $self->key_can_do_this(token => $token, action => 'set_persistent')){
       $room->{persistent} = ($req->{param}->{persistent} eq Mojo::JSON->true) ? '1' : '0';
     }
     foreach my $pass (qw/join_password owner_password/){
