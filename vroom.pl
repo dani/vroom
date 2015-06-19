@@ -58,6 +58,7 @@ $config->{'rooms.max_members'}                 ||= 0;
 $config->{'etherpad.uri'}                      ||= '';
 $config->{'etherpad.api_key'}                  ||= '';
 $config->{'etherpad.base_domain'}              ||= '';
+$config->{'directories.cache'}                 ||= 'cache';
 $config->{'daemon.listen_ip'}                  ||= '127.0.0.1';
 $config->{'daemon.listen_port'}                ||= '8090';
 $config->{'daemon.backend'}                    ||= 'hypnotoad';
