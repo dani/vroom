@@ -6,15 +6,11 @@ use strict;
 use File::Basename;
 use lib dirname($0) . '/../lib';
 use DBI;
-use Config::Simple;
 use Vroom::Constants;
+use Vroom::Conf;
 use utf8;
 
-
-# Load and parse global config file
-my $cfg = new Config::Simple();
-$cfg->read(dirname($0) . '/../conf/settings.ini');
-my $config = $cfg->vars();
+my $config = Vroom::Conf::get_conf();
 
 # Open a handle to the database server
 my $dbh = DBI->connect(

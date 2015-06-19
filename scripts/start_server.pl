@@ -2,19 +2,13 @@
 
 use strict;
 use warnings;
-use Config::Simple;
 use File::Basename;
+use lib dirname($0) . '/../lib';
+use Vroom::Conf;
 
-my $dir=dirname($0);
-chdir $dir . '/..';
+chdir dirname($0) . '/..';
 
-my $cfg = new Config::Simple();
-$cfg->read('conf/settings.ini');
-our $config = $cfg->vars();
-
-$config->{'daemon.listen_ip'}   ||= '127.0.0.1';
-$config->{'daemon.listen_port'} ||= '8090';
-$config->{'daemon.backend'}     ||= 'hypnotoad';
+my $config = Vroom::Conf::get_conf();
 
 $ENV{'PERL5LIB'} = 'lib';
 
