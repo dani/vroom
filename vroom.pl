@@ -474,15 +474,6 @@ helper get_random_name => sub {
   return $name;
 };
 
-# Return the mtime of a file
-# Used to append the timestamp to JS and CSS files
-# So client can get new version immediatly
-helper get_mtime => sub {
-  my $self = shift;
-  my ($file) = @_;
-  return stat($file)->mtime;
-};
-
 # Add an email address to the list of notifications
 helper add_notification => sub {
   my $self = shift;
