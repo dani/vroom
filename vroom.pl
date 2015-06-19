@@ -1003,6 +1003,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
   # Associate the unique ID and name
   $peers->{$id}->{id} = $self->session('id');
   $peers->{$id}->{name} = $self->session('name');
+  $peers->{$id}->{check_invitations} = 1;
   # Register the i18n stash, for localization will be available in the main IOLoop
   # Outside of Mojo controller
   $peers->{$id}->{i18n} = $self->stash->{i18n};
@@ -1160,7 +1161,7 @@ Mojo::IOLoop->recurring( 3 => sub {
       $peers->{$id}->{socket}->finish;
       delete $peers->{$id};
     }
-    else {
+    elsif ($peers->{$id}->{check_invitations}) {
       my $invitations = app->get_invitation_list($peers->{$id}->{id});
       foreach my $invit (keys %{$invitations}){
         my $msg = '';
@@ -1186,6 +1187,7 @@ Mojo::IOLoop->recurring( 3 => sub {
             }
           )
         );
+        delete $peers->{$id}->{check_invitations};
       }
       # Send the heartbeat
       $peers->{$id}->{socket}->send(Protocol::SocketIO::Message->new( type => 'heartbeat' ))
@@ -1550,6 +1552,7 @@ any '/api' => sub {
       }
       $self->app->log->info("Email invitation to join room " . $req->{param}->{room} . " sent to " . $addr);
     }
+    $peers->{$self->session('peer_id')}->{check_invitations} = 1;
     return $self->render(
       json => {
         msg => sprintf($self->l('INVITE_SENT_TO_s'), join("\n", @$rcpts)),
