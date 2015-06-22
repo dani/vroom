@@ -1333,57 +1333,6 @@ get '/localize/:lang' => { lang => 'en' } => sub {
   return $self->render(json => $strings);
 };
 
-# Route for the password page
-# When someone tries to join a password protected room
-any [qw(GET POST)] => '/password/(:room)' => sub {
-  my $self = shift;
-  my $room = $self->stash('room') || '';
-  my $data = $self->get_room_by_name($room);
-  if (!$data){
-    return $self->render('error',
-      err  => 'ERROR_ROOM_s_DOESNT_EXIST',
-      msg  => sprintf ($self->l("ERROR_ROOM_s_DOESNT_EXIST"), $room),
-      room => $room
-    );
-  }
-  if ($self->req->method eq 'GET'){
-    return $self->render('password',
-      room => $room
-    );
-  }
-  else{
-    my $pass = $self->param('password');
-    # First check if we got the owner password, and if so, mark this user as owner
-    if ($data->{owner_password} && Crypt::SaltedHash->validate($data->{owner_password}, $pass)){
-      $self->session($room => {role => 'owner'});
-      $self->associate_key_to_room(
-        room => $room,
-        key  => $self->session('key'),
-        role => 'owner'
-      );
-      return $self->redirect_to($self->get_url('/') . $room);
-    }
-    # Then, check if it's the join password
-    elsif ($data->{join_password} && Crypt::SaltedHash->validate($data->{join_password}, $pass)){
-      $self->session($room => {role => 'participant'});
-      $self->associate_key_to_room(
-        room => $room,
-        key  => $self->session('key'),
-        role => 'participant'
-      );
-      return $self->redirect_to($self->url_for('/') . $room);
-    }
-    # Else, it's a wrong password, display an error page
-    else{
-      return $self->render('error',
-        err  => 'WRONG_PASSWORD',
-        msg  => sprintf ($self->l("WRONG_PASSWORD"), $room),
-        room => $room
-      );
-    }
-  }
-};
-
 # API requests handler
 any '/api' => sub {
   my $self = shift;
