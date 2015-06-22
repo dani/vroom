@@ -1514,10 +1514,9 @@ any '/api' => sub {
 
   # Ok, now, we don't have to bother with authorization anymore
   if ($req->{action} eq 'authenticate'){
-    my $pass = $req->{param}->{pass};
+    my $pass = $req->{param}->{password};
     # Is this peer already authenticated ?
     my $role = $self->get_key_role($token, $room->{name});
-    $self->app->log->debug("Checking pass $pass");
     if ($room->{owner_password} && Crypt::SaltedHash->validate($room->{owner_password}, $pass)){
       $role = 'owner';
     }
@@ -1526,6 +1525,9 @@ any '/api' => sub {
     }
     if ($role){
       $self->session($room->{name}, {role => $role});
+      if ($ec && !$self->session($room->{name})->{etherpadSession}){
+        $self->create_etherpad_session();
+      }
       $self->set_peer_role({
         room    => $room->{name},
         peer_id => $self->session('peer_id'),
@@ -1545,7 +1547,7 @@ any '/api' => sub {
     }
     return $self->render(
       json => {
-        msg => $self->l('AUTH_NEEDED')
+        msg => $self->l('WRONG_PASSWORD')
       },
       status => '401'
     );
@@ -2089,32 +2091,11 @@ get '/:room' => sub {
       room => $room,
     );
   }
-  # Now, if the room is password protected and we're not a participant, nor the owner, lets prompt for the password
-  # Email invitation have a token which can be used instead of password
-  if ($data->{join_password} &&
-     (!$self->session($room) ||
-      $self->session($room)->{role} !~ m/^participant|owner$/) &&
-     !$self->check_invite_token($room,$token)){
-    return $self->redirect_to($self->url_for('/password/') . $room);
-  }
-  # Set this peer as a simple participant if he has no role yet (shouldn't happen)
-  if (!$self->session($room) || !$self->session($room)->{role}){
-    $self->session($room => {role => 'participant'});
-    $self->associate_key_to_room(
-      room => $room,
-      key  => $self->session('key'),
-      role => 'participant'
-    );
-  }
-  # Create etherpad session if needed
-  if ($ec && !$self->session($room)->{etherpadSession}){
-    # pad doesn't exist yet ?
-    if (!$data->{etherpad_group}){
-      $self->create_pad($room);
-      # Reload data so we get the etherpad_group
-      $data = $self->get_room_by_name($room);
-    }
-    $self->create_etherpad_session($room);
+  # pad doesn't exist yet ?
+  if ($ec && !$data->{etherpad_group}){
+    $self->create_pad($room);
+    # Reload data so we get the etherpad_group
+    $data = $self->get_room_by_name($room);
   }
   # Now display the room page
   return $self->render('join',

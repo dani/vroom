@@ -648,27 +648,80 @@ function initAdminRooms(){
 }
 
 function initJoin(room){
-  $.ajax({
-    data: {
-      req: JSON.stringify({
-        action: 'get_rtc_conf',
-        param: {
-          room: room,
-        }
-      })
-    },
-    error: function(data){
-      showApiError(data);
-    },
-    success: function(data){
-      if (!video){
-        data.config.media.video = false;
+  // Auth input if access is protected
+  $('#authBeforeJoinPass').on('input', function() {
+    var pass = $('#authBeforeJoinPass').val();
+    if (pass.length > 0 && pass.length < 200){
+      $('#authBeforeJoinButton').removeClass('disabled');
+      $('#authBeforeJoinPass').parent().removeClass('has-error');
+    }
+    else{ 
+      $('#authBeforeJoinButton').addClass('disabled');
+      $('#authBeforeJoinPass').parent().addClass('has-error');
+      if (pass.length < 1){
+        $('#authBeforeJoinPass').notify(localize('PASSWORD_REQUIRED'), 'error');
       }
-      data.config.localVideoEl = 'webRTCVideoLocal';
-      webrtc = new SimpleWebRTC(data.config);
-      initVroom(room);
+      else{
+        $('#authBeforeJoinPass').notify(localize('PASSWORD_TOO_LONG'), 'error');
+      }
     }
   });
+
+  $('#authBeforeJoinForm').submit(function(event){
+    event.preventDefault();
+    var pass = $('#authBeforeJoinPass').val();
+    if (pass.length > 0 && pass.length < 200){
+      $('#auth-before-join').slideUp();
+      try_auth(pass, true);
+    }
+  });
+
+
+  function try_auth(pass, hideErrorMsg){
+    $.ajax({
+      data: {
+        req: JSON.stringify({
+          action: 'authenticate',
+          param: {
+            room: room,
+            password: pass
+          }
+        })
+      },
+      error: function(data){
+        if (data.status === 401){
+          $('#auth-before-join').slideDown();
+        }
+        if (hideErrorMsg){
+          showApiError(data);
+        }
+      },
+      success: function(data){
+        $.ajax({
+          data: {
+            req: JSON.stringify({
+              action: 'get_rtc_conf',
+              param: {
+                room: room,
+              }
+            })
+          },
+          error: function(data){
+            showApiError(data);
+          },
+          success: function(data){
+            if (!video){
+              data.config.media.video = false;
+            }
+            data.config.localVideoEl = 'webRTCVideoLocal';
+            webrtc = new SimpleWebRTC(data.config);
+            initVroom(room);
+          }
+        });
+      }
+    });
+  }
+  try_auth('', false);
 }
 
 // This is the main function called when you join a room

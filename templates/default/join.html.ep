@@ -236,6 +236,31 @@
                 </a>
               </p>
             </div>
+            <div id="auth-before-join" class="connecting-msg" style="display: none">
+              <form role="form" class="form-horizontal" id="authBeforeJoinForm">
+                <p class="text-center">
+                  <%=l 'A_PASSWORD_IS_NEEDED_TO_JOIN' %>
+                </p>
+                <div class="form-group">
+                  <label for="authBeforJoinPass" class="col-sm-4 control-label">
+                    <%=l 'PASSWORD' %>
+                  </label>
+                  <div class="col-sm-4">
+                    <input type="password" class="form-control" id="authBeforeJoinPass" placeholder="<%=l 'PASSWORD' %>">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-offset-4 col-sm-8">
+                    <button id="authBeforeJoinButton" class="btn btn-primary disabled" type="submit">
+                      <%=l 'SUBMIT' %>
+                    </button>
+                    <a class="btn btn-default" href="<%= $self->url_for('/') %>">
+                      <%=l 'CANCEL' %>
+                    </a>
+                  </div>
+                </div>
+              </form>
+            </div>
             <div id="display-name-pre" class="connecting-msg" style="display: none">
               <form role="form" class="form-horizontal" id="displayNamePreForm">
                 <p class="text-center">
