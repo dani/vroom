@@ -114,7 +114,6 @@ use constant API_ACTIONS => {
   },
   participant => {
     ping             => 1,
-    authenticate     => 1,
     get_room_info    => 1,
     get_room_conf    => 1,
     get_peer_role    => 1,
@@ -123,7 +122,8 @@ use constant API_ACTIONS => {
     get_rtc_conf     => 1 
   },
   anonymous => {
-    create_room  => 1
+    create_room  => 1,
+    authenticate => 1
   }
 };
 

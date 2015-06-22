@@ -1892,9 +1892,14 @@ function initVroom(room) {
       success: function(data){
         $('#authPass').val('');
         $('#ownerAuthModal').modal('hide');
-        getPeerRole(peers.local.id);
-        $('#joinPassFields,#ownerPassFields').hide();
-        $.notify(data.msg, 'success');
+        if (data.role === 'owner'){
+          getPeerRole(peers.local.id);
+          $('#joinPassFields,#ownerPassFields').hide();
+          $.notify(data.msg, 'success');
+        }
+        else{
+          $.notify(localize('WRONG_PASSWORD'), 'error');
+        }
       }
     });
   });

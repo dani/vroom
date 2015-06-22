@@ -1513,7 +1513,44 @@ any '/api' => sub {
   }
 
   # Ok, now, we don't have to bother with authorization anymore
-  if ($req->{action} eq 'invite_email'){
+  if ($req->{action} eq 'authenticate'){
+    my $pass = $req->{param}->{pass};
+    # Is this peer already authenticated ?
+    my $role = $self->get_key_role($token, $room->{name});
+    $self->app->log->debug("Checking pass $pass");
+    if ($room->{owner_password} && Crypt::SaltedHash->validate($room->{owner_password}, $pass)){
+      $role = 'owner';
+    }
+    elsif (!$role && $room->{join_password} && Crypt::SaltedHash->validate($room->{join_password}, $pass)){
+      $role = 'participant';
+    }
+    if ($role){
+      $self->session($room->{name}, {role => $role});
+      $self->set_peer_role({
+        room    => $room->{name},
+        peer_id => $self->session('peer_id'),
+        role    => $role
+      });
+      $self->associate_key_to_room(
+        room => $room->{name},
+        key  => $self->session('key'),
+        role => $role
+      );
+      return $self->render(
+        json => {
+          msg  => $self->l('AUTH_SUCCESS'),
+          role => $role
+        }
+      );
+    }
+    return $self->render(
+      json => {
+        msg => $self->l('AUTH_NEEDED')
+      },
+      status => '401'
+    );
+  }
+  elsif ($req->{action} eq 'invite_email'){
     my $rcpts = $req->{param}->{rcpts};
     foreach my $addr (@$rcpts){
       if (!$self->valid_email($addr) && $addr ne ''){
@@ -1732,46 +1769,6 @@ any '/api' => sub {
         err => 'ERROR_OCCURRED',
       },
       status => 503
-    );
-  }
-  elsif ($req->{action} eq 'authenticate'){
-    my $pass = $req->{param}->{'password'};
-    # Auth succeed ? lets promote him to owner of the room
-    if ($room->{owner_password} && Crypt::SaltedHash->validate($room->{owner_password}, $pass)){
-      $self->session($room->{name}, {role => 'owner'});
-      $self->set_peer_role({
-        room    => $room->{name},
-        peer_id => $self->session('peer_id'),
-        role    => 'owner'
-      });
-      $self->associate_key_to_room(
-        room => $room->{name},
-        key  => $self->session('key'),
-        role => 'owner'
-      );
-      return $self->render(
-        json => {
-          msg    => $self->l('AUTH_SUCCESS')
-        }
-      );
-    }
-    # Oner password is set, but auth failed
-    elsif ($room->{owner_password}){
-      return $self->render(
-        json => {
-          msg => $self->l('WRONG_PASSWORD'),
-          err => 'WRONG_PASSWORD'
-        },
-        status => 401
-      );
-    }
-    # There's no owner password, so you cannot auth
-    return $self->render(
-      json => {
-        msg => $self->l('NOT_ALLOWED'),
-        err => 'NOT_ALLOWED',
-      },
-      status => 403
     );
   }
   # Return configuration for SimpleWebRTC
