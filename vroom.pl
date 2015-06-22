@@ -1437,7 +1437,7 @@ any '/api' => sub {
     );
   }
 
-  # Here are method not tied to a room
+  # Here are methods not tied to a room
   if ($req->{action} eq 'get_room_list'){
     my $rooms = $self->get_room_list;
     foreach my $r (keys %{$rooms}){
