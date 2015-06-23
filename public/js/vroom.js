@@ -31,6 +31,7 @@ var itemPerPage = 20;
 
 // Will store the global webrtc object
 var webrtc = undefined;
+var roomInfo = {};
 
 // Mark current page link as active
 $('#lnk_' + page).addClass('active');
@@ -676,7 +677,6 @@ function initJoin(room){
     }
   });
 
-
   function try_auth(pass, hideErrorMsg){
     $.ajax({
       data: {
@@ -689,6 +689,7 @@ function initJoin(room){
         })
       },
       error: function(data){
+        // 401 means password is missing or incorrect
         if (data.status === 401){
           $('#auth-before-join').slideDown();
         }
@@ -740,7 +741,6 @@ function initVroom(room) {
       hasVideo: true
     }
   };
-  var roomInfo;
   var mainVid = false,
       chatHistory = {},
       chatIndex = 0,
