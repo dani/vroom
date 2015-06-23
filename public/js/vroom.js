@@ -716,7 +716,18 @@ function initJoin(room){
             }
             data.config.localVideoEl = 'webRTCVideoLocal';
             webrtc = new SimpleWebRTC(data.config);
-            initVroom(room);
+            // If browser doesn't support webRTC or dataChannels
+            if (!webrtc.capabilities.support || !webrtc.capabilities.supportGetUserMedia || !webrtc.capabilities.supportDataChannel){
+              $('.connecting-msg').not('#no-webrtc-msg').remove();
+              $('#no-webrtc-msg').slideDown();
+            }
+            else{
+              // Hide screen sharing btn if not supported, disable it on mobile
+              if (!webrtc.capabilities.supportScreenSharing || !$.browser.desktop){
+                $('.btn-share-screen').remove();
+              }
+              initVroom(room);
+            }
           }
         });
       }
@@ -748,17 +759,6 @@ function initVroom(room) {
       colorChanged = false;
 
   $('#name_local').css('background-color', peers.local.color);
-
-  // If browser doesn't support webRTC or dataChannels
-  if (!webrtc.capabilities.support || !webrtc.capabilities.supportGetUserMedia || !webrtc.capabilities.supportDataChannel){
-    $('.connecting-msg').not('#no-webrtc-msg').remove();
-    $('#no-webrtc-msg').slideDown();
-  }
-
-  // Hide screen sharing btn if not supported, disable it on mobile
-  if (!webrtc.capabilities.supportScreenSharing || !$.browser.desktop){
-    $('.btn-share-screen').remove();
-  }
 
   // Return the number of peers in the room
   function countPeers(){
