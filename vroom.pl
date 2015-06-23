@@ -1472,6 +1472,9 @@ any '/api' => sub {
     elsif (!$role && $room->{join_password} && Crypt::SaltedHash->validate($room->{join_password}, $pass)){
       $role = 'participant';
     }
+    elsif (!$role && !$room->{join_password}){
+      $role = 'participant';
+    }
     if ($role){
       $self->session($room->{name}, {role => $role});
       if ($ec && !$self->session($room->{name})->{etherpadSession}){
