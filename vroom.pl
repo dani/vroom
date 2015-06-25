@@ -202,7 +202,6 @@ helper create_room => sub {
     return 0;
   }
   if ($self->get_room_by_name($name)){
-    return 0;
   }
   my $sth = eval {
     $self->db->prepare('INSERT INTO `rooms`
@@ -1119,6 +1118,10 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
     # Heartbeat reply, update timestamp
     elsif ($msg->type eq 'heartbeat'){
       $peers->{$id}->{last} = time;
+      # Update room last activity ~ every 40 heartbeat, so about every 2 minutes
+      if ((int (rand 200)) <= 5){
+        $self->update_room_last_activity($peers->{$id}->{room});
+      }
     }
   });
 
@@ -1588,11 +1591,6 @@ any '/api' => sub {
       },
       status => 503
     );
-  }
-  # Handle activity pings sent every minute by each participant
-  elsif ($req->{action} eq 'ping'){
-    $self->update_room_last_activity($room->{name});
-    return $self->render(json => {});
   }
   # Update room configuration
   elsif ($req->{action} eq 'update_room_conf'){

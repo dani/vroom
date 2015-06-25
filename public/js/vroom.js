@@ -1644,31 +1644,6 @@ function initVroom(room) {
         }
       }, 10000);
     }
-    // Ping the room every minutes
-    // Used to detect inactive rooms
-    setInterval(function(){
-      $.ajax({
-        data: {
-          req: JSON.stringify({
-            action: 'ping',
-            param: {
-              room: roomName
-            }
-          })
-        },
-        error: function(data) {
-          showApiError(data);
-        },
-        success: function(data) {
-          if (data.msg && data.msg != ''){
-            $.notify(data.msg, {
-              className: 'info',
-              autoHide: false
-            });
-          }
-        }
-      });
-    }, 120000);
     // Notify the server a new participant has joined (ourself)
     // If we were prompted for our display name before joining
     // we send it. Not that I like sending this kind of data to the server
