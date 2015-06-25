@@ -100,8 +100,7 @@ helper valid_room_name => sub {
   my $ret = {};
   # A few names are reserved
   my @reserved = qw(about help feedback feedback_thanks goodbye admin localize api
-                    missing dies password kicked invitation js css img fonts snd
-                    documentation);
+                    missing dies kicked invitation js css img fonts snd documentation);
   if (!$name || $name !~ m/^[\w\-]{1,49}$/ || grep { $name eq $_ } @reserved){
     return 0;
   }
