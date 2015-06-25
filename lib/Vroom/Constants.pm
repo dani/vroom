@@ -113,7 +113,6 @@ use constant API_ACTIONS => {
     update_room_conf   => 1
   },
   participant => {
-    ping             => 1,
     get_room_info    => 1,
     get_room_conf    => 1,
     get_peer_role    => 1,
