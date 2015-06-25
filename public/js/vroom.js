@@ -32,6 +32,18 @@ var itemPerPage = 20;
 // Will store the global webrtc object
 var webrtc = undefined;
 var roomInfo = {};
+var peers = {
+  local: {
+    screenShared: false,
+    micMuted: false,
+    videoPaused: false,
+    displayName: '',
+    color: chooseColor(),
+    role: 'participant',
+    hasVideo: true
+  }
+};
+
 
 // Mark current page link as active
 $('#lnk_' + page).addClass('active');
@@ -239,6 +251,18 @@ $(document).on('click','button.btn-remove-email',function(e){
   el.remove();
 });
 
+// Update the displayName of the peer
+// and its screen if any
+function updateDisplayName(id){
+  // We might receive the screen before the peer itself
+  // so check if the object exists before using it, or fallback with empty values
+  var display = (peers[id] && peers[id].hasName) ? stringEscape(peers[id].displayName) : '';
+  var color = (peers[id] && peers[id].color) ? peers[id].color : chooseColor();
+  var screenName = (peers[id] && peers[id].hasName) ? sprintf(localize('SCREEN_s'), stringEscape(peers[id].displayName)) : '';
+  $('#name_' + id).html(display).css('background-color', color);
+  $('#name_' + id + '_screen').html(screenName).css('background-color', color);
+}
+
 // Handle owner/join password confirm
 $('#ownerPassConfirm').on('input', function() {
   if ($('#ownerPassConfirm').val() == $('#ownerPass').val() &&
@@ -353,6 +377,47 @@ $('#configureRoomForm').submit(function(e){
   });
 });
 
+// Get our role and other room settings from the server
+function getRoomInfo(cb){
+  $.ajax({
+    data: {
+      req: JSON.stringify({
+        action: 'get_room_conf',
+        param: {
+          room: roomName,
+        }
+      })
+    },
+    error: function(data){
+      showApiError(data);
+    },
+    success: function(data){
+      roomInfo = data;
+      // Reset the list of email displayed, so first remove evry input field but the last one
+      // We keep it so we can clone it again
+      $('.email-list').find('.email-entry:not(:last)').remove();
+      $.each(data.notif, function(index, obj){
+        addEmailInputField('email-list-notification', obj.email);
+      });
+      // Now, remove the first one if the list is not empty
+      if (Object.keys(data.notif).length > 0){
+        $('.email-list').find('.email-entry:first').remove();
+      }
+      else{
+        $('.email-list').find('.email-entry:first').find('input:first').val('');
+      }
+      adjustAddRemoveEmailButtons();
+      // Update config switches
+      $('#lockedSet').bootstrapSwitch('state', data.locked);
+      $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name);
+      $('#joinPassSet').bootstrapSwitch('state', data.join_auth);
+      $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth);
+      if (typeof cb === 'function'){
+        cb();
+      }
+    }
+  });
+}
 
 // Used on the index page
 function initIndex(){
@@ -667,7 +732,7 @@ function initJoin(room){
       }
     }
   });
-
+  // Submit the join password form
   $('#authBeforeJoinForm').submit(function(event){
     event.preventDefault();
     var pass = $('#authBeforeJoinPass').val();
@@ -677,7 +742,41 @@ function initJoin(room){
     }
   });
 
-  function try_auth(pass, hideErrorMsg){
+  // This is the displayName input before joining the room
+  $('#displayNamePre').on('input', function() {
+    var name = $('#displayNamePre').val();
+    if (name.length > 0 && name.length < 50){
+      $('#displayNamePreButton').removeClass('disabled');
+      $('#displayNamePre').parent().removeClass('has-error');
+    }
+    else{
+      $('#displayNamePreButton').addClass('disabled');
+      $('#displayNamePre').parent().addClass('has-error');
+      if (name.length < 1){
+        $('#displayNamePre').notify(localize('DISPLAY_NAME_REQUIRED'), 'error');
+      }
+      else{
+        $('#displayNamePre').notify(localize('DISPLAY_NAME_TOO_LONG'), 'error');
+      }
+    }
+  });
+
+  $('#displayNamePreForm').submit(function(event){
+    event.preventDefault();
+    var name = $('#displayNamePre').val();
+    if (name.length > 0 && name.length < 50){
+      $('#display-name-pre').slideUp();
+      $('#displayName').val(name);
+      peers.local.hasName = true;
+      peers.local.displayName = name;
+      updateDisplayName('local');
+      $('#chatBox').removeAttr('disabled').removeAttr('placeholder');
+      init_webrtc(room);
+    }
+  });
+
+
+  function try_auth(pass, showErrorMsg){
     $.ajax({
       data: {
         req: JSON.stringify({
@@ -689,11 +788,19 @@ function initJoin(room){
         })
       },
       error: function(data){
-        // 401 means password is missing or incorrect
+        // 401 means password is needed
         if (data.status === 401){
+          data = data.responseJSON;
+          $('.connecting-err-reason').text(data.msg);
           $('#auth-before-join').slideDown();
         }
-        if (hideErrorMsg){
+        else if (data.status === 403){
+          data = data.responseJSON;
+          $('.connecting-err-reason').text(data.msg);
+          $('.connecting-msg').not('#room-is-locked').remove();
+          $('#room-is-locked').slideDown();
+        }
+        if (showErrorMsg){
           showApiError(data);
         }
       },
@@ -701,7 +808,7 @@ function initJoin(room){
         $.ajax({
           data: {
             req: JSON.stringify({
-              action: 'get_rtc_conf',
+              action: 'get_room_conf',
               param: {
                 room: room,
               }
@@ -711,22 +818,12 @@ function initJoin(room){
             showApiError(data);
           },
           success: function(data){
-            if (!video){
-              data.config.media.video = false;
-            }
-            data.config.localVideoEl = 'webRTCVideoLocal';
-            webrtc = new SimpleWebRTC(data.config);
-            // If browser doesn't support webRTC or dataChannels
-            if (!webrtc.capabilities.support || !webrtc.capabilities.supportGetUserMedia || !webrtc.capabilities.supportDataChannel){
-              $('.connecting-msg').not('#no-webrtc-msg').remove();
-              $('#no-webrtc-msg').slideDown();
+            roomInfo = data;
+            if (roomInfo.ask_for_name){
+              $('#display-name-pre').slideDown();
             }
             else{
-              // Hide screen sharing btn if not supported, disable it on mobile
-              if (!webrtc.capabilities.supportScreenSharing || !$.browser.desktop){
-                $('.btn-share-screen').remove();
-              }
-              initVroom(room);
+              init_webrtc(roomName);
             }
           }
         });
@@ -736,22 +833,51 @@ function initJoin(room){
   try_auth('', false);
 }
 
+function init_webrtc(room){
+  $.ajax({
+    data: {
+      req: JSON.stringify({
+        action: 'get_rtc_conf',
+        param: {
+          room: room,
+        }
+      })
+    },
+    error: function(data){
+      showApiError(data);
+    },
+    success: function(data){
+      if (!video){
+        data.config.media.video = false;
+      }
+      data.config.localVideoEl = 'webRTCVideoLocal';
+      webrtc = new SimpleWebRTC(data.config);
+      // Handle the readyToCall event: join the room
+      // Or prompt for a name first
+      webrtc.once('readyToCall', function () {
+        peers.local.id = webrtc.connection.connection.socket.sessionid;
+        webrtc.joinRoom(roomName);
+      });
+
+      // If browser doesn't support webRTC or dataChannels
+      if (!webrtc.capabilities.support || !webrtc.capabilities.supportGetUserMedia || !webrtc.capabilities.supportDataChannel){
+        $('.connecting-msg').not('#no-webrtc-msg').remove();
+        $('#no-webrtc-msg').slideDown();
+      }
+      else{
+        // Hide screen sharing btn if not supported, disable it on mobile
+        if (!webrtc.capabilities.supportScreenSharing || !$.browser.desktop){
+          $('.btn-share-screen').remove();
+        }
+        initVroom(room);
+      }
+    }
+  });
+}
+
 // This is the main function called when you join a room
 function initVroom(room) {
 
-  // This object will be used to record all
-  // the peers and their info. Init with our own info
-  var peers = {
-    local: {
-      screenShared: false,
-      micMuted: false,
-      videoPaused: false,
-      displayName: '',
-      color: chooseColor(),
-      role: 'participant',
-      hasVideo: true
-    }
-  };
   var mainVid = false,
       chatHistory = {},
       chatIndex = 0,
@@ -770,53 +896,6 @@ function initVroom(room) {
       count--;
     }
     return count;
-  }
-
-  // Get our role and other room settings from the server
-  function getRoomInfo(ev){
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'get_room_conf',
-          param: {
-            room: roomName,
-          }
-        })
-      },
-      error: function(data){
-        showApiError(data);
-      },
-      success: function(data){
-        roomInfo = data;
-        // Reset the list of email displayed, so first remove evry input field but the last one
-        // We keep it so we can clone it again
-        $('.email-list').find('.email-entry:not(:last)').remove();
-        $.each(data.notif, function(index, obj){
-          addEmailInputField('email-list-notification', obj.email);
-        });
-        // Now, remove the first one if the list is not empty
-        if (Object.keys(data.notif).length > 0){
-          $('.email-list').find('.email-entry:first').remove();
-        }
-        else{
-          $('.email-list').find('.email-entry:first').find('input:first').val('');
-        }
-        adjustAddRemoveEmailButtons();
-        // Update config switches
-        $('#lockedSet').bootstrapSwitch('state', data.locked);
-        $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name);
-        $('#joinPassSet').bootstrapSwitch('state', data.join_auth);
-        $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth);
-        if (ev === 'join'){
-          if (data.ask_for_name){
-            $('#display-name-pre').slideDown();
-          }
-          else{
-            webrtc.joinRoom(room);
-          }
-        }
-      }
-    });
   }
 
   // Get the role of a peer
@@ -1132,18 +1211,6 @@ function initVroom(room) {
       message: message
     }
     chatIndex++;
-  }
-
-  // Update the displayName of the peer
-  // and its screen if any
-  function updateDisplayName(id){
-    // We might receive the screen before the peer itself
-    // so check if the object exists before using it, or fallback with empty values
-    var display = (peers[id] && peers[id].hasName) ? stringEscape(peers[id].displayName) : '';
-    var color = (peers[id] && peers[id].color) ? peers[id].color : chooseColor();
-    var screenName = (peers[id] && peers[id].hasName) ? sprintf(localize('SCREEN_s'), stringEscape(peers[id].displayName)) : '';
-    $('#name_' + id).html(display).css('background-color', color);
-    $('#name_' + id + '_screen').html(screenName).css('background-color', color);
   }
 
   // Mute a peer
@@ -1552,13 +1619,6 @@ function initVroom(room) {
     getPeerRole(data.id);
   });
 
-  // Handle the readyToCall event: join the room
-  // Or prompt for a name first
-  webrtc.once('readyToCall', function () {
-    peers.local.id = webrtc.connection.connection.socket.sessionid;
-    getRoomInfo('join');
-  });
-
   //Notification from the server
   webrtc.connection.connection.on('notification', function(data) {
     if (!data.payload.class || !data.payload.class.match(/^(success)|(info)|(warning)|(error)$/)){
@@ -1792,39 +1852,6 @@ function initVroom(room) {
           loadEtherpadIframe();
         }
       }, 3100);
-    }
-  });
-  // This is the displayName input before joining the room
-  $('#displayNamePre').on('input', function() {
-    var name = $('#displayNamePre').val();
-    if (name.length > 0 && name.length < 50){
-      $('#displayNamePreButton').removeClass('disabled');
-      $('#displayNamePre').parent().removeClass('has-error');
-    }
-    else{
-      $('#displayNamePreButton').addClass('disabled');
-      $('#displayNamePre').parent().addClass('has-error');
-      if (name.length < 1){
-        $('#displayNamePre').notify(localize('DISPLAY_NAME_REQUIRED'), 'error');
-      }
-      else{
-        $('#displayNamePre').notify(localize('DISPLAY_NAME_TOO_LONG'), 'error');
-      }
-    }
-  });
-
-  $('#displayNamePreForm').submit(function(event){
-    event.preventDefault();
-    var name = $('#displayNamePre').val();
-    if (name.length > 0 && name.length < 50){
-      //$('#setDisplayName').modal('hide');
-      $('#display-name-pre').slideUp();
-      $('#displayName').val(name);
-      peers.local.hasName = true;
-      peers.local.displayName = name;
-      updateDisplayName('local');
-      $('#chatBox').removeAttr('disabled').removeAttr('placeholder');
-      webrtc.joinRoom(room);
     }
   });
 

@@ -133,6 +133,7 @@ our %Lexicon = (
     "WRONG_PASSWORD"                            => "Mauvais mot de passe",
     "PASSWORD_REQUIRED"                         => "Mot de passe requis",
     "A_PASSWORD_IS_NEEDED_TO_JOIN"              => "Vous devez saisir un mot de passe pour rejoindre ce salon",
+    "ROOM_LOCKED_ENTER_OWNER_PASSWORD"          => "Ce salon est verrouillé, seul un administrateur peut le rejoindre. Veuillez saisir le mot de passe d'administration du salon",
     "TRY_AGAIN"                                 => "Essayer à nouveau",
     "AUTH_IF_OWNER"                             => "Authentifiez-vous si vous êtes le propriétaire du salon",
     "CREATE_THIS_ROOM"                          => "Créez ce salon",

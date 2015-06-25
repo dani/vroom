@@ -127,6 +127,7 @@ our %Lexicon = (
   "WRONG_PASSWORD"                       => "Wrong password",
   "PASSWORD_REQUIRED"                    => "Password required",
   "A_PASSWORD_IS_NEEDED_TO_JOIN"         => "You must provide a password to join this room",
+  "ROOM_LOCKED_ENTER_OWNER_PASSWORD"     => "This room is locked. Only an administrator can joint it. Please enter the administrator's password",
   "TRY_AGAIN"                            => "Try again",
   "AUTH_IF_OWNER"                        => "Authenticate if you are the room owner",
   "CREATE_THIS_ROOM"                     => "Create this room",

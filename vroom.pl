@@ -839,7 +839,9 @@ helper get_key_role => sub {
   $sth->execute($key->{id},$room);
   $sth->bind_columns(\$key->{role});
   $sth->fetch;
-  $self->app->log->debug("Key $token has role:" . $key->{role} . " in room $room");
+  if ($key->{role}){
+    $self->app->log->debug("Key $token has role:" . $key->{role} . " in room $room");
+  }
   return $key->{role};
 };
 
@@ -975,7 +977,6 @@ helper get_room_conf => sub {
 # Socket.IO handshake
 get '/socket.io/:ver' => sub {
   my $self = shift;
-  $self->session(peer_id => $self->get_random(256));
   my $handshake = Protocol::SocketIO::Handshake->new(
       session_id        => $self->session('peer_id'),
       heartbeat_timeout => 20,
@@ -1023,7 +1024,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
             !$self->session($room)->{role} ||
             $self->session($room)->{role} !~ m/^owner|participant$/){
           $self->app->log->debug("Failed to connect to the signaling channel, " . $self->session('name') .
-                                 " (session ID " . $self->session('id') . ") has no role for this room");
+                                 " (session ID " . $self->session('id') . ") has no role in room $room");
           $self->send( Protocol::SocketIO::Message->new( type => 'disconnect' ) );
           $self->finish;
           return;
@@ -1464,15 +1465,19 @@ any '/api' => sub {
   # Ok, now, we don't have to bother with authorization anymore
   if ($req->{action} eq 'authenticate'){
     my $pass = $req->{param}->{password};
-    # Is this peer already authenticated ?
     my $role = $self->get_key_role($token, $room->{name});
+    my $reason;
+    my $code = 401;
+    if (!$self->session('peer_id') || $self->session('peer_id') eq ''){
+      $self->session(peer_id => $self->get_random(256));
+    }
     if ($room->{owner_password} && Crypt::SaltedHash->validate($room->{owner_password}, $pass)){
       $role = 'owner';
     }
     elsif (!$role && $room->{join_password} && Crypt::SaltedHash->validate($room->{join_password}, $pass)){
       $role = 'participant';
     }
-    elsif (!$role && !$room->{join_password}){
+    elsif (!$role && !$room->{join_password} && !$room->{locked}){
       $role = 'participant';
     }
     if ($role){
@@ -1492,16 +1497,30 @@ any '/api' => sub {
       );
       return $self->render(
         json => {
-          msg  => $self->l('AUTH_SUCCESS'),
-          role => $role
+          msg     => $self->l('AUTH_SUCCESS'),
+          role    => $role,
+          peer_id => $self->session('peer_id')
         }
       );
     }
+    elsif ($room->{locked} && $room->{owner_password}){
+      $reason = $self->l('ROOM_LOCKED_ENTER_OWNER_PASSWORD');
+    }
+    elsif ($room->{locked}){
+      $reason = sprintf($self->l('ERROR_ROOM_s_LOCKED'), $room->{name});
+      $code = 403;
+    }
+    elsif ((!$pass || $pass eq '') && $room->{join_password}){
+      $reason = $self->l('A_PASSWORD_IS_NEEDED_TO_JOIN')
+    }
+    elsif ($room->{join_password}){
+      $reason = $self->l('WRONG_PASSWORD');
+    }
     return $self->render(
       json => {
-        msg => $self->l('WRONG_PASSWORD')
+        msg => $reason
       },
-      status => '401'
+      status => $code
     );
   }
   elsif ($req->{action} eq 'invite_email'){
@@ -2022,18 +2041,6 @@ get '/:room' => sub {
   }
   # Create a session if not already done
   $self->login;
-  # If the room is locked and we're not the owner, we cannot join it !
-  if ($data->{'locked'} &&
-      (!$self->session($room) ||
-       !$self->session($room)->{role} ||
-       $self->session($room)->{role} ne 'owner')){
-    return $self->render('error',
-      msg => sprintf($self->l("ERROR_ROOM_s_LOCKED"), $room),
-      err => 'ERROR_ROOM_s_LOCKED',
-      room => $room,
-      ownerPass => ($data->{owner_password}) ? '1':'0'
-    );
-  }
   # If we've reached the members' limit
   my $limit = $self->get_member_limit($room);
   if ($limit > 0 && scalar $self->get_room_members($room) >= $limit){

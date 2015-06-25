@@ -219,6 +219,13 @@
               <p class="text-center">
                 <%=l 'CONNECTING_PLEASE_WAIT' %>
               </p>
+              <p class="text-center connecting-err-reason">
+              </p>
+            </div>
+            <div id="room-is-locked" class="connecting-msg" style="display: none">
+              %= image '/img/lock.png', alt => $self->l('LOCKED'), class => "img-responsive center-block"
+              <p class="text-center connecting-err-reason">
+              </p>
             </div>
             <div id="no-webcam-msg" class="connecting-msg" style="display: none">
               <p class="text-center">
@@ -238,9 +245,6 @@
             </div>
             <div id="auth-before-join" class="connecting-msg" style="display: none">
               <form role="form" class="form-horizontal" id="authBeforeJoinForm">
-                <p class="text-center">
-                  <%=l 'A_PASSWORD_IS_NEEDED_TO_JOIN' %>
-                </p>
                 <div class="form-group">
                   <label for="authBeforJoinPass" class="col-sm-4 control-label">
                     <%=l 'PASSWORD' %>
