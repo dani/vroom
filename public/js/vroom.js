@@ -805,6 +805,7 @@ function initJoin(room){
         }
       },
       success: function(data){
+        $('.connecting-err-reason').hide();
         $.ajax({
           data: {
             req: JSON.stringify({
