@@ -1198,8 +1198,8 @@ Mojo::IOLoop->recurring( 3 => sub {
   }
 });
 
-# Purge every 5 minutes
-Mojo::IOLoop->recurring( 300 => sub {
+# Purge the database every 15 minutes
+Mojo::IOLoop->recurring( 900 => sub {
   app->purge_rooms;
   app->purge_invitations;
 });
