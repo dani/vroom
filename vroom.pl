@@ -156,7 +156,7 @@ helper get_name => sub {
 # And a new API key
 helper login => sub {
   my $self = shift;
-  if ($self->session('id')){
+  if ($self->session('id') && $self->session('id') ne ''){
     return 1;
   }
   my $id = $self->get_random(256);
@@ -168,8 +168,8 @@ helper login => sub {
   };
   $sth->execute($key);
   $self->session(
-    id      => $id,
-    key     => $key
+    id  => $id,
+    key => $key
   );
   $self->app->log->info($self->get_name . " logged in from " . $self->tx->remote_address);
   return 1;
@@ -188,6 +188,11 @@ helper logout => sub {
       $peers->{$self->session('peer_id')}->{socket}){
     $peers->{$self->session('peer_id')}->{socket}->finish;
   }
+  my $sth = eval {
+    $self->db->prepare('DELETE FROM `api_keys`
+                         WHERE `token`=?');
+  };
+  $sth->execute($self->session('key'));
   $self->app->log->info($self->get_name . " logged out");
   $self->session( expires => 1 );
   return 1;
