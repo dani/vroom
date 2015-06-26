@@ -999,8 +999,10 @@ helper get_room_conf => sub {
 # Socket.IO handshake
 get '/socket.io/:ver' => sub {
   my $self = shift;
+  my $sid = $self->get_random(256);
+  $self->session( peer_id => $sid );
   my $handshake = Protocol::SocketIO::Handshake->new(
-      session_id        => $self->session('peer_id'),
+      session_id        => $sid,
       heartbeat_timeout => 20,
       close_timeout     => 40,
       transports        => [qw/websocket/]
@@ -1050,6 +1052,11 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           $self->finish;
           return;
         }
+        $self->set_peer_role({
+          room    => $room,
+          peer_id => $self->session('peer_id'),
+          role    => $self->session($room)->{role}
+        });
         # Are we under the limit of members ?
         my $limit = $self->get_member_limit($room);
         if ($limit > 0 && scalar $self->get_room_members($room) >= $limit){
@@ -1493,9 +1500,6 @@ any '/api' => sub {
     my $role = $self->get_key_role($token, $room->{name});
     my $reason;
     my $code = 401;
-    if (!$self->session('peer_id') || $self->session('peer_id') eq ''){
-      $self->session(peer_id => $self->get_random(256));
-    }
     if ($room->{owner_password} && Crypt::SaltedHash->validate($room->{owner_password}, $pass)){
       $role = 'owner';
     }
@@ -1510,11 +1514,6 @@ any '/api' => sub {
       if ($ec && !$self->session($room->{name})->{etherpadSession}){
         $self->create_etherpad_session($room->{name});
       }
-      $self->set_peer_role({
-        room    => $room->{name},
-        peer_id => $self->session('peer_id'),
-        role    => $role
-      });
       $self->associate_key_to_room(
         room => $room->{name},
         key  => $self->session('key'),
