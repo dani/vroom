@@ -74,7 +74,7 @@
         </ul>
       </p>
       <div class="alert alert-warning">
-        As long as possible, data channels and audio/video streams are established directly between peers, but in some situations, this is not possible (NAT, firewalls etc...). In those case
+        As long as possible, data channels and audio/video streams are established directly between peers, but in some situations, this is not possible (NAT, firewalls etc...). In those cases
         data streams are relayed through a <a href="https://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT" target="_blank">TURN</a> server
       </div>
 
