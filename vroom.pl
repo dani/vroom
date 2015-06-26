@@ -143,14 +143,22 @@ helper check_db_version => sub {
   return ($ver eq Vroom::Constants::DB_VERSION) ? '1' : '0';
 };
 
+# Return human readable username if it exists, or just the session ID
+helper get_name => sub {
+  my $self = shift;
+  if ($ENV{'REMOTE_USER'} && $ENV{'REMOTE_USER'} ne ''){
+    return $ENV{'REMOTE_USER'};
+  }
+  return $self->session('id');
+};
+
 # Create a cookie based session
 # And a new API key
 helper login => sub {
   my $self = shift;
-  if ($self->session('name')){
+  if ($self->session('id')){
     return 1;
   }
-  my $login = $ENV{'REMOTE_USER'} || lc $self->get_random(128);
   my $id = $self->get_random(256);
   my $key = $self->get_random(256);
   my $sth = eval {
@@ -160,11 +168,10 @@ helper login => sub {
   };
   $sth->execute($key);
   $self->session(
-    name    => $login,
     id      => $id,
     key     => $key
   );
-  $self->app->log->info($self->session('name') . " logged in from " . $self->tx->remote_address);
+  $self->app->log->info($self->get_name . " logged in from " . $self->tx->remote_address);
   return 1;
 };
 
@@ -181,7 +188,7 @@ helper logout => sub {
       $peers->{$self->session('peer_id')}->{socket}){
     $peers->{$self->session('peer_id')}->{socket}->finish;
   }
-  $self->app->log->info($self->session('name') . " logged out");
+  $self->app->log->info($self->get_name . " logged out");
   $self->session( expires => 1 );
   return 1;
 };
@@ -216,7 +223,7 @@ helper create_room => sub {
     $name,
     $owner
   );
-  $self->app->log->info("Room $name created by " . $self->session('name'));
+  $self->app->log->info("Room $name created by " . $self->get_name);
   # Etherpad integration ? If so, create the corresponding pad
   if ($ec){
     $self->create_pad($name);
@@ -301,7 +308,7 @@ helper modify_room => sub {
     $room->{max_members},
     $room->{id}
   );
-  $self->app->log->info("Room " . $room->{name} ." modified by " . $self->session('name'));
+  $self->app->log->info("Room " . $room->{name} ." modified by " . $self->get_name);
   return 1;
 };
 
@@ -550,7 +557,7 @@ helper remove_notification => sub {
     $data->{id},
     $email
   );
-  $self->app->log->debug($self->session('name') .
+  $self->app->log->debug($self->get_name .
     " has removed $email from the list of email which are notified when someone joins room $room");
   return 1;
 };
@@ -582,7 +589,7 @@ helper add_invitation => sub {
     $token,
     $email
   );
-  $self->app->log->debug($self->session('name') . " has invited $email to join room $room");
+  $self->app->log->debug($self->get_name . " has invited $email to join room $room");
   return $token;
 };
 
@@ -734,7 +741,7 @@ helper create_etherpad_session => sub {
   if (!$ec || !$data || !$data->{etherpad_group}){
     return 0;
   }
-  my $id = $ec->create_author_if_not_exists_for($self->session('name'));
+  my $id = $ec->create_author_if_not_exists_for($self->get_name);
   $self->session($room)->{etherpadAuthorId} = $id;
   my $etherpadSession = $ec->create_session(
     $data->{etherpad_group},
@@ -988,7 +995,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
   my $self = shift;
   my $id = $self->stash('id');
   # the ID must match the one stored in our session
-  if ($id ne $self->session('peer_id') || !$self->session('name')){
+  if ($id ne $self->session('peer_id') || !$self->get_name){
     $self->app->log->debug('Sometyhing is wrong, peer ID is ' . $id . ' but should be ' . $self->session('peer_id'));
     return $self->send('Bad session');
   }
@@ -1000,7 +1007,6 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
   $peers->{$id}->{last} = time;
   # Associate the unique ID and name
   $peers->{$id}->{id} = $self->session('id');
-  $peers->{$id}->{name} = $self->session('name');
   $peers->{$id}->{check_invitations} = 1;
   # Register the i18n stash, for localization will be available in the main IOLoop
   # Outside of Mojo controller
@@ -1020,7 +1026,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
             !$self->session($room) ||
             !$self->session($room)->{role} ||
             $self->session($room)->{role} !~ m/^owner|participant$/){
-          $self->app->log->debug("Failed to connect to the signaling channel, " . $self->session('name') .
+          $self->app->log->debug("Failed to connect to the signaling channel, " . $self->get_name .
                                  " (session ID " . $self->session('id') . ") has no role in room $room");
           $self->send( Protocol::SocketIO::Message->new( type => 'disconnect' ) );
           $self->finish;
@@ -1427,7 +1433,7 @@ any '/api' => sub {
       $json->{msg} = $self->l('ERROR_NAME_CONFLICT');
       return $self->render(json => $json, status => 409);
     }
-    if (!$self->create_room($req->{param}->{room},$self->session('name'))){
+    if (!$self->create_room($req->{param}->{room},$self->get_name)){
       $json->{err} = 'ERROR_OCCURRED';
       $json->{msg} = $self->l('ERROR_OCCURRED');
       return $self->render(json => $json, status => 500);
