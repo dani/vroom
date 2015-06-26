@@ -341,7 +341,7 @@ helper set_peer_role => sub {
   }
   $peers->{$data->{peer_id}}->{role} = $data->{role};
   $self->app->log->info("Peer " . $data->{peer_id} . " has now the " .
-                          $data->{role} . " role in room " . $data->{room});
+                          $data->{role} . " role");
   return 1;
 };
 
@@ -355,10 +355,9 @@ helper get_peer_role => sub {
 # Promote a peer to owner
 helper promote_peer => sub {
   my $self = shift;
-  my ($data) = @_;
+  my ($peer_id) = @_;
   return $self->set_peer_role({
-    peer_id => $data->{peer_id},
-    room    => $data->{room},
+    peer_id => $peer_id,
     role    => 'owner'
   });
 };
@@ -1020,6 +1019,8 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
     return $self->send('Bad session');
   }
 
+  my $key = $self->session('key');
+
   $self->app->log->debug("Adding new peer $id to the global peer hash");
   # We create the peer in the global hash
   $peers->{$id}->{socket} = $self->tx;
@@ -1041,22 +1042,18 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
       # Here's a client joining a room
       if ($msg->{data}->{name} eq 'join'){
         my $room = $msg->{data}->{args}[0];
+        my $role = $self->get_key_role($key, $room);
+        $peers->{$id}->{role} = $role;
         # Is this peer allowed to join the room ?
         if (!$self->get_room_by_name($room) ||
-            !$self->session($room) ||
-            !$self->session($room)->{role} ||
-            $self->session($room)->{role} !~ m/^owner|participant$/){
+            !$role ||
+            $role !~ m/^owner|participant$/){
           $self->app->log->debug("Failed to connect to the signaling channel, " . $self->get_name .
                                  " (session ID " . $self->session('id') . ") has no role in room $room");
           $self->send( Protocol::SocketIO::Message->new( type => 'disconnect' ) );
           $self->finish;
           return;
         }
-        $self->set_peer_role({
-          room    => $room,
-          peer_id => $self->session('peer_id'),
-          role    => $self->session($room)->{role}
-        });
         # Are we under the limit of members ?
         my $limit = $self->get_member_limit($room);
         if ($limit > 0 && scalar $self->get_room_members($room) >= $limit){
@@ -1853,11 +1850,6 @@ any '/api' => sub {
           key  => $self->session('key'),
           role => 'owner'
         );
-        my $res = $self->set_peer_role({
-          room    => $room->{name},
-          peer_id => $peer_id,
-          role    => $self->session($room->{name})->{role}
-        });
         if (!$res){
           return $self->render(
             json => {
@@ -1889,20 +1881,6 @@ any '/api' => sub {
   elsif ($req->{action} eq 'join'){
     my $name = $req->{param}->{name} || '';
     my $peer_id = $req->{param}->{peer_id};
-    my $res = $self->set_peer_role({
-      room    => $room->{name},
-      peer_id => $peer_id,
-      role    => $self->session($room->{name})->{role}
-    });
-    if (!$res){
-      return $self->render(
-        json => {
-          msg => $self->l('ERROR_OCCURRED'),
-          err => 'ERROR_OCCURRED'
-        },
-        status => 503
-      );
-    }
     my $subj = sprintf($self->l('s_JOINED_ROOM_s'), ($name eq '') ? $self->l('SOMEONE') : $name, $room->{name});
     # Send notifications
     my $recipients = $self->get_email_notifications($room->{name});
@@ -1933,7 +1911,7 @@ any '/api' => sub {
         status => 400
       );
     }
-    elsif ($self->promote_peer({room => $room->{name}, peer_id => $peer_id})){
+    elsif ($self->promote_peer($peer_id)){
       return $self->render(
         json => {
           msg => $self->l('PEER_PROMOTED')
