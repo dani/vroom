@@ -288,8 +288,7 @@ helper modify_room => sub {
   }
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
-                          SET `owner`=?,
-                              `locked`=?,
+                          SET `locked`=?,
                               `ask_for_name`=?,
                               `join_password`=?,
                               `owner_password`=?,
@@ -298,7 +297,6 @@ helper modify_room => sub {
                           WHERE `id`=?');
   };
   $sth->execute(
-    $room->{owner},
     $room->{locked},
     $room->{ask_for_name},
     $room->{join_password},
