@@ -207,6 +207,7 @@ helper create_room => sub {
     return 0;
   }
   if ($self->get_room_by_name($name)){
+    return 0;
   }
   my $sth = eval {
     $self->db->prepare('INSERT INTO `rooms`
