@@ -197,7 +197,7 @@ helper logout => sub {
 # Requires two args: the name of the room and the session name of the creator
 helper create_room => sub {
   my $self = shift;
-  my ($name,$owner) = @_;
+  my ($name) = @_;
   # Convert room names to lowercase
   if ($name ne lc $name){
     $name = lc $name;
@@ -213,16 +213,14 @@ helper create_room => sub {
     $self->db->prepare('INSERT INTO `rooms`
                           (`name`,
                            `create_date`,
-                           `last_activity`,
-                           `owner`)
+                           `last_activity`)
                           VALUES (?,
                                   CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
-                                  CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
-                                  ?)');
+                                  CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')
+                                 )');
   };
   $sth->execute(
-    $name,
-    $owner
+    $name
   );
   $self->app->log->info("Room $name created by " . $self->get_name);
   # Etherpad integration ? If so, create the corresponding pad
@@ -1434,7 +1432,7 @@ any '/api' => sub {
       $json->{msg} = $self->l('ERROR_NAME_CONFLICT');
       return $self->render(json => $json, status => 409);
     }
-    if (!$self->create_room($req->{param}->{room},$self->get_name)){
+    if (!$self->create_room($req->{param}->{room})){
       $json->{err} = 'ERROR_OCCURRED';
       $json->{msg} = $self->l('ERROR_OCCURRED');
       return $self->render(json => $json, status => 500);

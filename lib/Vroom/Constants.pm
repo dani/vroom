@@ -7,7 +7,7 @@ use base 'Exporter';
 our @EXPORT = qw/DB_VERSION COMPONENTS MOH JS_STRINGS API_ACTIONS/;
 
 # Database version
-use constant DB_VERSION => 5;
+use constant DB_VERSION => 6;
 
 # Components used to generate the credits part
 use constant COMPONENTS => {

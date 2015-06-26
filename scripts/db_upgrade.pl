@@ -128,3 +128,20 @@ if ($cur_ver < 5){
   print "Successfully upgraded to schema version 5\n";
 }
 
+if ($cur_ver < 6){
+  print "Upgrading the schema to version 6\n";
+  eval {
+    $dbh->begin_work;
+    $dbh->do(qq{ ALTER TABLE `rooms` DROP COLUMN `owner` });
+    $dbh->do(qq{ UPDATE `config` SET `value`='6' WHERE `key`='schema_version' });
+    $dbh->commit;
+  };
+  if ($@){
+    print "An error occurred: " . $dbh->errstr . "\n";
+    local $dbh->{RaiseError} = 0;
+    $dbh->rollback;
+    exit 255;
+  };
+  print "Successfully upgraded to schema version 6\n";
+}
+

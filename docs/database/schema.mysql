@@ -6,12 +6,11 @@ CREATE TABLE `config` (
   UNIQUE (`key`)
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 INSERT INTO `config` (`key`,`value`)
-  VALUES ('schema_version', '5');
+  VALUES ('schema_version', '6');
 
 CREATE TABLE `rooms` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(120) NOT NULL,
-  `owner` VARCHAR(60) DEFAULT NULL,
   `create_date` DATETIME DEFAULT NULL,
   `last_activity` DATETIME DEFAULT NULL,
   `locked` TINYINT UNSIGNED DEFAULT '0',
