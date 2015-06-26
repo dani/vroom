@@ -1431,15 +1431,15 @@ function initVroom(room) {
 
   // An owner has just promoted a participant of the room to the owner role
   webrtc.on('owner_promoted', function(data){
+    // Ignore if the emitter is not an owner, or is a screen
     if (peers[data.id].role != 'owner' || data.roomType == 'screen'){
       return;
     }
+    // Are we the one being promoted ?
     if (data.payload.peer && data.payload.peer == peers.local.id && peers.local.role != 'owner'){
       var who = (peers[data.id].hasName) ? peers[data.id].displayName : localize('A_ROOM_ADMIN');
       getPeerRole(peers.local.id);
-      if (peers.local.role == 'owner'){
-        $.notify(sprintf(localize('s_IS_PROMOTING_YOU'), who), 'success');
-      }
+      $.notify(sprintf(localize('s_IS_PROMOTING_YOU'), who), 'success');
     }
     else if (data.payload.peer != peers.local.id && peers[data.payload.peer]){
       var who = (peers[data.id].hasName) ? peers[data.id].displayName : localize('A_ROOM_ADMIN');
