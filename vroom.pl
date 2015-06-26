@@ -348,8 +348,8 @@ helper set_peer_role => sub {
 # Return the role of a peer, take a peer object as arg ($data = { peer_id => XYZ })
 helper get_peer_role => sub {
   my $self = shift;
-  my ($data) = @_;
-  return $peers->{$data->{peer_id}}->{role};
+  my ($peer_id) = @_;
+  return $peers->{$peer_id}->{role};
 };
 
 # Promote a peer to owner
@@ -1840,14 +1840,14 @@ any '/api' => sub {
       );
     }
     if ($self->session('peer_id') && $self->session('peer_id') eq $peer_id){
+      my $api_role = $self->get_key_role($token,$room->{name});
       # If we just have been promoted to owner
-      if ($self->session($room->{name})->{role} ne 'owner' &&
-          $self->get_peer_role({room => $room->{name}, peer_id => $peer_id}) &&
-          $self->get_peer_role({room => $room->{name}, peer_id => $peer_id}) eq 'owner'){
-        $self->session($room->{name})->{role} = 'owner';
+      if ($api_role ne 'owner' &&
+          $self->get_peer_role($peer_id) &&
+          $self->get_peer_role($peer_id) eq 'owner'){
         $self->associate_key_to_room(
           room => $room->{name},
-          key  => $self->session('key'),
+          key  => $token,
           role => 'owner'
         );
         if (!$res){
@@ -1861,7 +1861,7 @@ any '/api' => sub {
         }
       }
     }
-    my $role = $self->get_peer_role({room => $room->{name}, peer_id => $peer_id});
+    my $role = $self->get_peer_role($peer_id);
     if (!$role){
       return $self->render(
         json => {
