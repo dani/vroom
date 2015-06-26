@@ -162,7 +162,6 @@ helper login => sub {
   $self->session(
     name    => $login,
     id      => $id,
-    ip      => $self->tx->remote_address,
     key     => $key
   );
   $self->app->log->info($self->session('name') . " logged in from " . $self->tx->remote_address);
