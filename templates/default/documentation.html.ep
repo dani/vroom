@@ -441,25 +441,13 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       </p>
 
 
-      <h2 id="turn_download">
-        Download turnserver
-      </h2>
-      <p>
-        Download the latest version from <a href="http://turnserver.open-sys.org/downloads/">here</a> and extract the archive
-      </p>
-      <div class="alert alert-warning">
-        Branch 3.x is rfc5766-turn-server and 4.x is coturn. 4.x is recommanded
-      </div>
-
-
       <h2 id="turn_install">
         Install the RPMS
       </h2>
       <p>
         You can now install the extracted RPMS
         <pre>
-yum localinstall turnserver-*/*.rpm</pre>
-
+yum --enablerepo=fws install turnserver turnserver-utils</pre>
       </p>
 
 
