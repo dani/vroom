@@ -1485,7 +1485,7 @@ any '/api' => sub {
     if ($role){
       $self->session($room->{name}, {role => $role});
       if ($ec && !$self->session($room->{name})->{etherpadSession}){
-        $self->create_etherpad_session();
+        $self->create_etherpad_session($room->{name});
       }
       $self->set_peer_role({
         room    => $room->{name},
