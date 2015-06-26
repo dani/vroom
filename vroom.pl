@@ -266,7 +266,6 @@ helper get_room_by_id => sub {
 };
 
 # Update a room, take a room object as argument (hashref)
-# TODO: log modified fields
 helper modify_room => sub {
   my $self = shift;
   my ($room) = @_;
@@ -274,6 +273,10 @@ helper modify_room => sub {
     return 0;
   }
   if (!$self->valid_room_name($room->{name})){
+    return 0;
+  }
+  my $old_room = $self->get_room_by_id($room->{id});
+  if (!$old_room){
     return 0;
   }
   if (!$room->{max_members} ||
@@ -306,6 +309,19 @@ helper modify_room => sub {
     $room->{id}
   );
   $self->app->log->info("Room " . $room->{name} ." modified by " . $self->get_name);
+  my $mods = '';
+  foreach my $field (keys %$room){
+    if (($old_room->{$field} // '' ) ne ($room->{$field} // '')){
+      if ($field =~ m/_password$/){
+        $old_room->{$field} = '<hidden>';
+        $room->{$field}     = '<hidden>';
+      }
+      $mods .= $field . ": " . $old_room->{$field} . ' -> ' . $room->{$field} . "\n";
+    }
+  }
+  if ($mods ne ''){
+    $self->app->log->debug("Modified fields:\n$mods");
+  }
   return 1;
 };
 
