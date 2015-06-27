@@ -1461,10 +1461,9 @@ any '/api' => sub {
       return $self->render(json => $json, status => 500);
     }
     $json->{err} = '';
-    $self->session($req->{param}->{room} => {role => 'owner'});
     $self->associate_key_to_room(
       room => $req->{param}->{room},
-      key  => $self->session('key'),
+      key  => $token,
       role => 'owner'
     );
     return $self->render(json => $json);
@@ -1507,20 +1506,24 @@ any '/api' => sub {
       $role = 'participant';
     }
     if ($role){
-      $self->session($room->{name}, {role => $role});
+      if (!$self->session($room->{name})){
+        $self->session($room->{name} => {});
+      }
       if ($ec && !$self->session($room->{name})->{etherpadSession}){
         $self->create_etherpad_session($room->{name});
       }
+      if ($self->session('peer_id')){
+        $self->set_peer_role({ peer_id => $self->session('peer_id'), role => $role });
+      }
       $self->associate_key_to_room(
         room => $room->{name},
-        key  => $self->session('key'),
+        key  => $token,
         role => $role
       );
       return $self->render(
         json => {
           msg     => $self->l('AUTH_SUCCESS'),
           role    => $role,
-          peer_id => $self->session('peer_id')
         }
       );
     }
