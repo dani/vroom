@@ -122,13 +122,6 @@ $('#switch_lang').change(function(){
   });
 });
 
-
-// Escape a string to be used as a jQuerry selector
-// Taken from http://totaldev.com/content/escaping-characters-get-valid-jquery-id
-function escapeJqSelector(string){
-  return string.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
-}
-
 // Escape entities to prevent XSS
 function stringEscape(string){
   string = string.replace(/[\u00A0-\u99999<>\&]/gim, function(i) {
