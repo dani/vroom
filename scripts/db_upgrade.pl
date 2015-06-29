@@ -145,3 +145,24 @@ if ($cur_ver < 6){
   print "Successfully upgraded to schema version 6\n";
 }
 
+if ($cur_ver < 7){
+  print "Upgrading the schema to version 7\n";
+  eval {
+    $dbh->begin_work;
+    $dbh->do(qq{ CREATE TABLE `session_keys` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                              `key` VARCHAR(160) NOT NULL,
+                                              `date` DATETIME NOT NULL DEFAULT 0,
+                                              PRIMARY KEY (`id`),
+                                              INDEX (`date`))
+                 ENGINE INNODB DEFAULT CHARSET=utf8; });
+    $dbh->do(qq{ UPDATE `config` SET `value`='7' WHERE `key`='schema_version' });
+    $dbh->commit;
+  };
+  if ($@){
+    print "An error occurred: " . $dbh->errstr . "\n";
+    local $dbh->{RaiseError} = 0;
+    $dbh->rollback;
+    exit 255;
+  };
+  print "Successfully upgraded to schema version 7\n";
+}

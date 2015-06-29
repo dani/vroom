@@ -32,8 +32,6 @@ sub get_conf(){
   $config->{'interface.template'}                ||= 'default';
   $config->{'interface.chrome_extension_id'}     ||= 'ecicdpoejfllflombfanbhfpgcimjddn';
   $config->{'interface.chrome_extension_id'}     ||= 0;
-  $config->{'cookie.secret'}                     ||= 'secret';
-  $config->{'cookie.name'}                       ||= 'vroom';
   $config->{'rooms.inactivity_timeout'}          ||= 60;
   $config->{'rooms.reserved_inactivity_timeout'} ||= 86400;
   $config->{'rooms.common_names'}                ||= '';

@@ -51,12 +51,6 @@ credentials = 'rest'
 ; Default to 0
 ;demo = 0
 
-[cookie]
-; Secret passphrase used to sign cookies. You must set this
-;secret = '1zEewX24ZD%2RvtF%e'
-; Cookie name, You shouldn't have to change this
-;name = 'vroom'
-
 [rooms]
 ; After this amount of time in minutes, rooms without any activity will be purged
 ;inactivity_timeout = '60'

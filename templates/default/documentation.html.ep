@@ -358,17 +358,6 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       </p>
 
 
-      <h3 id="settings_cookie">
-        cookie
-      </h3>
-      <p>
-        This section controls the cookie used for VROOM sessions. The available settings are
-        <ul>
-          <li><strong>secret</strong>: A secret passphrase to sign cookies. Must be changed !!!
-          <li><strong>name</strong>: The name of the cookie. Default is <strong>vroom</strong></li>
-        </ul>
-      </p>
-
       <h3 id="settings_rooms">
         rooms
       </h3>

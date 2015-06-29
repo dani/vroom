@@ -6,7 +6,15 @@ CREATE TABLE `config` (
   UNIQUE (`key`)
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 INSERT INTO `config` (`key`,`value`)
-  VALUES ('schema_version', '6');
+  VALUES ('schema_version', '7');
+
+CREATE TABLE `session_keys` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `key` VARCHAR(160) NOT NULL,
+  `date` DATETIME NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  INDEX (`date`)
+) ENGINE INNODB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `rooms` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,

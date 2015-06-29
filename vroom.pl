@@ -143,6 +143,39 @@ helper check_db_version => sub {
   return ($ver eq Vroom::Constants::DB_VERSION) ? '1' : '0';
 };
 
+# Generate and manage rotation of session keys
+# used to sign cookies
+helper update_session_keys => sub {
+  my $self = shift;
+  # First, delete obsolete session keys
+  my $sth = eval {
+    $self->db->prepare('DELETE FROM `session_keys`
+                          WHERE `date` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL 72 HOUR)');
+  };
+  $sth->execute;
+  # Now, retrieve all remaining keys, to check if we have enough of them
+  $sth = eval {
+    $self->db->prepare('SELECT `key` FROM `session_keys`
+                         ORDER BY `date` DESC');
+  };
+  $sth->execute;
+  my $keys = $sth->fetchall_hashref('key');
+  my @keys = keys %$keys;
+  if (scalar @keys < 3){
+    $self->app->log->debug("Generating a new key to sign session cookies");
+    my $new_key = Session::Token->new(alphabet => ['a'..'z', 'A'..'Z', '0'..'9', '.:;,/!%$#~{([-_)]}=+*|'], entropy => 512)->get;
+    unshift @keys, $new_key;
+    $self->app->log->info("new key: $new_key");
+    $sth = eval {
+      $self->db->prepare('INSERT INTO `session_keys` (`key`,`date`)
+                           VALUES (?,NOW())');
+    };
+    $sth->execute($new_key);
+  }
+  $self->app->secrets(\@keys);
+  return 1;
+};
+
 # Return human readable username if it exists, or just the session ID
 helper get_name => sub {
   my $self = shift;
@@ -1231,6 +1264,11 @@ Mojo::IOLoop->recurring( 900 => sub {
   app->purge_invitations;
 });
 
+# Check every 24h if session keys needs updating
+Mojo::IOLoop->recurring( 86400 => sub {
+  app->update_session_keys;
+});
+
 # Route / to the index page
 get '/' => sub {
   my $self = shift;
@@ -2070,10 +2108,12 @@ get '/:room' => sub {
 # use the templates defined in the config
 push @{app->renderer->paths}, 'templates/'.$config->{'interface.template'};
 
-# Set the secret used to sign cookies
-app->secrets([$config->{'cookie.secret'}]);
+
+app->update_session_keys;
+# Set log level
+app->log->level($config->{'daemon.log_level'});
 app->sessions->secure(1);
-app->sessions->cookie_name($config->{'cookie.name'});
+app->sessions->cookie_name('vroom');
 app->hook(before_dispatch => sub {
   my $self = shift;
   # Switch to the desired language
@@ -2109,8 +2149,6 @@ app->config(
   }
 );
 
-# Set log level
-app->log->level($config->{'daemon.log_level'});
 app->log->info('Starting VROOM daemon');
 # And start, lets VROOM !!
 app->start;
