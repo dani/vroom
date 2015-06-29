@@ -163,7 +163,10 @@ helper update_session_keys => sub {
   my @keys = keys %$keys;
   if (scalar @keys < 3){
     $self->app->log->debug("Generating a new key to sign session cookies");
-    my $new_key = Session::Token->new(alphabet => ['a'..'z', 'A'..'Z', '0'..'9', '.:;,/!%$#~{([-_)]}=+*|'], entropy => 512)->get;
+    my $new_key = Session::Token->new(
+       alphabet => ['a'..'z', 'A'..'Z', '0'..'9', '.:;,/!%$#~{([-_)]}=+*|'],
+       entropy  => 512
+    )->get;
     unshift @keys, $new_key;
     $self->app->log->info("new key: $new_key");
     $sth = eval {
