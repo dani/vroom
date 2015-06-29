@@ -2124,7 +2124,8 @@ app->hook(before_dispatch => sub {
   $self->stash(config => $config);
 
   # Check db is available
-  if ($error){
+  # But don't error when user requests static assets
+  if ($error && @{$self->req->url->path->parts}[-1] !~ m/\.(css|js|png|woff2?|mp3|localize\/.*)$/){
     return $self->render('error',
       msg => $self->l($error),
       err => $error,
