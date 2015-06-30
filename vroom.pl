@@ -168,7 +168,7 @@ helper update_session_keys => sub {
   };
   $sth->execute;
   my $recent_keys = $sth->fetchrow;
-  if (scalar @keys < 3 && $recent_keys < 1){
+  if ($recent_keys < 1){
     $self->app->log->debug("Generating a new key to sign session cookies");
     my $new_key = Session::Token->new(
        alphabet => ['a'..'z', 'A'..'Z', '0'..'9', '.:;,/!%$#~{([-_)]}=+*|'],
