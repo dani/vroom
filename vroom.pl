@@ -161,17 +161,23 @@ helper update_session_keys => sub {
   $sth->execute;
   my $keys = $sth->fetchall_hashref('key');
   my @keys = keys %$keys;
-  if (scalar @keys < 3){
+  # Now, check how many keys are less than 24 hours old
+  $sth = eval {
+    $self->db->prepare('SELECT COUNT(`key`) FROM `session_keys`
+                         WHERE `date` > DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL 24 HOUR)');
+  };
+  $sth->execute;
+  my $recent_keys = $sth->fetchrow;
+  if (scalar @keys < 3 && $recent_keys < 1){
     $self->app->log->debug("Generating a new key to sign session cookies");
     my $new_key = Session::Token->new(
        alphabet => ['a'..'z', 'A'..'Z', '0'..'9', '.:;,/!%$#~{([-_)]}=+*|'],
        entropy  => 512
     )->get;
     unshift @keys, $new_key;
-    $self->app->log->info("new key: $new_key");
     $sth = eval {
       $self->db->prepare('INSERT INTO `session_keys` (`key`,`date`)
-                           VALUES (?,NOW())');
+                           VALUES (?,CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'))');
     };
     $sth->execute($new_key);
   }
@@ -1261,14 +1267,11 @@ Mojo::IOLoop->recurring( 3 => sub {
   }
 });
 
-# Purge the database every 15 minutes
-Mojo::IOLoop->recurring( 900 => sub {
+# Maintenance loop
+# purge old stuff from the database
+Mojo::IOLoop->recurring( 3600 => sub {
   app->purge_rooms;
   app->purge_invitations;
-});
-
-# Check every 24h if session keys needs updating
-Mojo::IOLoop->recurring( 86400 => sub {
   app->update_session_keys;
 });
 
