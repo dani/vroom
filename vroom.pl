@@ -2118,6 +2118,11 @@ push @{app->renderer->paths}, 'templates/'.$config->{'interface.template'};
 app->update_session_keys;
 # Set log level
 app->log->level($config->{'daemon.log_level'});
+# Remove timestamp, journald handles it
+app->log->format(sub {
+  my ($time, $level, @lines) = @_;
+  return "[$level] " . join("\n", @lines) . "\n";
+});
 app->sessions->secure(1);
 app->sessions->cookie_name('vroom');
 app->hook(before_dispatch => sub {
