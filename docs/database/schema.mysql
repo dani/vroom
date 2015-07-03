@@ -6,7 +6,7 @@ CREATE TABLE `config` (
   UNIQUE (`key`)
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 INSERT INTO `config` (`key`,`value`)
-  VALUES ('schema_version', '7');
+  VALUES ('schema_version', '8');
 
 CREATE TABLE `session_keys` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -88,3 +88,14 @@ CREATE TABLE `room_keys` (
     ON DELETE CASCADE
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `audit` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `date` DATETIME NOT NULL,
+  `event` VARCHAR(255) NOT NULL,
+  `from_ip` VARCHAR(45) DEFAULT NULL,
+  `message` TEXT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX (`date`),
+  INDEX (`event`),
+  INDEX (`from_ip`)
+) ENGINE INNODB DEFAULT CHARSET=utf8;

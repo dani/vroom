@@ -166,3 +166,30 @@ if ($cur_ver < 7){
   };
   print "Successfully upgraded to schema version 7\n";
 }
+
+if ($cur_ver < 8){
+  print "Upgrading the schema to version 8\n";
+  eval {
+    $dbh->begin_work;
+    $dbh->do(qq{ CREATE TABLE `audit` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                       `date` DATETIME NOT NULL,
+                                       `event` VARCHAR(255) NOT NULL,
+                                       `from_ip` VARCHAR(45) DEFAULT NULL,
+                                       `message` TEXT NOT NULL,
+                                        PRIMARY KEY (`id`),
+                                        INDEX (`date`),
+                                        INDEX (`event`),
+                                        INDEX (`from_ip`))
+                 ENGINE INNODB DEFAULT CHARSET=utf8; });
+    $dbh->do(qq{ UPDATE `config` SET `value`='8' WHERE `key`='schema_version' });
+    $dbh->commit;
+  };
+  if ($@){
+    print "An error occurred: " . $dbh->errstr . "\n";
+    local $dbh->{RaiseError} = 0;
+    $dbh->rollback;
+    exit 255;
+  };
+  print "Successfully upgraded to schema version 8\n";
+}
+
