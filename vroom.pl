@@ -1412,15 +1412,13 @@ any '/api' => sub {
   my $self = shift;
   $self->purge_api_keys;
   my $token = $self->req->headers->header('X-VROOM-API-Key');
-  my $json = Mojo::JSON->new;
-  my $req = $json->decode($self->param('req'));
-  my $err = $json->error;
+  my $req = Mojo::JSON::decode_json($self->param('req'));
   my $room;
-  if ($err || !$req->{action} || !$req->{param}){
+  if (!$req->{action} || !$req->{param}){
     return $self->render(
       json => {
-        msg => $err,
-        err => $err
+        msg => $self->l('ERROR_OCCURRED'),
+        err => 'ERROR_OCCURRED'
       },
       status => 503
     );
@@ -1664,10 +1662,10 @@ any '/api' => sub {
     $room->{max_members} = $req->{param}->{max_members};
     # Room persistence can only be set by admins
     if ($req->{param}->{persistent} ne '' && $self->key_can_do_this(token => $token, action => 'set_persistent')){
-      $room->{persistent} = ($req->{param}->{persistent} eq Mojo::JSON->true) ? '1' : '0';
+      $room->{persistent} = ($req->{param}->{persistent} eq Mojo::JSON::true) ? '1' : '0';
     }
     foreach my $pass (qw/join_password owner_password/){
-      if ($req->{param}->{$pass} eq Mojo::JSON->false){
+      if ($req->{param}->{$pass} eq Mojo::JSON::false){
         $room->{$pass} = undef;
       }
       elsif ($req->{param}->{$pass} ne ''){
