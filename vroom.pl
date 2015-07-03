@@ -1089,7 +1089,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
         # Is this peer allowed to join the room ?
         if (!$self->get_room_by_name($room) ||
             !$role ||
-            $role !~ m/^owner|participant$/){
+            $role !~ m/^(owner)|(participant)|(admin)$/){
           $self->app->log->debug("Failed to connect to the signaling channel, " . $self->get_name .
                                  " (session ID " . $self->session('id') . ") has no role in room $room");
           $self->send( Protocol::SocketIO::Message->new( type => 'disconnect' ) );
