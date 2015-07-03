@@ -5,9 +5,15 @@ After=mariadb.service
 [Service]
 Type=simple
 ExecStart=/opt/vroom/scripts/start_server.pl
+ExecReload=/bin/kill -USR2 $MAINPID
 PrivateTmp=yes
-User=apache
-Group=apache
+User=vroom
+Group=vroom
+SyslogIdentifier=vroom
+InaccessibleDirectories=/home
+ReadOnlyDirectories=/usr
+ReadOnlyDirectories=/etc
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

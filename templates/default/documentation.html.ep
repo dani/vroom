@@ -240,9 +240,9 @@ echo "LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so" \\
         Set permissions on the cache directory
       </h3>
       <p>
-        The <strong>cache</strong> directory must be writeable for the user running the VROOM daemon, which is apache in the provided systemd unit
+        The <strong>cache</strong> directory must be writeable for the user running the VROOM daemon, which is <strong>vroom</strong> in the provided systemd unit
         <pre>
-chown -R apache ./cache
+chown -R vroom ./cache
 chmod 700 ./cache</pre>
       </p>
 
@@ -250,8 +250,9 @@ chmod 700 ./cache</pre>
         Setup systemd units
       </h3>
       <p>
-        Here, we'll copy the sample vroom.service unit so that systemd picks it up
+        Here, we'll copy the sample vroom.service unit so that systemd picks it up, and create the vroom user account
         <pre>
+useradd -r -d /dev/null -s /sbin/nologin vroom
 cp /opt/vroom/docs/systemd/vroom.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable vroom</pre>
