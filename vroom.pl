@@ -1907,6 +1907,8 @@ any '/api' => sub {
       }
     }
     my $role = $self->get_peer_role($peer_id);
+    # In a room, an admin is just equivalent to an owner
+    $role = ($role eq 'admin') ? 'owner' : $role;
     if (!$role){
       return $self->render(
         json => {
