@@ -11,6 +11,7 @@ chdir dirname($0) . '/..';
 my $config = Vroom::Conf::get_conf();
 
 $ENV{'PERL5LIB'} = 'lib';
+$ENV{'MOJO_REVERSE_PROXY'} = 1;
 
 if ($config->{'daemon.backend'} eq 'morbo'){
   exec ('/usr/bin/morbo',
