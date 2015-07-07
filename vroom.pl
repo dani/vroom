@@ -153,15 +153,16 @@ helper log_event => sub {
     return 0;
   }
   my $sth = eval {
-    $self->db->prepare('INSERT INTO `audit` (`date`,`event`,`from_ip`,`message`)
-                          VALUES (CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),?,?,?)');
+    $self->db->prepare('INSERT INTO `audit` (`date`,`event`,`from_ip`,`user`,`message`)
+                          VALUES (CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),?,?,?,?)');
   };
   $sth->execute(
     $event->{event},
     $self->tx->remote_address,
+    $self->get_name,
     $event->{msg}
   );
-  $self->app->log->info('[' . $self->tx->remote_address . '] [' . $event->{event} . '] ' . $event->{msg});
+  $self->app->log->info('[' . $self->tx->remote_address . '] [' . $self->get_name . '] [' . $event->{event} . '] ' . $event->{msg});
   return 1;
 };
 
@@ -236,8 +237,8 @@ helper login => sub {
     key => $key
   );
   $self->log_event({
-    event => 'new_session',
-    msg   => $self->get_name . " logged in from " . $self->tx->remote_address
+    event => 'session_create',
+    msg   => 'User logged in'
   });
   return 1;
 };
@@ -260,8 +261,11 @@ helper logout => sub {
                          WHERE `token`=?');
   };
   $sth->execute($self->session('key'));
-  $self->app->log->info($self->get_name . " logged out");
   $self->session( expires => 1 );
+  $self->log_event({
+    event => 'session_destroy',
+    msg   => 'User logged out'
+  });
   return 1;
 };
 
@@ -294,7 +298,10 @@ helper create_room => sub {
   $sth->execute(
     $name
   );
-  $self->app->log->info("Room $name created by " . $self->get_name);
+  $self->log_event({
+    event => 'room_create',
+    msg   => "Room $name created"
+  });
   # Etherpad integration ? If so, create the corresponding pad
   if ($ec){
     $self->create_pad($name);
@@ -380,7 +387,7 @@ helper modify_room => sub {
     $room->{max_members},
     $room->{id}
   );
-  $self->app->log->info("Room " . $room->{name} ." modified by " . $self->get_name);
+  my $msg = "Room " . $room->{name} ." modified";
   my $mods = '';
   foreach my $field (keys %$room){
     if (($old_room->{$field} // '' ) ne ($room->{$field} // '')){
@@ -392,8 +399,12 @@ helper modify_room => sub {
     }
   }
   if ($mods ne ''){
-    $self->app->log->debug("Modified fields:\n$mods");
+    $msg .= "\nModified fields:\n$mods";
   }
+  $self->log_event({
+    event => 'room_modify',
+    msg   => $msg
+  });
   return 1;
 };
 
@@ -409,6 +420,11 @@ helper set_peer_role => sub {
   $peers->{$data->{peer_id}}->{role} = $data->{role};
   $self->app->log->info("Peer " . $data->{peer_id} . " has now the " .
                           $data->{role} . " role");
+  $self->log_event({
+    event => 'peer_role',
+    msg   => "Peer " . $data->{peer_id} . " has now the " .
+                          $data->{role} . " role in room " . $peers->{$data->{peer_id}}->{room}
+  });
   return 1;
 };
 
@@ -469,7 +485,10 @@ helper purge_rooms => sub {
     }
   }
   foreach my $room (keys %{$toDelete}){
-    $self->app->log->debug("Room $room will be deleted");
+    $self->log_event({
+      event => 'room_expire',
+      msg   => "Deleting room $room after inactivity timeout"
+    });
     # Remove Etherpad group
     if ($ec){
       $ec->delete_pad($toDelete->{$room} . '$' . $room);
@@ -506,6 +525,10 @@ helper delete_room => sub {
                             WHERE `name`=?');
   };
   $sth->execute($room);
+  $self->log_event({
+    event => 'room_delete',
+    msg   => "Deleting room $room"
+  });
   return 1;
 };
 
@@ -579,6 +602,10 @@ helper add_notification => sub {
     $data->{id},
     $email
   );
+  $self->log_event({
+    event => 'add_email_notification',
+    msg   => "Adding $email to the notification list for room " . $data->{name}
+  });
   return 1;
 };
 
@@ -599,6 +626,10 @@ helper update_email_notifications => sub {
   $sth->execute(
     $data->{id},
   );
+  $self->log_event({
+    event => 'reset_email_notification',
+    msg   => 'Resetting email notification list for room ' . $data->{name}
+  });
   # Now, insert new emails
   foreach my $email (@$emails){
     # Skip empty inputs
@@ -641,8 +672,10 @@ helper remove_notification => sub {
     $data->{id},
     $email
   );
-  $self->app->log->debug($self->get_name .
-    " has removed $email from the list of email which are notified when someone joins room $room");
+  $self->log_event({
+    event => 'del_email_notification',
+    msg   => "Removing $email from the email notification list for room $room"
+  });
   return 1;
 };
 
@@ -673,7 +706,10 @@ helper add_invitation => sub {
     $token,
     $email
   );
-  $self->app->log->debug($self->get_name . " has invited $email to join room $room");
+  $self->log_event({
+    event => 'send_invitation',
+    msg   => "Invitation to join room $room sent to $email"
+  });
   return $token;
 };
 
@@ -708,7 +744,7 @@ helper get_invitation_list => sub {
 };
 
 # Got a response from invitation. Store the message in the DB
-# so the organizer can get it on next ping
+# so the organizer can get it
 helper respond_to_invitation => sub {
   my $self = shift;
   my ($token,$response,$message) = @_;
@@ -723,6 +759,10 @@ helper respond_to_invitation => sub {
     $message,
     $token
   );
+  $self->log_event({
+    event => 'invitation_response',
+    msg   => "Invitation ID $token received a reply"
+  });
   return 1;
 };
 
@@ -736,6 +776,10 @@ helper mark_invitation_processed => sub {
                           WHERE `token`=?');
   };
   $sth->execute($token);
+  $self->log_event({
+    event => 'invalidate_invitation',
+    msg   => "Marking invitation ID $token as processed, it won't be usable anymore"
+  });
   return 1;
 };
 
@@ -813,7 +857,10 @@ helper create_pad => sub {
     );
   }
   $ec->create_group_pad($data->{etherpad_group},$room);
-  $self->app->log->debug("Pad for room $room created (group " . $data->{etherpad_group} . ")");
+  $self->log_event({
+    event => 'pad_create',
+    msg   => "Creating group pad " . $data->{etherpad_group} . " for room $room"
+  });
   return 1;
 };
 
@@ -889,7 +936,6 @@ helper make_key_admin => sub {
   my $self = shift;
   my ($token) = @_;
   my $key = $self->get_key_by_token($token);
-  $self->app->log->debug("making key $token an admin key");
   if (!$key){
     return 0;
   }
@@ -899,6 +945,10 @@ helper make_key_admin => sub {
                          WHERE `id`=?');
   };
   $sth->execute($key->{id});
+  $self->log_event({
+    event => 'admin_key',
+    msg   => "Granting API key $token admin privileges"
+  });
   return 1;
 };
 
@@ -972,7 +1022,10 @@ helper key_can_do_this => sub {
     return 1;
   }
   # Else, deny
-  $self->app->log->debug("API Key " . $data->{token} . " cannot run action " . $data->{action} . " on room " . $data->{param}->{room});
+  $self->log_event({
+    event => 'action_denied',
+    msg   => "API Key " . $data->{token} . " doesn't have permission to call " . $data->{action} . " on room " . $data->{param}->{room}
+  });
   return 0;
 };
 
@@ -1081,14 +1134,16 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
   my $self = shift;
   my $id = $self->stash('id');
   # the ID must match the one stored in our session
-  if ($id ne $self->session('peer_id') || !$self->get_name){
-    $self->app->log->debug('Sometyhing is wrong, peer ID is ' . $id . ' but should be ' . $self->session('peer_id'));
-    return $self->send('Bad session');
+  if ($id ne $self->session('peer_id')){
+    $self->log_event({
+      event => 'peer_id_mismatch',
+      msg   => 'Something is wrong, peer ID is ' . $id . ' but should be ' . $self->session('peer_id')
+    });
+    return $self->send('Bad session id');
   }
 
   my $key = $self->session('key');
 
-  $self->app->log->debug("Adding new peer $id to the global peer hash");
   # We create the peer in the global hash
   $peers->{$id}->{socket} = $self->tx;
   # And set the initial "last seen" flag
@@ -1115,8 +1170,10 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
         if (!$self->get_room_by_name($room) ||
             !$role ||
             $role !~ m/^(owner)|(participant)|(admin)$/){
-          $self->app->log->debug("Failed to connect to the signaling channel, " . $self->get_name .
-                                 " (session ID " . $self->session('id') . ") has no role in room $room");
+          $self->log_event({
+            event => 'no_role',
+            msg   => "Failed to connect to the signaling channel, " . $self->get_name . " has no role in room $room"
+          });
           $self->send( Protocol::SocketIO::Message->new( type => 'disconnect' ) );
           $self->finish;
           return;
@@ -1124,8 +1181,11 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
         # Are we under the limit of members ?
         my $limit = $self->get_member_limit($room);
         if ($limit > 0 && scalar $self->get_room_members($room) >= $limit){
-          $self->app->log->debug("Failed to connect to the signaling channel, members limit (" . $config->{'rooms.max_members'} .
-                                 ") is reached");
+          $self->log_event({
+            event => 'member_off_limit',
+            msg   => "Failed to connect to the signaling channel, members limit (" . $config->{'rooms.max_members'} .
+                                 ") is reached"
+          });
           $self->send( Protocol::SocketIO::Message->new( type => 'disconnect' ) );
           $self->finish;
           return;
@@ -1143,7 +1203,6 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           audio  => \0
         };
         $peers->{$id}->{room} = $room;
-        $self->app->log->debug("Client id " . $id . " joined room " . $room);
         # Lets send the list of peers in our ack message
         # Not sure why the null arg is needed, got it by looking at how it works with SignalMaster
         $self->send(
@@ -1163,7 +1222,6 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
       }
       # We have a message from a peer
       elsif ($msg->{data}->{name} eq 'message'){
-        $self->app->log->debug("Signaling message received from peer " . $id);
         $msg->{data}->{args}[0]->{from} = $id;
         my $to = $msg->{data}->{args}[0]->{to};
         # Unicast message ? Check if the dest is in the same room
@@ -1221,8 +1279,10 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
   # Triggerred when a websocket connection ends
   $self->on(finish => sub {
     my ($self, $code, $reason) = @_;
-    $self->app->log->debug("Client id " . $id . " closed websocket connection");
-    $self->app->log->debug("Notifying others that $id leaved");
+    $self->log_event({
+      event => 'room_leave',
+      msg   => "Peer $id closed websocket connection, leaving room " . $peers->{$id}->{room}
+    });
     $self->signal_broadcast_room({
       from => $id,
       msg  => Protocol::SocketIO::Message->new(
