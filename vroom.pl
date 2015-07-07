@@ -143,6 +143,28 @@ helper check_db_version => sub {
   return ($ver eq Vroom::Constants::DB_VERSION) ? '1' : '0';
 };
 
+# Log an event
+helper log_event => sub {
+  my $self = shift;
+  my ($event) = @_;
+  if (!$event->{event} ||
+      !$event->{msg}){
+    $self->app->log->debug("Oops, invalid event received");
+    return 0;
+  }
+  my $sth = eval {
+    $self->db->prepare('INSERT INTO `audit` (`date`,`event`,`from_ip`,`message`)
+                          VALUES (CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),?,?,?)');
+  };
+  $sth->execute(
+    $event->{event},
+    $self->tx->remote_address,
+    $event->{msg}
+  );
+  $self->app->log->info('[' . $self->tx->remote_address . '] [' . $event->{event} . '] ' . $event->{msg});
+  return 1;
+};
+
 # Generate and manage rotation of session keys
 # used to sign cookies
 helper update_session_keys => sub {
@@ -213,7 +235,10 @@ helper login => sub {
     id  => $id,
     key => $key
   );
-  $self->app->log->info($self->get_name . " logged in from " . $self->tx->remote_address);
+  $self->log_event({
+    event => 'new_session',
+    msg   => $self->get_name . " logged in from " . $self->tx->remote_address
+  });
   return 1;
 };
 
