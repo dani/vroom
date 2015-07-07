@@ -175,11 +175,13 @@ if ($cur_ver < 8){
                                        `date` DATETIME NOT NULL,
                                        `event` VARCHAR(255) NOT NULL,
                                        `from_ip` VARCHAR(45) DEFAULT NULL,
+                                       `user` VARCHAR(255) DEFAULT NULL,
                                        `message` TEXT NOT NULL,
                                         PRIMARY KEY (`id`),
                                         INDEX (`date`),
                                         INDEX (`event`),
-                                        INDEX (`from_ip`))
+                                        INDEX (`from_ip`),
+                                        INDEX (`user`))
                  ENGINE INNODB DEFAULT CHARSET=utf8; });
     $dbh->do(qq{ UPDATE `config` SET `value`='8' WHERE `key`='schema_version' });
     $dbh->commit;

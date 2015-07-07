@@ -93,9 +93,11 @@ CREATE TABLE `audit` (
   `date` DATETIME NOT NULL,
   `event` VARCHAR(255) NOT NULL,
   `from_ip` VARCHAR(45) DEFAULT NULL,
+  `user` VARCHAR(255) DEFAULT NULL,
   `message` TEXT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX (`date`),
   INDEX (`event`),
-  INDEX (`from_ip`)
+  INDEX (`from_ip`),
+  INDEX (`user`),
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
