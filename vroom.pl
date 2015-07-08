@@ -2147,6 +2147,12 @@ group {
     my $self = shift;
     return $self->render('admin_manage_rooms');
   };
+
+  # Audit
+  get '/audit' => sub {
+    my $self = shift;
+    return $self->render('admin_audit');
+  };
 };
 
 # Catch all route: if nothing else match, it's the name of a room

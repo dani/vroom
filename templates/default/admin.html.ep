@@ -6,6 +6,9 @@
   <a class="btn btn-lg btn-primary btn-block" href="<%= $self->url_for('/admin/rooms') %>">
     <%=l 'ROOM_MANAGEMENT' %>
   </a>
+  <a class="btn btn-lg btn-primary btn-block" href="<%= $self->url_for('/admin/audit') %>">
+    <%=l 'AUDIT' %>
+  </a>
 </div>
 
 %= include 'js_common'
