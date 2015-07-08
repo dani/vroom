@@ -23,6 +23,7 @@ use Protocol::SocketIO::Handshake;
 use Protocol::SocketIO::Message;
 use File::Path qw(make_path);
 use File::Basename;
+use DateTime;
 use Data::Dumper;
 
 app->log->level('info');

@@ -1,0 +1,75 @@
+% title l('ADMIN_AUDIT');
+%= include 'header'
+%= include 'public_toolbar'
+<div class="container-fluid">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <form class="form-inline" id="eventSearch" role="form" method="post">
+        <div class="form-group">
+          <div class="input-group">
+            <input type="text" id="searchEvent" class="form-control" value=""/>
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-search">
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="text" id="dateStart" name="dateStart" class="form-control date-picker" value="<%= DateTime->now->ymd %>"/>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <input type="text" id="dateEnd" name="dateEnd" class="form-control date-picker" value="<%= DateTime->now->ymd %>"/>
+            <span class="input-group-btn">
+              <button type=submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-play">
+                </span>
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="form-group pull-right hidden-xs">
+          %= image '/img/loading.gif', alt => $self->l('LOADING'), id => 'loading-icon'
+        </div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="text-center" id="pagination">
+      </div>
+      <table class="table table-hover tablesorter">
+        <thead>
+          <tr>
+            <th class="hidden-xs">
+              <%=l 'EVENT_ID' %>
+            </th>
+            <th>
+              <%=l 'EVENT_DATE' %>
+            </th>
+            <th class="hidden-xs">
+              <%=l 'EVENT_FROM_IP' %>
+            </th>
+            <th>
+              <%=l 'EVENT' %>
+            </th>
+            <th class="hidden-xs">
+              <%=l 'EVENT_USER' %>
+            </th>
+            <th>
+              <%=l 'EVENT_MESSAGE' %>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="eventList">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+%= include 'js_common'
+<script>
+  $(document).ready(function() {
+    initAdminAudit();
+  });
+</script>
+%= include 'footer'
