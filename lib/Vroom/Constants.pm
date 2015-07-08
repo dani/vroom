@@ -97,6 +97,7 @@ use constant MOH => {
 use constant API_ACTIONS => {
   admin => {
     get_room_list  => 1,
+    get_event_list => 1,
     set_persistent => 1
   },
   owner => {

@@ -125,6 +125,18 @@ helper valid_email => sub {
   return Email::Valid->address($email);
 };
 
+# Validate a date in YYYY-MM-DD format
+# Also accept YYYY-MM-DD hh:mm:ss
+helper valid_date => sub {
+  my $self = shift;
+  my ($date) = @_;
+  if ($date =~ m/^\d{4}\-\d{1,2}\-\d{1,2}(\s+\d{1,2}:\d{1,2}:\d{1,2})?$/){
+    return 1;
+  }
+  $self->app->log->debug("$date is not a valid date");
+  return 0;
+};
+
 ##########################
 #   Various helpers      #
 ##########################
@@ -165,6 +177,36 @@ helper log_event => sub {
   );
   $self->app->log->info('[' . $self->tx->remote_address . '] [' . $self->get_name . '] [' . $event->{event} . '] ' . $event->{msg});
   return 1;
+};
+
+# Return a list of event between 2 dates
+helper get_event_list => sub {
+  my $self = shift;
+  my ($start,$end) = @_;
+  # Check both start and end dates seems valid
+  if (!$self->valid_date($start) || !$self->valid_date($end)){
+    $self->app->log->debug("Invalid date submitted while looking for events");
+    return 0;
+  }
+  my $sth;
+  $sth = eval {
+    $self->db->prepare('SELECT * FROM `audit`
+                          WHERE `date`>=?
+                            AND `date`<=?');
+  };
+  if ($@){
+    $self->app->log->debug("DB error: $@");
+    return 0;
+  }
+  # We want both dates to be inclusive, as the default time is 00:00:00
+  # if not given, append 23:59:59 to the end date
+  $sth->execute($start,$end . ' 23:59:59');
+  if ($sth->err){
+    $self->app->log->debug("DB error: " . $sth->errstr . " (code " . $sth->err . ")");
+    return 0;   
+  }
+  # Everything went fine, return the list of event as a hashref
+  return $sth->fetchall_hashref('id');
 };
 
 # Generate and manage rotation of session keys
@@ -1567,6 +1609,41 @@ any '/api' => sub {
     return $self->render(
       json => {
         rooms => $rooms
+      }
+    );
+  }
+  elsif ($req->{action} eq 'get_event_list'){
+    my $start = $req->{param}->{start};
+    my $end   = $req->{param}->{end};
+    if ($start eq ''){
+      $start = DateTime->now->ymd;
+    }
+    if ($end eq ''){
+      $end = DateTime->now->ymd;
+    }
+    # Validate input
+    if (!$self->valid_date($start) || !$self->valid_date($end)){
+      return $self->render(
+        json => {
+          err    => 'ERROR_INPUT_INVALID',
+          msg    => $self->l('ERROR_INPUT_INVALID'),
+          status => 'error'
+        },
+      );
+    }
+    my $events = $self->get_event_list($start,$end);
+    foreach my $event (keys %{$events}){
+      # Init NULL values to empty strings
+      foreach (qw(date from_ip event user message)){
+        if (!$events->{$event}->{$_}){
+          $events->{$event}->{$_} = '';
+        }
+      }
+    }
+    # And send the list of event as a json object
+    return $self->render(
+      json => {
+        events => $events
       }
     );
   }
