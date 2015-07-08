@@ -1241,11 +1241,11 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           });
         }
       }
-      # When a peer share its screen
+      # When a peer shares its screen
       elsif ($msg->{data}->{name} eq 'shareScreen'){
         $peers->{$id}->{details}->{screen} = \1;
       }
-      # Or unshare it
+      # Or unshares it
       elsif ($msg->{data}->{name} eq 'unshareScreen'){
         $peers->{$id}->{details}->{screen} = \0;
         $self->signal_broadcast_room({
@@ -1507,7 +1507,7 @@ any '/api' => sub {
       },
       status => 503
     );
-  }   
+  }
   # Handle requests authorized for anonymous users righ now
   if ($req->{action} eq 'switch_lang'){
     if (!grep { $req->{param}->{language} eq $_ } $self->get_supported_lang()){
@@ -1534,6 +1534,10 @@ any '/api' => sub {
 
   # This action isn't possible with the privs associated to the API Key
   if (!$res){
+    $self->log_event({
+      event => 'api_action_denied',
+      msg   => "API Key $token calls API action $req->{action} but has been denied"
+    });
     return $self->render(
       json => {
         msg => $self->l('NOT_ALLOWED'),
@@ -1542,6 +1546,11 @@ any '/api' => sub {
       status => '401'
     );
   }
+
+  $self->log_event({
+    event => 'api_action_allowed',
+    msg   => "API Key $token calls API action $req->{action}"
+  });
 
   # Here are methods not tied to a room
   if ($req->{action} eq 'get_room_list'){
