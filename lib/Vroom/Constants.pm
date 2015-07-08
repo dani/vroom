@@ -55,6 +55,9 @@ use constant COMPONENTS => {
   },
   "tocjs" => {
     url => "https://github.com/nghuuphuoc/tocjs"
+  },
+  "bootstrap-datpicker" => {
+    url => "https://bootstrap-datepicker.readthedocs.org/en/latest/"
   }
 };
 
