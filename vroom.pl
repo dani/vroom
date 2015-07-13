@@ -1579,7 +1579,7 @@ any '/api' => sub {
   if (!$res){
     $self->log_event({
       event => 'api_action_denied',
-      msg   => "API Key $token calls API action $req->{action} but has been denied"
+      msg   => "Key $token called $req->{action} but has been denied"
     });
     return $self->render(
       json => {
@@ -1593,7 +1593,7 @@ any '/api' => sub {
   if (!grep { $_ eq $req->{action} } API_NO_LOG){
     $self->log_event({
       event => 'api_action_allowed',
-      msg   => "API Key $token calls API action $req->{action}"
+      msg   => "Key $token called $req->{action}"
     });
   }
 
