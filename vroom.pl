@@ -2208,7 +2208,9 @@ group {
     # TODO: support several auth method, including an internal one where user are managed
     # in our DB, and another where auth is handled by the web server
     $self->login;
-    $self->make_key_admin($self->session('key'));
+    if ($self->get_key_role($self->session('key'), undef) ne 'admin'){
+      $self->make_key_admin($self->session('key'));
+    }
     $self->purge_rooms;
     $self->stash(admin => 1);
     return 1;
