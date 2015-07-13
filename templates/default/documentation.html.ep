@@ -108,7 +108,7 @@
               <li>Data::Dumper</li>
               <li>DateTime</li>
             </ul>
-          </ul>
+          </li>
         </ul>
         It's also advised to run VROOM on a systemd powered distribution (simply because that's what I use and I include service units for VROOM). 
         For the same reason, I recommend running Apache as webserver (others like Nginx probably work too, but I provide configuration sample only for Apache)
