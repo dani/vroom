@@ -16,7 +16,6 @@ use Digest::HMAC_SHA1 qw(hmac_sha1);
 use MIME::Base64;
 use File::stat;
 use File::Basename;
-use Etherpad::API;
 use Session::Token;
 use Email::Valid;
 use Protocol::SocketIO::Handshake;
@@ -42,14 +41,21 @@ foreach my $dir (qw/assets/){
 
 # Create etherpad api client if enabled
 our $ec = undef;
+my $etherpad = eval { require Etherpad::API };
 if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key'} ne ''){
-  $ec = Etherpad::API->new({
-    url => $config->{'etherpad.uri'},
-    apikey => $config->{'etherpad.api_key'}
-  });
-  if (!$ec->check_token){
-    app->log->info("Can't connect to Etherpad-Lite API, check your API key and uri");
-    $ec = undef;
+  if ($etherpad){
+    import Etherpad::API;
+    $ec = Etherpad::API->new({
+      url => $config->{'etherpad.uri'},
+      apikey => $config->{'etherpad.api_key'}
+    });
+    if (!$ec->check_token){
+      app->log->info("Can't connect to Etherpad-Lite API, check your API key and uri");
+      $ec = undef;
+    }
+  }
+  else{
+    app->log->info("Etherpad::API not found, disabling Etherpad-Lite support");
   }
 }
 
