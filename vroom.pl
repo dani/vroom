@@ -175,7 +175,9 @@ helper log_event => sub {
     $self->get_name,
     $event->{msg}
   );
-  $self->app->log->info('[' . $self->tx->remote_address . '] [' . $self->get_name . '] [' . $event->{event} . '] ' . $event->{msg});
+  my $addr = $self->tx->remote_address || '127.0.0.1';
+  my $user = $self->get_name || 'VROOM daemon';
+  $self->app->log->info('[' . $addr . '] [' . $user . '] [' . $event->{event} . '] ' . $event->{msg});
   return 1;
 };
 
