@@ -1590,10 +1590,12 @@ any '/api' => sub {
     );
   }
 
-  $self->log_event({
-    event => 'api_action_allowed',
-    msg   => "API Key $token calls API action $req->{action}"
-  });
+  if (!grep { $_ eq $req->{action} } API_NO_LOG){
+    $self->log_event({
+      event => 'api_action_allowed',
+      msg   => "API Key $token calls API action $req->{action}"
+    });
+  }
 
   # Here are methods not tied to a room
   if ($req->{action} eq 'get_room_list'){

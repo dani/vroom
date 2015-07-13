@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use base 'Exporter';
 
-our @EXPORT = qw/DB_VERSION COMPONENTS MOH JS_STRINGS API_ACTIONS/;
+our @EXPORT = qw/DB_VERSION COMPONENTS MOH JS_STRINGS API_ACTIONS API_NO_LOG/;
 
 # Database version
 use constant DB_VERSION => 8;
@@ -129,5 +129,8 @@ use constant API_ACTIONS => {
     authenticate => 1
   }
 };
+
+# List of API actions for which we do not want to log an event
+use constant API_NO_LOG => qw(get_event_list);
 
 1;
