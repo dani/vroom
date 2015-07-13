@@ -1043,21 +1043,17 @@ helper key_can_do_this => sub {
   }
   my $role = $self->get_key_role($data->{token}, $data->{param}->{room});
   if (!$role){
-    $self->app->log->debug("Key " . $data->{token} . " has no role in room " . $data->{param}->{room});
     return 0;
   }
   # API key is an admin one ?
   if ($role eq 'admin'){
-    $self->app->log->debug("Admin API Key, every actions are allowed");
     return 1;
   }
   # Global actions can only be performed by admin keys
   if (!$data->{param}->{room}){
-    $self->app->log->debug("Invalid room ID");
     return 0;
   }
 
-  $self->app->log->debug("Key role: " . $role . " and action: " . $data->{action});
   # If this key has owner privileges on this room, allow both owner and partitipant actions
   if ($role eq 'owner' && ($actions->{owner}->{$data->{action}} || $actions->{participant}->{$data->{action}})){
     return 1;
@@ -1066,11 +1062,6 @@ helper key_can_do_this => sub {
   elsif ($role eq 'participant' && $actions->{participant}->{$data->{action}}){
     return 1;
   }
-  # Else, deny
-  $self->log_event({
-    event => 'action_denied',
-    msg   => "API Key " . $data->{token} . " doesn't have permission to call " . $data->{action} . " on room " . $data->{param}->{room}
-  });
   return 0;
 };
 
