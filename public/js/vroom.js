@@ -761,7 +761,7 @@ function initAdminAudit(){
             .append($('<td>').html(stringEscape(obj.id)).addClass('hidden-xs'))
             .append($('<td>').html(stringEscape(date)))
             .append($('<td>').html(stringEscape(obj.from_ip)))
-            .append($('<td>').html(stringEscape(obj.event)))
+            .append($('<td>').html(stringEscape(obj.event)).addClass('hidden-xs'))
             .append($('<td>').html(stringEscape(obj.user)).addClass('hidden-xs'))
             .append($('<td>').html(stringEscape(obj.message)))
           );

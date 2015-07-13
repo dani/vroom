@@ -46,10 +46,10 @@
             <th>
               <%=l 'EVENT_DATE' %>
             </th>
-            <th class="hidden-xs">
+            <th>
               <%=l 'EVENT_FROM_IP' %>
             </th>
-            <th>
+            <th class="hidden-xs">
               <%=l 'EVENT' %>
             </th>
             <th class="hidden-xs">
