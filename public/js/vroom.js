@@ -25,12 +25,26 @@ $('.modal').on('show.bs.modal', function(){
 // Enable bootstrap-swicth
 $('.bs-switch').bootstrapSwitch();
 
+// Date pickers
+$('.date-picker').datepicker({
+  autoclose: true,
+  format: 'yyyy-mm-dd',
+  todayHighlight: true,
+  todayBtn: 'linked',
+  weekStart: 1,
+  endDate: '1',
+  language: currentLang
+});
+
 // Strings we need translated
 var locale = {},
     def_locale = {};
 
 // When pagination is done, how many item per page
 var itemPerPage = 20;
+
+// Regex to check a date
+var dateRe = /^\d{4}\-\d{1,2}\-\d{1,2}$/;
 
 // Some global vars, like
 // the SimpleWebRTC object
@@ -727,7 +741,7 @@ function initAdminAudit(){
 
   // Update display of event list
   function updateEventList(filter, min, max){
-    $('#loading-icon').show();
+    $('#loadingIcon').show();
     $('#eventList').html('');
     var filterRe = new RegExp(filter, "gi");
     var i = 0;
@@ -756,7 +770,6 @@ function initAdminAudit(){
       }
     });
     $('#loadingIcon').hide();
-    $('.tablesorter').trigger('update');
   }
 
   function updatePagination(){
@@ -799,7 +812,6 @@ function initAdminAudit(){
         matches = Object.keys(eventList).length;
         updateEventList($('#eventSearch').val(), 0, itemPerPage);
         updatePagination();
-        //$('.tablesorter').tablesorter({textSorter: $.tablesorter.sortText});
       }
     });
   }
@@ -837,13 +849,15 @@ function initAdminAudit(){
   });
 
   $('#searchEvent').on('input', function(){
+    $('#loadingIcon').show();
     var lastInput = +new Date;
     setTimeout(function(){
       if (lastInput + 500 < +new Date){
-        $('#loading-icon').show();
+        $('#loadingIcon').show();
         $('#pagination').html('');
         updateEventList($('#searchEvent').val(), 0, itemPerPage);
         updatePagination();
+        $('#searchEvent').val();
       }
     }, 600);
   });

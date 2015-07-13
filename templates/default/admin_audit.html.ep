@@ -2,9 +2,10 @@
 %= include 'header'
 %= include 'public_toolbar'
 <div class="container-fluid">
+%= include 'noscript'
   <div class="panel panel-default">
     <div class="panel-heading">
-      <form class="form-inline" id="eventSearch" role="form" method="post">
+      <form class="form-inline" id="eventSearch" role="form">
         <div class="form-group">
           <div class="input-group">
             <input type="text" id="searchEvent" class="form-control" value=""/>
@@ -29,14 +30,14 @@
           </div>
         </div>
         <div class="form-group pull-right hidden-xs">
-          %= image '/img/loading.gif', alt => $self->l('LOADING'), id => 'loading-icon'
+          %= image '/img/loading.gif', alt => $self->l('LOADING'), id => 'loadingIcon'
         </div>
       </div>
     </div>
     <div class="panel-body">
       <div class="text-center" id="pagination">
       </div>
-      <table class="table table-hover tablesorter">
+      <table class="table table-hover">
         <thead>
           <tr>
             <th class="hidden-xs">
