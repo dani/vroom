@@ -92,8 +92,9 @@ plugin mail => {
 
 # Static resources compressor
 plugin StaticCompressor => {
-  url_path_prefix => 'assets',
-  file_cache_path => $config->{'directories.cache'} . '/assets/'
+  url_path_prefix    => 'assets',
+  file_cache_path    => $config->{'directories.cache'} . '/assets/',
+  disable_on_devmode => 1
 };
 
 ##########################
