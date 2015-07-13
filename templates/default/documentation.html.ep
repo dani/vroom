@@ -94,12 +94,13 @@
           <li>A webserver supporting HTTPS and reverse proxying, including websocket reverse proxying (Apache can do this with mod_proxy_wstunnel)</li>
           <li>The following perl modules
             <ul>
+              <li>DBI</li>
+              <li>DBD::mysql</li>
               <li>Mojolicious::Plugin::Mail</li>
               <li>Mojolicious::Plugin::Database</li>
               <li>Mojolicious::Plugin::StaticCompressor</li>
               <li>Crypt::SaltedHash</li>
               <li>MIME::Base64</li>
-              <li>Etherpad::API</li>
               <li>Session::Token</li>
               <li>Config::Simple</li>
               <li>Email::Valid</li>
@@ -107,6 +108,11 @@
               <li>Protocol::SocketIO::Message</li>
               <li>Data::Dumper</li>
               <li>DateTime</li>
+            </ul>
+          </li>
+          <li>The following perl modules are optional
+            <ul>
+              <li>Etherpad::API</li>
             </ul>
           </li>
         </ul>
@@ -168,6 +174,7 @@ yum install epel-release</pre>
         The following command will install everything required to run VROOM
         <pre>
 yum install git tar wget httpd mod_ssl openssl mariadb-server \\
+           'perl(DBI)' 'perl(DBD::mysql)' \\
            'perl(Mojolicious)' 'perl(Mojolicious::Plugin::I18N)' 'perl(Mojolicious::Plugin::Mail)' \\
            'perl(Crypt::SaltedHash)' 'perl(Etherpad::API)' 'perl(LWP::Protocol::https)' \\
            'perl(Sesion::Token)' 'perl(Mojolicious::Plugin::Database)' \\
