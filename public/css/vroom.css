@@ -1,9 +1,3 @@
-@font-face {
-  font-family: 'Happy Monkey';
-  font-style: normal;
-  font-weight: 400;
-  src: url(../fonts/happymonkey.woff2) format('woff2'), url(../fonts/happymonkey.woff) format('woff');
-}
 .navbar-btn-group {
   border-color: transparent !important;
 }
@@ -273,7 +267,6 @@ body {
   overflow-x: hidden;
   margin: 0px;
   padding: 0px;
-  font-family: 'Happy Monkey', cursive;
   position: relative;
 }
 #wrap {
