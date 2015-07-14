@@ -131,6 +131,6 @@ use constant API_ACTIONS => {
 };
 
 # List of API actions for which we do not want to log an event
-use constant API_NO_LOG => qw(get_event_list);
+use constant API_NO_LOG => qw(get_event_list get_room_list);
 
 1;
