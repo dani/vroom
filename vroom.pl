@@ -453,11 +453,11 @@ helper modify_room => sub {
   }
   if ($mods ne ''){
     $msg .= "\nModified fields:\n$mods";
+    $self->log_event({
+      event => 'room_modify',
+      msg   => $msg
+    });
   }
-  $self->log_event({
-    event => 'room_modify',
-    msg   => $msg
-  });
   return 1;
 };
 
