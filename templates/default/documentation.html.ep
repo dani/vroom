@@ -108,6 +108,7 @@
               <li>Protocol::SocketIO::Message</li>
               <li>Data::Dumper</li>
               <li>DateTime</li>
+              <li>Array::Diff</li>
             </ul>
           </li>
           <li>The following perl modules are optional
@@ -174,7 +175,7 @@ yum install epel-release</pre>
         The following command will install everything required to run VROOM
         <pre>
 yum install git tar wget httpd mod_ssl openssl mariadb-server \\
-           'perl(DBI)' 'perl(DBD::mysql)' \\
+           'perl(DBI)' 'perl(DBD::mysql)' 'perl('Array::Diff)' \\
            'perl(Mojolicious)' 'perl(Mojolicious::Plugin::I18N)' 'perl(Mojolicious::Plugin::Mail)' \\
            'perl(Crypt::SaltedHash)' 'perl(Etherpad::API)' 'perl(LWP::Protocol::https)' \\
            'perl(Sesion::Token)' 'perl(Mojolicious::Plugin::Database)' \\
@@ -715,16 +716,8 @@ systemctl restart vroom.service</pre>
               <td>A room is being deleted by a user action</td>
             </tr>
             <tr>
-              <td>add_email_notification</td>
-              <td>Add an email to the list of notifications sent when someone joins a room</td>
-            </tr>
-            <tr>
-              <td>reset_email_notification</td>
-              <td>Reset the list of email being notified when someone joins a rooms</td>
-            </tr>
-            <tr>
-              <td>del_email_notification</td>
-              <td>Remove an email from the list of notifications sent when someone joins a room</td>
+              <td>email_notification_change</td>
+              <td>The list of email being notified when someone joins a room has been updated</td>
             </tr>
             <tr>
               <td>send_invitation</td>

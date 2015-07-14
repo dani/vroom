@@ -23,6 +23,7 @@ use Protocol::SocketIO::Message;
 use File::Path qw(make_path);
 use File::Basename;
 use DateTime;
+use Array::Diff;
 use Data::Dumper;
 
 app->log->level('info');
@@ -654,10 +655,6 @@ helper add_notification => sub {
     $data->{id},
     $email
   );
-  $self->log_event({
-    event => 'add_email_notification',
-    msg   => "Adding $email to the notification list for room " . $data->{name}
-  });
   return 1;
 };
 
@@ -670,6 +667,26 @@ helper update_email_notifications => sub {
   if (!$data){
     return 0;
   }
+  my $old = $self->get_email_notifications($room);
+  my @old = sort map { $old->{$_}->{email} } keys $old;
+  my @new = sort @$emails;
+  # Remove empty email
+  @new = grep { $_ ne '' } @new;
+  my $diff = Array::Diff->diff(\@old, \@new);
+  # Are we changing the list of email ?
+  if ($diff->count > 0){
+    my $msg = "Notification list for room $room has changed\n";
+    if (scalar @{$diff->deleted} > 0){
+      $msg .= "Emails being removed: " . join (', ', @{$diff->deleted}) . "\n";
+    }
+    if (scalar @{$diff->added} > 0){
+      $msg .= "Emails being added: " . join (', ', @{$diff->added}) . "\n";
+    }
+    $self->log_event({
+      event => 'email_notification_change',
+      msg   => $msg
+    });
+  }
   # First, drop all existing notifications
   my $sth = eval {
     $self->db->prepare('DELETE FROM `email_notifications`
@@ -678,12 +695,8 @@ helper update_email_notifications => sub {
   $sth->execute(
     $data->{id},
   );
-  $self->log_event({
-    event => 'reset_email_notification',
-    msg   => 'Resetting email notification list for room ' . $data->{name}
-  });
   # Now, insert new emails
-  foreach my $email (@$emails){
+  foreach my $email (@new){
     # Skip empty inputs
     if ($email eq ''){
       next;
