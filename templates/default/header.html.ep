@@ -4,7 +4,10 @@
   <title><%= $title %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="description" content=" <%=l 'VROOM_DESC' %>" />
-  <% my @css = qw(css/bootstrap.css css/bootstrap-switch.css css/toc-scroll.css css/bootstrap-datepicker3.css css/vroom.css); %>
+  <%
+    my @css = qw(bootstrap.css bootstrap-switch.css toc-scroll.css bootstrap-datepicker3.css vroom.css);
+    @css = map { $self->url_for('/') . 'css/' . $_ } @css;
+  %>
   <%=css @css %>
   <link rel="icon" type="image/png" href="<%= $self->url_for('/img/favicon.png') %>" />
 </head>
