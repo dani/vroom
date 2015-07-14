@@ -1335,10 +1335,12 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
   # Triggerred when a websocket connection ends
   $self->on(finish => sub {
     my ($self, $code, $reason) = @_;
-    $self->log_event({
-      event => 'room_leave',
-      msg   => "Peer $id closed websocket connection, leaving room " . $peers->{$id}->{room}
-    });
+    if ($id && $peers->{$id} && $peers->{$id}->{room}){
+      $self->log_event({
+        event => 'room_leave',
+        msg   => "Peer $id closed websocket connection, leaving room " . $peers->{$id}->{room}
+      });
+    }
     $self->signal_broadcast_room({
       from => $id,
       msg  => Protocol::SocketIO::Message->new(
