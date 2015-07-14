@@ -752,6 +752,10 @@ systemctl restart vroom.service</pre>
               <td>A peer is being denied because member limit is already reached</td>
             </tr>
             <tr>
+              <td>room_join</td>
+              <td>A peer joins a room</td>
+            </tr>
+            <tr>
               <td>room_leave</td>
               <td>A peer leaves a room</td>
             </tr>

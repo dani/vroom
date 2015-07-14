@@ -1273,6 +1273,10 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
             ]
           )
         );
+        $self->log_event({
+          event => 'room_join',
+          msg   => "Peer $id has joined room $room"
+        });
         # Update room last activity
         $self->update_room_last_activity($room);
       }
