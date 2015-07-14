@@ -445,8 +445,8 @@ helper modify_room => sub {
   foreach my $field (keys %$room){
     if (($old_room->{$field} // '' ) ne ($room->{$field} // '')){
       if ($field =~ m/_password$/){
-        $old_room->{$field} = '<hidden>';
-        $room->{$field}     = '<hidden>';
+        $old_room->{$field} = ($old_room->{$field}) ? '<hidden>' : '<unset>';
+        $room->{$field}     = ($room->{$field})     ? '<hidden>' : '<unset>';
       }
       $mods .= $field . ": " . $old_room->{$field} . ' -> ' . $room->{$field} . "\n";
     }
