@@ -2235,7 +2235,7 @@ group {
       $self->make_key_admin($self->session('key'));
     }
     $self->purge_rooms;
-    $self->stash(admin => 1);
+    $self->stash(page => 'admin');
     return 1;
   };
 
