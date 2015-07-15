@@ -1427,6 +1427,7 @@ Mojo::IOLoop->recurring( 3600 => sub {
 # Route / to the index page
 get '/' => sub {
   my $self = shift;
+  $self->login;
   $self->stash(
     page     => 'index',
     etherpad => ($ec) ? 'true' : 'false'
