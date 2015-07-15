@@ -194,8 +194,8 @@ function linkify(text){
 }
 
 // Save content to a file
-function downloadContent(filename, content){
-  var blob = new Blob([content], {type: 'text/html;charset=utf-8'});
+function downloadContent(filename, type, content){
+  var blob = new Blob([content], {type: type});
   saveAs(blob, filename);
 }
 
@@ -2164,7 +2164,7 @@ function initVroom(room) {
   // Download chat history in a file
   $('#saveChat').click(function(){
     var d = new Date;
-    downloadContent('VROOM Tchat (' + room + ') ' + d.toLocaleString() + '.html', $('#chatHistory').html());
+    downloadContent('VROOM Tchat (' + room + ') ' + d.toLocaleString() + '.html', 'text/html;charset=utf-8', $('#chatHistory').html());
   });
 
   // Suspend/Play MoH
