@@ -2231,7 +2231,8 @@ group {
     # TODO: support several auth method, including an internal one where user are managed
     # in our DB, and another where auth is handled by the web server
     $self->login;
-    if ($self->get_key_role($self->session('key'), undef) ne 'admin'){
+     my $role = $self->get_key_role($self->session('key'), undef);
+    if (!$role || $role ne 'admin'){
       $self->make_key_admin($self->session('key'));
     }
     $self->purge_rooms;
