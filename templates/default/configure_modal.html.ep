@@ -91,7 +91,7 @@
                   <input id="ownerPassConfirm" type="password" class="form-control" placeholder="<%=l 'CONFIRM_PASSWORD' %>"/>
                 </div>
               </div>
-              <% if (defined(stash("admin")) && stash("admin") eq '1'){ %>
+              <% if (defined(stash("page")) && stash("page") eq 'admin'){ %>
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="persistentSet">
                   <%=l 'PERSISTENT' %>
