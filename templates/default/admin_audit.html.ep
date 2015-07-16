@@ -22,8 +22,12 @@
           <div class="input-group">
             <input type="text" id="dateEnd" name="dateEnd" class="form-control date-picker" value="<%= DateTime->now->ymd %>"/>
             <span class="input-group-btn">
-              <button type=submit" class="btn btn-primary">
+              <button id="events_refresh" class="btn btn-primary">
                 <span class="glyphicon glyphicon-play">
+                </span>
+              </button>
+              <button id="events_export" class="btn btn-default">
+                <span class="glyphicon glyphicon-save">
                 </span>
               </button>
             </span>

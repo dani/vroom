@@ -817,7 +817,7 @@ function initAdminAudit(){
   }
 
   // Intercept form submission
-  $('#eventSearch').submit(function(e){
+  $('#events_refresh,#events_export').click(function(e){
     e.preventDefault();
     var startObj = new Date($('#dateStart').val());
     var endObj = new Date($('#dateEnd').val());
@@ -843,8 +843,13 @@ function initAdminAudit(){
       return false;
     }
     else{
-      reloadEvents($('#dateStart').val(),$('#dateEnd').val());
-      return;
+      if ($(this).attr('id') === 'events_refresh'){
+        reloadEvents($('#dateStart').val(),$('#dateEnd').val());
+        return;
+      }
+      else if ($(this).attr('id') === 'events_export'){
+        window.location.assign('export_events?from=' + $('#dateStart').val() + '&to=' + $('#dateEnd').val());
+      }
     }
   });
 

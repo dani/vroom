@@ -9,6 +9,7 @@ use Mojolicious::Lite;
 use Mojolicious::Plugin::Mail;
 use Mojolicious::Plugin::Database;
 use Mojolicious::Plugin::StaticCompressor;
+use Mojolicious::Plugin::RenderFile;
 use Vroom::Constants;
 use Vroom::Conf;
 use Crypt::SaltedHash;
@@ -24,6 +25,8 @@ use File::Path qw(make_path);
 use File::Basename;
 use DateTime;
 use Array::Diff;
+use File::Temp;
+use Excel::Writer::XLSX;
 use Data::Dumper;
 
 app->log->level('info');
@@ -97,6 +100,9 @@ plugin StaticCompressor => {
   file_cache_path    => $config->{'directories.cache'} . '/assets/',
   disable_on_devmode => 1
 };
+
+# Stream files
+plugin 'RenderFile';
 
 ##########################
 #  Validation helpers    #
@@ -1171,6 +1177,36 @@ helper get_room_conf => sub {
     max_members  => $room->{max_members},
     notif        => $self->get_email_notifications($room->{name})
   };
+};
+
+# Export events in XLSX
+helper export_events_xlsx => sub {
+  my $self = shift;
+  my ($from,$to) = @_;
+  my $tmp = File::Temp->new( DIR => $config->{'directories.cache'}, SUFFIX => '.xlsx' )->filename;
+  my $events = $self->get_event_list($from, $to);
+  if (!$events){
+    return 0;
+  }
+  my $xlsx = Excel::Writer::XLSX->new($tmp);
+  my $sheet = $xlsx->add_worksheet;
+  my @headers = qw(id date from_ip user event message);
+  # Write header
+  $sheet->write(0, 0, \@headers);
+  my $row = 1;
+  foreach my $e (sort {$a <=> $b } keys %$events){
+    my @details = (
+      $events->{$e}->{id},
+      $events->{$e}->{date},
+      $events->{$e}->{from_ip},
+      $events->{$e}->{user},
+      $events->{$e}->{event},
+      $events->{$e}->{message}
+    );
+    $sheet->write($row, 0, \@details);
+    $row++;
+  }
+  return $tmp;
 };
 
 # Socket.IO handshake
@@ -2257,6 +2293,26 @@ group {
   get '/audit' => sub {
     my $self = shift;
     return $self->render('admin_audit');
+  };
+
+  get '/export_events' => sub {
+    my $self = shift;
+    my $from = $self->param('from') || DateTime->now->ymd;
+    my $to   = $self->param('to')   || DateTime->now->ymd;
+    my $file = $self->export_events_xlsx($from,$to);
+    if (!$file || !-e $file){
+      return $self->render('error',
+        msg => $self->l('ERROR_EXPORT_XLSX'),
+        err => 'ERROR_EXPORT_XLSX',
+        room => ''
+      );
+    }
+    $self->render_file(
+      filepath => $file,
+      filename => 'events.xlsx',
+      cleanup  => 1,
+      format   => 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
   };
 };
 
