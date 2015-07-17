@@ -9,7 +9,6 @@ use Mojolicious::Lite;
 use Mojolicious::Plugin::Mail;
 use Mojolicious::Plugin::Database;
 use Mojolicious::Plugin::StaticCompressor;
-use Mojolicious::Plugin::RenderFile;
 use Vroom::Constants;
 use Vroom::Conf;
 use Crypt::SaltedHash;
@@ -66,10 +65,12 @@ if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key
 my $excel = eval {
   require File::Temp;
   require Excel::Writer::XLSX;
+  require Mojolicious::Plugin::RenderFile;
 };
 if ($excel){
   import File::Temp;
   import Excel::Writer::XLSX;
+  import Mojolicious::Plugin::RenderFile;
   $optf->{excel} = 1;
 }
 
