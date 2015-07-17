@@ -1514,14 +1514,6 @@ get '/documentation' => sub {
   );
 } => 'documentation';
 
-# Route for the help page
-get '/help' => sub {
-  my $self = shift;
-  $self->stash(
-    page => 'help'
-  );
-} => 'help';
-
 # Routes for feedback. One get to display the form
 # and one post to get data from it
 get '/feedback' => sub {

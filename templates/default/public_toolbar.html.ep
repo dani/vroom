@@ -14,9 +14,6 @@
           <li id='lnk_index'>
             <a href="<%= $self->url_for('/') %>"><%= l('HOME') %></a>
           </li>
-          <li id='lnk_help'>
-            <a href="<%= $self->url_for('/help') %>"><%= l('HELP') %></a>
-          </li>
           <li id='lnk_about'>
             <a href="<%= $self->url_for('/about') %>"><%= l('ABOUT') %></a>
           </li>
