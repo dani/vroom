@@ -22,11 +22,11 @@
           <div class="input-group">
             <input type="text" id="dateEnd" name="dateEnd" class="form-control date-picker" value="<%= DateTime->now->ymd %>"/>
             <span class="input-group-btn">
-              <button id="events_refresh" class="btn btn-primary">
+              <button id="events_refresh" class="btn btn-primary help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'REFRESH_EVENTS' %>">
                 <span class="glyphicon glyphicon-play">
                 </span>
               </button>
-              <button id="events_export" class="btn btn-default">
+              <button id="events_export" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'EXPORT_EVENTS' %>">
                 <span class="glyphicon glyphicon-save">
                 </span>
               </button>
