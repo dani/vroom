@@ -118,6 +118,7 @@
                 For Etherpad-Lite support:
                 <ul>
                   <li>Etherpad::API</li>
+                  <li>LWP::Protocol::https</li>
                 </ul>
               </li>
               <li>
@@ -189,13 +190,26 @@ yum install epel-release</pre>
         The following command will install everything required to run VROOM
         <pre>
 yum install git tar wget httpd mod_ssl openssl mariadb-server \\
-           'perl(DBI)' 'perl(DBD::mysql)' 'perl('Array::Diff)' \\
-           'perl(Mojolicious)' 'perl(Mojolicious::Plugin::I18N)' 'perl(Mojolicious::Plugin::Mail)' \\
-           'perl(Crypt::SaltedHash)' 'perl(Etherpad::API)' 'perl(LWP::Protocol::https)' \\
-           'perl(Sesion::Token)' 'perl(Mojolicious::Plugin::Database)' \\
-           'perl(Mojolicious::Plugin::StaticCompressor' 'perl(Mojolicious::Plugin::RenderFile)' \\
-           'perl(Email::Valid)' 'perl(File::Temp)' 'perl(Excel::Writer::XLSX)' 'perl(Locale::Maketext::Lexicon)' \\
-           'perl(Config::Simple)' 'perl(Session::Token)' 'perl(DateTime)'</pre>
+            'perl(DBI)' \\
+            'perl(DBD::mysql)' \\
+            'perl(Array::Diff)' \\
+            'perl(Mojolicious)' \\
+            'perl(Mojolicious::Plugin::I18N)' \\
+            'perl(Mojolicious::Plugin::Mail)' \\
+            'perl(Mojolicious::Plugin::Database)' \\
+            'perl(Mojolicious::Plugin::StaticCompressor' \\
+            'perl(Mojolicious::Plugin::RenderFile)' \\
+            'perl(Crypt::SaltedHash)' \\
+            'perl(Etherpad::API)' \\
+            'perl(LWP::Protocol::https)' \\
+            'perl(Sesion::Token)' \\
+            'perl(Email::Valid)' \\
+            'perl(File::Temp)' \\
+            'perl(Excel::Writer::XLSX)' \\
+            'perl(Locale::Maketext::Lexicon)' \\
+            'perl(Config::Simple)' \\
+            'perl(Session::Token)' \\
+            'perl(DateTime)'</pre>
       </p>
 
       <h3 id="c7_clone_git">
