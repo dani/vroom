@@ -51,7 +51,7 @@
               0
             </span>
           </button>
-          <% if ($etherpad eq 'true'){ %>
+          <% if ($self->get_opt_features->{etherpad}){ %>
           <button class="btn btn-lg btn-default help btn-etherpad" data-toggle="tooltip" data-placement="bottom" title="<%=l 'OPEN_ETHERPAD' %>">
             <span class="glyphicon glyphicon-pencil">
             </span>
@@ -368,7 +368,7 @@
           </div>
         </div>
         <div id="mainView" class="col-xs-12 col-sm-8">
-          <% if ($etherpad eq 'true'){ %>
+          <% if ($self->get_opt_features->{etherpad}){ %>
           <div id="etherpadContainer" class="hidden-xs"></div>
           <% } %>
           <div id="mainVideo">
@@ -386,7 +386,7 @@
       var roomName = '<%= $room %>';
       $( document ).ready(function() {
           etherpad = {
-            enabled: <%= $etherpad %>,
+            enabled: <%= $self->get_opt_features->{etherpad} ? 'true' : 'false' %>,
             <%
               my $ethuri = Mojo::URL->new($config->{'etherpad.uri'});
             %>

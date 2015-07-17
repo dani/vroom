@@ -1492,8 +1492,7 @@ get '/' => sub {
   my $self = shift;
   $self->login;
   $self->stash(
-    page     => 'index',
-    etherpad => ($optf->{etherpad}) ? 'true' : 'false'
+    page     => 'index'
   );
 } => 'index';
 
@@ -2400,7 +2399,6 @@ get '/:room' => sub {
     page          => 'room',
     moh           => $self->choose_moh(),
     video         => $video,
-    etherpad      => ($optf->{etherpad}) ? 'true' : 'false',
     etherpadGroup => $data->{etherpad_group},
     ua            => $self->req->headers->user_agent
   );
