@@ -16,7 +16,8 @@ msgstr ""
 "Language: fr\n"
 "X-Generator: Poedit 1.8.1\n"
 
-#: templates/default/about.html.ep:1 templates/default/about.html.ep:8
+#: templates/default/about.html.ep:1
+#: templates/default/about.html.ep:8
 #: templates/default/public_toolbar.html.ep:21
 msgid "ABOUT"
 msgstr "About"
@@ -82,7 +83,8 @@ msgstr "Require to enter a name"
 msgid "AUDIT"
 msgstr "Audit"
 
-#: templates/default/auth_modal.html.ep:9 templates/default/join.html.ep:96
+#: templates/default/auth_modal.html.ep:9
+#: templates/default/join.html.ep:96
 msgid "AUTHENTICATE"
 msgstr "Authentication"
 
@@ -102,8 +104,12 @@ msgstr "A microphone and speakers (or headphones)"
 msgid "A_MODERN_BROWSER"
 msgstr "A modern web browser, recent versions of Mozilla Firefox, Google Chrome or Opera will work"
 
-#: public/js/vroom.js:1394 public/js/vroom.js:1416 public/js/vroom.js:1468
-#: public/js/vroom.js:1555 public/js/vroom.js:1587 public/js/vroom.js:1630
+#: public/js/vroom.js:1394
+#: public/js/vroom.js:1416
+#: public/js/vroom.js:1468
+#: public/js/vroom.js:1555
+#: public/js/vroom.js:1587
+#: public/js/vroom.js:1630
 #: public/js/vroom.js:1648
 msgid "A_PARTICIPANT"
 msgstr "a participant"
@@ -112,9 +118,14 @@ msgstr "a participant"
 msgid "A_PASSWORD_IS_NEEDED_TO_JOIN"
 msgstr "You must provide a password to join this room"
 
-#: public/js/vroom.js:1539 public/js/vroom.js:1553 public/js/vroom.js:1572
-#: public/js/vroom.js:1585 public/js/vroom.js:1599 public/js/vroom.js:1622
-#: public/js/vroom.js:1628 public/js/vroom.js:1646
+#: public/js/vroom.js:1539
+#: public/js/vroom.js:1553
+#: public/js/vroom.js:1572
+#: public/js/vroom.js:1585
+#: public/js/vroom.js:1599
+#: public/js/vroom.js:1622
+#: public/js/vroom.js:1628
+#: public/js/vroom.js:1646
 msgid "A_ROOM_ADMIN"
 msgstr "a room administrator"
 
@@ -147,7 +158,8 @@ msgstr "Your webcam is now suspended"
 #: templates/default/delete_room_modal.html.ep:25
 #: templates/default/feedback.html.ep:28
 #: templates/default/invite_modal.html.ep:44
-#: templates/default/join.html.ep:135 templates/default/join.html.ep:262
+#: templates/default/join.html.ep:135
+#: templates/default/join.html.ep:262
 #: templates/default/join.html.ep:287
 msgid "CANCEL"
 msgstr "Cancel"
@@ -204,11 +216,13 @@ msgstr "Click send to deliver your message, or join the room now"
 msgid "CLICK_TO_CHAT"
 msgstr "Click to access the chat"
 
-#: templates/default/index.html.ep:153 templates/default/index.html.ep:159
+#: templates/default/index.html.ep:153
+#: templates/default/index.html.ep:159
 msgid "COLLABORATIVE_NOTETAKING"
 msgstr "Real time notetaking"
 
-#: templates/default/feedback.html.ep:20 templates/default/feedback.mail.ep:6
+#: templates/default/feedback.html.ep:20
+#: templates/default/feedback.mail.ep:6
 msgid "COMMENT"
 msgstr "Comment"
 
@@ -232,7 +246,8 @@ msgstr "Do you want to join it or choose another name ?"
 msgid "CONFIRM_PASSWORD"
 msgstr "Confirm password"
 
-#: templates/default/join.html.ep:212 templates/default/join.html.ep:217
+#: templates/default/join.html.ep:212
+#: templates/default/join.html.ep:217
 msgid "CONNECTING"
 msgstr "Connecting"
 
@@ -240,7 +255,8 @@ msgstr "Connecting"
 msgid "CONNECTING_PLEASE_WAIT"
 msgstr "Please wait while establishing the connection"
 
-#: templates/default/join.html.ep:194 templates/default/join.html.ep:198
+#: templates/default/join.html.ep:194
+#: templates/default/join.html.ep:198
 msgid "CONNECTION_LOST"
 msgstr "You have been disconnected"
 
@@ -272,7 +288,8 @@ msgstr "Display name"
 msgid "DISPLAY_NAME_REQUIRED"
 msgstr "You need to enter your name"
 
-#: public/js/vroom.js:1991 public/js/vroom.js:916
+#: public/js/vroom.js:1991
+#: public/js/vroom.js:916
 msgid "DISPLAY_NAME_TOO_LONG"
 msgstr "This name is too long"
 
@@ -299,7 +316,8 @@ msgstr "Video conference invitation"
 msgid "EMAIL_PLACEHOLDER"
 msgstr "j.smith@example.com"
 
-#: templates/default/feedback.mail.ep:11 templates/default/invite.mail.ep:57
+#: templates/default/feedback.mail.ep:11
+#: templates/default/invite.mail.ep:57
 #: templates/default/notification.mail.ep:30
 msgid "EMAIL_SIGN"
 msgstr "VROOM! And video conferencing becomes free, simple and safe"
@@ -308,7 +326,8 @@ msgstr "VROOM! And video conferencing becomes free, simple and safe"
 msgid "ERROR_COMMON_ROOM_NAME"
 msgstr "This room name is too common to be reserved"
 
-#: public/js/vroom.js:825 public/js/vroom.js:832
+#: public/js/vroom.js:825
+#: public/js/vroom.js:832
 msgid "ERROR_DATE_INVALID"
 msgstr "Please enter the date respecting this format: YYY-MM-DD"
 
@@ -336,7 +355,10 @@ msgstr "Invalid input"
 msgid "ERROR_INVITATION_INVALID"
 msgstr "This link is invalid, your invitation has probably expired, or you've already responded"
 
-#: public/js/vroom.js:1949 public/js/vroom.js:341 vroom.pl:1856 vroom.pl:2038
+#: public/js/vroom.js:1949
+#: public/js/vroom.js:341
+#: vroom.pl:1856
+#: vroom.pl:2038
 msgid "ERROR_MAIL_INVALID"
 msgstr "Please enter a valid email address"
 
@@ -344,19 +366,34 @@ msgstr "Please enter a valid email address"
 msgid "ERROR_NAME_CONFLICT"
 msgstr "A room with this name already exists, please choose another one"
 
-#: public/js/vroom.js:450 vroom.pl:1750 vroom.pl:2367
+#: public/js/vroom.js:450
+#: vroom.pl:1750
+#: vroom.pl:2367
 msgid "ERROR_NAME_INVALID"
 msgstr "This name is not valid"
 
-#: public/js/vroom.js:115 public/js/vroom.js:482
-#: templates/default/error.html.ep:7 vroom.pl:1632 vroom.pl:1742 vroom.pl:1760
-#: vroom.pl:1881 vroom.pl:1910 vroom.pl:1942 vroom.pl:2006 vroom.pl:2025
-#: vroom.pl:2060 vroom.pl:2159 vroom.pl:2228 vroom.pl:2247 vroom.pl:2264
+#: public/js/vroom.js:115
+#: public/js/vroom.js:482
+#: templates/default/error.html.ep:7
+#: vroom.pl:1632
+#: vroom.pl:1742
+#: vroom.pl:1760
+#: vroom.pl:1881
+#: vroom.pl:1910
+#: vroom.pl:1942
+#: vroom.pl:2006
+#: vroom.pl:2025
+#: vroom.pl:2060
+#: vroom.pl:2159
+#: vroom.pl:2228
+#: vroom.pl:2247
+#: vroom.pl:2264
 #: vroom.pl:2281
 msgid "ERROR_OCCURRED"
 msgstr "An error occurred"
 
-#: vroom.pl:2139 vroom.pl:2213
+#: vroom.pl:2139
+#: vroom.pl:2213
 msgid "ERROR_PEER_ID_MISSING"
 msgstr "Peer ID is missing"
 
@@ -368,7 +405,10 @@ msgstr "This peer doesn't exist"
 msgid "ERROR_ROOM_NAME_MISSING"
 msgstr "Room name is missing"
 
-#: vroom.pl:1556 vroom.pl:1571 vroom.pl:1786 vroom.pl:2376
+#: vroom.pl:1556
+#: vroom.pl:1571
+#: vroom.pl:1786
+#: vroom.pl:2376
 msgid "ERROR_ROOM_s_DOESNT_EXIST"
 msgstr "Room %s doesn't exist"
 
@@ -434,7 +474,8 @@ msgstr "From"
 msgid "FROM_AUTHOR"
 msgstr "from"
 
-#: templates/default/feedback.html.ep:8 templates/default/goodbye.html.ep:21
+#: templates/default/feedback.html.ep:8
+#: templates/default/goodbye.html.ep:21
 msgid "GIVE_US_YOUR_FEEDBACK"
 msgstr "Give us your feedback"
 
@@ -519,7 +560,8 @@ msgstr ""
 msgid "I_DONT_HAVE_A_WEBCAM"
 msgstr "I don't have a webcam"
 
-#: templates/default/error.html.ep:21 templates/default/index.html.ep:46
+#: templates/default/error.html.ep:21
+#: templates/default/index.html.ep:46
 #: templates/default/invitation.html.ep:41
 msgid "JOIN_THIS_ROOM"
 msgstr "Join this room"
@@ -556,7 +598,8 @@ msgstr "Locked"
 msgid "LOCK_ROOM"
 msgstr "Prevent room access"
 
-#: templates/default/join.html.ep:106 templates/default/join.html.ep:27
+#: templates/default/join.html.ep:106
+#: templates/default/join.html.ep:27
 msgid "LOGOUT"
 msgstr "Leave the room"
 
@@ -570,7 +613,8 @@ msgstr "Participants limit"
 
 #: templates/default/invitation.html.ep:28
 #: templates/default/invite_modal.html.ep:32
-#: templates/default/invite_modal.html.ep:35 vroom.pl:1460
+#: templates/default/invite_modal.html.ep:35
+#: vroom.pl:1460
 msgid "MESSAGE"
 msgstr "Message"
 
@@ -594,7 +638,8 @@ msgstr "Your microphone is now unmuted"
 msgid "MODERN_BROWSERS"
 msgstr "VROOM works with modern browsers (Chrome, Mozilla Firefox or Opera), you don't have to install plugins, codecs, client software, then send the tech documentation to all other parties. Just click, and hangout"
 
-#: templates/default/index.html.ep:103 templates/default/index.html.ep:97
+#: templates/default/index.html.ep:103
+#: templates/default/index.html.ep:97
 msgid "MULTI_USER"
 msgstr "Multi User"
 
@@ -618,7 +663,8 @@ msgstr "Notification when someone joins this room"
 msgid "NOT_ALLOWED"
 msgstr "You are not allowed to do this"
 
-#: templates/default/index.html.ep:108 templates/default/index.html.ep:114
+#: templates/default/index.html.ep:108
+#: templates/default/index.html.ep:114
 msgid "NO_SIGNIN"
 msgstr "No need to register"
 
@@ -668,11 +714,13 @@ msgstr "The one who just joined your room is named"
 #: templates/default/configure_modal.html.ep:58
 #: templates/default/configure_modal.html.ep:82
 #: templates/default/configure_modal.html.ep:85
-#: templates/default/join.html.ep:250 templates/default/join.html.ep:253
+#: templates/default/join.html.ep:250
+#: templates/default/join.html.ep:253
 msgid "PASSWORD"
 msgstr "Password"
 
-#: public/js/vroom.js:327 public/js/vroom.js:333
+#: public/js/vroom.js:327
+#: public/js/vroom.js:333
 msgid "PASSWORDS_DO_NOT_MATCH"
 msgstr "Passwords do not match"
 
@@ -704,7 +752,8 @@ msgstr "Powered by"
 msgid "PROMOTE_PEER"
 msgstr "Grant this participant administration privileges on the room"
 
-#: templates/default/index.html.ep:119 templates/default/index.html.ep:125
+#: templates/default/index.html.ep:119
+#: templates/default/index.html.ep:125
 msgid "QUICK"
 msgstr "Quick"
 
@@ -766,12 +815,14 @@ msgstr "room %s"
 msgid "SAVE_HISTORY"
 msgstr "Save history to a file"
 
-#: templates/default/help.html.ep:39 templates/default/index.html.ep:130
+#: templates/default/help.html.ep:39
+#: templates/default/index.html.ep:130
 #: templates/default/index.html.ep:136
 msgid "SCREEN_SHARING"
 msgstr "Screen Sharing"
 
-#: templates/default/help.html.ep:49 templates/default/join.html.ep:180
+#: templates/default/help.html.ep:49
+#: templates/default/join.html.ep:180
 msgid "SCREEN_SHARING_ABOUT_CONFIG_s"
 msgstr ""
 "<ol>\n"
@@ -799,7 +850,8 @@ msgstr "You do no longer share your screen"
 msgid "SCREEN_s"
 msgstr "%s's screen"
 
-#: templates/default/index.html.ep:75 templates/default/index.html.ep:81
+#: templates/default/index.html.ep:75
+#: templates/default/index.html.ep:81
 msgid "SECURE"
 msgstr "Secure"
 
@@ -827,7 +879,8 @@ msgstr "Session created"
 msgid "SET_A_DISPLAY_NAME"
 msgstr "Please set your name before you can join the room"
 
-#: public/js/vroom.js:2004 templates/default/join.html.ep:344
+#: public/js/vroom.js:2004
+#: templates/default/join.html.ep:344
 msgid "SET_YOUR_NAME_TO_CHAT"
 msgstr "You need to set your name to be able to chat"
 
@@ -856,7 +909,8 @@ msgstr "Stop wasting time checking, installing, explaining. Just click, send a l
 #: templates/default/feedback.html.ep:25
 #: templates/default/invitation.html.ep:44
 #: templates/default/invite_modal.html.ep:41
-#: templates/default/join.html.ep:259 templates/default/join.html.ep:284
+#: templates/default/join.html.ep:259
+#: templates/default/join.html.ep:284
 msgid "SUBMIT"
 msgstr "Submit"
 
@@ -876,7 +930,8 @@ msgstr "Suspend or resume this participant's webcam"
 msgid "TAKE_NOTE_IN_REALTIME"
 msgstr "Write your meeting notes with others, all in real time with the included text pad"
 
-#: templates/default/index.html.ep:141 templates/default/index.html.ep:147
+#: templates/default/index.html.ep:141
+#: templates/default/index.html.ep:147
 msgid "TEXT_CHAT"
 msgstr "Chat Included"
 
@@ -989,11 +1044,13 @@ msgstr "Will you join later ?"
 msgid "WONT_BE_ABLE_TO_JOIN"
 msgstr "I cannot participate"
 
-#: templates/default/index.html.ep:86 templates/default/index.html.ep:92
+#: templates/default/index.html.ep:86
+#: templates/default/index.html.ep:92
 msgid "WORKS_EVERYWHERE"
 msgstr "Universal"
 
-#: public/js/vroom.js:2146 vroom.pl:1841
+#: public/js/vroom.js:2146
+#: vroom.pl:1841
 msgid "WRONG_PASSWORD"
 msgstr "Wrong password"
 
@@ -1005,7 +1062,8 @@ msgstr "Your feedback (good or bad) can help us improve this application"
 msgid "YOUR_MAIL_OPTIONAL"
 msgstr "Your email address (optional)"
 
-#: templates/default/join.html.ep:278 templates/default/join.html.ep:37
+#: templates/default/join.html.ep:278
+#: templates/default/join.html.ep:37
 msgid "YOUR_NAME"
 msgstr "Your name"
 
