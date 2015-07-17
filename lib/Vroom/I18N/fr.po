@@ -35,11 +35,11 @@ msgid "ABOUT_VROOM"
 msgstr ""
 "VROOM est un logiciel libre exploitant les dernières technologies du web vous permettant d'organiser simplement des visio conférences. Fini les galères à devoir installer un client sur le poste au dernier moment, l'incompatibilité MAC OS ou GNU/Linux, les problèmes de redirection de port, les appels au support technique parce que la visio ne s'établit pas, les soucis d'H323 vs SIP vs ISDN. Tout ce qu'il vous faut désormais, c'est:\n"
 "<ul>\n"
-"  <li>Un poste (PC, MAC, tablette*, smartphone*)</li>\n"
-"  <li>Une webcam (optionnelle mais recommandée)</li>\n"
-"  <li>Un micro et des haut-parleurs (ou un casque)</li>\n"
-"  <li>Un navigateur web moderne</li>\" .\n"
-"</ul>\n"
+"  <li>Un poste (PC, MAC, tablette*, smartphone*)</li>"
+"  <li>Une webcam (optionnelle mais recommandée)</li>"
+"  <li>Un micro et des haut-parleurs (ou un casque)</li>"
+"  <li>Un navigateur web moderne</li>"
+"</ul>"
 "*: exceptés ipad et iphone"
 
 #: templates/default/about.html.ep:26
@@ -395,7 +395,7 @@ msgstr "Une erreur est survenue"
 #: vroom.pl:2139
 #: vroom.pl:2213
 msgid "ERROR_PEER_ID_MISSING"
-msgstr "L'identifiant du pair est absente"
+msgstr "L'identifiant du pair est absent"
 
 #: vroom.pl:2173
 msgid "ERROR_PEER_NOT_FOUND"
@@ -446,7 +446,7 @@ msgstr "Utilisateur"
 
 #: public/js/vroom.js:2067
 msgid "EVERYONE_CAN_SEE_YOUR_SCREEN"
-msgstr "Tous les autres participants peuvent voir votre écran"
+msgstr "Tous les participants peuvent voir votre écran"
 
 #: templates/default/admin_audit.html.ep:30
 msgid "EXPORT_EVENTS"
@@ -515,7 +515,7 @@ msgstr "Par défaut, les salons sont éphémères, c'est à dire qu'ils sont aut
 
 #: templates/default/help.html.ep:46
 msgid "HELP_SCREEN_SHARING"
-msgstr "\"VROOM vous permet de partager votre écran (ou juste une fenêtre) avec les autres participants d'un salon. Pour l'instant, le partage d'écran ne fonctionne qu'avec les navigateurs Google Chrome (nécessite l'installation d'une petite extension qui vous sera proposée la première fois que vous essayez de partager votre écran) et Mozilla Firefox. Pour activer cette fonction avec Firefox, suivez ces étapes:"
+msgstr "VROOM vous permet de partager votre écran (ou juste une fenêtre) avec les autres participants d'un salon. Pour l'instant, le partage d'écran ne fonctionne qu'avec les navigateurs Google Chrome (nécessite l'installation d'une petite extension qui vous sera proposée la première fois que vous essayez de partager votre écran) et Mozilla Firefox. Pour activer cette fonction avec Firefox, suivez ces étapes:"
 
 #: vroom.pl:1454
 msgid "HE_WILL_TRY_TO_JOIN_LATER"
@@ -552,7 +552,7 @@ msgstr "Réponse de %s à votre invitation"
 
 #: vroom.pl:1892
 msgid "INVITE_SENT_TO_s"
-msgstr "Une invitation a été envoyée aux adresses suivantes\\n%s"
+msgstr "Une invitation a été envoyée aux adresses suivantes\n%s"
 
 #: templates/default/help.html.ep:25
 msgid "I_DONT_HAVE_A_WEBCAM"
@@ -634,7 +634,7 @@ msgstr "Votre micro est à nouveau actif"
 
 #: templates/default/index.html.ep:88
 msgid "MODERN_BROWSERS"
-msgstr "\"VROOM fonctionne avec les navigateurs modernes (Google Chrome, Mozilla Firefox, Opera), vous n'avez aucun plugin, codec, ou logiciel à installer"
+msgstr "VROOM fonctionne avec les navigateurs modernes (Google Chrome, Mozilla Firefox, Opera), vous n'avez aucun plugin, codec, ou logiciel à installer"
 
 #: templates/default/index.html.ep:103
 #: templates/default/index.html.ep:97
@@ -824,12 +824,12 @@ msgstr "Partage d'écran"
 msgid "SCREEN_SHARING_ABOUT_CONFIG_s"
 msgstr ""
 "<ol>\n"
-"  <li>Ouvrez un nouvel onglet, et tapez <b>about:config</b> dans la barre d'adresse</li>\n"
-"  <li>Validez l'avertissement en cliquant sur le bouton \"<i>Je ferai attention, promis !</i>\"</li>\n"
-"  <li>Recherchez <b>screensharing</b> à l'aide de la barre de recherche</li>\n"
-"  <li>Double cliquez sur <b>media.getusermedia.screensharing.allowed_domains</b> pour le modifier</li>\n"
-"  <li>Ajoutez <b>%s</b> à la fin de la liste</li>\n"
-"  <li>Vous pouvez désormais partager votre écran</li>\n"
+"  <li>Ouvrez un nouvel onglet, et tapez <b>about:config</b> dans la barre d'adresse</li>"
+"  <li>Validez l'avertissement en cliquant sur le bouton \"<i>Je ferai attention, promis !</i>\"</li>"
+"  <li>Recherchez <b>screensharing</b> à l'aide de la barre de recherche</li>"
+"  <li>Double cliquez sur <b>media.getusermedia.screensharing.allowed_domains</b> pour le modifier</li>"
+"  <li>Ajoutez <b>%s</b> à la fin de la liste</li>"
+"  <li>Vous pouvez désormais partager votre écran</li>"
 "</ol>"
 
 #: public/js/vroom.js:2055
@@ -1139,7 +1139,7 @@ msgstr "%s a réactivé la webcam de %s"
 
 #: public/js/vroom.js:1575
 msgid "s_IS_SUSPENDING_YOU"
-msgstr "\"%s a mis votre webcam en pause"
+msgstr "%s a mis votre webcam en pause"
 
 #: public/js/vroom.js:1592
 msgid "s_IS_SUSPENDING_s"
