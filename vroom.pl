@@ -460,6 +460,7 @@ helper modify_room => sub {
     }
   }
   if ($mods ne ''){
+    chomp($mods);
     $msg .= "\nModified fields:\n$mods";
     $self->log_event({
       event => 'room_modify',
@@ -1211,7 +1212,7 @@ helper export_events_xlsx => sub {
     $sheet->write($row, 0, \@details);
     my $cr = scalar(split("\n", $events->{$e}->{message}));
     if ($cr > 1){
-      $sheet->set_row($row, $cr*15);
+      $sheet->set_row($row, $cr*12);
     }
     $row++;
   }
