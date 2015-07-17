@@ -26,10 +26,12 @@
                 <span class="glyphicon glyphicon-play">
                 </span>
               </button>
+              <% if ($self->get_opt_features->{excel}){ %>
               <button id="events_export" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'EXPORT_EVENTS' %>">
                 <span class="glyphicon glyphicon-save">
                 </span>
               </button>
+              <% } %>
             </span>
           </div>
         </div>

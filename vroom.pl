@@ -25,8 +25,6 @@ use File::Path qw(make_path);
 use File::Basename;
 use DateTime;
 use Array::Diff;
-use File::Temp;
-use Excel::Writer::XLSX;
 use Data::Dumper;
 
 app->log->level('info');
@@ -43,24 +41,36 @@ foreach my $dir (qw/assets/){
   }
 }
 
+# Optional features
+our $optf = {};
 # Create etherpad api client if enabled
-our $ec = undef;
-my $etherpad = eval { require Etherpad::API };
 if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key'} ne ''){
+  my $etherpad = eval { require Etherpad::API };
   if ($etherpad){
     import Etherpad::API;
-    $ec = Etherpad::API->new({
+    $optf->{etherpad} = Etherpad::API->new({
       url => $config->{'etherpad.uri'},
       apikey => $config->{'etherpad.api_key'}
     });
-    if (!$ec->check_token){
+    if (!$optf->{etherpad}->check_token){
       app->log->info("Can't connect to Etherpad-Lite API, check your API key and uri");
-      $ec = undef;
+      $optf->{etherpad} = undef;
     }
   }
   else{
     app->log->info("Etherpad::API not found, disabling Etherpad-Lite support");
   }
+}
+
+# Check if Excel export is available
+my $excel = eval {
+  require File::Temp;
+  require Excel::Writer::XLSX;
+};
+if ($excel){
+  import File::Temp;
+  import Excel::Writer::XLSX;
+  $optf->{excel} = 1;
 }
 
 # Global error check
@@ -168,6 +178,12 @@ helper check_db_version => sub {
   $sth->bind_columns(\$ver);
   $sth->fetch;
   return ($ver eq Vroom::Constants::DB_VERSION) ? '1' : '0';
+};
+
+# Get optional features
+helper get_opt_features => sub {
+  my $self = shift;
+  return $optf;
 };
 
 # Log an event
@@ -309,8 +325,8 @@ helper logout => sub {
   my $self = shift;
   my ($room) = @_;
   # Logout from etherpad
-  if ($ec && $self->session($room) && $self->session($room)->{etherpadSessionId}){
-    $ec->delete_session($self->session($room)->{etherpadSessionId});
+  if ($optf->{etherpad} && $self->session($room) && $self->session($room)->{etherpadSessionId}){
+    $optf->{etherpad}->delete_session($self->session($room)->{etherpadSessionId});
   }
   if ($self->session('peer_id') && 
       $peers->{$self->session('peer_id')} &&
@@ -364,7 +380,7 @@ helper create_room => sub {
     msg   => "Room $name created"
   });
   # Etherpad integration ? If so, create the corresponding pad
-  if ($ec){
+  if ($optf->{etherpad}){
     $self->create_pad($name);
   }
   return 1;
@@ -552,9 +568,9 @@ helper purge_rooms => sub {
       msg   => "Deleting room $room after inactivity timeout"
     });
     # Remove Etherpad group
-    if ($ec){
-      $ec->delete_pad($toDelete->{$room} . '$' . $room);
-      $ec->delete_group($toDelete->{$room});
+    if ($optf->{etherpad}){
+      $optf->{etherpad}->delete_pad($toDelete->{$room} . '$' . $room);
+      $optf->{etherpad}->delete_group($toDelete->{$room});
     }
   }
   # Now remove rooms
@@ -578,9 +594,9 @@ helper delete_room => sub {
     $self->app->log->debug("Error: room $room doesn't exist");
     return 0;
   }
-  if ($ec && $data->{etherpad_group}){
-    $ec->delete_pad($data->{etherpad_group} . '$' . $room);
-    $ec->delete_group($data->{etherpad_group});
+  if ($optf->{etherpad} && $data->{etherpad_group}){
+    $optf->{etherpad}->delete_pad($data->{etherpad_group} . '$' . $room);
+    $optf->{etherpad}->delete_group($data->{etherpad_group});
   }
   my $sth = eval {
       $self->db->prepare('DELETE FROM `rooms`
@@ -910,13 +926,13 @@ helper create_pad => sub {
   my $self = shift;
   my ($room) = @_;
   my $data = $self->get_room_by_name($room);
-  if (!$ec || !$data){
+  if (!$optf->{etherpad} || !$data){
     return 0;
   }
   # Create the etherpad group if not already done
   # and register it in the DB
   if (!$data->{etherpad_group} || $data->{etherpad_group} eq ''){
-    $data->{etherpad_group} = $ec->create_group();
+    $data->{etherpad_group} = $optf->{etherpad}->create_group();
     if (!$data->{etherpad_group}){
       return 0;
     }
@@ -930,7 +946,7 @@ helper create_pad => sub {
       $data->{id}
     );
   }
-  $ec->create_group_pad($data->{etherpad_group},$room);
+  $optf->{etherpad}->create_group_pad($data->{etherpad_group},$room);
   $self->log_event({
     event => 'pad_create',
     msg   => "Creating group pad " . $data->{etherpad_group} . " for room $room"
@@ -943,12 +959,12 @@ helper create_etherpad_session => sub {
   my $self = shift;
   my ($room) = @_;
   my $data = $self->get_room_by_name($room);
-  if (!$ec || !$data || !$data->{etherpad_group}){
+  if (!$optf->{etherpad} || !$data || !$data->{etherpad_group}){
     return 0;
   }
-  my $id = $ec->create_author_if_not_exists_for($self->get_name);
+  my $id = $optf->{etherpad}->create_author_if_not_exists_for($self->get_name);
   $self->session($room)->{etherpadAuthorId} = $id;
-  my $etherpadSession = $ec->create_session(
+  my $etherpadSession = $optf->{etherpad}->create_session(
     $data->{etherpad_group},
     $id,
     time + 86400
@@ -1476,7 +1492,7 @@ get '/' => sub {
   $self->login;
   $self->stash(
     page     => 'index',
-    etherpad => ($ec) ? 'true' : 'false'
+    etherpad => ($optf->{etherpad}) ? 'true' : 'false'
   );
 } => 'index';
 
@@ -1793,7 +1809,7 @@ any '/api' => sub {
       if (!$self->session($room->{name})){
         $self->session($room->{name} => {});
       }
-      if ($ec && !$self->session($room->{name})->{etherpadSession}){
+      if ($optf->{etherpad} && !$self->session($room->{name})->{etherpadSession}){
         $self->create_etherpad_session($room->{name});
       }
       if ($self->session('peer_id')){
@@ -2217,7 +2233,7 @@ any '/api' => sub {
   }
   # Wipe room data (chat history and etherpad content)
   elsif ($req->{action} eq 'wipe_data'){
-    if (!$ec || ($ec->delete_pad($room->{etherpad_group} . '$' . $room->{name}) &&
+    if (!$optf->{etherpad} || ($optf->{etherpad}->delete_pad($room->{etherpad_group} . '$' . $room->{name}) &&
            $self->create_pad($room->{name}) &&
            $self->create_etherpad_session($room->{name}))){
       return $self->render(
@@ -2307,6 +2323,13 @@ group {
 
   get '/export_events' => sub {
     my $self = shift;
+    if (!$optf->{excel}){
+      return $self->render('error',
+        msg => $self->l('ERROR_FEATURE_NOT_AVAILABLE'),
+        err => 'ERROR_FEATURE_NOT_AVAILABLE',
+        room => ''
+      );
+    }
     my $from = $self->param('from') || DateTime->now->ymd;
     my $to   = $self->param('to')   || DateTime->now->ymd;
     my $file = $self->export_events_xlsx($from,$to);
@@ -2366,7 +2389,7 @@ get '/:room' => sub {
     );
   }
   # pad doesn't exist yet ?
-  if ($ec && !$data->{etherpad_group}){
+  if ($optf->{etherpad} && !$data->{etherpad_group}){
     $self->create_pad($room);
     # Reload data so we get the etherpad_group
     $data = $self->get_room_by_name($room);
@@ -2376,7 +2399,7 @@ get '/:room' => sub {
     page          => 'room',
     moh           => $self->choose_moh(),
     video         => $video,
-    etherpad      => ($ec) ? 'true' : 'false',
+    etherpad      => ($optf->{etherpad}) ? 'true' : 'false',
     etherpadGroup => $data->{etherpad_group},
     ua            => $self->req->headers->user_agent
   );
