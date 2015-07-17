@@ -5,12 +5,12 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">
-        <%=l 'ABOUT' %>
+        <%= l('ABOUT') %>
       </h3>
     </div>
     <div class="panel-body">
       <p>
-        <%==l 'ABOUT_VROOM' %>
+        <%== l('ABOUT_VROOM') %>
       </p>
     </div>
   </div>
@@ -18,12 +18,12 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">
-        <%=l 'WHO_IS_BEHIND_VROOM' %>
+        <%= l('WHO_IS_BEHIND_VROOM') %>
       </h3>
     </div>
     <div class="panel-body">
       <p>
-        <%==l 'ABOUT_WHO_IS_BEHIND_VROOM' %>
+        <%== l('ABOUT_WHO_IS_BEHIND_VROOM') %>
       </p>
     </div>
   </div>
@@ -31,12 +31,12 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">
-        <%=l 'THANKS' %>
+        <%= l('THANKS') %>
       </h3>
     </div>
     <div class="panel-body">
       <p>
-        <%==l 'ABOUT_THANKS' %>
+        <%== l('ABOUT_THANKS') %>
         <ul>
           <% foreach my $component (sort keys %{$components}) { %>
             <li>
@@ -46,11 +46,11 @@
         </ul>
       </p>
       <p>
-        <%=l 'ABOUT_MUSICS' %>
+        <%= l('ABOUT_MUSICS') %>
         <ul>
           <% foreach my $music (sort keys %{$musics}) { %>
             <li>
-              <%= $music %> <%=l 'FROM_AUTHOR' %> <a href="<%= $musics->{$music}->{author_url} %>"><%= $musics->{$music}->{author} %></a> (<a href="<%= $musics->{$music}->{licence_url} %>"><%= $musics->{$music}->{licence} %></a>)
+              <%= $music %> <%= l('FROM_AUTHOR') %> <a href="<%= $musics->{$music}->{author_url} %>"><%= $musics->{$music}->{author} %></a> (<a href="<%= $musics->{$music}->{licence_url} %>"><%= $musics->{$music}->{licence} %></a>)
             </li>
           <% } %>
       </p>

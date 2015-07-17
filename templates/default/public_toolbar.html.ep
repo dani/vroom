@@ -12,24 +12,24 @@
       <div class="collapse navbar-collapse" id="toolbar">
         <ul class="nav navbar-nav navbar-right">
           <li id='lnk_index'>
-            <a href="<%= $self->url_for('/') %>"><%=l 'HOME' %></a>
+            <a href="<%= $self->url_for('/') %>"><%= l('HOME') %></a>
           </li>
           <li id='lnk_help'>
-            <a href="<%= $self->url_for('/help') %>"><%=l 'HELP' %></a>
+            <a href="<%= $self->url_for('/help') %>"><%= l('HELP') %></a>
           </li>
           <li id='lnk_about'>
-            <a href="<%= $self->url_for('/about') %>"><%=l 'ABOUT' %></a>
+            <a href="<%= $self->url_for('/about') %>"><%= l('ABOUT') %></a>
           </li>
           <li id='lnk_feedback'>
-            <a href="<%= $self->url_for('/feedback') %>"><%=l 'FEEDBACK' %></a>
+            <a href="<%= $self->url_for('/feedback') %>"><%= l('FEEDBACK') %></a>
           </li>
           <% if ($config->{'interface.demo'}){ %>
           <li id='lnk_documentation'>
-            <a href="<%= $self->url_for('/documentation') %>"><%=l 'DOCUMENTATION' %></a>
+            <a href="<%= $self->url_for('/documentation') %>"><%= l('DOCUMENTATION') %></a>
           </li>
           <% } %>
           <li id='lnk_admin'>
-            <a href="<%= $self->url_for('/admin') %>"><%=l 'ADMINISTRATION' %></a>
+            <a href="<%= $self->url_for('/admin') %>"><%= l('ADMINISTRATION') %></a>
           </li>
           <li class="hidden-xs">
             <select class="form-control navbar-btn" id="switch_lang">

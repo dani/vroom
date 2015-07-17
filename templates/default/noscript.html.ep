@@ -2,7 +2,7 @@
     <div class="row">
       <div class="col-md-6 col-md-offset-3 alert alert-danger">
         <p class="text-center">
-          <%=l 'JS_REQUIRED' %>
+          <%= l('JS_REQUIRED') %>
         </p>
       </div>
     </div>

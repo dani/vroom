@@ -3,15 +3,15 @@
   $url .= ($url =~ m/\/$/) ? '' : '/';
 %>
 <p>
-  <%=l 'SOMEONE_JOINED_A_ROOM' %>
+  <%= l('SOMEONE_JOINED_A_ROOM') %>
 </p>
 <% if ($name && $name ne ''){ %>
 <p>
-  <%=l 'PARTICIPANT_NAME' %>: <%= $name %>
+  <%= l('PARTICIPANT_NAME') %>: <%= $name %>
 </p>
 <% } %>
 <p>
-  <%=l 'WHEN_YOU_ARE_READY' %>
+  <%= l('WHEN_YOU_ARE_READY') %>
   <center>
     <h1>
       <a href="<%= $url . $room %>">
@@ -22,10 +22,10 @@
 </p>
 <br>
 <p>
-  <%=l 'HAVE_A_NICE_MEETING' %>
+  <%= l('HAVE_A_NICE_MEETING') %>
 </p>
 <p style="font-size:small;-webkit-text-size-adjust:none;color:#666;">
   &mdash;
   <br>
-  <%=l 'EMAIL_SIGN' %>
+  <%= l('EMAIL_SIGN') %>
 </p>

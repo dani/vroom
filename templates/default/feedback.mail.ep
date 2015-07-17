@@ -1,14 +1,14 @@
 <html>
   <p>
-  <%=l 'FROM' %>: <%= $email %>
+  <%= l('FROM') %>: <%= $email %>
   </p>
   <p>
-  <%=l 'COMMENT' %>: <%= $comment %>
+  <%= l('COMMENT') %>: <%= $comment %>
   </p>
   <p style="font-size:small;-webkit-text-size-adjust:none;color:#666;">
     &mdash;
     <br>
-    <%=l 'EMAIL_SIGN' %>
+    <%= l('EMAIL_SIGN') %>
   </p>
 </html>
 

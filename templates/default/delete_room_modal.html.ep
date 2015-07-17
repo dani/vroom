@@ -6,12 +6,12 @@
               &times;
             </button>
             <h4 class="modal-title">
-              <%=l 'CONFIRM_DELETE' %>
+              <%= l('CONFIRM_DELETE') %>
             </h4>
           </div>
           <div class="modal-body">
             <p>
-              <%=l 'ROOM_WILL_BE_DELETED' %>
+              <%= l('ROOM_WILL_BE_DELETED') %>
             </p>
           </div>
           <div class="modal-footer">
@@ -19,10 +19,10 @@
               <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-8">
                   <button type="submit" class="btn btn-danger">
-                    <%=l 'DELETE' %>
+                    <%= l('DELETE') %>
                   </button>
                   <button class="btn btn-default" data-dismiss="modal">
-                    <%=l 'CANCEL' %>
+                    <%= l('CANCEL') %>
                   </button>
                 </div>
               </div>

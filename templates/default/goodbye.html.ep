@@ -5,20 +5,20 @@
   <br/>
   <div class="jumbotron">
     <h2>
-      <%=l 'THANKS_SEE_YOU_SOON' %>
+      <%= l('THANKS_SEE_YOU_SOON') %>
     </h2>
     <p>
-      <%=l 'THANKS_FOR_USING' %>
+      <%= l('THANKS_FOR_USING') %>
     </p>
     <div class='row'>
       <div class="col-sm-6 col-lg-4 col-xl-3">
         <a class="btn btn-primary btn-lg btn-full" role="button" href="<%= $self->url_for('/') %>">
-          <%=l 'BACK_TO_MAIN_MENU' %>
+          <%= l('BACK_TO_MAIN_MENU') %>
         </a>
       </div>
       <div class="col-sm-6 col-lg-4 col-xl-3">
         <a class="btn btn-default btn-lg btn-full" role="button" href="<%= $self->url_for('/feedback') %>">
-          <%=l 'GIVE_US_YOUR_FEEDBACK' %>
+          <%= l('GIVE_US_YOUR_FEEDBACK') %>
         </a>
       </div>
     </div>

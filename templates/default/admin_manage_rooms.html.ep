@@ -26,19 +26,19 @@
         <thead>
           <tr>
             <th>
-              <%=l 'ROOM_NAME' %>
+              <%= l('ROOM_NAME') %>
             </th>
             <th class="hidden-xs">
-              <%=l 'CREATION_DATE' %>
+              <%= l('CREATION_DATE') %>
             </th>
             <th class="hidden-xs">
-              <%=l 'LAST_ACTIVITY' %>
+              <%= l('LAST_ACTIVITY') %>
             </th>
             <th class="hidden-xs hidden-sm">
-              <%=l 'NUMBER_OF_PARTICIPANTS' %>
+              <%= l('NUMBER_OF_PARTICIPANTS') %>
             </th>
             <th>
-              <%=l 'MANAGE' %>
+              <%= l('MANAGE') %>
             </th>
           </tr>
         </thead>

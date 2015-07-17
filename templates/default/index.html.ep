@@ -6,7 +6,7 @@
 %= include 'noscript'
   <div class="well publicForm">
     <h1 class="text-center">
-      <%=l 'CREATE_ROOM' %>
+      <%= l('CREATE_ROOM') %>
     </h1>
     <form id="createRoom" class="form-horizontal">
       <fieldset>
@@ -22,7 +22,7 @@
             </strong>
           </span>
           <div class="control-group">
-            <input id="roomName" name="roomName" type="text" placeholder="<%=l 'ROOM_NAME' %>" class="form-control input-lg help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'RANDOM_IF_EMPTY' %>" autofocus>
+            <input id="roomName" name="roomName" type="text" placeholder="<%= l('ROOM_NAME') %>" class="form-control input-lg help" data-toggle="tooltip" data-placement="bottom" title="<%= l('RANDOM_IF_EMPTY') %>" autofocus>
           </div>
           <span class="input-group-btn">
             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span></button>
@@ -36,17 +36,17 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"><%=l 'THIS_ROOM_ALREADY_EXISTS' %></h4>
+          <h4 class="modal-title"><%= l('THIS_ROOM_ALREADY_EXISTS') %></h4>
         </div>
         <div class="modal-body">
           <div class="panel" id="confirmJoinForm">
-            <label><%=l 'CONFIRM_OR_CHOOSE_ANOTHER_NAME' %></label>
+            <label><%= l('CONFIRM_OR_CHOOSE_ANOTHER_NAME') %></label>
             <div class="btn-group btn-group-justified">
               <div class="btn-group">
-                <button class="btn btn-primary" id="confirmJoinButton"><%=l 'JOIN_THIS_ROOM' %></button>
+                <button class="btn btn-primary" id="confirmJoinButton"><%= l('JOIN_THIS_ROOM') %></button>
               </div>
               <div class="btn-group">
-                <button class="btn btn-default" id="chooseAnotherNameButton"><%=l 'CHOOSE_ANOTHER_NAME' %></button>
+                <button class="btn btn-default" id="chooseAnotherNameButton"><%= l('CHOOSE_ANOTHER_NAME') %></button>
               </div>
             </div>
           </div>
@@ -74,77 +74,77 @@
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
             %= image '/img/lock.png', alt => $self->l('SECURE'), class => "img-responsive carouselLogo"
             <p>
-              <%=l 'P2P_COMMUNICATION' %>
+              <%= l('P2P_COMMUNICATION') %>
             </p>
             <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
-                <%=l 'SECURE' %>
+                <%= l('SECURE') %>
               </h2>
             </div>
           </div>
           <div class="item active carouselIndexItem col-xs-10 col-xs-offset-1">
             %= image '/img/universal.png', alt => $self->l('WORKS_EVERYWHERE'), class => "img-responsive carouselLogo"
             <p>
-              <%=l 'MODERN_BROWSERS' %>
+              <%= l('MODERN_BROWSERS') %>
             </p>
             <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
-                <%=l 'WORKS_EVERYWHERE' %>
+                <%= l('WORKS_EVERYWHERE') %>
               </h2>
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
             %= image '/img/multi.png', alt => $self->l('MULTI_USER'), class => "img-responsive carouselLogo"
             <p>
-              <%=l 'THE_LIMIT_IS_YOUR_PIPE' %>
+              <%= l('THE_LIMIT_IS_YOUR_PIPE') %>
             </p>
             <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
-                <%=l 'MULTI_USER' %>
+                <%= l('MULTI_USER') %>
               </h2>
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
             %= image '/img/signin.png', alt => $self->l('NO_SIGNIN'), class => "img-responsive carouselLogo"
             <p>
-              <%=l 'YOU_DONT_HAVE_TO_REGISTER' %>
+              <%= l('YOU_DONT_HAVE_TO_REGISTER') %>
             </p>
             <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
-                <%=l 'NO_SIGNIN' %>
+                <%= l('NO_SIGNIN') %>
               </h2>
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
             %= image '/img/clock.png', alt => $self->l('QUICK'), class => "img-responsive carouselLogo"
             <p>
-              <%=l 'STOP_WASTING_TIME' %>
+              <%= l('STOP_WASTING_TIME') %>
             </p>
             <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
-                <%=l 'QUICK' %>
+                <%= l('QUICK') %>
               </h2>
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
             %= image '/img/screen.png', alt => $self->l('SCREEN_SHARING'), class => "img-responsive carouselLogo"
             <p>
-              <%=l 'SHARE_DESKTOP_OR_WINDOW' %>
+              <%= l('SHARE_DESKTOP_OR_WINDOW') %>
             </p>
             <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
-                <%=l 'SCREEN_SHARING' %>
+                <%= l('SCREEN_SHARING') %>
               </h2>
             </div>
           </div>
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
             %= image '/img/chat.png', alt => $self->l('TEXT_CHAT'), class => "img-responsive carouselLogo"
             <p>
-              <%=l 'SECURED_TEXT_CHAT' %>
+              <%= l('SECURED_TEXT_CHAT') %>
             </p>
             <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
-                <%=l 'TEXT_CHAT' %>
+                <%= l('TEXT_CHAT') %>
               </h2>
             </div>
           </div>
@@ -152,11 +152,11 @@
           <div class="item carouselIndexItem col-xs-10 col-xs-offset-1">
             %= image '/img/note.png', alt => $self->l('COLLABORATIVE_NOTETAKING'), class => "img-responsive carouselLogo"
             <p>
-              <%=l 'TAKE_NOTE_IN_REALTIME' %>
+              <%= l('TAKE_NOTE_IN_REALTIME') %>
             </p>
             <div class="carousel-caption hidden-xs carouselIndexCaption">
               <h2>
-                <%=l 'COLLABORATIVE_NOTETAKING' %>
+                <%= l('COLLABORATIVE_NOTETAKING') %>
               </h2>
             </div>
           </div>

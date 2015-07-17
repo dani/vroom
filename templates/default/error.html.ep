@@ -4,7 +4,7 @@
 <div class="container-fluid">
   <div class="jumbotron alert-danger">
     <h2>
-      <%=l 'ERROR_OCCURRED' %>
+      <%= l('ERROR_OCCURRED') %>
     </h2>
     <p>
       <%= $msg %>
@@ -12,25 +12,25 @@
     <div class="row">
       <div class="col-sm-6 col-lg-4 col-xl-3">
         <a class="btn btn-primary btn-lg btn-full" role="button" href="<%= $self->url_for('/') %>">
-          <%=l 'BACK_TO_MAIN_MENU' %>
+          <%= l('BACK_TO_MAIN_MENU') %>
         </a>
       </div>
       <div class="col-sm-6 col-lg-4 col-xl-3">
         <% if ($err eq 'ERROR_NAME_CONFLICT'){ %>
         <a class="btn btn-default btn-lg btn-full" role="button" href="<%= $self->url_for("/$room") %>">
-          <%=l 'JOIN_THIS_ROOM' %>
+          <%= l('JOIN_THIS_ROOM') %>
         </a>
         <% } elsif ($err eq 'WRONG_PASSWORD'){ %>
         <a class="btn btn-default btn-lg btn-full" role="button" href="<%= $self->url_for("/password/$room") %>">
-          <%=l 'TRY_AGAIN' %>
+          <%= l('TRY_AGAIN') %>
         </a>
         <% } elsif ($err eq 'ERROR_ROOM_s_LOCKED' && stash 'ownerPass'){ %>
         <a class="btn btn-default btn-lg btn-full" role="button" href="<%= $self->url_for("/password/$room") %>">
-          <%=l 'AUTH_IF_OWNER' %>
+          <%= l('AUTH_IF_OWNER') %>
         </a>
         <% } elsif ($err eq 'ERROR_ROOM_s_DOESNT_EXIST'){ %>
         <button class="btn btn-default btn-lg btn-full" style="width: 100%" type="submit" form="createRoom">
-          <%=l 'CREATE_THIS_ROOM' %>
+          <%= l('CREATE_THIS_ROOM') %>
         </button>
         <% } %>
       </div>

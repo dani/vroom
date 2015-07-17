@@ -5,43 +5,43 @@
   <div class="well publicForm">
     <form role="form" method="post">
       <legend class="text-center">
-        <%=l 'INVITATION_RESPONSE' %>
+        <%= l('INVITATION_RESPONSE') %>
       </legend>
       <p class="text-center">
-        <%=l 'CANNOT_JOIN_NOW' %>
+        <%= l('CANNOT_JOIN_NOW') %>
       </p>
       <div class="form-group">
         <label for="response">
-          <%=l 'WILL_YOU_JOIN' %>
+          <%= l('WILL_YOU_JOIN') %>
         </label>
         <select name="response" id="response" class="form-control">
           <option value="later">
-            <%=l 'WILL_TRY_TO_JOIN_LATER' %>
+            <%= l('WILL_TRY_TO_JOIN_LATER') %>
           </option>
           <option value="decline" selected>
-            <%=l 'WONT_BE_ABLE_TO_JOIN' %>
+            <%= l('WONT_BE_ABLE_TO_JOIN') %>
           </option>
         </select>
       </div>
       <div class="form-group">
         <label for="message">
-          <%=l 'MESSAGE' %>
+          <%= l('MESSAGE') %>
         </label>
-        <textarea name="message" id="message" class="form-control" rows="5" placeholder="<%=l 'DONT_WAIT_FOR_ME' %>"></textarea>
+        <textarea name="message" id="message" class="form-control" rows="5" placeholder="<%= l('DONT_WAIT_FOR_ME') %>"></textarea>
       </div>
       <div class="form-group">
         <label>
-          <%=l 'YOU_CAN_STILL_CHANGE_YOUR_MIND' %>
+          <%= l('YOU_CAN_STILL_CHANGE_YOUR_MIND') %>
         </label>
         <p>
-          <%=l 'CLICK_SEND_OR_JOIN_NOW' %>
+          <%= l('CLICK_SEND_OR_JOIN_NOW') %>
         </p>
       </div>
         <a class="btn btn-default btn-lg" role="button" href="<%= $self->url_for("/$room") %><% if ($token ne ''){ %>?token=<%= $token %><% } %>">
-          <%=l 'JOIN_THIS_ROOM' %>
+          <%= l('JOIN_THIS_ROOM') %>
         </a>
         <button type="submit" class="btn btn-primary btn-lg">
-          <%=l 'SUBMIT' %>
+          <%= l('SUBMIT') %>
         </button>
     </form>
   </div>

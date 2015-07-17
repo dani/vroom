@@ -22,12 +22,12 @@
           <div class="input-group">
             <input type="text" id="dateEnd" name="dateEnd" class="form-control date-picker" value="<%= DateTime->now->ymd %>"/>
             <span class="input-group-btn">
-              <button id="events_refresh" class="btn btn-primary help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'REFRESH_EVENTS' %>">
+              <button id="events_refresh" class="btn btn-primary help" data-toggle="tooltip" data-placement="bottom" title="<%= l('REFRESH_EVENTS') %>">
                 <span class="glyphicon glyphicon-play">
                 </span>
               </button>
               <% if ($self->get_opt_features->{excel}){ %>
-              <button id="events_export" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%=l 'EXPORT_EVENTS' %>">
+              <button id="events_export" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%= l('EXPORT_EVENTS') %>">
                 <span class="glyphicon glyphicon-save">
                 </span>
               </button>
@@ -47,22 +47,22 @@
         <thead>
           <tr>
             <th class="hidden-xs">
-              <%=l 'EVENT_ID' %>
+              <%= l('EVENT_ID') %>
             </th>
             <th>
-              <%=l 'EVENT_DATE' %>
+              <%= l('EVENT_DATE') %>
             </th>
             <th>
-              <%=l 'EVENT_FROM_IP' %>
+              <%= l('EVENT_FROM_IP') %>
             </th>
             <th class="hidden-xs">
-              <%=l 'EVENT' %>
+              <%= l('EVENT') %>
             </th>
             <th class="hidden-xs">
-              <%=l 'EVENT_USER' %>
+              <%= l('EVENT_USER') %>
             </th>
             <th>
-              <%=l 'EVENT_MESSAGE' %>
+              <%= l('EVENT_MESSAGE') %>
             </th>
           </tr>
         </thead>

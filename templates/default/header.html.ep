@@ -3,7 +3,7 @@
 <head>
   <title><%= $title %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="description" content=" <%=l 'VROOM_DESC' %>" />
+  <meta name="description" content=" <%= l('VROOM_DESC') %>" />
   <%
     my @css = qw(bootstrap.css bootstrap-switch.css toc-scroll.css bootstrap-datepicker3.css vroom.css);
     @css = map { $self->url_for('/') . 'css/' . $_ } @css;
