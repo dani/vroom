@@ -1612,7 +1612,7 @@ get '/localize/:lang' => { lang => 'en' } => sub {
   my $strings = {};
   my $l = $self->languages;
   $self->languages($self->stash('lang'));
-  foreach my $string (keys %Vroom::I18N::en::Lexicon){
+  foreach my $string (keys %Vroom::I18N::fr::Lexicon){
     $strings->{$string} = $self->l($string);
   }
   $self->languages($l);
