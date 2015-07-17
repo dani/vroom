@@ -1191,6 +1191,11 @@ helper export_events_xlsx => sub {
   my $xlsx = Excel::Writer::XLSX->new($tmp);
   my $sheet = $xlsx->add_worksheet;
   my @headers = qw(id date from_ip user event message);
+  $sheet->set_column(1, 1, 30);
+  $sheet->set_column(2, 2, 20);
+  $sheet->set_column(3, 3, 60);
+  $sheet->set_column(4, 4, 20);
+  $sheet->set_column(5, 5, 100);
   # Write header
   $sheet->write(0, 0, \@headers);
   my $row = 1;
@@ -1204,6 +1209,10 @@ helper export_events_xlsx => sub {
       $events->{$e}->{message}
     );
     $sheet->write($row, 0, \@details);
+    my $cr = scalar(split("\n", $events->{$e}->{message}));
+    if ($cr > 1){
+      $sheet->set_row($row, $cr*15);
+    }
     $row++;
   }
   return $tmp;
