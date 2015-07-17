@@ -109,6 +109,7 @@
               <li>Data::Dumper</li>
               <li>DateTime</li>
               <li>Array::Diff</li>
+              <li>Locale::Maketext::Lexicon</li>
             </ul>
           </li>
           <li>The following perl modules are optional
@@ -193,7 +194,7 @@ yum install git tar wget httpd mod_ssl openssl mariadb-server \\
            'perl(Crypt::SaltedHash)' 'perl(Etherpad::API)' 'perl(LWP::Protocol::https)' \\
            'perl(Sesion::Token)' 'perl(Mojolicious::Plugin::Database)' \\
            'perl(Mojolicious::Plugin::StaticCompressor' 'perl(Mojolicious::Plugin::RenderFile)' \\
-           'perl(Email::Valid)' 'perl(File::Temp)' 'perl(Excel::Writer::XLSX)' \\
+           'perl(Email::Valid)' 'perl(File::Temp)' 'perl(Excel::Writer::XLSX)' 'perl(Locale::Maketext::Lexicon)' \\
            'perl(Config::Simple)' 'perl(Session::Token)' 'perl(DateTime)'</pre>
       </p>
 
