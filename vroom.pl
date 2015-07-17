@@ -643,7 +643,7 @@ helper update_room_last_activity => sub {
 # Return an array of supported languages
 helper get_supported_lang => sub {
   my $self = shift;
-  return map { basename(s/\.pm$//r) } glob('lib/Vroom/I18N/*.pm');
+  return map { basename(s/\.po$//r) } glob('lib/Vroom/I18N/*.po');
 };
 
 # Generate a random token
