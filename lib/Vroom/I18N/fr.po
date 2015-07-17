@@ -18,7 +18,7 @@ msgstr ""
 
 #: templates/default/about.html.ep:1
 #: templates/default/about.html.ep:8
-#: templates/default/public_toolbar.html.ep:21
+#: templates/default/public_toolbar.html.ep:18
 msgid "ABOUT"
 msgstr "À propos"
 
@@ -35,19 +35,14 @@ msgid "ABOUT_VROOM"
 msgstr ""
 "VROOM est un logiciel libre exploitant les dernières technologies du web vous permettant d'organiser simplement des visio conférences. Fini les galères à devoir installer un client sur le poste au dernier moment, l'incompatibilité MAC OS ou GNU/Linux, les problèmes de redirection de port, les appels au support technique parce que la visio ne s'établit pas, les soucis d'H323 vs SIP vs ISDN. Tout ce qu'il vous faut désormais, c'est:\n"
 "<ul>\n"
-"  <li>Un poste (PC, MAC, tablette*, smartphone*)</li>"
-"  <li>Une webcam (optionnelle mais recommandée)</li>"
-"  <li>Un micro et des haut-parleurs (ou un casque)</li>"
-"  <li>Un navigateur web moderne</li>"
-"</ul>"
-"*: exceptés ipad et iphone"
+"  <li>Un poste (PC, MAC, tablette*, smartphone*)</li>  <li>Une webcam (optionnelle mais recommandée)</li>  <li>Un micro et des haut-parleurs (ou un casque)</li>  <li>Un navigateur web moderne</li></ul>*: exceptés ipad et iphone"
 
 #: templates/default/about.html.ep:26
 msgid "ABOUT_WHO_IS_BEHIND_VROOM"
 msgstr "VROOM a démarré comme un simple projet personnel, développé par une seule personne (Daniel Berteaud) sur mon temps libre. Ce projet n'en serait pas là sans l'aide de mon enreprise, <a href='http://www.firewall-services.com'>Firewall Services</a> qui assure entre autre l'hébergement de <a href='http://vroom.im'>l'instance de référence</a>"
 
 #: templates/default/admin.html.ep:1
-#: templates/default/public_toolbar.html.ep:32
+#: templates/default/public_toolbar.html.ep:29
 msgid "ADMINISTRATION"
 msgstr "Administration"
 
@@ -92,7 +87,7 @@ msgstr "Authentification"
 msgid "AUTH_IF_OWNER"
 msgstr "Authentifiez-vous si vous êtes le propriétaire du salon"
 
-#: vroom.pl:1825
+#: vroom.pl:1817
 msgid "AUTH_SUCCESS"
 msgstr "Vous êtes maintenant authentifié"
 
@@ -114,7 +109,7 @@ msgstr "Un navigateur web moderne, les versions récentes des navigateurs Mozill
 msgid "A_PARTICIPANT"
 msgstr "un participant"
 
-#: vroom.pl:1838
+#: vroom.pl:1830
 msgid "A_PASSWORD_IS_NEEDED_TO_JOIN"
 msgstr "Vous devez saisir un mot de passe pour rejoindre ce salon"
 
@@ -140,10 +135,6 @@ msgstr "Une webcam (optionnelle mais recommandée)"
 #: templates/default/kicked.html.ep:9
 msgid "BACK_TO_MAIN_MENU"
 msgstr "Retour au menu principal"
-
-#: templates/default/help.html.ep:86
-msgid "BE_NOTIFIED"
-msgstr "Notifications"
 
 #: public/js/vroom.js:2107
 msgid "CAM_RESUMED"
@@ -272,7 +263,7 @@ msgstr "Créez ce salon"
 msgid "CREATION_DATE"
 msgstr "Date de création"
 
-#: vroom.pl:2241
+#: vroom.pl:2233
 msgid "DATA_WIPED"
 msgstr "Les données du salon ont été effacées"
 
@@ -294,7 +285,7 @@ msgid "DISPLAY_NAME_TOO_LONG"
 msgstr "Ce nom est trop long"
 
 #: templates/default/documentation.html.ep:1
-#: templates/default/public_toolbar.html.ep:28
+#: templates/default/public_toolbar.html.ep:25
 msgid "DOCUMENTATION"
 msgstr "Documentation"
 
@@ -306,7 +297,7 @@ msgstr "Ne m'attendez pas"
 msgid "DOWNLOAD_ONE_OF_THESE_BROWSERS"
 msgstr "Nous recommandons de télécharger un des navigateurs suivants, qui supportent les dernières technologies nécessaires à l'utilisation de VROOM"
 
-#: vroom.pl:1870
+#: vroom.pl:1862
 msgid "EMAIL_INVITATION"
 msgstr "Invitation à une conférence vidéo"
 
@@ -322,7 +313,7 @@ msgstr "j.smith@exemple.com"
 msgid "EMAIL_SIGN"
 msgstr "VROOM! Et la visio conférence devient libre, simple et sûr"
 
-#: vroom.pl:1971
+#: vroom.pl:1963
 msgid "ERROR_COMMON_ROOM_NAME"
 msgstr "Le nom de ce salon est trop commun pour être réservé"
 
@@ -339,84 +330,84 @@ msgstr "La date de début doit être antérieure à celle de fin"
 msgid "ERROR_ESTABLISHING_P2P"
 msgstr "Impossible d'établir une connexion avec un des participants"
 
-#: vroom.pl:2338
+#: vroom.pl:2330
 msgid "ERROR_EXPORT_XLSX"
 msgstr "Une erreur est survenue pendant l'export"
 
-#: vroom.pl:2328
+#: vroom.pl:2320
 msgid "ERROR_FEATURE_NOT_AVAILABLE"
 msgstr "Cette fonction n'est pas disponible"
 
-#: vroom.pl:1715
+#: vroom.pl:1707
 msgid "ERROR_INPUT_INVALID"
 msgstr "Paramètres invalides"
 
-#: vroom.pl:1589
+#: vroom.pl:1581
 msgid "ERROR_INVITATION_INVALID"
 msgstr "Ce lien est invalide, votre invitation a probablement expiré, ou vous y avez déjà répondu"
 
 #: public/js/vroom.js:1949
 #: public/js/vroom.js:341
-#: vroom.pl:1856
-#: vroom.pl:2038
+#: vroom.pl:1848
+#: vroom.pl:2030
 msgid "ERROR_MAIL_INVALID"
 msgstr "Veuillez saisir une adresse email valide"
 
-#: vroom.pl:1755
+#: vroom.pl:1747
 msgid "ERROR_NAME_CONFLICT"
 msgstr "Ce nom est déjà pris, choisissez en un autre"
 
 #: public/js/vroom.js:450
-#: vroom.pl:1750
-#: vroom.pl:2367
+#: vroom.pl:1742
+#: vroom.pl:2359
 msgid "ERROR_NAME_INVALID"
 msgstr "Ce nom n'est pas valide"
 
 #: public/js/vroom.js:115
 #: public/js/vroom.js:482
 #: templates/default/error.html.ep:7
-#: vroom.pl:1632
-#: vroom.pl:1742
-#: vroom.pl:1760
-#: vroom.pl:1881
-#: vroom.pl:1910
-#: vroom.pl:1942
-#: vroom.pl:2006
-#: vroom.pl:2025
-#: vroom.pl:2060
-#: vroom.pl:2159
-#: vroom.pl:2228
-#: vroom.pl:2247
-#: vroom.pl:2264
-#: vroom.pl:2281
+#: vroom.pl:1624
+#: vroom.pl:1734
+#: vroom.pl:1752
+#: vroom.pl:1873
+#: vroom.pl:1902
+#: vroom.pl:1934
+#: vroom.pl:1998
+#: vroom.pl:2017
+#: vroom.pl:2052
+#: vroom.pl:2151
+#: vroom.pl:2220
+#: vroom.pl:2239
+#: vroom.pl:2256
+#: vroom.pl:2273
 msgid "ERROR_OCCURRED"
 msgstr "Une erreur est survenue"
 
-#: vroom.pl:2139
-#: vroom.pl:2213
+#: vroom.pl:2131
+#: vroom.pl:2205
 msgid "ERROR_PEER_ID_MISSING"
 msgstr "L'identifiant du pair est absent"
 
-#: vroom.pl:2173
+#: vroom.pl:2165
 msgid "ERROR_PEER_NOT_FOUND"
 msgstr "Ce pair n'existe pas"
 
-#: vroom.pl:1775
+#: vroom.pl:1767
 msgid "ERROR_ROOM_NAME_MISSING"
 msgstr "Vous devez fournir un nom de salon"
 
-#: vroom.pl:1556
-#: vroom.pl:1571
-#: vroom.pl:1786
-#: vroom.pl:2376
+#: vroom.pl:1548
+#: vroom.pl:1563
+#: vroom.pl:1778
+#: vroom.pl:2368
 msgid "ERROR_ROOM_s_DOESNT_EXIST"
 msgstr "Le salon %s n'existe pas"
 
-#: vroom.pl:1834
+#: vroom.pl:1826
 msgid "ERROR_ROOM_s_LOCKED"
 msgstr "Le salon %s est verrouillé, vous ne pouvez pas le rejoindre"
 
-#: vroom.pl:2386
+#: vroom.pl:2378
 msgid "ERROR_TOO_MANY_MEMBERS"
 msgstr "Ce salon a atteint sa limite de participants"
 
@@ -458,11 +449,11 @@ msgstr "Une extension est nécessaire"
 
 #: templates/default/feedback.html.ep:1
 #: templates/default/feedback_thanks.html.ep:1
-#: templates/default/public_toolbar.html.ep:24
+#: templates/default/public_toolbar.html.ep:21
 msgid "FEEDBACK"
 msgstr "Retour d'expérience"
 
-#: vroom.pl:1540
+#: vroom.pl:1532
 msgid "FEEDBACK_FROM_VROOM"
 msgstr "Retour d'expérience de VROOM"
 
@@ -487,35 +478,6 @@ msgstr "Au revoir"
 #: templates/default/notification.mail.ep:25
 msgid "HAVE_A_NICE_MEETING"
 msgstr "Bonne réunion :-)"
-
-#: templates/default/help.html.ep:1
-#: templates/default/public_toolbar.html.ep:18
-msgid "HELP"
-msgstr "Aide"
-
-#: templates/default/help.html.ep:92
-msgid "HELP_BE_NOTIFIED"
-msgstr "Vous pouvez être notifiés par mail dès que quelqu'un rejoint un de vos salons. Par exemple, créez un salon, réservez-le en configurant un mot de passe de gestionnaire et ajoutez le lien dans votre signature de mail. Dès que quelqu'un cherche à discuter avez vous, vous recevrez une notification"
-
-#: templates/default/help.html.ep:17
-msgid "HELP_BROWSERS_SUPPORTED"
-msgstr "Les technologies employées (WebRTC) étant encore jeunes, seules les versions récentes de Mozilla Firefox, Google Chrome et Opera fonctionnent pour l'instant. Les autres navigateurs (principalement Internet Explorer et Safari, ce qui inclus les appareils Apple type iPhone, iPad ou iPod) ne fonctionneront pas."
-
-#: templates/default/help.html.ep:31
-msgid "HELP_I_DONT_HAVE_A_WEBCAM"
-msgstr "Vous pourrez quand même participer. Si aucune webcam n'est disponible au moment de rejoindre un salon, un message apparaitra. Vous pouvez à ce moment choisir de rejoindre le salon an audio uniquement. Vous pourrez voir les autres participants, et ils pourront vous entendre, mais verront un écran noir à la place de votre vidéo."
-
-#: templates/default/help.html.ep:64
-msgid "HELP_OWNER_PRIVILEGES"
-msgstr "Le créateur d'un salon (aussi appelé gestionnaire) dispose de privilèges spéciaux sur ce dernier (par rapport à ceux qui rejoignent le salon après, qui ne seront que de simples participants). Il peut par exemple protéger l'accès par un mot de passe, qui sera demandé avant de pouvoir rejoindre le salon. Il peut aussi définir le mot de passe du gestionnaire ce qui lui permettra, s'il quitte le salon, de retrouver ses privilèges lorsqu'il se connecte à nouveau. Ces privilèges peuvent aussi être donnés à d'autres participants"
-
-#: templates/default/help.html.ep:78
-msgid "HELP_RESERVED_ROOMS"
-msgstr "Par défaut, les salons sont éphémères, c'est à dire qu'ils sont automatiquement supprimés si ils ne sont pas utilisés pendant un certains temps. Le créateur du salon peut définir un mot de passe de gestionaire, ce qui réservera le salon. Un salon réservé peut toujours être supprimé s'il n'est utilisé pendant une longue période, mais sera conservé plus longtemps."
-
-#: templates/default/help.html.ep:46
-msgid "HELP_SCREEN_SHARING"
-msgstr "VROOM vous permet de partager votre écran (ou juste une fenêtre) avec les autres participants d'un salon. Pour l'instant, le partage d'écran ne fonctionne qu'avec les navigateurs Google Chrome (nécessite l'installation d'une petite extension qui vous sera proposée la première fois que vous essayez de partager votre écran) et Mozilla Firefox. Pour activer cette fonction avec Firefox, suivez ces étapes:"
 
 #: vroom.pl:1454
 msgid "HE_WILL_TRY_TO_JOIN_LATER"
@@ -550,13 +512,11 @@ msgstr "Inviter des participants"
 msgid "INVITE_REPONSE_FROM_s"
 msgstr "Réponse de %s à votre invitation"
 
-#: vroom.pl:1892
+#: vroom.pl:1884
 msgid "INVITE_SENT_TO_s"
-msgstr "Une invitation a été envoyée aux adresses suivantes\n%s"
-
-#: templates/default/help.html.ep:25
-msgid "I_DONT_HAVE_A_WEBCAM"
-msgstr "Je n'ai pas de webcam"
+msgstr ""
+"Une invitation a été envoyée aux adresses suivantes\n"
+"%s"
 
 #: templates/default/error.html.ep:21
 #: templates/default/index.html.ep:46
@@ -657,7 +617,7 @@ msgstr "Ce nom sera envoyé aux autres participants"
 msgid "NOTIFICATION_ON_JOIN"
 msgstr "Notification lorsque quelqu'un rejoint ce salon"
 
-#: vroom.pl:1670
+#: vroom.pl:1662
 msgid "NOT_ALLOWED"
 msgstr "Vous n'êtes pas autorisé à faire ceci"
 
@@ -689,10 +649,6 @@ msgstr "Prise de notes collaborative"
 #: templates/default/invitation_thanks.html.ep:8
 msgid "ORGANIZER_WILL_GET_YOUR_MESSAGE"
 msgstr "L'organisateur de la réunion recevra votre message dans quelques instants"
-
-#: templates/default/help.html.ep:58
-msgid "OWNER_PRIVILEGES"
-msgstr "Privilèges des créateurs de salon"
 
 #: templates/default/index.html.ep:77
 msgid "P2P_COMMUNICATION"
@@ -734,7 +690,7 @@ msgstr "Mot de passe requis"
 msgid "PASSWORD_TOO_LONG"
 msgstr "Ce mot de passe est trop long"
 
-#: vroom.pl:2222
+#: vroom.pl:2214
 msgid "PEER_PROMOTED"
 msgstr "Vous avez donné les droits sur ce salon"
 
@@ -771,23 +727,19 @@ msgstr "Destinataire"
 msgid "REFRESH_EVENTS"
 msgstr "Raffraichir"
 
-#: templates/default/help.html.ep:72
-msgid "RESERVED_ROOMS"
-msgstr "Salons réservés"
-
 #: templates/default/configure_modal.html.ep:69
 msgid "RESERVE_THIS_ROOM"
 msgstr "Réserver ce salon"
 
-#: vroom.pl:1936
+#: vroom.pl:1928
 msgid "ROOM_CONFIG_UPDATED"
 msgstr "La configuration du salon a été mise à jour"
 
-#: vroom.pl:2275
+#: vroom.pl:2267
 msgid "ROOM_DELETED"
 msgstr "Le salon a été supprimé"
 
-#: vroom.pl:1831
+#: vroom.pl:1823
 msgid "ROOM_LOCKED_ENTER_OWNER_PASSWORD"
 msgstr "Ce salon est verrouillé, seul un administrateur peut le rejoindre. Veuillez saisir le mot de passe d'administration du salon"
 
@@ -813,24 +765,16 @@ msgstr "Salon %s"
 msgid "SAVE_HISTORY"
 msgstr "Sauvegarder l'historique dans un fichier"
 
-#: templates/default/help.html.ep:39
 #: templates/default/index.html.ep:130
 #: templates/default/index.html.ep:136
 msgid "SCREEN_SHARING"
 msgstr "Partage d'écran"
 
-#: templates/default/help.html.ep:49
 #: templates/default/join.html.ep:180
 msgid "SCREEN_SHARING_ABOUT_CONFIG_s"
 msgstr ""
 "<ol>\n"
-"  <li>Ouvrez un nouvel onglet, et tapez <b>about:config</b> dans la barre d'adresse</li>"
-"  <li>Validez l'avertissement en cliquant sur le bouton \"<i>Je ferai attention, promis !</i>\"</li>"
-"  <li>Recherchez <b>screensharing</b> à l'aide de la barre de recherche</li>"
-"  <li>Double cliquez sur <b>media.getusermedia.screensharing.allowed_domains</b> pour le modifier</li>"
-"  <li>Ajoutez <b>%s</b> à la fin de la liste</li>"
-"  <li>Vous pouvez désormais partager votre écran</li>"
-"</ol>"
+"  <li>Ouvrez un nouvel onglet, et tapez <b>about:config</b> dans la barre d'adresse</li>  <li>Validez l'avertissement en cliquant sur le bouton \"<i>Je ferai attention, promis !</i>\"</li>  <li>Recherchez <b>screensharing</b> à l'aide de la barre de recherche</li>  <li>Double cliquez sur <b>media.getusermedia.screensharing.allowed_domains</b> pour le modifier</li>  <li>Ajoutez <b>%s</b> à la fin de la liste</li>  <li>Vous pouvez désormais partager votre écran</li></ol>"
 
 #: public/js/vroom.js:2055
 msgid "SCREEN_SHARING_CANCELLED"
@@ -869,7 +813,7 @@ msgstr "Envoyer le message"
 msgid "SERVER_ERROR"
 msgstr "Veuillez nous excuser"
 
-#: vroom.pl:2258
+#: vroom.pl:2250
 msgid "SESSION_CREATED"
 msgstr "La session a été créée"
 
@@ -890,7 +834,7 @@ msgstr "Partagez votre écran entier, ou seulement une fenêtre en un clique ave
 msgid "SHARE_YOUR_SCREEN"
 msgstr "Partager votre écran"
 
-#: vroom.pl:2189
+#: vroom.pl:2181
 msgid "SOMEONE"
 msgstr "Quelqu'un"
 
@@ -911,10 +855,6 @@ msgstr "Ne perdez plus votre temps à vérifier, installer, expliquer. Cliquez, 
 #: templates/default/join.html.ep:284
 msgid "SUBMIT"
 msgstr "Valider"
-
-#: templates/default/help.html.ep:11
-msgid "SUPPORTED_BROWSERS"
-msgstr "Navigateurs supportés"
 
 #: templates/default/join.html.ep:66
 msgid "SUSPEND_CAM"
@@ -993,7 +933,7 @@ msgstr "Ce mot de passe vous permettra de récuperer l'accès aux menus de gesti
 msgid "TRY_AGAIN"
 msgstr "Essayer à nouveau"
 
-#: vroom.pl:1643
+#: vroom.pl:1635
 msgid "UNSUPPORTED_LANG"
 msgstr "Langue non supportée"
 
@@ -1048,7 +988,7 @@ msgid "WORKS_EVERYWHERE"
 msgstr "Universel"
 
 #: public/js/vroom.js:2146
-#: vroom.pl:1841
+#: vroom.pl:1833
 msgid "WRONG_PASSWORD"
 msgstr "Mauvais mot de passe"
 
@@ -1153,14 +1093,14 @@ msgstr "%s a réactivé votre micro"
 msgid "s_IS_UNMUTING_s"
 msgstr "%s a réactivé le micro de %s"
 
-#: vroom.pl:2189
+#: vroom.pl:2181
 msgid "s_JOINED_ROOM_s"
 msgstr "%s a rejoint le salon %s"
 
-#: vroom.pl:2047
+#: vroom.pl:2039
 msgid "s_WILL_BE_NOTIFIED"
 msgstr "%s recevra une notification à chaque fois qu'une personne rejoint ce salon"
 
-#: vroom.pl:2054
+#: vroom.pl:2046
 msgid "s_WONT_BE_NOTIFIED_ANYMORE"
 msgstr "%s ne recevra plus les notifications pour ce salon"

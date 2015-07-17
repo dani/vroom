@@ -18,7 +18,7 @@ msgstr ""
 
 #: templates/default/about.html.ep:1
 #: templates/default/about.html.ep:8
-#: templates/default/public_toolbar.html.ep:21
+#: templates/default/public_toolbar.html.ep:18
 msgid "ABOUT"
 msgstr "About"
 
@@ -47,7 +47,7 @@ msgid "ABOUT_WHO_IS_BEHIND_VROOM"
 msgstr "VROOM started as a simple personal project, developed by a single person (Daniel Berteaud) on my spare time. This project wouldn't be that far without my employer <a href='http://www.firewall-services.com'>Firewall Services</a> who hosts <a href='http://vroom.im'>the demo instance</a>"
 
 #: templates/default/admin.html.ep:1
-#: templates/default/public_toolbar.html.ep:32
+#: templates/default/public_toolbar.html.ep:29
 msgid "ADMINISTRATION"
 msgstr "Administration"
 
@@ -92,7 +92,7 @@ msgstr "Authentication"
 msgid "AUTH_IF_OWNER"
 msgstr "Authenticate if you are the room owner"
 
-#: vroom.pl:1825
+#: vroom.pl:1817
 msgid "AUTH_SUCCESS"
 msgstr "You are now authenticated"
 
@@ -114,7 +114,7 @@ msgstr "A modern web browser, recent versions of Mozilla Firefox, Google Chrome 
 msgid "A_PARTICIPANT"
 msgstr "a participant"
 
-#: vroom.pl:1838
+#: vroom.pl:1830
 msgid "A_PASSWORD_IS_NEEDED_TO_JOIN"
 msgstr "You must provide a password to join this room"
 
@@ -140,10 +140,6 @@ msgstr "A webcam (optional but recommended)"
 #: templates/default/kicked.html.ep:9
 msgid "BACK_TO_MAIN_MENU"
 msgstr "Back to main menu"
-
-#: templates/default/help.html.ep:86
-msgid "BE_NOTIFIED"
-msgstr "Notifications"
 
 #: public/js/vroom.js:2107
 msgid "CAM_RESUMED"
@@ -272,7 +268,7 @@ msgstr "Create this room"
 msgid "CREATION_DATE"
 msgstr "Creation date"
 
-#: vroom.pl:2241
+#: vroom.pl:2233
 msgid "DATA_WIPED"
 msgstr "Room data has been wiped"
 
@@ -294,7 +290,7 @@ msgid "DISPLAY_NAME_TOO_LONG"
 msgstr "This name is too long"
 
 #: templates/default/documentation.html.ep:1
-#: templates/default/public_toolbar.html.ep:28
+#: templates/default/public_toolbar.html.ep:25
 msgid "DOCUMENTATION"
 msgstr "Documentation"
 
@@ -306,7 +302,7 @@ msgstr "Don't wait for me"
 msgid "DOWNLOAD_ONE_OF_THESE_BROWSERS"
 msgstr "We recommend you download one of the following browsers which support the latest web technologies required to use VROOM"
 
-#: vroom.pl:1870
+#: vroom.pl:1862
 msgid "EMAIL_INVITATION"
 msgstr "Video conference invitation"
 
@@ -322,7 +318,7 @@ msgstr "j.smith@example.com"
 msgid "EMAIL_SIGN"
 msgstr "VROOM! And video conferencing becomes free, simple and safe"
 
-#: vroom.pl:1971
+#: vroom.pl:1963
 msgid "ERROR_COMMON_ROOM_NAME"
 msgstr "This room name is too common to be reserved"
 
@@ -339,84 +335,84 @@ msgstr "Start date must be before end date"
 msgid "ERROR_ESTABLISHING_P2P"
 msgstr "Cannot establish a connection with a participant"
 
-#: vroom.pl:2338
+#: vroom.pl:2330
 msgid "ERROR_EXPORT_XLSX"
 msgstr "An error occurred during export"
 
-#: vroom.pl:2328
+#: vroom.pl:2320
 msgid "ERROR_FEATURE_NOT_AVAILABLE"
 msgstr "This feature is not available"
 
-#: vroom.pl:1715
+#: vroom.pl:1707
 msgid "ERROR_INPUT_INVALID"
 msgstr "Invalid input"
 
-#: vroom.pl:1589
+#: vroom.pl:1581
 msgid "ERROR_INVITATION_INVALID"
 msgstr "This link is invalid, your invitation has probably expired, or you've already responded"
 
 #: public/js/vroom.js:1949
 #: public/js/vroom.js:341
-#: vroom.pl:1856
-#: vroom.pl:2038
+#: vroom.pl:1848
+#: vroom.pl:2030
 msgid "ERROR_MAIL_INVALID"
 msgstr "Please enter a valid email address"
 
-#: vroom.pl:1755
+#: vroom.pl:1747
 msgid "ERROR_NAME_CONFLICT"
 msgstr "A room with this name already exists, please choose another one"
 
 #: public/js/vroom.js:450
-#: vroom.pl:1750
-#: vroom.pl:2367
+#: vroom.pl:1742
+#: vroom.pl:2359
 msgid "ERROR_NAME_INVALID"
 msgstr "This name is not valid"
 
 #: public/js/vroom.js:115
 #: public/js/vroom.js:482
 #: templates/default/error.html.ep:7
-#: vroom.pl:1632
-#: vroom.pl:1742
-#: vroom.pl:1760
-#: vroom.pl:1881
-#: vroom.pl:1910
-#: vroom.pl:1942
-#: vroom.pl:2006
-#: vroom.pl:2025
-#: vroom.pl:2060
-#: vroom.pl:2159
-#: vroom.pl:2228
-#: vroom.pl:2247
-#: vroom.pl:2264
-#: vroom.pl:2281
+#: vroom.pl:1624
+#: vroom.pl:1734
+#: vroom.pl:1752
+#: vroom.pl:1873
+#: vroom.pl:1902
+#: vroom.pl:1934
+#: vroom.pl:1998
+#: vroom.pl:2017
+#: vroom.pl:2052
+#: vroom.pl:2151
+#: vroom.pl:2220
+#: vroom.pl:2239
+#: vroom.pl:2256
+#: vroom.pl:2273
 msgid "ERROR_OCCURRED"
 msgstr "An error occurred"
 
-#: vroom.pl:2139
-#: vroom.pl:2213
+#: vroom.pl:2131
+#: vroom.pl:2205
 msgid "ERROR_PEER_ID_MISSING"
 msgstr "Peer ID is missing"
 
-#: vroom.pl:2173
+#: vroom.pl:2165
 msgid "ERROR_PEER_NOT_FOUND"
 msgstr "This peer doesn't exist"
 
-#: vroom.pl:1775
+#: vroom.pl:1767
 msgid "ERROR_ROOM_NAME_MISSING"
 msgstr "Room name is missing"
 
-#: vroom.pl:1556
-#: vroom.pl:1571
-#: vroom.pl:1786
-#: vroom.pl:2376
+#: vroom.pl:1548
+#: vroom.pl:1563
+#: vroom.pl:1778
+#: vroom.pl:2368
 msgid "ERROR_ROOM_s_DOESNT_EXIST"
 msgstr "Room %s doesn't exist"
 
-#: vroom.pl:1834
+#: vroom.pl:1826
 msgid "ERROR_ROOM_s_LOCKED"
 msgstr "Room %s is locked, you cannot join it"
 
-#: vroom.pl:2386
+#: vroom.pl:2378
 msgid "ERROR_TOO_MANY_MEMBERS"
 msgstr "This room reached its members limit"
 
@@ -458,11 +454,11 @@ msgstr "An extension is required"
 
 #: templates/default/feedback.html.ep:1
 #: templates/default/feedback_thanks.html.ep:1
-#: templates/default/public_toolbar.html.ep:24
+#: templates/default/public_toolbar.html.ep:21
 msgid "FEEDBACK"
 msgstr "Feedback"
 
-#: vroom.pl:1540
+#: vroom.pl:1532
 msgid "FEEDBACK_FROM_VROOM"
 msgstr "VROOM feedback"
 
@@ -487,35 +483,6 @@ msgstr "Goodbye"
 #: templates/default/notification.mail.ep:25
 msgid "HAVE_A_NICE_MEETING"
 msgstr "Have a nice meeting :-)"
-
-#: templates/default/help.html.ep:1
-#: templates/default/public_toolbar.html.ep:18
-msgid "HELP"
-msgstr "Help"
-
-#: templates/default/help.html.ep:92
-msgid "HELP_BE_NOTIFIED"
-msgstr "You can be notified by email as soon as someone joins one of your rooms. For example, create a room, add a password to make it persistent and add the link in your email signature. When someone wants to talk with you, you'll get the notification."
-
-#: templates/default/help.html.ep:17
-msgid "HELP_BROWSERS_SUPPORTED"
-msgstr "The technologies behind VROOM are still at their early stages, so only recent versions of Mozilla Firefox, Google Chrome or Opera will work. Other browsers (mainly Internet Explorer and Safari, which include Apple's devices like iPhone, iPads and iPods) won't work for now."
-
-#: templates/default/help.html.ep:31
-msgid "HELP_I_DONT_HAVE_A_WEBCAM"
-msgstr "You'll still be able to participate. If no webcam is detected when you join a room you'll get a message. Click on the link at the bottom and you'll join with audio only. You'll be able to see others, and they will hear you, but will get a black screen instead of your video."
-
-#: templates/default/help.html.ep:64
-msgid "HELP_OWNER_PRIVILEGES"
-msgstr "Room's creator (also called manager) has special privileges (compared to those who join later, which are simple participants). For example, he can protect access with a password which will be required before you can join the room. He also can set the manager's password which will allow him, if he leaves the room, to recover its privileges when he connects again."
-
-#: templates/default/help.html.ep:78
-msgid "HELP_RESERVED_ROOMS"
-msgstr "By default, rooms are ephemeral, which means they are automatically deleted if they have no activity for some time. The room's creator can define an owner's password, which will make the room reserved. A reserved room can still be deleted if it's not used for a very long period of time, but will last longer on the system"
-
-#: templates/default/help.html.ep:46
-msgid "HELP_SCREEN_SHARING"
-msgstr "VROOM lets you share your screen (or a single window) with the other members of the room. For now this feature is only available with Google Chrome (requires a small extension, you'll be prompted to install it first time you try to share your screen) or Mozilla Firefox. To enable this feature in Mozilla Firefox, follow these steps:"
 
 #: vroom.pl:1454
 msgid "HE_WILL_TRY_TO_JOIN_LATER"
@@ -550,15 +517,11 @@ msgstr "Invite other people"
 msgid "INVITE_REPONSE_FROM_s"
 msgstr "%s responded to your invitation"
 
-#: vroom.pl:1892
+#: vroom.pl:1884
 msgid "INVITE_SENT_TO_s"
 msgstr ""
 "An invitation was sent to the following addresses\n"
 "%s"
-
-#: templates/default/help.html.ep:25
-msgid "I_DONT_HAVE_A_WEBCAM"
-msgstr "I don't have a webcam"
 
 #: templates/default/error.html.ep:21
 #: templates/default/index.html.ep:46
@@ -659,7 +622,7 @@ msgstr "This name will be sent to the other peers"
 msgid "NOTIFICATION_ON_JOIN"
 msgstr "Notification when someone joins this room"
 
-#: vroom.pl:1670
+#: vroom.pl:1662
 msgid "NOT_ALLOWED"
 msgstr "You are not allowed to do this"
 
@@ -691,10 +654,6 @@ msgstr "Collaborative notetaking"
 #: templates/default/invitation_thanks.html.ep:8
 msgid "ORGANIZER_WILL_GET_YOUR_MESSAGE"
 msgstr "The organizer will get your message in a few seconds"
-
-#: templates/default/help.html.ep:58
-msgid "OWNER_PRIVILEGES"
-msgstr "Room creator's privileges"
 
 #: templates/default/index.html.ep:77
 msgid "P2P_COMMUNICATION"
@@ -736,7 +695,7 @@ msgstr "Password required"
 msgid "PASSWORD_TOO_LONG"
 msgstr "This password is too long"
 
-#: vroom.pl:2222
+#: vroom.pl:2214
 msgid "PEER_PROMOTED"
 msgstr "You have granted administration privileges on the roo"
 
@@ -773,23 +732,19 @@ msgstr "Recipient"
 msgid "REFRESH_EVENTS"
 msgstr "Refresh"
 
-#: templates/default/help.html.ep:72
-msgid "RESERVED_ROOMS"
-msgstr "Reserved rooms"
-
 #: templates/default/configure_modal.html.ep:69
 msgid "RESERVE_THIS_ROOM"
 msgstr "Reserve this room"
 
-#: vroom.pl:1936
+#: vroom.pl:1928
 msgid "ROOM_CONFIG_UPDATED"
 msgstr "Room configuration has been updated"
 
-#: vroom.pl:2275
+#: vroom.pl:2267
 msgid "ROOM_DELETED"
 msgstr "This room has been deleted"
 
-#: vroom.pl:1831
+#: vroom.pl:1823
 msgid "ROOM_LOCKED_ENTER_OWNER_PASSWORD"
 msgstr "This room is locked. Only an administrator can joint it. Please enter the administrator's password"
 
@@ -815,13 +770,11 @@ msgstr "room %s"
 msgid "SAVE_HISTORY"
 msgstr "Save history to a file"
 
-#: templates/default/help.html.ep:39
 #: templates/default/index.html.ep:130
 #: templates/default/index.html.ep:136
 msgid "SCREEN_SHARING"
 msgstr "Screen Sharing"
 
-#: templates/default/help.html.ep:49
 #: templates/default/join.html.ep:180
 msgid "SCREEN_SHARING_ABOUT_CONFIG_s"
 msgstr ""
@@ -871,7 +824,7 @@ msgstr "Send the message"
 msgid "SERVER_ERROR"
 msgstr "Sorry for the inconvinience"
 
-#: vroom.pl:2258
+#: vroom.pl:2250
 msgid "SESSION_CREATED"
 msgstr "Session created"
 
@@ -892,7 +845,7 @@ msgstr "Share your entire screen, or only a window in a single click, with an gr
 msgid "SHARE_YOUR_SCREEN"
 msgstr "Share your screen with the other members of this room"
 
-#: vroom.pl:2189
+#: vroom.pl:2181
 msgid "SOMEONE"
 msgstr "Someone"
 
@@ -913,10 +866,6 @@ msgstr "Stop wasting time checking, installing, explaining. Just click, send a l
 #: templates/default/join.html.ep:284
 msgid "SUBMIT"
 msgstr "Submit"
-
-#: templates/default/help.html.ep:11
-msgid "SUPPORTED_BROWSERS"
-msgstr "Supported browsers"
 
 #: templates/default/join.html.ep:66
 msgid "SUSPEND_CAM"
@@ -995,7 +944,7 @@ msgstr "If this password is set, you'll be able to access the configuration menu
 msgid "TRY_AGAIN"
 msgstr "Try again"
 
-#: vroom.pl:1643
+#: vroom.pl:1635
 msgid "UNSUPPORTED_LANG"
 msgstr "Unsupported lanbguage"
 
@@ -1050,7 +999,7 @@ msgid "WORKS_EVERYWHERE"
 msgstr "Universal"
 
 #: public/js/vroom.js:2146
-#: vroom.pl:1841
+#: vroom.pl:1833
 msgid "WRONG_PASSWORD"
 msgstr "Wrong password"
 
@@ -1155,14 +1104,14 @@ msgstr "%s has unmuted your microphon"
 msgid "s_IS_UNMUTING_s"
 msgstr "%s has unmuted %s's microphone"
 
-#: vroom.pl:2189
+#: vroom.pl:2181
 msgid "s_JOINED_ROOM_s"
 msgstr "%s joined room %s"
 
-#: vroom.pl:2047
+#: vroom.pl:2039
 msgid "s_WILL_BE_NOTIFIED"
 msgstr "%s will receive a notification each time someone joins this room"
 
-#: vroom.pl:2054
+#: vroom.pl:2046
 msgid "s_WONT_BE_NOTIFIED_ANYMORE"
 msgstr "%s won't be notified anymore"
