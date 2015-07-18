@@ -22,7 +22,8 @@
         There are several more or less similar hosted solutions available (like
           <a href="https://talky.io/" target="_blank">talky.io</a>,
           <a href="https://appear.in/" target="_blank">appear.in</a>,
-          <a href="https://vline.com/" target="_blank">vLine.com</a> for example).
+          <a href="https://vline.com/" target="_blank">vLine.com</a> 
+        for example).
         Most of them are more polished than VROOM, but I've found none entirely opensource, so I started this project.
       </p>
       <p>
@@ -38,11 +39,11 @@
       <p>
         VROOM implements the following features:
         <ul>
-          <li>Audio/Video conversations (no limit on the number of peers per room)</li>
-          <li>Text chat (with possibility to save the history)</li>
-          <li>Screen or single windows sharing sharing</li>
-          <li>Invite anyone by email</li>
-          <li>Be notified (by email) when someone joins one of your rooms</li>
+          <li>P2P Audio/Video conversations (no limit on the number of peers per room)</li>
+          <li>P2P text chat</li>
+          <li>Screen or single windows sharing</li>
+          <li>Send invitations by email</li>
+          <li>Be notified when someone joins one of your rooms</li>
           <li>Persistent/reserved rooms</li>
           <li>Chairman functionnalities (mute/pause/kick other peers)</li>
           <li>Grant chairman role to other peers</li>
@@ -60,23 +61,34 @@
         How it works
       </h1>
       <p>
-        WebRTC allows browsers to browsers direct connections. This provides the best latency as it avoids round trip through a server,
+        <a href="http://www.webrtc.org/" taget="_blank">WebRTC</a> allows browsers to browsers direct connections. This provides the best latency as it avoids round trip through a server,
         which is important with real time communications. But it also ensures the privacy of your communications. VROOM takes advantage of those
         new technologies, and does the following:
         <ul>
           <li>When a client joins a room, it establishes a <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">websocket</a> connection to VROOM server. 
               This is called the signaling channel. With this, all peers are able to exchange small messages with each other. But messages sent through this channels are 
-              routed through VROOM server, so it's not yet peer to peer</li>
+              routed through VROOM server, so it's not peer to peer yet</li>
           <li>When a second peer joins the same room, he gets informations about how to connect directly to the other one(s) through this signaling channel.</li>
           <li>Now, both peer exchange their video and audio stream directly</li>
           <li>The signaling channel stays open and is used to transmit non sensitive informations (peer colors synchronization, notification of muting/kicking etc...)</li>
-          <li>Everything else (audio/video/text chat) is sent through data channels</li>
+          <li>Everything else (audio/video/text chat) is sent directly between peers through data channels</li>
         </ul>
       </p>
       <div class="alert alert-warning">
-        As long as possible, data channels and audio/video streams are established directly between peers, but in some situations, this is not possible (NAT, firewalls etc...). In those cases
+        As long as possible, data channels and audio/video streams are established directly between peers, but in some situations, this is not possible (NAT, restrictive firewalls etc...). In those cases
         data streams are relayed through a <a href="https://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT" target="_blank">TURN</a> server
       </div>
+
+      <h1 id="technologies">
+        Technologies
+      </h1>
+      VROOM is composed of two distincts
+      <ul>
+        <li>The client side: written in Javascript, it's the code executed on the browsers. This is where webcam streams are captured and sent to other peers. The biggest part is
+            <a href="http://simplewebrtc.com/" target="_blank">SimpleWebRTC</a>.</li>
+        <li>The server side: mainly written in Perl using the fabulous <a href="http://mojolicio.us/" target="_blank">Mojolicious</a> framework. This is where room are created
+            their configurations are stored, and where permissions are managed</li>
+      </ul>
 
       <h1 id="install_your_own">
         Install your own VROOM instance
@@ -89,13 +101,13 @@
       <p>
         If you want to run your own VROOM instance, you'll need the following components
         <ul>
-          <li><a href="http://mojolicio.us" target="_blank">Mojolicious</a> 5 or better</li>
           <li>A MySQL compatible server (MySQL or MariaDB)</li>
           <li>A webserver supporting HTTPS and reverse proxying, including websocket reverse proxying (Apache can do this with mod_proxy_wstunnel)</li>
           <li>The following perl modules
             <ul>
               <li>DBI</li>
               <li>DBD::mysql</li>
+              <li>Mojolicious</li>
               <li>Mojolicious::Plugin::Mail</li>
               <li>Mojolicious::Plugin::Database</li>
               <li>Mojolicious::Plugin::StaticCompressor</li>
@@ -133,11 +145,11 @@
           </li>
         </ul>
         It's also advised to run VROOM on a systemd powered distribution (simply because that's what I use and I include service units for VROOM). 
-        For the same reason, I recommend running Apache as webserver (others like Nginx probably work too, but I provide configuration sample only for Apache)
+        For the same reasons, I recommend running Apache as webserver (others like Nginx probably work too, but I provide configuration sample only for Apache)
       </p>
       <div class="alert alert-warning">
-        VROOM can probably work with other DB engine (like PostgreSQL) with minor modifications.
-        If you're interrested in adding support for other engines, you're welcome to help
+        VROOM can probably work with other database engines (like PostgreSQL) with minor modifications.
+        If you're interrested in adding support, you're welcome to help
       </div>
       <div class="alert alert-warning">
         While VROOM should run on any distro, it's only tested on CentOS 7 x86_64, so it's the recommended platform.
