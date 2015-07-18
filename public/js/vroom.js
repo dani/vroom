@@ -327,10 +327,18 @@ $('#configureRoomForm').submit(function(e){
       $('#joinPassConfirm').notify(localize('PASSWORDS_DO_NOT_MATCH'), 'error');
       return false;
     }
+    if ($('#joinPassFields').css('display') !== 'none' && $('#joinPass').val() === ''){
+      $('#joinPass').notify(localize('PASSWORDS_CANNOT_BE_EMPTY'), 'error');
+      return false;
+    }
   }
   if ($('#ownerPassSet').bootstrapSwitch('state')){
     if ($('#ownerPass').val() !== $('#ownerPassConfirm').val()){
       $('#ownerPassConfirm').notify(localize('PASSWORDS_DO_NOT_MATCH'), 'error');
+      return false;
+    }
+    if ($('#ownerPassFields').css('display') !== 'none' && $('#ownerPass').val() === ''){
+      $('#ownerPass').notify(localize('PASSWORDS_CANNOT_BE_EMPTY'), 'error');
       return false;
     }
   }
