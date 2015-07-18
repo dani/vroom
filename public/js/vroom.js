@@ -105,35 +105,48 @@ function localize(string){
   return string;
 }
 
-// Parse and display an error when an API call failed
-function showApiError(data){
-  data = data.responseJSON;
-  if (data.msg){
-    $.notify(data.msg, 'error');
+function vroomApi(action, param, success, error){
+  if (typeof error !== 'function'){
+    error = function(data){
+      data = data.responseJSON;
+      if (data.msg){
+        $.notify(data.msg, 'error');
+      }   
+      else{
+        $.notify(localize('ERROR_OCCURRED'), 'error');
+      }
+    };
   }
-  else{
-    $.notify(localize('ERROR_OCCURRED'), 'error');
+  if (typeof success !== 'function'){
+    success = function(){};
   }
+  $.ajax({
+    data: {
+      req: JSON.stringify({
+        action: action,
+        param: param
+      })
+    },
+    error: function(data){
+      error(data);
+    },
+    success: function(data){
+      success(data);
+    }
+  });
 }
 
 // Handle lang switch drop down menu
 $('#switch_lang').change(function(){
-    $.ajax({
-    data: {
-      req: JSON.stringify({
-        action: 'switch_lang',
-        param : {
-          language: $('#switch_lang').val()
-        }
-      })
+  vroomApi(
+    'switch_lang',
+    {
+       language: $('#switch_lang').val()
     },
-    error: function(data){
-      showApiError(data);
-    },
-    success: function(data){
+    function(data){
       window.location.reload();
     }
-  });
+  );
 });
 
 // Escape entities to prevent XSS
@@ -372,26 +385,19 @@ $('#configureRoomForm').submit(function(e){
   $('input[name="emails[]"]').each(function(){
     emails.push($(this).val());
   });
-  $.ajax({
-    data: {
-      req: JSON.stringify({
-        action: 'update_room_conf',
-        param: {
-          room: roomName,
-          locked: locked,
-          ask_for_name: askForName,
-          join_password: joinPass,
-          owner_password: ownerPass,
-          persistent: persist,
-          max_members: members,
-          emails: emails
-        }
-      })
+  vroomApi(
+    'update_room_conf',
+    {
+      room: roomName,
+      locked: locked,
+      ask_for_name: askForName,
+      join_password: joinPass,
+      owner_password: ownerPass,
+      persistent: persist,
+      max_members: members,
+      emails: emails
     },
-    error: function(data){
-      showApiError(data);
-    },
-    success: function(data){
+    function(data){
       // On success, reset the input fields, collapse the password inputs
       // and close the configuration modal
       $('#ownerPass,#ownerPassConfirm,#joinPass,#joinPassConfirm').val('');
@@ -400,24 +406,17 @@ $('#configureRoomForm').submit(function(e){
       $.notify(data.msg, 'info');
       $('#configureRoomForm').trigger('room_conf_updated');
     }
-  });
+  );
 });
 
 // Get our role and other room settings from the server
 function getRoomInfo(cb){
-  $.ajax({
-    data: {
-      req: JSON.stringify({
-        action: 'get_room_conf',
-        param: {
-          room: roomName,
-        }
-      })
+  vroomApi(
+    'get_room_conf',
+    {
+      room: roomName,
     },
-    error: function(data){
-      showApiError(data);
-    },
-    success: function(data){
+    function(data){
       roomInfo = data;
       // Reset the list of email displayed, so first remove every input field but the last one
       // We keep it so we can clone it again
@@ -444,7 +443,7 @@ function getRoomInfo(cb){
         cb();
       }
     }
-  });
+  );
 }
 
 // Used on the index page
@@ -461,20 +460,16 @@ function initIndex(){
       });
     }
     else{
-      $.ajax({
-        data: {
-          req: JSON.stringify({
-            action: 'create_room',
-            param: {
-              room: $('#roomName').val()
-            }
-          })
+      vroomApi(
+        'create_room',
+        {
+          room: $('#roomName').val()
         },
-        success: function(data) {
+        function(data) {
           room = data.room;
           window.location.assign(rootUrl + data.room);
         },
-        error: function(data){
+        function(data){
           data = data.responseJSON;
           if (data.err && data.err == 'ERROR_NAME_CONFLICT' ){
             room = data.room;
@@ -490,7 +485,7 @@ function initIndex(){
             $.notify(localize('ERROR_OCCURRED'), 'error');
           }
         }
-      });
+      );
     }
   });
 
@@ -630,39 +625,25 @@ function initAdminRooms(){
 
   // Request the list of existing rooms to the server
   function getRooms(){
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'get_room_list',
-          param: {}
-        })        
-      },
-      error: function(data){
-        showApiError(data);
-      },
-      success: function(data){
+    vroomApi(
+      'get_room_list',
+      {},
+      function(data){
         roomList = data.rooms;
         matches = Object.keys(roomList).length;
         updateRoomList($('#searchRoom').val(), 0, itemPerPage);
         updatePagination();
       }
-    });
+    );
   }
 
   function getRoomConf(roomName){
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'get_room_conf',
-          param: {
-            room: roomName,
-          }
-        })
+    vroomApi(
+      'get_room_conf',
+      {
+        room: roomName,
       },
-      error: function(data){
-        showApiError(data);
-      },
-      success: function(data){
+      function(data){
         // Reset the list of email displayed, so first remove evry input field but the last one
         // We keep it so we can clone it again
         $('.email-list').find('.email-entry:not(:last)').remove();
@@ -689,7 +670,7 @@ function initAdminRooms(){
         // And display the config modal dialog
         $('#configureModal').modal('show');
       }
-    });
+    );
   }
 
   // Handle submiting the configuration form
@@ -710,24 +691,17 @@ function initAdminRooms(){
   // Delete room form
   $('#deleteRoomForm').submit(function(e){
     e.preventDefault();
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'delete_room',
-          param: {
-            room: roomName,
-          }
-        })
+    vroomApi(
+      'delete_room',
+      {
+        room: roomName,
       },
-      error: function(data){
-        showApiError(data);
-      },
-      success: function(data){
+      function(data){
         $.notify(data.msg, 'success');
         getRooms();
         $('#deleteRoomModal').modal('hide');
       }
-    });
+    );
   });
 
   // Update room list when searching
@@ -802,26 +776,19 @@ function initAdminAudit(){
   }
 
   function reloadEvents(start,end){
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'get_event_list',
-          param: {
-            start: start,
-            end: end
-          }
-        })
+    vroomApi(
+      'get_event_list',
+      {
+        start: start,
+        end: end
       },
-      error: function(data) {
-        showApiError(data);
-      },
-      success: function(data){
+      function(data){
         eventList = data.events;
         matches = Object.keys(eventList).length;
         updateEventList($('#eventSearch').val(), 0, itemPerPage);
         updatePagination();
       }
-    });
+    );
   }
 
   // Intercept form submission
@@ -942,17 +909,34 @@ function initJoin(room){
 
 
   function try_auth(pass, showErrorMsg){
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'authenticate',
-          param: {
-            room: room,
-            password: pass
-          }
-        })
+    vroomApi(
+      'authenticate',
+      {
+        room: room,
+        password: pass
       },
-      error: function(data){
+      function(data){
+        $('.connecting-err-reason').hide();
+        // Once auth is passed, we get the room configuration
+        vroomApi(
+          'get_room_conf',
+          {
+            room: room,
+          },
+          function(data){
+            roomInfo = data;
+            // If our name is asked before joining the room, display the corresponding modal
+            // Else, just continue (with webrtc initialization
+            if (roomInfo.ask_for_name){
+              $('#display-name-pre').slideDown();
+            }
+            else{
+              init_webrtc(roomName);
+            }
+          }
+        );
+      },
+      function(data){
         // 401 means password is needed
         if (data.status === 401){
           data = data.responseJSON;
@@ -968,38 +952,13 @@ function initJoin(room){
           $('#room-is-locked').slideDown();
         }
         if (showErrorMsg){
-          showApiError(data);
-        }
-      },
-      success: function(data){
-        $('.connecting-err-reason').hide();
-        // Once auth is passed, we get the room configuration
-        $.ajax({
-          data: {
-            req: JSON.stringify({
-              action: 'get_room_conf',
-              param: {
-                room: room,
-              }
-            })
-          },
-          error: function(data){
-            showApiError(data);
-          },
-          success: function(data){
-            roomInfo = data;
-            // If our name is asked before joining the room, display the corresponding modal
-            // Else, just continue (with webrtc initialization
-            if (roomInfo.ask_for_name){
-              $('#display-name-pre').slideDown();
-            }
-            else{
-              init_webrtc(roomName);
-            }
+          data = data.responseJSON;
+          if (data.msg){
+            $.notify(data.msg, 'error');
           }
-        });
+        }
       }
-    });
+    );
   }
   // Always start by trying with an empty password.
   // Only if one is required the modal will appear
@@ -1009,19 +968,12 @@ function initJoin(room){
 // This just create the webrtc object, and then continue
 function init_webrtc(room){
   // First get SimpleWebRTC config from the server
-  $.ajax({
-    data: {
-      req: JSON.stringify({
-        action: 'get_rtc_conf',
-        param: {
-          room: room,
-        }
-      })
+  vroomApi(
+    'get_rtc_conf',
+    {
+      room: room,
     },
-    error: function(data){
-      showApiError(data);
-    },
-    success: function(data){
+    function(data){
       if (!video){
         data.config.media.video = false;
       }
@@ -1046,7 +998,7 @@ function init_webrtc(room){
         initVroom(room);
       }
     }
-  });
+  );
 }
 
 // This is the main function called when you join a room (after auth and all the basic stuff ready)
@@ -1074,20 +1026,13 @@ function initVroom(room) {
 
   // Get the role of a peer
   function getPeerRole(id){
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'get_peer_role',
-          param: {
-            room: roomName,
-            peer_id: id
-          }
-        })
+    vroomApi(
+      'get_peer_role',
+      {
+        room: roomName,
+        peer_id: id
       },
-      error: function(data){
-        showApiError(data);
-      },
-      success: function(data){
+      function(data){
         // If its our own role, check if it chagned
         if (id === peers.local.id){
           if (data.role != peers.local.role){
@@ -1121,7 +1066,7 @@ function initVroom(room) {
           }
         }
       }
-    });
+    );
   }
 
   // Put a video on the mainVideo div, called when you click on a video preview
@@ -1437,24 +1382,17 @@ function initVroom(room) {
   // Promote a peer (he will be owner)
   function promotePeer(id){
     if (peers[id] && peers[id].role != 'owner'){
-      $.ajax({
-        data: {
-          req: JSON.stringify({
-            action: 'promote_peer',
-            param: {
-              room: roomName,
-              peer_id: id
-            }
-          })
+      vroomApi(
+        'promote_peer',
+        {
+          room: roomName,
+          peer_id: id
         },
-        error: function(data){
-          showApiError(data);
-        },
-        success: function(data){
+        function(data){
           webrtc.sendToAll('owner_promoted', {peer: id});
           $.notify(data.msg, 'success');
         }
-      });
+      );
       suspendButton($('#actionPromote_' + id));
     }
     else if (peers[id]){
@@ -1843,21 +1781,14 @@ function initVroom(room) {
     // If we were prompted for our display name before joining
     // we send it. Not that I like sending this kind of data to the server
     // but it's needed for email notifications
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'join',
-          param: {
-            room: roomName,
-            name: (peers.local.hasName) ? peers.local.displayName : '',
-            peer_id: peers.local.id
-          }
-        })
+    vroomApi(
+      'join',
+      {
+        room: roomName,
+        name: (peers.local.hasName) ? peers.local.displayName : '',
+        peer_id: peers.local.id
       },
-      error: function(data){
-        showApiError(data);
-      },
-      success: function(data){
+      function(data){
         if (data.msg){
           $.notify(data.msg, 'success');
         }
@@ -1868,7 +1799,7 @@ function initVroom(room) {
           $('#connecting').modal('hide');
         }, 200);
       }
-    });
+    );
     checkMoh();
   });
 
@@ -1966,21 +1897,14 @@ function initVroom(room) {
     if (!validEmail){
       return false;
     }
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'invite_email',
-          param: {
-            rcpts: rcpts,
-            message: message,
-            room: roomName
-          }
-        })
+    vroomApi(
+      'invite_email',
+      {
+        rcpts: rcpts,
+        message: message,
+        room: roomName
       },
-      error: function(data){
-        showApiError(data);
-      },
-      success: function(data){
+      function(data){
         $('#recipient').val('');
         $('#inviteModal').modal('hide');
         $('#email-list-invite').find('.email-entry:not(:last)').remove();
@@ -1988,7 +1912,7 @@ function initVroom(room) {
         $('#message').val('');
         $.notify(data.msg, 'success');
       }
-    });
+    );
   });
 
   // Set your DisplayName
@@ -2129,20 +2053,13 @@ function initVroom(room) {
   $('#ownerAuthForm').submit(function(event) {
     event.preventDefault();
     var pass = $('#ownerAuthPass').val();
-    $.ajax({
-      data: {
-        req: JSON.stringify({
-          action: 'authenticate',
-          param: {
-            password: pass,
-            room: roomName
-          }
-        })
+    vroomApi(
+      'authenticate',
+      {
+        password: pass,
+        room: roomName
       },
-      error: function(data){
-        showApiError(data);
-      },
-      success: function(data){
+      function(data){
         $('#authPass').val('');
         $('#ownerAuthModal').modal('hide');
         if (data.role === 'owner'){
@@ -2154,7 +2071,7 @@ function initVroom(room) {
           $.notify(localize('WRONG_PASSWORD'), 'error');
         }
       }
-    });
+    );
   });
 
   // The configuration form has been submited successfuly
