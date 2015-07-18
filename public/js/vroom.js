@@ -1969,19 +1969,8 @@ function initVroom(room) {
       webrtc.shareScreen(function(err){
         // An error occured while sharing our screen
         if(err){
-          if (err.name === 'EXTENSION_UNAVAILABLE'){
-            // TODO: remove this test, v 34 or 35 are old now
-            var ver = 34;
-            if ($.browser.linux){
-              ver = 35;
-            }
-            if ($.browser.webkit && $.browser.versionNumber >= ver){
-              $('#chromeExtMessage').modal('show');
-            }
-            else{
-              // TODO: update this message as screen sharing now works on FF too
-              cantShare(localize('SCREEN_SHARING_ONLY_FOR_CHROME'));
-            }
+          if (err.name === 'EXTENSION_UNAVAILABLE' && $.browser.webkit){
+            $('#chromeExtMessage').modal('show');
           }
           // This error usually means you have denied access (old flag way)
           // or you cancelled screen sharing (new extension way)
