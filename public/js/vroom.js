@@ -1934,7 +1934,7 @@ function initVroom(room) {
       $('#displayName').parent().removeClass('has-error');
     }
     // Enable chat input when you set your disaplay name
-    if (name !i== '' && $('#chatBox').attr('disabled')){
+    if (name !== '' && $('#chatBox').attr('disabled')){
       $('#chatBox').removeAttr('disabled').removeAttr('placeholder');
       peers.local.hasName = true;
     }
