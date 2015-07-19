@@ -872,7 +872,7 @@ function initJoin(room){
     else{ 
       $('#authBeforeJoinButton').addClass('disabled');
       $('#authBeforeJoinPass').parent().addClass('has-error');
-      $('#authBeforeJoinPass').notify(localize(pass.length < 1 ? 'PASSWORD_REQUIRED' : 'PASSWORD_TOO_LONG'), 'error');
+      $('#authBeforeJoinPass').notify(pass.length < 1 ? localize('PASSWORD_REQUIRED') : localize('PASSWORD_TOO_LONG'), 'error');
     }
   });
   // Submit the join password form
@@ -895,7 +895,7 @@ function initJoin(room){
     else{
       $('#displayNamePreButton').addClass('disabled');
       $('#displayNamePre').parent().addClass('has-error');
-      $('#displayNamePre').notify(localize(name.length < 1 ? 'DISPLAY_NAME_REQUIRED' : 'DISPLAY_NAME_TOO_LONG'), 'error');
+      $('#displayNamePre').notify(name.length < 1 ? localize('DISPLAY_NAME_REQUIRED') : localize('DISPLAY_NAME_TOO_LONG'), 'error');
     }
   });
 
