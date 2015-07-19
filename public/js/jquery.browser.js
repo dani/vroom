@@ -1,5 +1,5 @@
 /*!
- * jQuery Browser Plugin 0.0.7
+ * jQuery Browser Plugin 0.0.8
  * https://github.com/gabceb/jquery-browser-plugin
  *
  * Original jquery-browser code Copyright 2005, 2015 jQuery Foundation, Inc. and other contributors
@@ -10,15 +10,15 @@
  *
  * Released under the MIT license
  *
- * Date: 19-05-2015
+ * Date: 05-07-2015
  */
 /*global window: false */
 
 (function (factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['jquery'], function($) {
-      factory($);
+    define(['jquery'], function ($) {
+      return factory($);
     });
   } else if (typeof module === 'object' && typeof module.exports === 'object') {
     // Node-like environment
