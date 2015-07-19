@@ -746,30 +746,6 @@ helper get_email_notifications => sub {
   return $sth->fetchall_hashref('id');
 };
 
-# Remove an email from notification list
-helper remove_notification => sub {
-  my $self = shift;
-  my ($room,$email) = @_;
-  my $data = $self->get_room_by_name($room);
-  if (!$data){
-    return 0;
-  }
-  my $sth = eval {
-    $self->db->prepare('DELETE FROM `email_notifications`
-                          WHERE `room_id`=?
-                            AND `email`=?');
-  };
-  $sth->execute(
-    $data->{id},
-    $email
-  );
-  $self->log_event({
-    event => 'del_email_notification',
-    msg   => "Removing $email from the email notification list for room $room"
-  });
-  return 1;
-};
-
 # Randomly choose a music on hold
 helper choose_moh => sub {
   my $self = shift;
@@ -2009,41 +1985,6 @@ any '/api' => sub {
       return $self->render(
         json => {
           msg => $self->l(($set eq 'on') ? 'FORCE_DISPLAY_NAME' : 'NAME_WONT_BE_ASKED')
-        }
-      );
-    }
-    return $self->render(
-      json => {
-        msg => $self->l('ERROR_OCCURRED'),
-        err => 'ERROR_OCCURRED',
-      },
-      status => 503
-    );
-  }
-  # Add or remove an email address to the list of email notifications
-  elsif ($req->{action} eq 'email_notification'){
-    my $email = $req->{param}->{email};
-    my $set = $req->{param}->{set};
-    if (!$self->valid_email($email)){
-      return $self->render(
-        json => {
-          msg => $self->l('ERROR_MAIL_INVALID'),
-          err => 'ERROR_MAIL_INVALID',
-        },
-        status => 400
-      );
-    }
-    elsif ($set eq 'on' && $self->add_notification($room->{name},$email)){
-      return $self->render(
-        json => {
-          msg => sprintf($self->l('s_WILL_BE_NOTIFIED'), $email)
-        }
-      );
-    }
-    elsif ($set eq 'off' && $self->remove_notification($room->{name},$email)){
-      return $self->render(
-        json => {
-          msg => sprintf($self->l('s_WONT_BE_NOTIFIED_ANYMORE'), $email)
         }
       );
     }
