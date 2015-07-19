@@ -35,7 +35,12 @@ msgid "ABOUT_VROOM"
 msgstr ""
 "VROOM est un logiciel libre exploitant les dernières technologies du web vous permettant d'organiser simplement des visio conférences. Fini les galères à devoir installer un client sur le poste au dernier moment, l'incompatibilité MAC OS ou GNU/Linux, les problèmes de redirection de port, les appels au support technique parce que la visio ne s'établit pas, les soucis d'H323 vs SIP vs ISDN. Tout ce qu'il vous faut désormais, c'est:\n"
 "<ul>\n"
-"  <li>Un poste (PC, MAC, tablette*, smartphone*)</li>  <li>Une webcam (optionnelle mais recommandée)</li>  <li>Un micro et des haut-parleurs (ou un casque)</li>  <li>Un navigateur web moderne</li></ul>*: exceptés ipad et iphone"
+"  <li>Un poste (PC, MAC, tablette*, smartphone*)</li>\n"
+"  <li>Une webcam (optionnelle mais recommandée)</li>\n"
+"  <li>Un micro et des haut-parleurs (ou un casque)</li>\n"
+"  <li>Un navigateur web moderne</li>\n"
+"</ul>\n"
+"*: exceptés ipad et iphone"
 
 #: templates/default/about.html.ep:26
 msgid "ABOUT_WHO_IS_BEHIND_VROOM"
@@ -87,7 +92,7 @@ msgstr "Authentification"
 msgid "AUTH_IF_OWNER"
 msgstr "Authentifiez-vous si vous êtes le propriétaire du salon"
 
-#: vroom.pl:1817
+#: vroom.pl:1793
 msgid "AUTH_SUCCESS"
 msgstr "Vous êtes maintenant authentifié"
 
@@ -99,28 +104,28 @@ msgstr "Un micro et des haut-parleurs (ou un casque)"
 msgid "A_MODERN_BROWSER"
 msgstr "Un navigateur web moderne, les versions récentes des navigateurs Mozilla Firefox, Google Chrome ou Opera fonctionneront"
 
-#: public/js/vroom.js:1402
-#: public/js/vroom.js:1424
-#: public/js/vroom.js:1476
-#: public/js/vroom.js:1563
-#: public/js/vroom.js:1595
-#: public/js/vroom.js:1638
-#: public/js/vroom.js:1656
+#: public/js/vroom.js:1354
+#: public/js/vroom.js:1376
+#: public/js/vroom.js:1421
+#: public/js/vroom.js:1508
+#: public/js/vroom.js:1540
+#: public/js/vroom.js:1583
+#: public/js/vroom.js:1601
 msgid "A_PARTICIPANT"
 msgstr "un participant"
 
-#: vroom.pl:1830
+#: vroom.pl:1806
 msgid "A_PASSWORD_IS_NEEDED_TO_JOIN"
 msgstr "Vous devez saisir un mot de passe pour rejoindre ce salon"
 
-#: public/js/vroom.js:1547
-#: public/js/vroom.js:1561
-#: public/js/vroom.js:1580
-#: public/js/vroom.js:1593
-#: public/js/vroom.js:1607
-#: public/js/vroom.js:1630
-#: public/js/vroom.js:1636
-#: public/js/vroom.js:1654
+#: public/js/vroom.js:1492
+#: public/js/vroom.js:1506
+#: public/js/vroom.js:1525
+#: public/js/vroom.js:1538
+#: public/js/vroom.js:1552
+#: public/js/vroom.js:1575
+#: public/js/vroom.js:1581
+#: public/js/vroom.js:1599
 msgid "A_ROOM_ADMIN"
 msgstr "un administrateur du salon"
 
@@ -136,11 +141,11 @@ msgstr "Une webcam (optionnelle mais recommandée)"
 msgid "BACK_TO_MAIN_MENU"
 msgstr "Retour au menu principal"
 
-#: public/js/vroom.js:2115
+#: public/js/vroom.js:2036
 msgid "CAM_RESUMED"
 msgstr "Votre webcam est à nouveau active"
 
-#: public/js/vroom.js:2111
+#: public/js/vroom.js:2032
 msgid "CAM_SUSPENDED"
 msgstr "Votre webcam est en pause"
 
@@ -163,23 +168,23 @@ msgstr "Vous ne pouvez pas rejoindre cette conférence ? Laissez un message à l
 msgid "CANT_ACCESS_WEBCAM"
 msgstr "Nous n'avons pas pu accéder à votre webcam, vérifiez qu'elle soit bien connectée, allumée, et que vous avez autorisé le navigateur à y accéder, puis rafraichissez cette page"
 
-#: public/js/vroom.js:1480
+#: public/js/vroom.js:1425
 msgid "CANT_KICK_OWNER"
 msgstr "Vous ne pouvez pas bannir ce participant"
 
-#: public/js/vroom.js:1413
+#: public/js/vroom.js:1365
 msgid "CANT_MUTE_OWNER"
 msgstr "Vous ne pouvez pas couper le micro de ce participant"
 
-#: public/js/vroom.js:1461
+#: public/js/vroom.js:1406
 msgid "CANT_PROMOTE_OWNER"
 msgstr "Ce participant dispose déjà des droits d'administration"
 
-#: public/js/vroom.js:2066
+#: public/js/vroom.js:1987
 msgid "CANT_SHARE_SCREEN"
 msgstr "Votre configuration ne vous permet pas de partager votre écran"
 
-#: public/js/vroom.js:1433
+#: public/js/vroom.js:1385
 msgid "CANT_SUSPEND_OWNER"
 msgstr "Vous ne pouvez pas mettre la webcam de ce participant en pause"
 
@@ -263,7 +268,7 @@ msgstr "Créez ce salon"
 msgid "CREATION_DATE"
 msgstr "Date de création"
 
-#: vroom.pl:2233
+#: vroom.pl:2174
 msgid "DATA_WIPED"
 msgstr "Les données du salon ont été effacées"
 
@@ -275,12 +280,12 @@ msgstr "Supprimer"
 msgid "DISPLAY_NAME"
 msgstr "Nom"
 
-#: public/js/vroom.js:921
+#: public/js/vroom.js:898
 msgid "DISPLAY_NAME_REQUIRED"
 msgstr "Vous devez entrer votre nom"
 
-#: public/js/vroom.js:1999
-#: public/js/vroom.js:924
+#: public/js/vroom.js:1930
+#: public/js/vroom.js:898
 msgid "DISPLAY_NAME_TOO_LONG"
 msgstr "Ce nom est trop long"
 
@@ -297,7 +302,7 @@ msgstr "Ne m'attendez pas"
 msgid "DOWNLOAD_ONE_OF_THESE_BROWSERS"
 msgstr "Nous recommandons de télécharger un des navigateurs suivants, qui supportent les dernières technologies nécessaires à l'utilisation de VROOM"
 
-#: vroom.pl:1862
+#: vroom.pl:1838
 msgid "EMAIL_INVITATION"
 msgstr "Invitation à une conférence vidéo"
 
@@ -313,101 +318,99 @@ msgstr "j.smith@exemple.com"
 msgid "EMAIL_SIGN"
 msgstr "VROOM! Et la visio conférence devient libre, simple et sûr"
 
-#: vroom.pl:1963
+#: vroom.pl:1939
 msgid "ERROR_COMMON_ROOM_NAME"
 msgstr "Le nom de ce salon est trop commun pour être réservé"
 
-#: public/js/vroom.js:833
-#: public/js/vroom.js:840
+#: public/js/vroom.js:811
+#: public/js/vroom.js:818
 msgid "ERROR_DATE_INVALID"
 msgstr "Veuillez saisir une date au format YYYY-MM-JJ"
 
-#: public/js/vroom.js:847
+#: public/js/vroom.js:825
 msgid "ERROR_END_MUST_BE_AFTER_START"
 msgstr "La date de début doit être antérieure à celle de fin"
 
-#: public/js/vroom.js:1926
+#: public/js/vroom.js:1864
 msgid "ERROR_ESTABLISHING_P2P"
 msgstr "Impossible d'établir une connexion avec un des participants"
 
-#: vroom.pl:2330
+#: vroom.pl:2271
 msgid "ERROR_EXPORT_XLSX"
 msgstr "Une erreur est survenue pendant l'export"
 
-#: vroom.pl:2320
+#: vroom.pl:2261
 msgid "ERROR_FEATURE_NOT_AVAILABLE"
 msgstr "Cette fonction n'est pas disponible"
 
-#: vroom.pl:1707
+#: vroom.pl:1683
 msgid "ERROR_INPUT_INVALID"
 msgstr "Paramètres invalides"
 
-#: vroom.pl:1581
+#: vroom.pl:1557
 msgid "ERROR_INVITATION_INVALID"
 msgstr "Ce lien est invalide, votre invitation a probablement expiré, ou vous y avez déjà répondu"
 
-#: public/js/vroom.js:1957
-#: public/js/vroom.js:349
-#: vroom.pl:1848
-#: vroom.pl:2030
+#: public/js/vroom.js:1895
+#: public/js/vroom.js:370
+#: vroom.pl:1824
 msgid "ERROR_MAIL_INVALID"
 msgstr "Veuillez saisir une adresse email valide"
 
-#: vroom.pl:1747
+#: vroom.pl:1723
 msgid "ERROR_NAME_CONFLICT"
 msgstr "Ce nom est déjà pris, choisissez en un autre"
 
-#: public/js/vroom.js:458
-#: vroom.pl:1742
-#: vroom.pl:2359
+#: public/js/vroom.js:467
+#: vroom.pl:1718
+#: vroom.pl:2300
 msgid "ERROR_NAME_INVALID"
 msgstr "Ce nom n'est pas valide"
 
-#: public/js/vroom.js:115
-#: public/js/vroom.js:490
+#: public/js/vroom.js:117
+#: public/js/vroom.js:496
 #: templates/default/error.html.ep:7
-#: vroom.pl:1624
-#: vroom.pl:1734
-#: vroom.pl:1752
-#: vroom.pl:1873
-#: vroom.pl:1902
-#: vroom.pl:1934
-#: vroom.pl:1998
-#: vroom.pl:2017
-#: vroom.pl:2052
-#: vroom.pl:2151
-#: vroom.pl:2220
-#: vroom.pl:2239
-#: vroom.pl:2256
-#: vroom.pl:2273
+#: vroom.pl:1600
+#: vroom.pl:1710
+#: vroom.pl:1728
+#: vroom.pl:1849
+#: vroom.pl:1878
+#: vroom.pl:1910
+#: vroom.pl:1974
+#: vroom.pl:1993
+#: vroom.pl:2092
+#: vroom.pl:2161
+#: vroom.pl:2180
+#: vroom.pl:2197
+#: vroom.pl:2214
 msgid "ERROR_OCCURRED"
 msgstr "Une erreur est survenue"
 
-#: vroom.pl:2131
-#: vroom.pl:2205
+#: vroom.pl:2072
+#: vroom.pl:2146
 msgid "ERROR_PEER_ID_MISSING"
 msgstr "L'identifiant du pair est absent"
 
-#: vroom.pl:2165
+#: vroom.pl:2106
 msgid "ERROR_PEER_NOT_FOUND"
 msgstr "Ce pair n'existe pas"
 
-#: vroom.pl:1767
+#: vroom.pl:1743
 msgid "ERROR_ROOM_NAME_MISSING"
 msgstr "Vous devez fournir un nom de salon"
 
-#: vroom.pl:1548
-#: vroom.pl:1563
-#: vroom.pl:1778
-#: vroom.pl:2368
+#: vroom.pl:1524
+#: vroom.pl:1539
+#: vroom.pl:1754
+#: vroom.pl:2309
 msgid "ERROR_ROOM_s_DOESNT_EXIST"
 msgstr "Le salon %s n'existe pas"
 
-#: vroom.pl:1826
+#: vroom.pl:1802
 msgid "ERROR_ROOM_s_LOCKED"
 msgstr "Le salon %s est verrouillé, vous ne pouvez pas le rejoindre"
 
-#: vroom.pl:2378
+#: vroom.pl:2319
 msgid "ERROR_TOO_MANY_MEMBERS"
 msgstr "Ce salon a atteint sa limite de participants"
 
@@ -435,7 +438,7 @@ msgstr "Message"
 msgid "EVENT_USER"
 msgstr "Utilisateur"
 
-#: public/js/vroom.js:2075
+#: public/js/vroom.js:1996
 msgid "EVERYONE_CAN_SEE_YOUR_SCREEN"
 msgstr "Tous les participants peuvent voir votre écran"
 
@@ -453,7 +456,7 @@ msgstr "Une extension est nécessaire"
 msgid "FEEDBACK"
 msgstr "Retour d'expérience"
 
-#: vroom.pl:1532
+#: vroom.pl:1508
 msgid "FEEDBACK_FROM_VROOM"
 msgstr "Retour d'expérience de VROOM"
 
@@ -479,11 +482,11 @@ msgstr "Au revoir"
 msgid "HAVE_A_NICE_MEETING"
 msgstr "Bonne réunion :-)"
 
-#: vroom.pl:1454
+#: vroom.pl:1430
 msgid "HE_WILL_TRY_TO_JOIN_LATER"
 msgstr "Cette personne essaiera de vous rejoindre plus tard"
 
-#: vroom.pl:1457
+#: vroom.pl:1433
 msgid "HE_WONT_JOIN"
 msgstr "Cette personne ne pourra pas vous rejoindre"
 
@@ -508,11 +511,11 @@ msgstr "Répondre à une invitation"
 msgid "INVITE_PEOPLE"
 msgstr "Inviter des participants"
 
-#: vroom.pl:1452
+#: vroom.pl:1428
 msgid "INVITE_REPONSE_FROM_s"
 msgstr "Réponse de %s à votre invitation"
 
-#: vroom.pl:1884
+#: vroom.pl:1860
 msgid "INVITE_SENT_TO_s"
 msgstr ""
 "Une invitation a été envoyée aux adresses suivantes\n"
@@ -532,7 +535,7 @@ msgstr "VROOM nécessite l'activation du javascript"
 msgid "KICKED"
 msgstr "Banni"
 
-#: public/js/vroom.js:1249
+#: public/js/vroom.js:1201
 msgid "KICK_PEER"
 msgstr "Bannir ce participant du salon"
 
@@ -572,7 +575,7 @@ msgstr "Limite de participants"
 #: templates/default/invitation.html.ep:28
 #: templates/default/invite_modal.html.ep:32
 #: templates/default/invite_modal.html.ep:35
-#: vroom.pl:1460
+#: vroom.pl:1436
 msgid "MESSAGE"
 msgstr "Message"
 
@@ -584,11 +587,11 @@ msgstr "Message de l'organisateur de la réunion"
 msgid "MESSAGE_SENT"
 msgstr "Message transmis"
 
-#: public/js/vroom.js:2092
+#: public/js/vroom.js:2013
 msgid "MIC_MUTED"
 msgstr "Votre micro est coupé"
 
-#: public/js/vroom.js:2096
+#: public/js/vroom.js:2017
 msgid "MIC_UNMUTED"
 msgstr "Votre micro est à nouveau actif"
 
@@ -605,7 +608,7 @@ msgstr "Multi utilisateurs"
 msgid "MUTE_MIC"
 msgstr "Couper le micro"
 
-#: public/js/vroom.js:1234
+#: public/js/vroom.js:1186
 msgid "MUTE_PEER"
 msgstr "Couper ou réactiver le micro de ce participant"
 
@@ -617,7 +620,7 @@ msgstr "Ce nom sera envoyé aux autres participants"
 msgid "NOTIFICATION_ON_JOIN"
 msgstr "Notification lorsque quelqu'un rejoint ce salon"
 
-#: vroom.pl:1662
+#: vroom.pl:1638
 msgid "NOT_ALLOWED"
 msgstr "Vous n'êtes pas autorisé à faire ceci"
 
@@ -626,7 +629,7 @@ msgstr "Vous n'êtes pas autorisé à faire ceci"
 msgid "NO_SIGNIN"
 msgstr "Pas d'inscription"
 
-#: public/js/vroom.js:1835
+#: public/js/vroom.js:1780
 msgid "NO_SOUND_DETECTED"
 msgstr "Aucun son n'a été détecté. Vérifiez votre micro (son volume est peut-être trop faible)"
 
@@ -673,13 +676,13 @@ msgstr "La personne qui a rejoint votre salon se nomme"
 msgid "PASSWORD"
 msgstr "Mot de passe"
 
-#: public/js/vroom.js:331
-#: public/js/vroom.js:341
+#: public/js/vroom.js:350
+#: public/js/vroom.js:361
 msgid "PASSWORDS_CANNOT_BE_EMPTY"
 msgstr "Le mot de passe ne peut pas être vide"
 
-#: public/js/vroom.js:327
-#: public/js/vroom.js:337
+#: public/js/vroom.js:344
+#: public/js/vroom.js:357
 msgid "PASSWORDS_DO_NOT_MATCH"
 msgstr "Les mots de passe ne correspondent pas"
 
@@ -687,15 +690,15 @@ msgstr "Les mots de passe ne correspondent pas"
 msgid "PASSWORD_PROTECT"
 msgstr "Ce mot de passe sera nécessaire pour rejoindre le salon"
 
-#: public/js/vroom.js:893
+#: public/js/vroom.js:875
 msgid "PASSWORD_REQUIRED"
 msgstr "Mot de passe requis"
 
-#: public/js/vroom.js:896
+#: public/js/vroom.js:875
 msgid "PASSWORD_TOO_LONG"
 msgstr "Ce mot de passe est trop long"
 
-#: vroom.pl:2214
+#: vroom.pl:2155
 msgid "PEER_PROMOTED"
 msgstr "Vous avez donné les droits sur ce salon"
 
@@ -707,7 +710,7 @@ msgstr "Persistant"
 msgid "POWERED_BY"
 msgstr "Propulsé par"
 
-#: public/js/vroom.js:1244
+#: public/js/vroom.js:1196
 msgid "PROMOTE_PEER"
 msgstr "Donner les droits d'administration du salon à ce participant"
 
@@ -736,15 +739,15 @@ msgstr "Raffraichir"
 msgid "RESERVE_THIS_ROOM"
 msgstr "Réserver ce salon"
 
-#: vroom.pl:1928
+#: vroom.pl:1904
 msgid "ROOM_CONFIG_UPDATED"
 msgstr "La configuration du salon a été mise à jour"
 
-#: vroom.pl:2267
+#: vroom.pl:2208
 msgid "ROOM_DELETED"
 msgstr "Le salon a été supprimé"
 
-#: vroom.pl:1823
+#: vroom.pl:1799
 msgid "ROOM_LOCKED_ENTER_OWNER_PASSWORD"
 msgstr "Ce salon est verrouillé, seul un administrateur peut le rejoindre. Veuillez saisir le mot de passe d'administration du salon"
 
@@ -779,21 +782,23 @@ msgstr "Partage d'écran"
 msgid "SCREEN_SHARING_ABOUT_CONFIG_s"
 msgstr ""
 "<ol>\n"
-"  <li>Ouvrez un nouvel onglet, et tapez <b>about:config</b> dans la barre d'adresse</li>  <li>Validez l'avertissement en cliquant sur le bouton \"<i>Je ferai attention, promis !</i>\"</li>  <li>Recherchez <b>screensharing</b> à l'aide de la barre de recherche</li>  <li>Double cliquez sur <b>media.getusermedia.screensharing.allowed_domains</b> pour le modifier</li>  <li>Ajoutez <b>%s</b> à la fin de la liste</li>  <li>Vous pouvez désormais partager votre écran</li></ol>"
+"  <li>Ouvrez un nouvel onglet, et tapez <b>about:config</b> dans la barre d'adresse</li>\n"
+"  <li>Validez l'avertissement en cliquant sur le bouton \"<i>Je ferai attention, promis !</i>\"</li>\n"
+"  <li>Recherchez <b>screensharing</b> à l'aide de la barre de recherche</li>\n"
+"  <li>Double cliquez sur <b>media.getusermedia.screensharing.allowed_domains</b> pour le modifier</li>\n"
+"  <li>Ajoutez <b>%s</b> à la fin de la liste</li>\n"
+"  <li>Vous pouvez désormais partager votre écran</li>\n"
+"</ol>"
 
-#: public/js/vroom.js:2063
+#: public/js/vroom.js:1984
 msgid "SCREEN_SHARING_CANCELLED"
 msgstr "Le partage d'écran a été annulé"
 
-#: public/js/vroom.js:2051
-msgid "SCREEN_SHARING_ONLY_FOR_CHROME"
-msgstr "Désolé, mais vous ne pouvez pas partager votre écran. Seul le navigateur Google Chrome supporte cette fonction pour l'instant"
-
-#: public/js/vroom.js:2083
+#: public/js/vroom.js:2004
 msgid "SCREEN_UNSHARED"
 msgstr "Vous ne partagez plus votre écran"
 
-#: public/js/vroom.js:277
+#: public/js/vroom.js:292
 msgid "SCREEN_s"
 msgstr "Écran de %s"
 
@@ -818,7 +823,7 @@ msgstr "Envoyer le message"
 msgid "SERVER_ERROR"
 msgstr "Veuillez nous excuser"
 
-#: vroom.pl:2250
+#: vroom.pl:2191
 msgid "SESSION_CREATED"
 msgstr "La session a été créée"
 
@@ -826,7 +831,7 @@ msgstr "La session a été créée"
 msgid "SET_A_DISPLAY_NAME"
 msgstr "Merci de saisir votre nom avant de pouvoir rejoindre le salon"
 
-#: public/js/vroom.js:2012
+#: public/js/vroom.js:1943
 #: templates/default/join.html.ep:344
 msgid "SET_YOUR_NAME_TO_CHAT"
 msgstr "Vous devez saisir votre nom avant de pouvoir tchater"
@@ -839,7 +844,7 @@ msgstr "Partagez votre écran entier, ou seulement une fenêtre en un clique ave
 msgid "SHARE_YOUR_SCREEN"
 msgstr "Partager votre écran"
 
-#: vroom.pl:2181
+#: vroom.pl:2122
 msgid "SOMEONE"
 msgstr "Quelqu'un"
 
@@ -865,7 +870,7 @@ msgstr "Valider"
 msgid "SUSPEND_CAM"
 msgstr "Stopper la webcam"
 
-#: public/js/vroom.js:1239
+#: public/js/vroom.js:1191
 msgid "SUSPEND_PEER"
 msgstr "Mettre en pause ou réactiver la webcam de ce participant"
 
@@ -938,7 +943,7 @@ msgstr "Ce mot de passe vous permettra de récuperer l'accès aux menus de gesti
 msgid "TRY_AGAIN"
 msgstr "Essayer à nouveau"
 
-#: vroom.pl:1635
+#: vroom.pl:1611
 msgid "UNSUPPORTED_LANG"
 msgstr "Langue non supportée"
 
@@ -992,8 +997,8 @@ msgstr "Je ne pourrai pas participer"
 msgid "WORKS_EVERYWHERE"
 msgstr "Universel"
 
-#: public/js/vroom.js:2154
-#: vroom.pl:1833
+#: public/js/vroom.js:2068
+#: vroom.pl:1809
 msgid "WRONG_PASSWORD"
 msgstr "Mauvais mot de passe"
 
@@ -1030,82 +1035,74 @@ msgstr "Vous en avez marre de créer un compte sur tous les services possibles e
 msgid "YOU_HAVE_BEEN_KICKED"
 msgstr "Vous avez été banni du salon"
 
-#: public/js/vroom.js:1477
+#: public/js/vroom.js:1422
 msgid "YOU_HAVE_KICKED_s"
 msgstr "Vous avez bani %s du salon"
 
-#: public/js/vroom.js:1401
+#: public/js/vroom.js:1353
 msgid "YOU_HAVE_MUTED_s"
 msgstr "Vous avez coupé le micro de %s"
 
-#: public/js/vroom.js:1426
+#: public/js/vroom.js:1378
 msgid "YOU_HAVE_RESUMED_s"
 msgstr "Vous avez réactivé la webcam de %s"
 
-#: public/js/vroom.js:1423
+#: public/js/vroom.js:1375
 msgid "YOU_HAVE_SUSPENDED_s"
 msgstr "Vous avez mis la webcam de %s en pause"
 
-#: public/js/vroom.js:1404
+#: public/js/vroom.js:1356
 msgid "YOU_HAVE_UNMUTED_s"
 msgstr "Vous avez réactivé le micro de %s"
 
-#: public/js/vroom.js:1609
+#: public/js/vroom.js:1554
 msgid "s_CHANGED_ROOM_CONFIG"
 msgstr "%s a changé la configuration du salon"
 
-#: public/js/vroom.js:1657
+#: public/js/vroom.js:1602
 msgid "s_IS_KICKING_s"
 msgstr "%s a banni %s du salon"
 
-#: public/js/vroom.js:1550
+#: public/js/vroom.js:1495
 msgid "s_IS_MUTING_YOU"
 msgstr "%s a coupé votre micro"
 
-#: public/js/vroom.js:1568
+#: public/js/vroom.js:1513
 msgid "s_IS_MUTING_s"
 msgstr "%s a coupé le micro de %s"
 
-#: public/js/vroom.js:1632
+#: public/js/vroom.js:1577
 msgid "s_IS_PROMOTING_YOU"
 msgstr "%s vous a donné les droits d'administration du salon"
 
-#: public/js/vroom.js:1639
+#: public/js/vroom.js:1584
 msgid "s_IS_PROMOTING_s"
 msgstr "%s a donné les droits d'administration du salon à %s"
 
-#: public/js/vroom.js:1587
+#: public/js/vroom.js:1532
 msgid "s_IS_RESUMING_YOU"
 msgstr "%s a réactivé votre webcam"
 
-#: public/js/vroom.js:1597
+#: public/js/vroom.js:1542
 msgid "s_IS_RESUMING_s"
 msgstr "%s a réactivé la webcam de %s"
 
-#: public/js/vroom.js:1583
+#: public/js/vroom.js:1528
 msgid "s_IS_SUSPENDING_YOU"
 msgstr "%s a mis votre webcam en pause"
 
-#: public/js/vroom.js:1600
+#: public/js/vroom.js:1545
 msgid "s_IS_SUSPENDING_s"
 msgstr "%s a mis la webcam de %s en pause"
 
-#: public/js/vroom.js:1554
+#: public/js/vroom.js:1499
 msgid "s_IS_UNMUTING_YOU"
 msgstr "%s a réactivé votre micro"
 
-#: public/js/vroom.js:1565
+#: public/js/vroom.js:1510
 msgid "s_IS_UNMUTING_s"
 msgstr "%s a réactivé le micro de %s"
 
-#: vroom.pl:2181
+#: vroom.pl:2122
 msgid "s_JOINED_ROOM_s"
 msgstr "%s a rejoint le salon %s"
-
-#: vroom.pl:2039
-msgid "s_WILL_BE_NOTIFIED"
-msgstr "%s recevra une notification à chaque fois qu'une personne rejoint ce salon"
-
-#: vroom.pl:2046
-msgid "s_WONT_BE_NOTIFIED_ANYMORE"
-msgstr "%s ne recevra plus les notifications pour ce salon"
