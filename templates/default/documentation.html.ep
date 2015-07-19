@@ -87,7 +87,7 @@
         <li>The client side: written in Javascript, it's the code executed on the browsers. This is where webcam streams are captured and sent to other peers. The biggest part is
             <a href="http://simplewebrtc.com/" target="_blank">SimpleWebRTC</a>.</li>
         <li>The server side: mainly written in Perl using the fabulous <a href="http://mojolicio.us/" target="_blank">Mojolicious</a> framework. This is where room are created
-            their configurations are stored, and where permissions are managed</li>
+            their configurations are stored, and where permissions are managed. The backend uses an SQL (MySQL is the only supported engine for now) to store configurations</li>
       </ul>
 
       <h1 id="install_your_own">
