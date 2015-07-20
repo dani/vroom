@@ -196,20 +196,18 @@ helper log_event => sub {
     $self->app->log->debug("Oops, invalid event received");
     return 0;
   }
+  my $addr = $self->tx->remote_address || '127.0.0.1';
+  my $user = $self->get_name || 'VROOM daemon';
   my $sth = eval {
     $self->db->prepare('INSERT INTO `audit` (`date`,`event`,`from_ip`,`user`,`message`)
                           VALUES (CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),?,?,?,?)');
   };
   $sth->execute(
     $event->{event},
-    $self->tx->remote_address,
-    $self->get_name,
+    $addr,
+    $user,
     $event->{msg}
   );
-  my $addr = $self->tx->remote_address || '';
-  my $user = $self->get_name || '';
-  $addr = ($addr eq '') ? '127.0.0.1' : $addr;
-  $user = ($user eq '') ? 'VROOM daemon' : $user;
   $self->app->log->info('[' . $addr . '] [' . $user . '] [' . $event->{event} . '] ' . $event->{msg});
   return 1;
 };
