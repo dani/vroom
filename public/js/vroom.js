@@ -2023,7 +2023,7 @@ function initVroom(room) {
 
   // Disable suspend webcam button if no webcam
   if (!video){
-    $('.btn-suspend-cam').addClass('disabled');
+    $('.btn-suspend-cam').addClass('disabled').attr('disabled', true);
   }
 
   // Suspend the webcam
