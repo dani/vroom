@@ -152,10 +152,7 @@ $('#switch_lang').change(function(){
 
 // Escape entities to prevent XSS
 function stringEscape(string){
-  string = string.replace(/[\u00A0-\u99999<>\&]/gim, function(i) {
-    return '&#' + i.charCodeAt(0) + ';';
-  });
-  return string;
+  return $('<div>').text(string).html();
 }
 
 // Select a color (randomly) from this list, used for text chat, and the name under the preview
