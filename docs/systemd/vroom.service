@@ -4,7 +4,7 @@ After=mariadb.service
 
 [Service]
 Type=simple
-ExecStart=/opt/vroom/scripts/start_server.pl
+ExecStart=/opt/vroom/script/start_server.pl
 PrivateTmp=yes
 User=vroom
 Group=vroom
