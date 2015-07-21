@@ -233,10 +233,10 @@
                 <%= l('NO_MEDIA_AVAILABLE') %>
               </p>
               <div class="row">
-                <div class="col-xs-6">
+                <div class="col-xs-2 col-xs-offset-4">
                   %= image '/img/webcam.png', alt => "Webcam", class => "img-responsive, center-block"
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-2">
                  %= image '/img/mic.png', alt => "Microphone", class => "img-responsive, center-block"
                 </div>
               </div>
