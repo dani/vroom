@@ -227,7 +227,24 @@
               <p class="text-center connecting-err-reason">
               </p>
             </div>
-            <div id="no-webcam-msg" class="connecting-msg" style="display: none">
+            <div id="no-media-msg" class="connecting-msg" style="display: none">
+              <% if (defined(stash('video')) && stash('video') eq 'false'){ %>
+              <p class="text-center">
+                <%= l('NO_MEDIA_AVAILABLE') %>
+              </p>
+              <div class="row">
+                <div class="col-xs-6">
+                  %= image '/img/webcam.png', alt => "Webcam", class => "img-responsive, center-block"
+                </div>
+                <div class="col-xs-6">
+                 %= image '/img/mic.png', alt => "Microphone", class => "img-responsive, center-block"
+                </div>
+              </div>
+              <br>
+              <p class="text-center">
+                <%= l('YOU_NEED8MIC_OR_WEBCAM') %>
+              </p> 
+              <% } else { %>
               <p class="text-center">
                 <%= l('CANT_ACCESS_WEBCAM') %>
               </p>
@@ -242,6 +259,7 @@
                   </span>
                 </a>
               </p>
+              <% } %>
             </div>
             <div id="auth-before-join" class="connecting-msg" style="display: none">
               <form role="form" class="form-horizontal" id="authBeforeJoinForm">

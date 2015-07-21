@@ -1822,7 +1822,12 @@ function initVroom(room) {
 
   // error opening the webcam or mic stream
   webrtc.on('localMediaError', function(){
-    $('#no-webcam-msg').slideDown();
+    $('#no-media-msg').slideDown();
+    // If video is disabled but we still have an error
+    // it means mic isn't available
+    if (!video){
+      $('#connecting-msg').slideUp();
+    }
   });
 
   // Handle video stream removed: someone leaved the room
