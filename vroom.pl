@@ -2339,6 +2339,13 @@ get '/:room' => sub {
       room => $room,
     );
   }
+  if ($self->check_invite_token($room,$token)){
+    $self->associate_key_to_room(
+      room => $room,
+      key  => $self->session('key'),
+      role => 'participant'
+    );
+  }
   # pad doesn't exist yet ?
   if ($optf->{etherpad} && !$data->{etherpad_group}){
     $self->create_pad($room);
