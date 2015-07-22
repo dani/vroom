@@ -38,7 +38,7 @@
 <p>
   <%= l('IF_YOU_CANNOT_JOIN') %>
     <h3>
-      <a style="color:red" href="<%= Mojo::URL->new($self->url_for('/invitation/') . $token)->to_abs)->scheme('https') %>">
+      <a style="color:red" href="<%= Mojo::URL->new($self->url_for('/invitation/' . $token)->to_abs)->scheme('https') %>">
         <%= l('YOU_CAN_NOTIFY_THE_ORGANIZER') %>
       </a>
     </h3>
