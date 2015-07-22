@@ -44,10 +44,10 @@ foreach my $dir (qw/assets/){
 our $optf = {};
 # Create etherpad api client if enabled
 if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key'} ne ''){
-  my $etherpad = eval { require Etherpad::API };
+  my $etherpad = eval { require Etherpad };
   if ($etherpad){
-    import Etherpad::API;
-    $optf->{etherpad} = Etherpad::API->new({
+    import Etherpad;
+    $optf->{etherpad} = Etherpad->new({
       url => $config->{'etherpad.uri'},
       apikey => $config->{'etherpad.api_key'}
     });
@@ -57,7 +57,7 @@ if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key
     }
   }
   else{
-    app->log->info("Etherpad::API not found, disabling Etherpad-Lite support");
+    app->log->info("Etherpad perl module not found, disabling Etherpad-Lite support");
   }
 }
 

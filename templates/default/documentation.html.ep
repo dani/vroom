@@ -129,8 +129,7 @@
               <li>
                 For Etherpad-Lite support:
                 <ul>
-                  <li>Etherpad::API</li>
-                  <li>LWP::Protocol::https</li>
+                  <li>Etherpad</li>
                 </ul>
               </li>
               <li>
@@ -212,8 +211,7 @@ yum install git tar wget httpd mod_ssl openssl mariadb-server \\
             'perl(Mojolicious::Plugin::StaticCompressor' \\
             'perl(Mojolicious::Plugin::RenderFile)' \\
             'perl(Crypt::SaltedHash)' \\
-            'perl(Etherpad::API)' \\
-            'perl(LWP::Protocol::https)' \\
+            'perl(Etherpad)' \\
             'perl(Sesion::Token)' \\
             'perl(Email::Valid)' \\
             'perl(File::Temp)' \\
@@ -434,9 +432,9 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         <ul>
           <li><strong>uri</strong>: The URI to reach your Etherpad Lite instance. This instance must share the same base domain as VROOM because
             of the way sessions are created (Etherpad Lite sessions are created by VROOM directly and sent as a cookie to the clients)</li>
-          <li><strong>api_key</strong>: The API key of your Etherpad-Lite instance. You can find it in the file <strong>APIKEY.txt</strong> at the root
+          <li><strong>api_key</strong>: The API key of your Etherpad Lite instance. You can find it in the file <strong>APIKEY.txt</strong> at the root
             of your Etherpad Lite installation</li>
-          <li><strong>base_domain</strong>: This is the common part of your domain between VROOM and Etherpad-Lite. For example, if you have VROOM running
+          <li><strong>base_domain</strong>: This is the common part of your domain between VROOM and Etherpad Lite. For example, if you have VROOM running
             on https://vroom.example.net/ and Etherpad-Lite as https://pads.example.net, you'd put <kbd>base_domain = 'example.net'</kbd> here</li>
         </ul>
       </p>
