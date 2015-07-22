@@ -1573,10 +1573,12 @@ any [qw(GET POST)] => '/invitation/:token' => { token => '' } => sub {
 };
 
 # Create a json script which contains localization
-get '/locales/(:lang).js' => { lang => 'en' } => sub {
+get '/locales/(:lang).js' => sub {
   my $self = shift;
   my $usr_lang = $self->languages;
   my $req_lang = $self->stash('lang');
+  $req_lang = (grep { $_ eq $req_lang } $self->get_supported_lang) ?
+    $req_lang : 'en';
   # Temporarily switch to the requested locale
   # eg, we can be in en and ask for /locales/fr.js
   $self->languages($req_lang);
