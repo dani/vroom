@@ -39,7 +39,8 @@ sub get_conf(){
   $config->{'etherpad.uri'}                      ||= '';
   $config->{'etherpad.api_key'}                  ||= '';
   $config->{'etherpad.base_domain'}              ||= '';
-  $config->{'directories.cache'}                 ||= 'cache';
+  $config->{'directories.cache'}                 ||= 'data/cache';
+  $config->{'directories.cache'}                 ||= 'data/tmp';
   $config->{'daemon.listen_ip'}                  ||= '127.0.0.1';
   $config->{'daemon.listen_port'}                ||= '8090';
   $config->{'daemon.backend'}                    ||= 'hypnotoad';

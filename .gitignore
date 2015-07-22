@@ -1,3 +1,5 @@
 conf/settings.ini
-cache/*
-!cache/README
+data/cache/*
+!data/cache/README
+data/tmp/*
+!data/tmp/README

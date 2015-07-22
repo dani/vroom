@@ -30,7 +30,7 @@ app->log->level('info');
 
 our $config = Vroom::Conf::get_conf();
 
-# Try to create the cache dir if they doesn't exist
+# Try to create the directories we need
 foreach my $dir (qw/assets/){
   if (!-d $config->{'directories.cache'} . '/' . $dir){
     make_path($config->{'directories.cache'} . '/' . $dir, { mode => 0770 });
@@ -1175,7 +1175,7 @@ helper get_room_conf => sub {
 helper export_events_xlsx => sub {
   my $self = shift;
   my ($from,$to) = @_;
-  my $tmp = File::Temp->new( DIR => $config->{'directories.cache'}, SUFFIX => '.xlsx' )->filename;
+  my $tmp = File::Temp->new( DIR => $config->{'directories.tmp'}, SUFFIX => '.xlsx' )->filename;
   my $events = $self->get_event_list($from, $to);
   if (!$events){
     return 0;

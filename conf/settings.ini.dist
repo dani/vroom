@@ -75,7 +75,9 @@ credentials = 'rest'
 [directories]
 ; Where to store cache data. Defaults to the cache subdirectory
 ; User running VROOM daemon must have write access
-;cache = 'cache'
+;cache = 'data/cache'
+; Where to store temporary files
+;tmp = 'data/tmp'
 
 [daemon]
 ; IP the hypnotoad daemon will listen on. You can use * to bind on every IP/Interface

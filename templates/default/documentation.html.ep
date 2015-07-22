@@ -285,14 +285,14 @@ echo "LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so" \\
  > /etc/httpd/conf.modules.d/00-proxy_wstunnel.conf</pre>
       </p>
 
-      <h3 id="c7_cache_dir_perm">
-        Set permissions on the cache directory
+      <h3 id="c7_dir_perm">
+        Set permissions on the cache and tmp directories
       </h3>
       <p>
-        The <strong>cache</strong> directory must be writeable for the user running the VROOM daemon, which is <strong>vroom</strong> in the provided systemd unit
+        The <strong>cache</strong> and <strong>tmp</strong> directories must be writeable for the user running the VROOM daemon, which is <strong>vroom</strong> in the provided systemd unit
         <pre>
-chown -R vroom ./cache
-chmod 700 ./cache</pre>
+chown -R vroom ./data/{tmp,cache}
+chmod 700 ./data/{cache,tmp}</pre>
       </p>
 
       <h3 id="c7_systemd_unit">
@@ -447,6 +447,7 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         Controls where to find some specific directories
         <ul>
           <li><strong>cache</strong>: This is where VROOM will store its cache (including auto generated and compressed assets like JS and CSS bundles)</li>
+          <li><strong>tmp</strong>: This is where VROOM will store temp data like XLSX files when exporting events</li>
         </ul>
       </p>
 
