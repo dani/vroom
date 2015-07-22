@@ -219,7 +219,8 @@ yum install git tar wget httpd mod_ssl openssl mariadb-server \\
             'perl(Locale::Maketext::Lexicon)' \\
             'perl(Config::Simple)' \\
             'perl(Session::Token)' \\
-            'perl(DateTime)'</pre>
+            'perl(DateTime)' \\
+            'perl(Data::Dumper)</pre>
       </p>
 
       <h3 id="c7_clone_git">
