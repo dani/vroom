@@ -1,7 +1,3 @@
-<%
-  my $url = Mojo::URL->new($self->url_for('/')->to_abs)->scheme('https');
-  $url .= ($url =~ m/\/$/) ? '' : '/';
-%>
 <p>
   <%= l('YOU_ARE_INVITED_TO_A_MEETING') %>
   <ul>
@@ -20,13 +16,13 @@
   <%= l('WHEN_YOU_ARE_READY') %>
   <center>
     <h1>
-      <% my $roomAccess = $room;
-         if ($joinPass eq 'yes') {
-           $roomAccess .= '?token=' . $token;
-         }
+      <%
+         my $link   = Mojo::URL->new($self->url_for($room)->to_abs)->scheme('https');
+         my $target = $link->clone;
+         $target    = ($joinPass eq 'yes') ? $target->query(token => $token) : $target;
       %>
-      <a href="<%= $url . $roomAccess %>">
-        <%= $url . $roomAccess %>
+      <a href="<%= $target %>">
+        <%= $link %>
       </a>
     </h1>
   </center>
@@ -42,7 +38,7 @@
 <p>
   <%= l('IF_YOU_CANNOT_JOIN') %>
     <h3>
-      <a style="color:red" href="<%= $url . 'invitation/' . $token %>">
+      <a style="color:red" href="<%= Mojo::URL->new($self->url_for('/invitation/') . $token)->to_abs)->scheme('https') %>">
         <%= l('YOU_CAN_NOTIFY_THE_ORGANIZER') %>
       </a>
     </h3>
