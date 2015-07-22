@@ -262,7 +262,7 @@ mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
         Setup Apache
       </h3>
       <p>
-        Two sample apache configurations are provided in the <strong>conf</strong> directory
+        Two sample apache configurations are provided in the <strong>doc/httpd</strong> directory
         <ul>
           <li><strong>httpd_alias.conf</strong> should work out of the box, VROOM will be available at <em>https://yourservername/vroom</em></li>
           <li><strong>httpd_vhost.conf</strong> is an alternative which you can use if you prefer working with named virtualhosts 
