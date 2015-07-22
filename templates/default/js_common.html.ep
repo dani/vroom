@@ -7,6 +7,7 @@
       var page = '<%= stash('page') ? stash('page') : "" %>';
       var roomName;
     </script>
+    <script type="text/javascript" src= "<%= $self->url_for('/locales/' . $self->languages . '.js') %>"></script>
     <%
       my @js = qw(jquery-1.11.3.js bootstrap.js notify-combined.js bootstrap-switch.js jquery.bootpag.js toc.js bootstrap-datepicker.js);
       # Load supported languages for datpicker, if they exists

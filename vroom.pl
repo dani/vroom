@@ -1572,17 +1572,35 @@ any [qw(GET POST)] => '/invitation/:token' => { token => '' } => sub {
   }
 };
 
-# Translation for JS resources
-get '/localize/:lang' => { lang => 'en' } => sub {
+# Create a json script which contains localization
+get '/locales/(:lang).js' => { lang => 'en' } => sub {
   my $self = shift;
+  my $usr_lang = $self->languages;
+  my $req_lang = $self->stash('lang');
+  # Temporarily switch to the requested locale
+  # eg, we can be in en and ask for /locales/fr.js
+  $self->languages($req_lang);
   my $strings = {};
-  my $l = $self->languages;
-  $self->languages($self->stash('lang'));
+  my $fallback_strings = {};
   foreach my $string (keys %Vroom::I18N::fr::Lexicon){
+    next if $string eq '';
     $strings->{$string} = $self->l($string);
   }
-  $self->languages($l);
-  return $self->render(json => $strings);
+  # If lang is not en, send also en as a fallback locale
+  # useful if a locale is not complete
+  if ($req_lang ne 'en'){
+    $self->languages('en');
+    foreach my $string (keys %Vroom::I18N::fr::Lexicon){
+      next if $string eq '';
+      $fallback_strings->{$string} = $self->l($string);
+    }
+  }
+  # Set the user locale back
+  $self->languages($usr_lang);
+  my $res = 'locale = ' . Mojo::JSON::to_json($strings) . ';';
+  $res .= 'fallback_locale = ' . Mojo::JSON::to_json($fallback_strings) . ';';
+  # And send the response
+  $self->render(text => $res, format => 'application/javascript;charset=UTF-8');
 };
 
 # API requests handler

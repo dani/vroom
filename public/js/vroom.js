@@ -36,10 +36,6 @@ $('.date-picker').datepicker({
   language: currentLang
 });
 
-// Strings we need translated
-var locale = {},
-    def_locale = {};
-
 // When pagination is done, how many item per page
 var itemPerPage = 20;
 
@@ -67,18 +63,6 @@ var peers = {
 // Mark current page link as active
 $('#lnk_' + page).addClass('active');
 
-// Localize the strings we need
-$.getJSON(rootUrl + 'localize/' + currentLang, function(data){
-  locale = data;
-});
-
-// If current locale isn't EN, retrieve EN locale as a fallback
-if (currentLang !== 'en'){
-  $.getJSON(rootUrl + 'localize/en' , function(data){
-    def_locale = data;
-  });
-}
-
 // Default ajax setup
 $.ajaxSetup({
   url: rootUrl + 'api',
@@ -99,8 +83,8 @@ function localize(string){
   if (locale[string]){
     return locale[string];
   }
-  else if (def_locale[string]){
-    return def_locale[string];
+  else if (fallback_locale[string]){
+    return fallback_locale[string];
   }
   return string;
 }
