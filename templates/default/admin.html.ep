@@ -3,11 +3,13 @@
 %= include 'public_toolbar'
 
 <div class="col-sm-offset-3 col-md-offset-4 col-sm-6 col-md-4">
-  <a class="btn btn-lg btn-primary btn-block" href="<%= $self->url_for('/admin/rooms') %>">
-    <%= l('ROOM_MANAGEMENT') %>
+  <a class="btn btn-lg btn-primary btn-block"
+     href="<%= url_for('/admin/rooms') %>">
+    %= l('ROOM_MANAGEMENT')
   </a>
-  <a class="btn btn-lg btn-primary btn-block" href="<%= $self->url_for('/admin/audit') %>">
-    <%= l('AUDIT') %>
+  <a class="btn btn-lg btn-primary btn-block"
+     href="<%= url_for('/admin/audit') %>">
+    %= l('AUDIT')
   </a>
 </div>
 

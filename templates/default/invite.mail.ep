@@ -1,54 +1,55 @@
 <p>
-  <%= l('YOU_ARE_INVITED_TO_A_MEETING') %>
+  %= l('YOU_ARE_INVITED_TO_A_MEETING')
   <ul>
     <li>
-      <%= l('A_MODERN_BROWSER') %>
+      %= l('A_MODERN_BROWSER')
     </li>
     <li>
-      <%= l('A_WEBCAM') %>
+      %= l('A_WEBCAM')
     </li>
     <li>
-      <%= l('A_MIC') %>
+      %= l('A_MIC')
     </li>
   </ul>
 </p>
 <p>
-  <%= l('WHEN_YOU_ARE_READY') %>
+  %= l('WHEN_YOU_ARE_READY')
   <center>
     <h1>
       <%
-         my $link   = Mojo::URL->new($self->url_for($room)->to_abs)->scheme('https');
+         my $link   = Mojo::URL->new(url_for($room)->to_abs)->scheme('https');
          my $target = $link->clone;
          $target    = ($joinPass eq 'yes') ? $target->query(token => $token) : $target;
       %>
       <a href="<%= $target %>">
-        <%= $link %>
+        %= $link
       </a>
     </h1>
   </center>
 </p>
-<% if ($message && $message ne ''){ %>
+% if ($message && $message ne ''){
 <p>
   <%= l('MESSAGE_FROM_ORGANIZER') %>:
 </p>
 <p>
-  <%= $message %>
+  %= $message
 </p>
-<% } %>
+% }
 <p>
-  <%= l('IF_YOU_CANNOT_JOIN') %>
+  %= l('IF_YOU_CANNOT_JOIN')
     <h3>
-      <a style="color:red" href="<%= Mojo::URL->new($self->url_for('/invitation/' . $token)->to_abs)->scheme('https') %>">
-        <%= l('YOU_CAN_NOTIFY_THE_ORGANIZER') %>
+      <a style="color:red"
+         href="<%= Mojo::URL->new(url_for('/invitation/' . $token)->to_abs)->scheme('https') %>">
+        %= l('YOU_CAN_NOTIFY_THE_ORGANIZER')
       </a>
     </h3>
 </p>
 <br>
 <p>
-  <%= l('HAVE_A_NICE_MEETING') %>
+  %= l('HAVE_A_NICE_MEETING')
 </p>
 <p style="font-size:small;-webkit-text-size-adjust:none;color:#666;">
   &mdash;
   <br>
-  <%= l('EMAIL_SIGN') %>
+  %= l('EMAIL_SIGN')
 </p>

@@ -1,9 +1,12 @@
 % title sprintf l('ROOM_s'), $room;
 %= include 'header'
   <div class="container-fluid">
-    <nav id="toolbar" class="navbar navbar-default" role="toolbar">
+    <nav id="toolbar"
+         class="navbar navbar-default">
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#roomToolBar">
+        <button class="navbar-toggle"
+                data-toggle="collapse"
+                data-target="#roomToolBar">
           <span class="sr-only">
           </span>
           <span class="icon-bar">
@@ -24,19 +27,32 @@
           </button>
         </div>
         <div class="btn-group visible-xs-block header-btn-group col-xs-push-1">
-          <button class="btn btn-lg btn-default help btn-logout navbar-btn" data-toggle="tooltip" data-placement="bottom" title="<%= l('LOGOUT') %>">
+          <button class="btn btn-lg btn-default help btn-logout navbar-btn"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="<%= l('LOGOUT') %>">
             <span class="glyphicon glyphicon-log-out">
             </span>
           </button>
         </div>
       </div>
-      <input id="roomName" name="roomName" type="hidden" value="<%= $room %>"/>
-      <div id="roomToolBar" class="collapse navbar-collapse">
+      <div id="roomToolBar"
+           class="collapse navbar-collapse">
         <div class="navbar-form navbar-btn-group navbar-left input-group">
           <div class="input-group">
-            <input type="text" id="displayName" class="form-control input-lg help" placeholder="<%= l('YOUR_NAME') %>" data-toggle="tooltip" data-placement="bottom" title="<%= l('NAME_SENT_TO_OTHERS') %>"/>
+            <input type="text"
+                   id="displayName"
+                   class="form-control input-lg help"
+                   placeholder="<%= l('YOUR_NAME') %>"
+                   data-toggle="tooltip"
+                   data-placement="bottom"
+                   title="<%= l('NAME_SENT_TO_OTHERS') %>">
             <span class="input-group-btn">
-              <button id="changeColorButton" class="btn btn-lg btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%= l('CHANGE_COLOR') %>">
+              <button id="changeColorButton"
+                      class="btn btn-lg btn-default help"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="<%= l('CHANGE_COLOR') %>">
                 <span class="glyphicon glyphicon-tag">
                 </span>
               </button>
@@ -44,66 +60,105 @@
           </div>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs">
-          <button id="chatDropdown" class="btn btn-lg btn-default collapsed help" data-toggle="collapse" data-target="#chatMenu" data-toggle="tooltip" data-placement="bottom" title="<%= l('CLICK_TO_CHAT') %>">
+          <button id="chatDropdown"
+                  class="btn btn-lg btn-default collapsed help"
+                  data-toggle="collapse" data-target="#chatMenu"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="<%= l('CLICK_TO_CHAT') %>">
             <span class="glyphicon glyphicon-comment">
             </span>
             <span class="badge" id="unreadMsg">
               0
             </span>
           </button>
-          <% if ($self->get_opt_features->{etherpad}){ %>
-          <button class="btn btn-lg btn-default help btn-etherpad" data-toggle="tooltip" data-placement="bottom" title="<%= l('OPEN_ETHERPAD') %>">
+          % if (get_opt_features->{etherpad}){
+          <button class="btn btn-lg btn-default help btn-etherpad"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="<%= l('OPEN_ETHERPAD') %>">
             <span class="glyphicon glyphicon-pencil">
             </span>
           </button>
-        <% } %>
+        % }
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs">
-          <button class="btn btn-lg btn-default btn-mute-mic help" data-toggle="tooltip" data-placement="bottom" title="<%= l('MUTE_MIC') %>">
+          <button class="btn btn-lg btn-default btn-mute-mic help"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="<%= l('MUTE_MIC') %>">
             <span class="glyphicon glyphicon-volume-off">
             </span>
           </button>
-          <button class="btn btn-lg btn-default btn-suspend-cam help" data-toggle="tooltip" data-placement="bottom" title="<%= l('SUSPEND_CAM') %>">
+          <button class="btn btn-lg btn-default btn-suspend-cam help"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="<%= l('SUSPEND_CAM') %>">
             <span class="glyphicon glyphicon-facetime-video">
             </span>
           </button>
-          <button class="btn btn-lg btn-default help btn-share-screen" data-toggle="tooltip" data-placement="bottom" title="<%= l('SHARE_YOUR_SCREEN') %>">
+          <button class="btn btn-lg btn-default help btn-share-screen"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="<%= l('SHARE_YOUR_SCREEN') %>">
             <span class="glyphicon glyphicon-blackboard">
             </span>
           </button>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left hidden-xs aloneEl">
-          <button class="btn btn-lg btn-default btn-moh help" data-toggle="tooltip" data-placement="bottom" title="<%= l('WAIT_WITH_MUSIC') %>">
+          <button class="btn btn-lg btn-default btn-moh help"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="<%= l('WAIT_WITH_MUSIC') %>">
             <span class="glyphicon glyphicon-music">
             </span>
           </button>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left">
           <div class="btn-group ownerEl">
-            <button class="btn btn-lg btn-default help" type="button" data-toggle="modal" data-target="#inviteModal" data-toggle="tooltip" data-placement="bottom" title="<%= l('INVITE_PEOPLE') %>">
+            <button class="btn btn-lg btn-default help"
+                    data-toggle="modal"
+                    data-target="#inviteModal"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="<%= l('INVITE_PEOPLE') %>">
               <span class="glyphicon glyphicon-user">
               </span>
             </button>
           </div>
           <div class="btn-group ownerEl">
-            <button class="btn btn-lg btn-default help" type="button" data-toggle="modal" data-target="#configureModal" data-toggle="tooltip" data-placement="bottom" title="<%= l('CONFIGURE') %>">
+            <button class="btn btn-lg btn-default help"
+                    data-toggle="modal"
+                    data-target="#configureModal"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="<%= l('CONFIGURE') %>">
               <span class="glyphicon glyphicon-cog">
               </span>
             </button>
           </div>
         </div>
         <div class="btn-group navbar-form navbar-btn-group navbar-left">
-          <button class="btn btn-lg btn-default dropdown-toggle help unauthEl" data-toggle="modal" data-target="#ownerAuthModal" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="<%= l('AUTHENTICATE') %>">
+          <button class="btn btn-lg btn-default dropdown-toggle help unauthEl"
+                  data-toggle="modal"
+                  data-target="#ownerAuthModal"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="<%= l('AUTHENTICATE') %>">
             <span class="glyphicon glyphicon-log-in">
             </span>
           </button>
         </div>
-        <div class="navbar-form navbar-btn-group navbar-right hidden-xs" data-toggle="buttons" >
+        <div class="navbar-form navbar-btn-group navbar-right hidden-xs"
+             data-toggle="buttons" >
           <div class="btn-group">
             <div id="timeCounter" class="btn btn-lg btn-default disabled">
               00:00
             </div>
-            <button class="btn btn-lg btn-default help btn-logout" data-toggle="tooltip" data-placement="bottom" title="<%= l('LOGOUT') %>">
+            <button class="btn btn-lg btn-default help btn-logout"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="<%= l('LOGOUT') %>">
               <span class="glyphicon glyphicon-log-out">
               </span>
             </button>
@@ -111,50 +166,61 @@
         </div>
       </div>
     </nav>
-    <div class="modal fade" role="dialog" id="quitModal" aria-labelledby="quitModal" aria-hidden="true">
+    <div class="modal fade"
+         id="quitModal"
+         aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <button class="close"
+                    data-dismiss="modal">
               &times;
             </button>
             <h4 class="modal-title">
-              <%= l('LEAVE_THIS_ROOM') %>
+              %= l('LEAVE_THIS_ROOM')
             </h4>
           </div>
           <div class="modal-body">
             <p>
-              <%= l('ARE_YOU_SURE_YOU_WANT_TO_LEAVE') %>
+              %= l('ARE_YOU_SURE_YOU_WANT_TO_LEAVE')
             </p>
           </div>
           <div class="modal-footer">
-            <button id="confirmQuitButton" class="btn btn-primary">
-              <%= l('QUIT') %>
+            <button id="confirmQuitButton"
+                    class="btn btn-primary">
+              %= l('QUIT')
             </button>
-            <button class="btn btn-default" data-dismiss="modal" data-target="#quitModal">
-              <%= l('CANCEL') %>
+            <button class="btn btn-default"
+                    data-dismiss="modal"
+                    data-target="#quitModal">
+              %= l('CANCEL')
             </button>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal fade" role="dialog" id="chromeExtMessage" aria-labelledby="chromeExtMessage" aria-hidden="true">
+    <div class="modal fade"
+         id="chromeExtMessage"
+         aria-hidden="true">
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <button class="close"
+                    data-dismiss="modal">
               &times;
             </button>
-            <h4 class="modal-title" id="chromeExtMessageTitle">
-              <%= l('EXTENSION_REQUIRED') %>
+            <h4 class="modal-title">
+              %= l('EXTENSION_REQUIRED')
             </h4>
           </div>
           <div class="modal-body">
             <p>
-              <%= l('VROOM_CHROME_EXTENSION') %>
+              %= l('VROOM_CHROME_EXTENSION')
             </p>
             <p>
-              <a class="btn btn-default btn-lg" href="https://chrome.google.com/webstore/detail/<%= $config->{'interface.chrome_extension_id'} %>" target="_blank">
+              <a class="btn btn-default btn-lg"
+                 href="https://chrome.google.com/webstore/detail/<%= $config->{'interface.chrome_extension_id'} %>"
+                 target="_blank">
                 <span class="glyphicon glyphicon-download-alt">
                 </span>
               </a>
@@ -163,158 +229,198 @@
         </div>
       </div>
     </div>
-    <div class="modal fade" role="dialog" id="firefoxShareScreenModal" aria-labelledby="firefoxShareScreenModal" aria-hidden="true">
+    <div class="modal fade"
+         id="firefoxShareScreenModal"
+         aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <button class="close"
+                    data-dismiss="modal"
+                    aria-hidden="true">
               &times;
             </button>
             <h4 class="modal-title">
-              <%= l('ALLOW_SCREEN_SHARING') %>
+              %= l('ALLOW_SCREEN_SHARING')
             </h4>
           </div>
           <div class="modal-body">
             <p>
-              <%= l('ALLOW_SCREEN_SHARING_ON_FF') %>
-              <%== sprintf $self->l('SCREEN_SHARING_ABOUT_CONFIG_s'), $self->req->url->to_abs->host %>
+              %= l('ALLOW_SCREEN_SHARING_ON_FF')
+              %== sprintf l('SCREEN_SHARING_ABOUT_CONFIG_s'), $self->req->url->to_abs->host
             </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal fade" role="dialog" id="disconnected" aria-labelledby="disconnected" aria-hidden="true">
+    <div class="modal fade"
+         id="disconnected"
+         aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <button class="close"
+                    data-dismiss="modal">
               &times;
             </button>
             <h4 class="modal-title">
-              <%= l('CONNECTION_LOST') %>
+              %= l('CONNECTION_LOST')
             </h4>
           </div>
           <div class="modal-body">
-            %= image '/img/flash.png', alt => $self->l('CONNECTION_LOST'), class => "img-responsive center-block"
+            %= image url_for('/img/flash.png'), alt => l('CONNECTION_LOST'), class => "img-responsive center-block"
             <br>
             <p class="text-center">
-              <%= l('CHECK_INTERNET_ACCESS') %>
+              %= l('CHECK_INTERNET_ACCESS')
             </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal fade" role="dialog" id="connecting" aria-labelledby="connecting" aria-hidden="false" data-keyboard="false" data-backdrop="static">
+    <div class="modal fade"
+         id="connecting"
+         aria-hidden="false"
+         data-keyboard="false"
+         data-backdrop="static">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">
-              <%= l('CONNECTING') %>
+              %= l('CONNECTING')
             </h4>
           </div>
           <div class="modal-body">
-            <div id="connecting-msg" class="connecting-msg">
-              %= image '/img/connecting.gif', alt => $self->l('CONNECTING'), class => "img-responsive center-block"
+            <div id="connecting-msg"
+                 class="connecting-msg">
+              %= image url_for('/img/connecting.gif'), alt => l('CONNECTING'), class => "img-responsive center-block"
               <br>
               <p class="text-center">
-                <%= l('CONNECTING_PLEASE_WAIT') %>
+                %= l('CONNECTING_PLEASE_WAIT')
               </p>
               <p class="text-center connecting-err-reason">
               </p>
             </div>
-            <div id="room-is-locked" class="connecting-msg" style="display: none">
-              %= image '/img/lock.png', alt => $self->l('LOCKED'), class => "img-responsive center-block"
+            <div id="room-is-locked"
+                 class="connecting-msg"
+                 style="display: none">
+              %= image url_for('/img/lock.png'), alt => l('LOCKED'), class => "img-responsive center-block"
               <p class="text-center connecting-err-reason">
               </p>
             </div>
-            <div id="no-media-msg" class="connecting-msg" style="display: none">
-              <% if (defined(stash('video')) && stash('video') eq 'false'){ %>
+            <div id="no-media-msg"
+                 class="connecting-msg"
+                 style="display: none">
+              % if (defined(stash('video')) && stash('video') eq 'false'){
               <p class="text-center">
-                <%= l('NO_MEDIA_AVAILABLE') %>
+                %= l('NO_MEDIA_AVAILABLE')
               </p>
               <div class="row">
                 <div class="col-xs-2 col-xs-offset-4">
-                  %= image '/img/webcam.png', alt => "Webcam", class => "img-responsive, center-block"
+                  %= image url_for('/img/webcam.png'), alt => "Webcam", class => "img-responsive, center-block"
                 </div>
                 <div class="col-xs-2">
-                 %= image '/img/mic.png', alt => "Microphone", class => "img-responsive, center-block"
+                 %= image url_for('/img/mic.png'), alt => "Microphone", class => "img-responsive, center-block"
                 </div>
               </div>
               <br>
               <p class="text-center">
-                <%= l('YOU_NEED8MIC_OR_WEBCAM') %>
+                %= l('YOU_NEED8MIC_OR_WEBCAM')
               </p> 
-              <% } else { %>
+              % } else {
               <p class="text-center">
-                <%= l('CANT_ACCESS_WEBCAM') %>
+                %= l('CANT_ACCESS_WEBCAM')
               </p>
-              %= image '/img/webcam.png', alt => "Webcam", class => "img-responsive center-block"
+              %= image url_for('/img/webcam.png'), alt => "Webcam", class => "img-responsive center-block"
               <br>
               <p class="text-center">
-                <%= l('CLICK_IF_NO_WEBCAM') %>
+                %= l('CLICK_IF_NO_WEBCAM')
               </p>
               <p class="text-center">
-                <a class="btn btn-default btn-lg" href="<%= $self->url_for("/$room") %>?video=false">
+                <a class="btn btn-default btn-lg"
+                   href="<%= $self->req->url->query(video => 'false') %>">
                   <span class="glyphicon glyphicon-headphones">
                   </span>
                 </a>
               </p>
-              <% } %>
+              % }
             </div>
-            <div id="auth-before-join" class="connecting-msg" style="display: none">
-              <form role="form" class="form-horizontal" id="authBeforeJoinForm">
+            <div id="auth-before-join"
+                 class="connecting-msg"
+                 style="display: none">
+              <form class="form-horizontal"
+                    id="authBeforeJoinForm">
                 <div class="form-group">
-                  <label for="authBeforJoinPass" class="col-sm-4 control-label">
-                    <%= l('PASSWORD') %>
+                  <label for="authBeforJoinPass"
+                         class="col-sm-4 control-label">
+                    %= l('PASSWORD')
                   </label>
                   <div class="col-sm-4">
-                    <input type="password" class="form-control" id="authBeforeJoinPass" placeholder="<%= l('PASSWORD') %>">
+                    <input type="password"
+                           class="form-control"
+                           id="authBeforeJoinPass"
+                           placeholder="<%= l('PASSWORD') %>">
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-sm-offset-4 col-sm-8">
-                    <button id="authBeforeJoinButton" class="btn btn-primary disabled" type="submit">
-                      <%= l('SUBMIT') %>
+                    <button id="authBeforeJoinButton"
+                            class="btn btn-primary disabled"
+                            type="submit">
+                      %= l('SUBMIT')
                     </button>
-                    <a class="btn btn-default" href="<%= $self->url_for('/') %>">
-                      <%= l('CANCEL') %>
+                    <a class="btn btn-default"
+                       href="<%= url_for('/') %>">
+                      %= l('CANCEL')
                     </a>
                   </div>
                 </div>
               </form>
             </div>
-            <div id="display-name-pre" class="connecting-msg" style="display: none">
-              <form role="form" class="form-horizontal" id="displayNamePreForm">
+            <div id="display-name-pre"
+                 class="connecting-msg"
+                 style="display: none">
+              <form class="form-horizontal"
+                    id="displayNamePreForm">
                 <p class="text-center">
-                  <%= l('SET_A_DISPLAY_NAME') %>
+                  %= l('SET_A_DISPLAY_NAME')
                 </p>
                 <div class="form-group">
-                  <label for="displayNamePre" class="col-sm-4 control-label">
-                    <%= l('DISPLAY_NAME') %>
+                  <label for="displayNamePre"
+                         class="col-sm-4 control-label">
+                    %= l('DISPLAY_NAME')
                   </label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" autocomplete="off" id="displayNamePre" placeholder="<%= l('YOUR_NAME') %>">
+                    <input type="text"
+                           class="form-control"
+                           autocomplete="off"
+                           id="displayNamePre"
+                           placeholder="<%= l('YOUR_NAME') %>">
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-sm-offset-4 col-sm-8">
-                    <button id="displayNamePreButton" class="btn btn-primary disabled" type="submit">
-                      <%= l('SUBMIT') %>
+                    <button id="displayNamePreButton"
+                            class="btn btn-primary disabled"
+                            type="submit">
+                      %= l('SUBMIT')
                     </button>
-                    <a class="btn btn-default" href="<%= $self->url_for('/') %>">
-                      <%= l('CANCEL') %>
+                    <a class="btn btn-default"
+                       href="<%= url_for('/') %>">
+                      %= l('CANCEL')
                     </a>
                   </div>
                 </div>
               </form>
             </div>
-            <div id="no-webrtc-msg" class="connecting-msg" style="display: none">
+            <div id="no-webrtc-msg"
+                 class="connecting-msg"
+                 style="display: none">
               <p>
-                <%= l('NO_WEBRTC_SUPPORT') %>
+                %= l('NO_WEBRTC_SUPPORT')
               </p>
-              <% if ($ua !~ m/iphone|ipad|ipod/i){ %>
+              % if ($ua !~ m/iphone|ipad|ipod/i){
               <p>
-                <%= l('DOWNLOAD_ONE_OF_THESE_BROWSERS') %>
+                %= l('DOWNLOAD_ONE_OF_THESE_BROWSERS')
               </p>
               <div class="row">
                 <%
@@ -328,44 +434,63 @@
                   }
                 %>
                 <div class="col-xs-4">
-                  <a href="<%= $ffurl %>" target="_blank">
-                    %= image '/img/firefox.png', alt => "Mozilla Firefox", class => "img-responsive center-block"
+                  <a href="<%= $ffurl %>"
+                     target="_blank">
+                    %= image url_for('/img/firefox.png'), alt => "Mozilla Firefox", class => "img-responsive center-block"
                   </a>
                 </div>
                 <div class="col-xs-4">
-                  <a href="<%= $churl %>" target="_blank">
-                    %= image '/img/chrome.png', alt => "Google Chrome", class => "img-responsive center-block"
+                  <a href="<%= $churl %>"
+                     target="_blank">
+                    %= image url_for('/img/chrome.png'), alt => "Google Chrome", class => "img-responsive center-block"
                   </a>
                 </div>
                 <div class="col-xs-4">
-                  <a href="<%= $opurl %>" target="_blank">
-                    %= image '/img/opera.png', alt => "Opera", class => "img-responsive center-block"
+                  <a href="<%= $opurl %>"
+                     target="_blank">
+                    %= image url_for('/img/opera.png'), alt => "Opera", class => "img-responsive center-block"
                   </a>
                 </div>
               </div>
-              <% } %>
+              % }
             </div>
           </div>
         </div>
       </div>
     </div>
-%=include 'invite_modal'
-%=include 'configure_modal'
-%=include 'auth_modal'
-%=include 'noscript'
+%= include 'invite_modal'
+%= include 'configure_modal'
+%= include 'auth_modal'
+%= include 'noscript'
     <div class="frame">
-      <div id="chatMenu" class="nav-collapse collapse hidden-xs">
-        <div id="chatHistory" class="form-control">
+      <div id="chatMenu"
+           class="nav-collapse collapse hidden-xs">
+        <div id="chatHistory"
+             class="form-control">
         </div>
-        <form role="form" id="chatForm">
+        <form id="chatForm">
           <div class="input-group">
-            <textarea class="form-control" id="chatBox" form_id="chatForm" placeholder="<%= l('SET_YOUR_NAME_TO_CHAT') %>" rows=1 disabled></textarea>
+            <textarea class="form-control"
+                      id="chatBox"
+                      form_id="chatForm"
+                      placeholder="<%= l('SET_YOUR_NAME_TO_CHAT') %>"
+                      rows=1 disabled>
+            </textarea>
             <span class="input-group-btn">
-              <button type="submit" id="sendChat" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%= l('SEND_MESSAGE') %>">
+              <button type="submit"
+                      id="sendChat"
+                      class="btn btn-default help"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="<%= l('SEND_MESSAGE') %>">
                 <span class="glyphicon glyphicon-share-alt">
                 </span>
               </button>
-              <button type="button" id="saveChat" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%= l('SAVE_HISTORY') %>">
+              <button id="saveChat"
+                      class="btn btn-default help"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="<%= l('SAVE_HISTORY') %>">
                 <span class="glyphicon glyphicon-floppy-save">
                 </span>
               </button>
@@ -373,27 +498,42 @@
           </div>
         </form>
       </div>
-      <audio id="mohPlayer" src="<%= $self->url_for('/snd/moh/' . $moh) %>" loop></audio>
-      <div id="view" class="view row-fluid">
-        <div id="webRTCVideo" class="col-xs-12 col-sm-4">
-          <div class="col-xs-3 col-sm-12 col-lg-6 previewContainer" id="videoLocalContainer">
-            <video id="webRTCVideoLocal" class="webRTCVideo latencyUnknown" muted oncontextmenu="return false;">
+      <audio id="mohPlayer"
+             src="<%= url_for('/snd/moh/' . $moh) %>"
+             loop>
+      </audio>
+      <div id="view"
+           class="view row-fluid">
+        <div id="webRTCVideo"
+             class="col-xs-12 col-sm-4">
+          <div class="col-xs-3 col-sm-12 col-lg-6 previewContainer"
+               id="videoLocalContainer">
+            <video id="webRTCVideoLocal"
+                   class="webRTCVideo latencyUnknown"
+                   muted
+                   oncontextmenu="return false;">
             </video>
-            <div id="localVolume" class="volumeBar">
+            <div id="localVolume"
+                 class="volumeBar">
             </div>
-            <div id="name_local" class="displayName">
+            <div id="name_local"
+                 class="displayName">
             </div>
           </div>
         </div>
-        <div id="mainView" class="col-xs-12 col-sm-8">
-          <% if ($self->get_opt_features->{etherpad}){ %>
-          <div id="etherpadContainer" class="hidden-xs"></div>
-          <% } %>
+        <div id="mainView"
+             class="col-xs-12 col-sm-8">
+          % if (get_opt_features->{etherpad}){
+          <div id="etherpadContainer"
+               class="hidden-xs">
+          </div>
+          % }
           <div id="mainVideo">
           </div>
-          <div id="aloneMsg" class="aloneEl">
+          <div id="aloneMsg"
+               class="aloneEl">
             <h2 class="text-center">
-              <%= l('ALONE_IN_ROOM') %>
+              %= l('ALONE_IN_ROOM')
             </h2>
           </div>
         </div>
@@ -404,10 +544,8 @@
       var roomName = '<%= $room %>';
       $( document ).ready(function() {
           etherpad = {
-            enabled: <%= $self->get_opt_features->{etherpad} ? 'true' : 'false' %>,
-            <%
-              my $ethuri = Mojo::URL->new($config->{'etherpad.uri'});
-            %>
+            enabled: <%= get_opt_features->{etherpad} ? 'true' : 'false' %>,
+            % my $ethuri = Mojo::URL->new($config->{'etherpad.uri'});
             host: "<%= $ethuri->scheme . '://' . $ethuri->authority %>",
             path: "<%= $ethuri->path . '/p/' %>",
             group: "<%= $etherpadGroup %>"

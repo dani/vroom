@@ -1,16 +1,22 @@
-% title $self->l('FEEDBACK');
+% title l('FEEDBACK');
 %= include 'header'
 %= include 'public_toolbar'
 <div class="container-fluid">
   <br/>
   <div class="jumbotron">
-    <h2><%= l('THANK_YOU') %></h2>
-    <p><%= l('THANKS_FOR_YOUR_FEEDBACK') %></p>
+    <h2>
+      %= l('THANK_YOU')
+    </h2>
+    <p>
+      %= l('THANKS_FOR_YOUR_FEEDBACK')
+    </p>
     <div class='btn-group'>
-      <a class="btn btn-primary btn-lg" role="button" href="<%= $self->url_for('/') %>"><%= l('BACK_TO_MAIN_MENU') %></a>
+      <a class="btn btn-primary btn-lg"
+         href="<%= url_for('/') %>">
+       %= l('BACK_TO_MAIN_MENU')
+      </a>
     </div>
   </div>
 </div>
 %= include 'js_common'
 %= include 'footer'
-

@@ -1,25 +1,39 @@
     <script type="text/javascript">
-      <% my $url = $self->url_for('/');
-         $url .= ($url =~ m/\/$/) ? '' : '/'; %>
-      var rootUrl = '<%= $url %>';
-      var currentLang = '<%= $self->languages %>';
-      var api_key = '<%= ($self->session('key')) ? $self->session('key') : '' %>';
-      var page = '<%= stash('page') ? stash('page') : "" %>';
+      var rootUrl = '<%= url_for('/') %>';
+      var currentLang = '<%= languages %>';
+      var api_key = '<%= (session('key')) ? session('key') : '' %>';
+      var page = '<%= stash('page') ? stash('page') : '' %>';
       var roomName;
     </script>
-    <script type="text/javascript" src= "<%= $self->url_for('/locales/' . $self->languages . '.js') %>"></script>
+    <script type="text/javascript"
+            src="<%= url_for('/locales/' . languages . '.js') %>">
+    </script>
     <%
-      my @js = qw(jquery-1.11.3.js bootstrap.js notify-combined.js bootstrap-switch.js jquery.bootpag.js toc.js bootstrap-datepicker.js);
+      my @js = qw(
+        jquery-1.11.3.js
+        bootstrap.js
+        notify-combined.js
+        bootstrap-switch.js
+        jquery.bootpag.js
+        toc.js
+        bootstrap-datepicker.js
+      );
       # Load supported languages for datpicker, if they exists
-      foreach my $l ($self->get_supported_lang){
-        if (-e 'public/js/datepicker-locales/bootstrap-datepicker.' . $l . '.js'){
-          push @js, 'datepicker-locales/bootstrap-datepicker.' . $l . '.js';
-        }
+      foreach my $l (get_supported_lang){
+        push @js, 'datepicker-locales/bootstrap-datepicker.' . $l . '.js'
+          if (-e 'public/js/datepicker-locales/bootstrap-datepicker.' . $l . '.js');
       }
       push @js, 'vroom.js';
       if (stash('page') && stash('page') eq 'room'){
-        push @js, qw(simplewebrtc.bundle.js jquery.browser.js sprintf.js FileSaver.js jquery.tinytimer.js etherpad.js);
+        push @js, qw(
+          simplewebrtc.bundle.js
+          jquery.browser.js
+          sprintf.js
+          FileSaver.js
+          jquery.tinytimer.js
+          etherpad.js
+        );
       }
-      @js = map { $self->url_for('/') . 'js/' . $_ } @js;
+      @js = map { url_for('/js/' . $_) } @js;
     %>
-    <%=js @js %>
+    %= js @js

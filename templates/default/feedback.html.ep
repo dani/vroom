@@ -1,31 +1,45 @@
-% title $self->l('FEEDBACK');
+% title l('FEEDBACK');
 %= include 'header'
 %= include 'public_toolbar'
 <div class="container-fluid">
   <div class="well publicForm">
-    <form role="form" action="<%= $self->url_for('/feedback') %>" method="post">
+    <form action="<%= url_for('/feedback') %>">
       <legend class=text-center">
-        <%= l('GIVE_US_YOUR_FEEDBACK') %>
+        %= l('GIVE_US_YOUR_FEEDBACK')
       </legend>
       <center>
-        <%= l('YOUR_FEEDBACK_HELPS_US') %>
+        %= l('YOUR_FEEDBACK_HELPS_US')
       </center>
       <br>
       <div class="form-group">
-        <label for="email"><%= l('YOUR_MAIL_OPTIONAL') %></label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="<%= l('EMAIL_PLACEHOLDER') %>">
+        <label for="email">
+          %= l('YOUR_MAIL_OPTIONAL')
+        </label>
+        <input type="email"
+               class="form-control"
+               id="email"
+               name="email"
+               placeholder="<%= l('EMAIL_PLACEHOLDER') %>">
       </div>
       <div class="form-group">
         <label for="comment">
-          <%= l('COMMENT') %>
+          %= l('COMMENT')
         </label>
-        <textarea id="comment" name="comment" class="form-control" rows="10" placeholder="<%= l('VROOM_IS_AWESOME') %>" required></textarea>
+        <textarea id="comment"
+                  name="comment"
+                  class="form-control"
+                  rows="10"
+                  placeholder="<%= l('VROOM_IS_AWESOME') %>"
+                  required>
+        </textarea>
       </div>
-      <button type="submit" class="btn btn-primary">
-        <%= l('SUBMIT') %>
+      <button type="submit"
+              class="btn btn-primary">
+        %= l('SUBMIT')
       </button>
-      <a href="<%= $self->url_for('/') %>" class="btn btn-default">
-        <%= l('CANCEL') %>
+      <a href="<%= url_for('/') %>"
+         class="btn btn-default">
+        %= l('CANCEL')
       </a>
     </form>
   </div>

@@ -7,7 +7,8 @@
       <div id="toc">
       </div>
     </div>
-    <div class="col-sm-9" id="doc-content">
+    <div class="col-sm-9"
+         id="doc-content">
 
 
 
@@ -15,19 +16,35 @@
         Introduction
       </h1>
       <p>
-        VROOM (short for <strong>V</strong>ideo <strong>ROOM</strong>) is a simple to use, web-based and opensource (MIT licence) video conferencing application.
+        VROOM (short for <strong>V</strong>ideo <strong>ROOM</strong>) is a simple to use,
+        web-based and opensource (MIT licence) video conferencing application.
       </p>
       <p>
-        VROOM uses the latest WebRTC technologies to allow video conferencing through a web browser without any plugin.
+        VROOM uses the latest WebRTC technologies to allow video conferencing through a web
+        browser without any plugin.
         There are several more or less similar hosted solutions available (like
-          <a href="https://talky.io/" target="_blank">talky.io</a>,
-          <a href="https://appear.in/" target="_blank">appear.in</a>,
-          <a href="https://vline.com/" target="_blank">vLine.com</a> 
+          <a href="https://talky.io/"
+             target="_blank">
+            talky.io
+          </a>,
+          <a href="https://appear.in/"
+             target="_blank">
+            appear.in
+          </a>,
+          <a href="https://vline.com/"
+             target="_blank">
+            vLine.com
+          </a> 
         for example).
-        Most of them are more polished than VROOM, but I've found none entirely opensource, so I started this project.
+        Most of them are more polished than VROOM, but I've found none entirely opensource,
+        so I started this project.
       </p>
       <p>
-        You can get the source, and follow the development of VROOM on the <a href="https://github.com/dani/vroom" target="_blank">github page</a>
+        You can get the source, and follow the development of VROOM on the
+        <a href="https://github.com/dani/vroom"
+           target="_blank">
+          github page
+        </a>
         of the project.
       </p>
 
@@ -39,21 +56,49 @@
       <p>
         VROOM implements the following features:
         <ul>
-          <li>P2P Audio/Video conversations (no limit on the number of peers per room)</li>
-          <li>P2P text chat</li>
-          <li>Screen or single windows sharing</li>
-          <li>Send invitations by email</li>
-          <li>Be notified when someone joins one of your rooms</li>
-          <li>Persistent/reserved rooms</li>
-          <li>Chairman functionnalities (mute/pause/kick other peers)</li>
-          <li>Grant chairman role to other peers</li>
-          <li>Password protected rooms (different passwords for access and chairman)</li>
-          <li>Music on hold (when you're alone in a room)</li>
-          <li>Can be optionaly integrated with <a href="https://github.com/ether/etherpad-lite" target="_blank">Etherpad-Lite</a></li>
+          <li>
+            P2P Audio/Video conversations (no limit on the number of peers per room)
+          </li>
+          <li>
+            P2P text chat
+          </li>
+          <li>
+            Screen or single windows sharing
+          </li>
+          <li>
+            Send invitations by email
+          </li>
+          <li>
+            Be notified when someone joins one of your rooms
+          </li>
+          <li>
+            Persistent/reserved rooms
+          </li>
+          <li>
+            Chairman functionnalities (mute/pause/kick other peers)
+          </li>
+          <li>
+            Grant chairman role to other peers
+          </li>
+          <li>
+            Password protected rooms (different passwords for access and chairman)
+          </li>
+          <li>
+            Music on hold (when you're alone in a room)
+          </li>
+          <li>
+            Can be optionaly integrated with
+            <a href="https://github.com/ether/etherpad-lite"
+               target="_blank">
+              Etherpad-Lite
+            </a>
+          </li>
         </ul>
       </p>
       <p>
-        VROOM is available in French and English. You're welcome to submit patches or pull requests to enhance existing localizations, or add new ones.
+        VROOM is available in french and english.
+        You're welcome to submit patches or pull requests to enhance existing localizations,
+        or add new ones.
       </p>
 
 
@@ -61,22 +106,52 @@
         How it works
       </h1>
       <p>
-        <a href="http://www.webrtc.org/" taget="_blank">WebRTC</a> allows browsers to browsers direct connections. This provides the best latency as it avoids round trip through a server,
-        which is important with real time communications. But it also ensures the privacy of your communications. VROOM takes advantage of those
+        <a href="http://www.webrtc.org/"
+           taget="_blank">
+          WebRTC
+        </a>
+        allows browsers to browsers direct connections. This provides the best latency
+        as it avoids round trip through a server, which is important with real time communications.
+        But it also ensures the privacy of your communications. VROOM takes advantage of those
         new technologies, and does the following:
         <ul>
-          <li>When a client joins a room, it establishes a <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">websocket</a> connection to VROOM server. 
-              This is called the signaling channel. With this, all peers are able to exchange small messages with each other. But messages sent through this channels are 
-              routed through VROOM server, so it's not peer to peer yet</li>
-          <li>When a second peer joins the same room, he gets informations about how to connect directly to the other one(s) through this signaling channel.</li>
-          <li>Now, both peer exchange their video and audio stream directly</li>
-          <li>The signaling channel stays open and is used to transmit non sensitive informations (peer colors synchronization, notification of muting/kicking etc...)</li>
-          <li>Everything else (audio/video/text chat) is sent directly between peers through data channels</li>
+          <li>
+            When a client joins a room, it establishes a
+            <a href="https://en.wikipedia.org/wiki/WebSocket"
+               target="_blank">
+              websocket
+            </a>
+            connection to VROOM server. 
+            This is called the signaling channel.
+            With this, all peers are able to exchange small messages with each other.
+            But messages sent through this channels are routed through VROOM server,
+            so it's not peer to peer yet
+          </li>
+          <li>
+            When a second peer joins the same room, he gets informations about how
+            to connect directly to the other one(s) through this signaling channel.
+          </li>
+          <li>
+            Now, both peer exchange their video and audio stream directly
+          </li>
+          <li>
+            The signaling channel stays open and is used to transmit non sensitive informations
+            (peer colors synchronization, notification of muting/kicking etc...)
+          </li>
+          <li>
+            Everything else (audio/video/text chat) is sent directly between peers through data channels
+          </li>
         </ul>
       </p>
       <div class="alert alert-warning">
-        As long as possible, data channels and audio/video streams are established directly between peers, but in some situations, this is not possible (NAT, restrictive firewalls etc...). In those cases
-        data streams are relayed through a <a href="https://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT" target="_blank">TURN</a> server
+        As long as possible, data channels and audio/video streams are established directly between peers,
+        but in some situations, this is not possible (NAT, restrictive firewalls etc...). In those cases
+        data streams are relayed through a
+        <a href="https://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT"
+           target="_blank">
+          TURN
+        </a>
+        server
       </div>
 
       <h1 id="technologies">
@@ -84,10 +159,23 @@
       </h1>
       VROOM is composed of two distincts
       <ul>
-        <li>The client side: written in Javascript, it's the code executed on the browsers. This is where webcam streams are captured and sent to other peers. The biggest part is
-            <a href="http://simplewebrtc.com/" target="_blank">SimpleWebRTC</a>.</li>
-        <li>The server side: mainly written in Perl using the fabulous <a href="http://mojolicio.us/" target="_blank">Mojolicious</a> framework. This is where room are created
-            their configurations are stored, and where permissions are managed. The backend uses an SQL (MySQL is the only supported engine for now) to store configurations</li>
+        <li>
+          The client side: written in Javascript, it's the code executed on the browsers. This is where
+          webcam streams are captured and sent to other peers. The biggest part is
+            <a href="http://simplewebrtc.com/"
+               target="_blank">
+              SimpleWebRTC
+            </a>
+        </li>
+        <li>
+          The server side: mainly written in Perl using the fabulous
+          <a href="http://mojolicio.us/"
+             target="_blank">
+            Mojolicious
+          </a>
+          framework. This is where room are created and their configuration stored, and where permissions
+          are managed. The backend uses an SQL (MySQL is the only supported engine for now) to store configurations
+        </li>
       </ul>
 
       <h1 id="install_your_own">
@@ -101,58 +189,114 @@
       <p>
         If you want to run your own VROOM instance, you'll need the following components
         <ul>
-          <li>A MySQL compatible server (MySQL or MariaDB)</li>
-          <li>A webserver supporting HTTPS and reverse proxying, including websocket reverse proxying (Apache can do this with mod_proxy_wstunnel)</li>
-          <li>The following perl modules
+          <li>
+            A MySQL compatible server (MySQL or MariaDB)
+          </li>
+          <li>
+            A webserver supporting HTTPS and reverse proxying, including websocket reverse
+            proxying (Apache can do this with mod_proxy_wstunnel)
+          </li>
+          <li>
+            The following perl modules
             <ul>
-              <li>DBI</li>
-              <li>DBD::mysql</li>
-              <li>Mojolicious</li>
-              <li>Mojolicious::Plugin::Mail</li>
-              <li>Mojolicious::Plugin::Database</li>
-              <li>Mojolicious::Plugin::StaticCompressor</li>
-              <li>Crypt::SaltedHash</li>
-              <li>MIME::Base64</li>
-              <li>Session::Token</li>
-              <li>Config::Simple</li>
-              <li>Email::Valid</li>
-              <li>Protocol::SocketIO::Handshake</li>
-              <li>Protocol::SocketIO::Message</li>
-              <li>Data::Dumper</li>
-              <li>DateTime</li>
-              <li>Array::Diff</li>
-              <li>Locale::Maketext::Lexicon</li>
+              <li>
+                DBI
+              </li>
+              <li>
+                DBD::mysql
+              </li>
+              <li>
+                Mojolicious
+              </li>
+              <li>
+                Mojolicious::Plugin::Mail
+              </li>
+              <li>
+                Mojolicious::Plugin::Database
+              </li>
+              <li>
+                Mojolicious::Plugin::StaticCompressor
+              </li>
+              <li>
+                Crypt::SaltedHash
+              </li>
+              <li>
+                MIME::Base64
+              </li>
+              <li>
+                Session::Token
+              </li>
+              <li>
+                Config::Simple
+              </li>
+              <li>
+                Email::Valid
+              </li>
+              <li>
+                Protocol::SocketIO::Handshake
+              </li>
+              <li>
+                Protocol::SocketIO::Message
+              </li>
+              <li>
+                Data::Dumper
+              </li>
+              <li>
+                DateTime
+              </li>
+              <li>
+                Array::Diff
+              </li>
+              <li>
+                Locale::Maketext::Lexicon
+              </li>
             </ul>
           </li>
-          <li>The following perl modules are optional
+          <li>
+            The following perl modules are optional
             <ul>
               <li>
                 For Etherpad-Lite support:
                 <ul>
-                  <li>Etherpad</li>
+                  <li>
+                    Etherpad
+                  </li>
                 </ul>
               </li>
               <li>
                 To export events in a XLSX file
                 <ul>
-                  <li>Mojolicious::Plugin::RenderFile</li>
-                  <li>File::Temp</li>
-                  <li>Excel::Writer::XLSX</li>
+                  <li>
+                    Mojolicious::Plugin::RenderFile
+                  </li>
+                  <li>
+                    File::Temp
+                  </li>
+                  <li>
+                    Excel::Writer::XLSX
+                  </li>
                 </ul>
               </li>
             </ul>
           </li>
         </ul>
-        It's also advised to run VROOM on a systemd powered distribution (simply because that's what I use and I include service units for VROOM). 
-        For the same reasons, I recommend running Apache as webserver (others like Nginx probably work too, but I provide configuration sample only for Apache)
+        It's also advised to run VROOM on a systemd powered distribution (simply because that's what
+        I use and I include service units for VROOM). 
+        For the same reasons, I recommend running Apache as webserver (others like Nginx probably work too,
+        but I provide configuration sample only for Apache)
       </p>
       <div class="alert alert-warning">
         VROOM can probably work with other database engines (like PostgreSQL) with minor modifications.
         If you're interrested in adding support, you're welcome to help
       </div>
       <div class="alert alert-warning">
-        While VROOM should run on any distro, it's only tested on CentOS 7 x86_64, so it's the recommended platform.
-        Also, all dependencies are available as RPM in <a href="http://repo.firewall-services.com/centos/" target="_blank">Firewall Services'</a> 
+        While VROOM should run on any distro, it's only tested on CentOS 7 x86_64,
+        so it's the recommended platform.
+        Also, all dependencies are available as RPM in
+        <a href="http://repo.firewall-services.com/centos/"
+           target="_blank">
+          Firewall Services'
+        </a> 
         repository, so installation will be easier on CentOS 7. 
         If you have it running on another system, please send me your notes so I can update this documentation.
       </div>
@@ -165,14 +309,16 @@
         This guide assumes that you have installed a minimal CentOS 7 x86_64 system
       </div>
       <div class="alert alert-danger">
-        For now, VROOM requires SELinux to be disabled, or permissive. You can set this in <strong>/etc/selinux/config</strong>
+        For now, VROOM requires SELinux to be disabled, or permissive.
+        You can set this in <strong>/etc/selinux/config</strong>
       </div>
 
       <h3 id="c7_repo">
         Configure the required repositories
       </h3>
       <p>
-        You need to configure both EPEL and FWS repo<br>
+        You need to configure both EPEL and FWS repo
+        <br>
         <pre>
 cat <<'_EOF' > /etc/yum.repos.d/fws.repo
 [fws]
@@ -250,7 +396,8 @@ GRANT ALL PRIVILEGES ON `vroom`.* TO 'vroom'@'localhost' IDENTIFIED BY 'MySuperP
 FLUSH PRIVILEGES;</pre>
       </p>
       <div class="alert alert-warning">
-        It's better to generate a long, random password here. Just write it somewhere, you'll need it later
+        It's better to generate a long, random password here.
+        Just write it somewhere, you'll need it later
       </div>
       <p>
         Now that we have our MySQL database, we can create the tables
@@ -262,11 +409,20 @@ mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
         Setup Apache
       </h3>
       <p>
-        Two sample apache configurations are provided in the <strong>doc/httpd</strong> directory
+        Two sample apache configurations are provided in the <strong>doc/httpd</strong>
+        directory
         <ul>
-          <li><strong>httpd_alias.conf</strong> should work out of the box, VROOM will be available at <em>https://yourservername/vroom</em></li>
-          <li><strong>httpd_vhost.conf</strong> is an alternative which you can use if you prefer working with named virtualhosts 
-              (but will require additional config adjustments, especially in ssl.conf, which is out of scope for this guide)</li>
+          <li>
+            <strong>httpd_alias.conf</strong> should work out of the box, VROOM will be available at
+            <em>
+              https://yourservername/vroom
+            </em>
+          </li>
+          <li>
+            <strong>httpd_vhost.conf</strong> is an alternative which you can use if you prefer
+            working with named virtualhosts (but will require additional config adjustments,
+            especially in ssl.conf, which is out of scope for this guide)
+          </li>
         </ul>
         Copy the config you want in /etc/httpd/conf.d/
       </p>
@@ -274,12 +430,15 @@ mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
         In either case, you might want to adjust the apache configuration
       </div>
       <div class="alert alert-danger">
-        The admin interface of VROOM will be available on /vroom/admin (alias) or /admin (vhost) and <strong>must</strong> be protected by your web server.
-        VROOM provides <strong>no authentication at all</strong>. In the sample configuration, the access is restricted to localhost, 
+        The admin interface of VROOM will be available on /vroom/admin (alias) or
+        /admin (vhost) and <strong>must</strong> be protected by your web server.
+        VROOM provides <strong>no authentication at all</strong>.
+        In the sample configuration, the access is restricted to localhost, 
         but you can change this to anything you want
       </div>
       <p>
-        You also have to make sure the <strong>mod_proxy_wstunnel</strong> module is enabled, which is not the case by default on CentOS 7
+        You also have to make sure the <strong>mod_proxy_wstunnel</strong>
+        module is enabled, which is not the case by default on CentOS 7
         <pre>
 echo "LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so" \\
  > /etc/httpd/conf.modules.d/00-proxy_wstunnel.conf</pre>
@@ -289,19 +448,20 @@ echo "LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so" \\
         Set permissions on the cache and tmp directories
       </h3>
       <p>
-        The <strong>cache</strong> and <strong>tmp</strong> directories must be writeable for the user running the VROOM daemon, which is <strong>vroom</strong> in the provided systemd unit
+        The <strong>data</strong> directory must be writeable for the user running the VROOM daemon,
+        which is <strong>vroom</strong> in the provided systemd unit
         <pre>
-chown -R vroom ./data/{tmp,cache}
-chmod 700 ./data/{cache,tmp}</pre>
+useradd -r -d /dev/null -s /sbin/nologin vroom
+chown -R vroom ./data/
+chmod 700 ./data/</pre>
       </p>
 
       <h3 id="c7_systemd_unit">
         Setup systemd units
       </h3>
       <p>
-        Here, we'll copy the sample vroom.service unit so that systemd picks it up, and create the vroom user account
+        Here, we'll copy the sample vroom.service unit so that systemd picks it up
         <pre>
-useradd -r -d /dev/null -s /sbin/nologin vroom
 cp /opt/vroom/docs/systemd/vroom.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable vroom</pre>
@@ -315,19 +475,28 @@ systemctl enable vroom</pre>
         Now, we just need to configure vroom itself. Just copy the sample conf file
         <pre>
 cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
-        And edit it to your need. settings.ini has plenty of comments, but here's an explanation of the different sections and settings
+        And edit it to your need. settings.ini has plenty of comments,
+        but here's an explanation of the different sections and settings
       </p>
 
       <h3 id="settings_database">
        database
       </h3>
       <p>
-        This section is where you define access to the database used by VROOM. The following settings are available
+        This section is where you define access to the database used by VROOM.
+        The following settings are available
         <ul>
-          <li><strong>dsn</strong>: The <strong>D</strong>ata <strong>S</strong>ource <strong>N</strong>ame for your database.
-              For example <kbd>dsn = 'DBI:mysql:database=vroom;host=localhost'</kbd>. See perl DBI documentation if you want more information</li>
-          <li><strong>user</strong>: This is the username for your database</li>
-          <li><strong>password</strong>: The password for your database</li>
+          <li>
+            <strong>dsn</strong>: The <strong>D</strong>ata <strong>S</strong>ource <strong>N</strong>ame for your database.
+            For example <kbd>dsn = 'DBI:mysql:database=vroom;host=localhost'</kbd>.
+            See perl DBI documentation if you want more information
+          </li>
+          <li>
+            <strong>user</strong>: This is the username for your database
+          </li>
+          <li>
+            <strong>password</strong>: The password for your database
+          </li>
         </ul>
       </p>
 
@@ -335,34 +504,73 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
        turn
       </h3>
       <p>
-        This section defines which <a href="http://en.wikipedia.org/wiki/STUN" target="_blank">STUN</a> and 
-        <a href="http://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT" target="_blank">TURN</a> servers
-        will be used by the <a href="http://en.wikipedia.org/wiki/Interactive_Connectivity_Establishment" target="_blank">ICE</a> process. 
-        If you plan to use VROOM only on a local network, where each peer can connect to each others, you can just omit this part. But if you want
-        VROOM to work from anywhere, you'll need to use STUN and most likely TURN too.
+        This section defines which
+        <a href="http://en.wikipedia.org/wiki/STUN"
+           target="_blank">
+          STUN
+        </a>
+        and 
+        <a href="http://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT"
+           target="_blank">
+          TURN
+        </a>
+        servers will be used by the
+        <a href="http://en.wikipedia.org/wiki/Interactive_Connectivity_Establishment"
+          target="_blank">
+          ICE
+        </a>
+        process. If you plan to use VROOM only on a local network, where each peer can connect to
+        each others, you can just omit this part. But if you want VROOM to work from anywhere,
+        you'll need to use STUN and most likely TURN too.
         <ul>
-          <li><strong>stun_server</strong>: The STUN server(s) to use. For example
+          <li>
+            <strong>stun_server</strong>: The STUN server(s) to use. For example
             <kbd>stun_server = 'stun:stun.l.google.com:19302','stun:vroom.example.net:3478'</kbd>. 
-          This must be a comma separated list of full STUN URI as defined by <a href="https://tools.ietf.org/html/rfc7064" target="_blank">rfc7064</a></li>
-
-          <li><strong>turn_server</strong>: The TURN server(s) to use. For example
+            This must be a comma separated list of full STUN URI as defined by
+            <a href="https://tools.ietf.org/html/rfc7064"
+               target="_blank">
+              rfc7064
+            </a>
+          </li>
+          <li>
+            <strong>turn_server</strong>: The TURN server(s) to use. For example
             <kbd>turn_server = 'turns:vroom.example.net:5349','turns:vroom.example.net:5349?transport=tcp'</kbd>.
-          This must be a comma separated list of full STUN URI as defined by <a href="https://tools.ietf.org/html/rfc7065" target="_blank">rfc7065</a></li>
-
-          <li><strong>credentials</strong>: This defines what TURN credentials are sent to clients. It can take two values:
+            This must be a comma separated list of full STUN URI as defined by
+            <a href="https://tools.ietf.org/html/rfc7065"
+               target="_blank">
+              rfc7065
+            </a>
+          </li>
+          <li>
+            <strong>credentials</strong>: This defines what TURN credentials are sent to clients.
+            It can take two values:
             <ul>
-              <li><strong>static</strong>: With this mode, you're using a single set of credentials (set with <strong>turn_user</strong> and
-                <strong>turn_password</strong>) and they will be used by every peer in every room</li>
-              <li><strong>rest</strong>: In this mode, VROOM will generate <a href="https://tools.ietf.org/html/draft-uberti-rtcweb-turn-rest-00" target="_blank">TURN REST API</a>
-                compatible credentials for each room. Each credentials set will be valid only for 5 minutes. You must set <strong>secret_key</strong> to the same secret key
-                set in your TURN server</li>
+              <li>
+                <strong>static</strong>: With this mode, you're using a single set of credentials
+                (defined in <strong>turn_user</strong> and <strong>turn_password</strong>) and they
+                will be used by every peer in every room
+              </li>
+              <li>
+                <strong>rest</strong>: In this mode, VROOM will generate
+                <a href="https://tools.ietf.org/html/draft-uberti-rtcweb-turn-rest-00"
+                   target="_blank">
+                  TURN REST API
+                </a>
+                compatible credentials for each room. Each credentials set will be valid only
+                for 5 minutes. You must set <strong>secret_key</strong> to the same secret key
+                set in your TURN server. This is of course the prefered method.
+              </li>
             </ul>
           </li>
-
-          <li><strong>turn_user</strong> and <strong>turn_password</strong>: To use your TURN server, you'll most likely require credentials.
-            If using static credentials, you must set this to the username and password the clients will use</li>
-
-          <li><strong>secret_key</strong>: When using the <strong>rest</strong> credentials method, set this to the secret key shared with the turn server</li>          
+          <li>
+            <strong>turn_user</strong> and <strong>turn_password</strong>: To use your TURN server,
+            you'll most likely require credentials. If using static credentials, you must set this to
+            the username and password the clients will use
+          </li>
+          <li>
+            <strong>secret_key</strong>: When using the <strong>rest</strong> credentials method,
+            set this to the secret key shared with the turn server
+          </li>
         </ul>
       </p>
 
@@ -372,8 +580,11 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       <p>
         This section is for video quality settings. the available settings are
         <ul>
-          <li><strong>frame_rate</strong>: Number of frames per second for webcam streams. A bigger number will provide a better quality stream
-          but will also require more bandwidth and CPU on each peer. The default is 15 fps
+          <li>
+            <strong>frame_rate</strong>: Number of frames per second for webcam streams.
+            A bigger number will provide a better quality stream but will also require more
+            bandwidth and CPU on each peer. The default is 15 fps
+          </li>
         </ul>
       </p>
 
@@ -381,11 +592,19 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         email
       </h3>
       <p>
-        This section is for emails sent by VROOM (invitations, notifications, feedback form etc...). The available settings are
+        This section is for emails sent by VROOM (invitations, notifications, feedback form etc...).
+        The available settings are
         <ul>
-          <li><strong>from</strong>: The address used in the From field of emails sent by VROOM.</li>
-          <li><strong>contact</strong>: The email address which will get feedback form submissions.</li>
-          <li><strong>sendmail</strong>: The path to the sendmail compatible binary to use (default is /usr/bin/sendmail and will probably won't need to be changed)</li>
+          <li>
+            <strong>from</strong>: The address used in the From field of emails sent by VROOM.
+          </li>
+          <li>
+            <strong>contact</strong>: The email address which will get feedback form submissions.
+          </li>
+          <li>
+            <strong>sendmail</strong>: The path to the sendmail compatible binary to use (default is
+            /usr/bin/sendmail and will probably won't need to be changed)
+          </li>
         </ul>
       </p>
 
@@ -395,15 +614,32 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       <p>
         This section controls the web interface. The available settings are
         <ul>
-          <li><strong>powered_by</strong>: will be displayed in the footer. You can put HTML code here.</li>
-          <li><strong>template</strong>: The name of the template to use. Must be a directory under <strong>templates</strong>. The default, 
-          and only template provided is called <strong>default</strong>. But you can copy it and customize it to your needs</li>
-          <li><strong>chrome_extension_id</strong>: This is the ID of the Chrome extension proposed to clients when trying to share screen for the first time
-          (obviously, only for Chrome users). The reason this is configurable is because the extension requires the allowed websites to be listed.
-          Two extensions are provided, the default (ecicdpoejfllflombfanbhfpgcimjddn) will work everywhere but allows screen capture on any website,
-          which can be a security risk. The other extension (lfkdfilifapafomlhaaihfdglamkmdme) only works on <a href="https://vroom.im" target="_blank">https://vroom.im</a>.
-          You can create your own extension which will only work for your site, and submit it to Google Chrome Store if you want.</li>
-          <li><strong>demo</strong>: If enabled, a few more pages and elements will be displayed, like the documentation you're reading right now.</li>
+          <li>
+            <strong>powered_by</strong>: will be displayed in the footer. You can put HTML code here.
+          </li>
+          <li>
+            <strong>template</strong>: The name of the template to use. Must be a directory under <strong>templates</strong>.
+            The default, and only template provided is called <strong>default</strong>.
+            But you can copy it and customize it to your needs
+          </li>
+          <li>
+            <strong>chrome_extension_id</strong>: This is the ID of the Chrome extension proposed to
+            clients when trying to share screen for the first time (obviously, only for Chrome users).
+            The reason this is configurable is because the extension requires the allowed websites to be listed.
+            Two extensions are provided, the default (ecicdpoejfllflombfanbhfpgcimjddn) will work everywhere
+            but allows screen capture on any website, which can be a security risk.
+            The other extension (lfkdfilifapafomlhaaihfdglamkmdme) only works on
+            <a href="https://vroom.im"
+               target="_blank">
+              https://vroom.im
+            </a>.
+            You can create your own extension which will only work for your site, and submit it to Google Chrome Store
+            if you want.
+          </li>
+          <li>
+            <strong>demo</strong>: If enabled, a few more pages and elements will be displayed,
+            like the documentation you're reading right now.
+          </li>
         </ul>
       </p>
 
@@ -414,13 +650,21 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       <p>
         This section controls rooms behavior. The available settings are
         <ul>
-          <li><strong>inactivity_timeout</strong>: The time (in minutes) after which a room without activity will be deleted</li>
-          <li><strong>reserved_inactivity_timeout</strong>: The same, but for rooms which have been reserved (owner password set).
-            You can set it to 0 if you do not want reserved room to expire</li>
-          <li><strong>common_names</strong>: a comma separated list of names you don't want anyone to be able to reserve. Rooms with
-            those names can be created, but not reserved. This is to prevent cybersquatting</li>
-          <li><strong>max_members</strong>: This is the maximum number of peers able to be in a room at the same time. You can define a limit
-            per room if you want. But the limit set here cannot be exceeded.</li>
+          <li>
+            <strong>inactivity_timeout</strong>: The time (in minutes) after which a room without activity will be deleted
+          </li>
+          <li>
+            <strong>reserved_inactivity_timeout</strong>: The same, but for rooms which have been reserved (owner password set).
+            You can set it to 0 if you do not want reserved room to expire
+          </li>
+          <li>
+            <strong>common_names</strong>: a comma separated list of names you don't want anyone to be able to reserve.
+            Rooms with those names can be created, but not reserved. This is to prevent cybersquatting
+          </li>
+          <li>
+            <strong>max_members</strong>: This is the maximum number of peers able to be in a room at the same time.
+            You can define a limit per room if you want. But the limit set here cannot be exceeded.
+          </li>
         </ul>
       </p>
 
@@ -429,14 +673,28 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         etherpad
       </h3>
       <p>
-        Controls <a href="https://github.com/ether/etherpad-lite" target="_blank">Etherpad-Lite</a> integration. The following settings are available
+        Controls
+        <a href="https://github.com/ether/etherpad-lite"
+           target="_blank">
+          Etherpad-Lite
+        </a>
+        integration. The following settings are available
         <ul>
-          <li><strong>uri</strong>: The URI to reach your Etherpad Lite instance. This instance must share the same base domain as VROOM because
-            of the way sessions are created (Etherpad Lite sessions are created by VROOM directly and sent as a cookie to the clients)</li>
-          <li><strong>api_key</strong>: The API key of your Etherpad Lite instance. You can find it in the file <strong>APIKEY.txt</strong> at the root
-            of your Etherpad Lite installation</li>
-          <li><strong>base_domain</strong>: This is the common part of your domain between VROOM and Etherpad Lite. For example, if you have VROOM running
-            on https://vroom.example.net/ and Etherpad-Lite as https://pads.example.net, you'd put <kbd>base_domain = 'example.net'</kbd> here</li>
+          <li>
+            <strong>uri</strong>: The URI to reach your Etherpad Lite instance.
+            This instance must share the same base domain as VROOM because
+            of the way sessions are created (Etherpad Lite sessions are created by VROOM
+            directly and sent as a cookie to the clients)
+          </li>
+          <li>
+            <strong>api_key</strong>: The API key of your Etherpad Lite instance.
+            You can find it in the file <strong>APIKEY.txt</strong> at the root of your Etherpad Lite
+            installation
+          </li>
+          <li><strong>base_domain</strong>: This is the common part of your domain between VROOM and Etherpad Lite.
+            For example, if you have VROOM running on https://vroom.example.net/ and Etherpad-Lite as
+            https://pads.example.net, you'd put <kbd>base_domain = 'example.net'</kbd> here
+          </li>
         </ul>
       </p>
 
@@ -446,8 +704,13 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       <p>
         Controls where to find some specific directories
         <ul>
-          <li><strong>cache</strong>: This is where VROOM will store its cache (including auto generated and compressed assets like JS and CSS bundles)</li>
-          <li><strong>tmp</strong>: This is where VROOM will store temp data like XLSX files when exporting events</li>
+          <li>
+            <strong>cache</strong>: This is where VROOM will store its cache (including auto generated and
+            compressed assets like JS and CSS bundles)
+          </li>
+          <li>
+            <strong>tmp</strong>: This is where VROOM will store temp data like XLSX files when exporting events
+          </li>
         </ul>
       </p>
 
@@ -457,16 +720,35 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
       <p>
         Controls how VROOM daemon behaves. The following settings are available
         <ul>
-          <li><strong>listen_ip</strong>: This is the IP the daemon will listen on. Most of the time, you'll let <strong>127.0.0.1</strong> here as VROOM will
-            be accessed through a reverse proxy</li>
-          <li><strong>listen_port</strong>: The port VROOM daemon will bind to. Default is <strong>8090</strong>. Just be sure to adjust your reverse proxy
-            configuration if you change this.</li>
-          <li><strong>backend</strong>: The backend used to run VROOM. Can be either
-            <a href="http://mojolicio.us/perldoc/Mojo/Server/Morbo" target="_blank"><strong>morbo</strong></a> (recommended for developments) or
-            <a href="http://mojolicio.us/perldoc/Mojo/Server/Hypnotoad" target="_blank"><strong>hypnotoad</strong></a> (recommanded for production).</li>
-          <li><strong>log_level</strong>: Set the logging level. Can be one of <strong>debug</strong>, <strong>info</strong>, <strong>warn</strong>,
-            <strong>error</strong> or <strong>fatal</strong></li>
-          <li><strong>pid_file</strong>: Where to store the PID file of VROOM daemon (has no effect when using the morbo backend)</li>
+          <li>
+            <strong>listen_ip</strong>: This is the IP the daemon will listen on. Most of the time, you'll let
+            <strong>127.0.0.1</strong> here as VROOM will be accessed through a reverse proxy
+          </li>
+          <li>
+            <strong>listen_port</strong>: The port VROOM daemon will bind to. Default is <strong>8090</strong>.
+            Just be sure to adjust your reverse proxy configuration if you change this.
+          </li>
+          <li>
+            <strong>backend</strong>: The backend used to run VROOM. Can be either
+            <a href="http://mojolicio.us/perldoc/Mojo/Server/Morbo"
+               target="_blank">
+              <strong>morbo</strong>
+            </a>
+            (recommended for developments) or
+            <a href="http://mojolicio.us/perldoc/Mojo/Server/Hypnotoad"
+              target="_blank">
+              <strong>hypnotoad</strong>
+            </a>
+            (recommanded for production).
+          </li>
+          <li>
+            <strong>log_level</strong>: Set the logging level. Can be one of <strong>debug</strong>,
+            <strong>info</strong>, <strong>warn</strong>, <strong>error</strong> or <strong>fatal</strong>
+          </li>
+          <li>
+            <strong>pid_file</strong>: Where to store the PID file of VROOM daemon (has no effect when using
+            the morbo backend)
+          </li>
         </ul>
       </p>
 
@@ -475,8 +757,18 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
         Setup coturn or rfc5766-turn-server
       </h1>
       <p>
-        You can run any TURN server you want, but VROOM is mainly tested <a href="https://code.google.com/p/rfc5766-turn-server/" target="_blank">rfc5766-turn-server</a>
-        or <a href="https://code.google.com/p/coturn/" target="_blank">coturn</a> (which are very similar). The reference instance https://vroom.im is using coturn.
+        You can run any TURN server you want, but VROOM has only been tested with
+        <a href="https://code.google.com/p/rfc5766-turn-server/"
+           target="_blank">
+          rfc5766-turn-server
+        </a>
+        and
+        <a href="https://code.google.com/p/coturn/"
+           target="_blank">
+          coturn
+        </a>
+        (which are very similar).
+        The reference instance https://vroom.im is using coturn.
         To make use of it, follow those steps
       </p>
 
@@ -522,13 +814,25 @@ EOF</pre>
       </p>
       <div class="alert alert-warning">
         <ul>
-          <li>An SSL certificate is needed for everything to work correctly and securely (<strong>/etc/turnserver/cert.pem</strong> and <strong>/etc/turnserver/key.pem</strong> in this example)</li>
-          <li>Both key and certificate must be readable by turnserver user and/or group</li>
-          <li>You can comment no-tcp, no-udp and alt-tls-listening-port if you want to test without encryption</li>
-          <li>If you have intermediate(s) CA, you have to put them in the cert.pem file, but after your certificate</li>
-          <li>In this example, the turn server will use TURN REST API compatible authentication, so you must set
-            <kbd>credentials='rest'</kbd> and <kbd>secret_key='SuperSecretPassword'</kbd> in the <strong>turn</strong> section of VROOM's <strong>settings.ini</strong>
-          </li> 
+          <li>
+            An SSL certificate is needed for everything to work correctly and securely
+            (<strong>/etc/turnserver/cert.pem</strong> and <strong>/etc/turnserver/key.pem</strong>
+            in this example)
+          </li>
+          <li>
+            Both key and certificate must be readable by turnserver user and/or group
+          </li>
+          <li>
+            You can comment no-tcp, no-udp and alt-tls-listening-port if you want to test without encryption
+          </li>
+          <li>
+            If you have intermediate(s) CA, you have to put them in the cert.pem file, but after your certificate
+          </li>
+          <li>
+            In this example, the turn server will use TURN REST API compatible authentication, so you must set
+            <kbd>credentials='rest'</kbd> and <kbd>secret_key='SuperSecretPassword'</kbd> in the <strong>turn</strong>
+            section of VROOM's <strong>settings.ini</strong>
+          </li>
         </ul>
       </div>
 
@@ -550,8 +854,12 @@ journalctl -fl -u turnserver.service</pre>
       <div class="alert alert-warning">
         Configuration of your firewall is out of scope for this doc, but you have to ensure the following ports are open:
         <ul>
-          <li>TCP 3478, 3479, 5349, 5350 and 49152 to 65535</li>
-          <li>UDP 3478, 3479, 5349, 5350 and 49152 to 65535</li>
+          <li>
+            TCP 3478, 3479, 5349, 5350 and 49152 to 65535
+          </li>
+          <li>
+            UDP 3478, 3479, 5349, 5350 and 49152 to 65535
+          </li>
         </ul>
         If you use <strong>firewalld</strong> you can open the correct ports with the following commands
         <pre>
@@ -589,7 +897,8 @@ firewall-cmd --permanent \\
         Etherpad-Lite integration
       </h1>
       <p>
-        If you want to integrate VROOM with Etherpad-Lite, you'll have to get your instance running. First, install the dependencies
+        If you want to integrate VROOM with Etherpad-Lite, you'll have to get your instance running.
+        First, install the dependencies
         <pre>
 yum groupinstall "Development Tools"</pre>
         Then, Create a user, clone the repository and prepare the config
@@ -603,9 +912,15 @@ cp -a etherpad-lite/settings.json.template etherpad-lite/settings.json</pre>
       <div class="alert alert-warning">
         Adapt /opt/etherpad-lite/settings.json to your need. The important settings are
         <ul>
-          <li><kbd>"requireSession" : true</kbd></li>
-          <li><kbd>"editOnly" : true</kbd></li>
-          <li><kbd>"requireAuthentication": false</kbd></li>
+          <li>
+            <kbd>"requireSession" : true</kbd>
+          </li>
+          <li>
+            <kbd>"editOnly" : true</kbd>
+          </li>
+          <li>
+            <kbd>"requireAuthentication": false</kbd>
+          </li>
         </ul>
       </div>
       <p>
@@ -631,7 +946,8 @@ _EOF
 systemctl daemon-reload
 systemctl enable etherpad
 systemctl start etherpad</pre>
-        And uncomment the corresponding lines in your httpd configuration (/etc/httpd/conf.d/vroom_alias.conf or /etc/httpd/conf.d/vroom_vhost.conf)
+        And uncomment the corresponding lines in your httpd configuration
+        (/etc/httpd/conf.d/vroom_alias.conf or /etc/httpd/conf.d/vroom_vhost.conf)
       </p>
       
 
@@ -663,13 +979,14 @@ cp -a /opt/vroom/templates/default /opt/vroom/templates/my_template</pre>
         Restart VROOM so the configuration change is applied
         <pre>
 systemctl restart vroom.service</pre>
-        And you can start modifying your template.
+        And you can start modifying your templates.
         <div class="alert alert-danger">
-          As VROOM is still in early development, you'll have to closely follow how the default templates evolve and merge the changes in your own template
+          As VROOM is still in early development, you'll have to closely follow how the default templates
+          evolve and merge the changes in your own template
         </div>
         <div class="alert alert-warning">
-          While working on your new template, it's recommanded to switch to the <strong>morbo</strong> backend as templates will be 
-          reloaded automatically after each modification
+          While working on your new template, it's recommanded to switch to the
+          <strong>morbo</strong> backend as templates will be reloaded automatically after each modification
         </div>
       </p>
 
@@ -678,7 +995,8 @@ systemctl restart vroom.service</pre>
         Admin area
       </h1>
       <p>
-        The admin area is available on /vroom/admin or /admin (depending on how you have configured your web server). 
+        The admin area is available on /vroom/admin or /admin
+        (depending on how you have configured your web server). 
         <div class="alert alert-danger">
           Once again: There's no builtin auth mechanism, your web server must protect this URI
         </div>
@@ -689,8 +1007,9 @@ systemctl restart vroom.service</pre>
         Room Management
       </h2>
       <p>
-        This page lists all the existing rooms wih some important informations (creation date, last activity, number of participants) and
-        three buttons to manage each room (join, configure, delete)
+        This page lists all the existing rooms wih some important informations
+        (creation date, last activity, number of participants) and three buttons to manage each room
+        (join, configure, delete)
       </p>
 
       <h2 id="audit">
@@ -699,21 +1018,38 @@ systemctl restart vroom.service</pre>
       <p>
         This page is to consult audit logs. Every important event in VROOM is logged
         <ul>
-          <li>On stdout (ideally captured by systemd's Journal or similar)</li>
-          <li>In the audit table</li>
+          <li>
+            On stdout (ideally captured by systemd's Journal or similar)
+          </li>
+          <li>
+            In the audit table
+          </li>
         </ul>
         Each event is composed of the following:
         <ul>
-          <li><strong>ID</strong>: It's just a unique ID for each event</li>
-          <li><strong>Date</strong>: the date and time of the event</li>
-          <li><strong>IP Address</strong>: The IP address of the user</li>
-          <li><strong>Event</strong>: The type of event (see below)</li>
-          <li><strong>User</strong>: The login of the user</li>
-          <li><strong>Message</strong>: A human readable information describing the event</li>
+          <li>
+            <strong>ID</strong>: It's just a unique ID for each event
+          </li>
+          <li>
+            <strong>Date</strong>: the date and time of the event
+          </li>
+          <li>
+            <strong>IP Address</strong>: The IP address of the user
+          </li>
+          <li>
+            <strong>Event</strong>: The type of event (see below)
+          </li>
+          <li>
+            <strong>User</strong>: The login of the user
+          </li>
+          <li>
+            <strong>Message</strong>: A human readable information describing the event
+          </li>
         </ul>
         <div class="alert alert-warning">
-          As all other dates, event dates are stored in the database in UTC and converted in local time when displayed. If you access
-          directly the database to check the events, you'll have to do the conversion yourself
+          As all other dates, event dates are stored in the database in UTC and converted in local time when displayed.
+          If you access directly the database to check the events, you'll have to do the conversion yourself. The dates
+          also are in UTC in the XLSX exports of events
         </div>
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -723,90 +1059,175 @@ systemctl restart vroom.service</pre>
         <table class="table">
           <thead>
             <tr>
-              <th>Event type</th>
-              <th>Signification</th>
+              <th>
+                Event type
+              </th>
+              <th>
+                Signification
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>session_create</td>
-              <td>A new cookie based session is created</td>
+              <td>
+                session_create
+              </td>
+              <td>
+                A new cookie based session is created
+              </td>
             </tr>
             <tr>
-              <td>session_destroy</td>
-              <td>A session is destroyed. Usually the user explicitely quit a room
+              <td>
+                session_destroy
+              </td>
+              <td>
+                A session is destroyed. Usually the user explicitely quit a room
+              </td>
             </tr>
             <tr>
-              <td>room_create</td>
-              <td>A new room is created</td>
+              <td>
+                room_create
+              </td>
+              <td>
+                A new room is created
+              </td>
             </tr>
             <tr>
-              <td>room_modify</td>
-              <td>Room configuration is modified</td>
+              <td>
+                room_modify
+              </td>
+              <td>
+                Room configuration is modified
+              </td>
             </tr>
             <tr>
-              <td>peer_role</td>
-              <td>The role of a peer is changing (after authentication or being promoted to an owner of a room)</td>
+              <td>
+                peer_role
+              </td>
+              <td>
+                The role of a peer is changing (after authentication or being promoted to an owner of a room)
+              </td>
             </tr>
             <tr>
-              <td>room_expire</td>
-              <td>A room is being deleted because it showed no activity for too long</td>
+              <td>
+                room_expire
+              </td>
+              <td>
+                A room is being deleted because it showed no activity for too long
+              </td>
             </tr>
             <tr>
-              <td>room_delete</td>
-              <td>A room is being deleted by a user action</td>
+              <td>
+                room_delete
+              </td>
+              <td>
+                A room is being deleted by a user action
+              </td>
             </tr>
             <tr>
-              <td>email_notification_change</td>
-              <td>The list of email being notified when someone joins a room has been updated</td>
+              <td>
+                email_notification_change
+              </td>
+              <td>
+                The list of email being notified when someone joins a room has been updated
+              </td>
             </tr>
             <tr>
-              <td>send_invitation</td>
-              <td>An email invitation to join the room is being sent</td>
+              <td>
+                send_invitation
+              </td>
+              <td>
+                An email invitation to join the room is being sent
+              </td>
             </tr>
             <tr>
-              <td>invitation_response</td>
-              <td>Response to an invitation received</td>
+              <td>
+                invitation_response
+              </td>
+              <td>
+                Response to an invitation received
+              </td>
             </tr>
             <tr>
-              <td>invalidate_invitation</td>
-              <td>An invitation has been used, so is marked as invalide (invitations are only usable once)</td>
+              <td>
+                invalidate_invitation
+              </td>
+              <td>
+                An invitation has been used, so is marked as invalide (invitations are only usable once)
+              </td>
             </tr>
             <tr>
-              <td>pad_create</td>
-              <td>A pad (Etherpad-Lite) is created</td>
+              <td>
+                pad_create
+              </td>
+              <td>
+                A pad (Etherpad-Lite) is created
+              </td>
             </tr>
             <tr>
-              <td>admin_key</td>
-              <td>An API Key aquire admin privileges. Usually this happens when a user access /admin for the first time with this session</td>
+              <td>
+                admin_key
+              </td>
+              <td>
+                An API Key aquires admin privileges.
+                Usually this happens when a user access /admin for the first time with this session
+              </td>
             </tr>
             <tr>
-              <td>peer_id_mismatch</td>
-              <td>Connection to the signaling channel attempted with a wrong peer ID</td>
+              <td>
+                peer_id_mismatch
+              </td>
+              <td>
+                Connection to the signaling channel attempted with a wrong peer ID
+              </td>
             </tr>
             <tr>
-              <td>no_role</td>
-              <td>Someone tried to join a room but has no valid role, so access is denied</td>
+              <td>
+                no_role
+              </td>
+              <td>
+                Someone tried to join a room but has no valid role, so access is denied
+              </td>
             </tr>
             <tr>
-              <td>member_off_limit</td>
-              <td>A peer is being denied because member limit is already reached</td>
+              <td>
+                member_off_limit
+              </td>
+              <td>
+                A peer is being denied because member limit is already reached
+              </td>
             </tr>
             <tr>
-              <td>room_join</td>
-              <td>A peer joins a room</td>
+              <td>
+                room_join
+              </td>
+              <td>
+                A peer joins a room
+              </td>
             </tr>
             <tr>
-              <td>room_leave</td>
-              <td>A peer leaves a room</td>
+              <td>
+                room_leave
+              </td>
+              <td>
+                A peer leaves a room
+              </td>
             </tr>
             <tr>
-              <td>api_action_denied</td>
-              <td>An API action has been denied</td>
+              <td>
+                api_action_denied
+              </td>
+              <td>
+                An API action has been denied
+              </td>
             </tr>
             <tr>
-              <td>api_action_allowed</td>
-              <td>An API action was allowed</td>
+              <td>
+                api_action_allowed
+              </td>
+              <td>
+                An API action was allowed
+              </td>
             </tr>
           </tbody>
         </table>

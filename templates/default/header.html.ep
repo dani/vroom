@@ -1,15 +1,27 @@
 <!DOCTYPE html>
-<html lang="<%= $self->languages %>">
+<html lang="<%= languages %>">
 <head>
-  <title><%= $title %></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="description" content=" <%= l('VROOM_DESC') %>" />
+  <title>
+    %= $title
+  </title>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1" />
+  <meta name="description"
+        content="<%= l('VROOM_DESC') %>" />
   <%
-    my @css = qw(bootstrap.css bootstrap-switch.css toc-scroll.css bootstrap-datepicker3.css vroom.css);
-    @css = map { $self->url_for('/') . 'css/' . $_ } @css;
+    my @css = qw(
+      bootstrap.css
+      bootstrap-switch.css
+      toc-scroll.css
+      bootstrap-datepicker3.css
+      vroom.css
+    );
+    @css = map { url_for('/css/' . $_) } @css;
   %>
-  <%=css @css %>
-  <link rel="icon" type="image/png" href="<%= $self->url_for('/img/favicon.png') %>" />
+  %= css @css
+  <link rel="icon"
+        type="image/png"
+        href="<%= url_for('/img/favicon.png') %>" />
 </head>
 <body>
   <div id="wrap">

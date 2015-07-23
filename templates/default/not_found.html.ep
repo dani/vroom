@@ -1,4 +1,4 @@
-% stash msg => $self->l('PAGE_NOT_FOUND');
-% stash err => 'not_found';
+% stash msg  => l('PAGE_NOT_FOUND');
+% stash err  => 'not_found';
 % stash room => '';
-%=include 'error'
+%= include 'error'

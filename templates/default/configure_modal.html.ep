@@ -1,114 +1,175 @@
-    <div class="modal fade" role="dialog" id="configureModal" aria-labelledby="configureModal" aria-hidden="true">
+    <div class="modal fade"
+         id="configureModal"
+         aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <button class="close"
+              data-dismiss="modal">
               &times;
             </button>
             <h4 class="modal-title">
-              <%= l('CONFIGURE') %>
+              %= l('CONFIGURE')
             </h4>
           </div>
           <div class="modal-body">
-            <form id="configureRoomForm" class="form-horizontal" role="form">
+            <form id="configureRoomForm" class="form-horizontal">
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="lockedSet">
-                  <%= l('LOCK_ROOM') %>
-                  <a href="#" class="popup" data-container="body" data-toggle="popover" data-content="<%= l('TOOLTIP_LOCK_ROOM') %>">
+                <label class="col-sm-4 control-label"
+                      for="lockedSet">
+                  %= l('LOCK_ROOM')
+                  <a href="#"
+                     class="popup"
+                     data-container="body"
+                     data-toggle="popover"
+                     data-content="<%= l('TOOLTIP_LOCK_ROOM') %>">
                     &nbsp;&nbsp
                     <span class="glyphicon glyphicon-question-sign">
                     </span>
                   </a>
                 </label>
                 <div class="col-sm-8">
-                  <input type="checkbox" class="bs-switch" id="lockedSet">
+                  <input type="checkbox"
+                         class="bs-switch"
+                         id="lockedSet">
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="askForNameSet">
-                  <%= l('ASK_FOR_NAME') %>
-                  <a href="#" class="popup" data-container="body" data-toggle="popover" data-content="<%= l('TOOLTIP_ASK_FOR_NAME') %>">
+                <label class="col-sm-4 control-label"
+                       for="askForNameSet">
+                  %= l('ASK_FOR_NAME')
+                  <a href="#"
+                     class="popup"
+                     data-container="body"
+                     data-toggle="popover"
+                     data-content="<%= l('TOOLTIP_ASK_FOR_NAME') %>">
                     &nbsp;&nbsp
                     <span class="glyphicon glyphicon-question-sign">
                     </span>
                   </a>
                 </label>
                 <div class="col-sm-8">
-                  <input type="checkbox" class="bs-switch" id="askForNameSet">
+                  <input type="checkbox"
+                         class="bs-switch"
+                         id="askForNameSet">
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="joinPassSet">
-                  <%= l('PASSWORD_PROTECT') %>
-                  <a href="#" class="popup" data-container="body" data-toggle="popover" data-content="<%= l('TOOLTIP_PASSWORD_PROTECT') %>">
+                <label class="col-sm-4 control-label"
+                       for="joinPassSet">
+                  %= l('PASSWORD_PROTECT')
+                  <a href="#"
+                     class="popup"
+                     data-container="body"
+                     data-toggle="popover"
+                     data-content="<%= l('TOOLTIP_PASSWORD_PROTECT') %>">
                     &nbsp;&nbsp
                     <span class="glyphicon glyphicon-question-sign">
                     </span>
                   </a>
                 </label>
                 <div class="col-sm-8">
-                  <input type="checkbox" class="bs-switch" id="joinPassSet">
+                  <input type="checkbox"
+                         class="bs-switch"
+                         id="joinPassSet">
                 </div>
               </div>
-              <div class="form-group hidden-form" id="joinPassFields">
-                <label class="col-sm-4 control-label" for="joinPass">
-                  <%= l('PASSWORD') %>
+              <div class="form-group hidden-form"
+                   id="joinPassFields">
+                <label class="col-sm-4 control-label"
+                       for="joinPass">
+                  %= l('PASSWORD')
                 </label>
                 <div class="col-sm-8">
-                  <input id="joinPass" type="password" class="form-control" placeholder="<%= l('PASSWORD') %>"/>
+                  <input id="joinPass"
+                         type="password"
+                         class="form-control"
+                         placeholder="<%= l('PASSWORD') %>">
                 </div>
-                <label class="col-sm-4 control-label" for="joinPassConfirm">
-                  <%= l('CONFIRM_PASSWORD') %>
+                <label class="col-sm-4 control-label"
+                       for="joinPassConfirm">
+                  %= l('CONFIRM_PASSWORD')
                 </label>
                 <div class="col-sm-8">
-                  <input id="joinPassConfirm" type="password" class="form-control" placeholder="<%= l('CONFIRM_PASSWORD') %>"/>
+                  <input id="joinPassConfirm"
+                         type="password"
+                         class="form-control"
+                         placeholder="<%= l('CONFIRM_PASSWORD') %>">
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="ownerPassSet">
-                  <%= l('RESERVE_THIS_ROOM') %>
-                  <a href="#" class="popup" data-container="body" data-toggle="popover" data-content="<%= l('TOOLTIP_RESERVE_THIS_ROOM') %>">
+                <label class="col-sm-4 control-label"
+                       for="ownerPassSet">
+                  %= l('RESERVE_THIS_ROOM')
+                  <a href="#"
+                     class="popup"
+                     data-container="body"
+                     data-toggle="popover"
+                     data-content="<%= l('TOOLTIP_RESERVE_THIS_ROOM') %>">
                     &nbsp;&nbsp
                     <span class="glyphicon glyphicon-question-sign">
                     </span>
                   </a>
                 </label>
                 <div class="col-sm-8">
-                  <input type="checkbox" class="bs-switch" id="ownerPassSet">
+                  <input type="checkbox"
+                         class="bs-switch"
+                         id="ownerPassSet">
                 </div>
               </div>
-              <div class="form-group hidden-form" id="ownerPassFields">
-                <label class="col-sm-4 control-label" for="ownerPass">
-                  <%= l('PASSWORD') %>
+              <div class="form-group hidden-form"
+                   id="ownerPassFields">
+                <label class="col-sm-4 control-label"
+                       for="ownerPass">
+                  %= l('PASSWORD')
                 </label>
                 <div class="col-sm-8">
-                  <input id="ownerPass" type="password" class="form-control" placeholder="<%= l('PASSWORD') %>"/>
+                  <input id="ownerPass"
+                         type="password"
+                         class="form-control"
+                         placeholder="<%= l('PASSWORD') %>">
                 </div>
-                <label class="col-sm-4 control-label" for="ownerPassConfirm">
-                  <%= l('CONFIRM_PASSWORD') %>
+                <label class="col-sm-4 control-label"
+                       for="ownerPassConfirm">
+                  %= l('CONFIRM_PASSWORD')
                 </label>
                 <div class="col-sm-8">
-                  <input id="ownerPassConfirm" type="password" class="form-control" placeholder="<%= l('CONFIRM_PASSWORD') %>"/>
+                  <input id="ownerPassConfirm"
+                         type="password"
+                         class="form-control"
+                         placeholder="<%= l('CONFIRM_PASSWORD') %>">
                 </div>
               </div>
-              <% if (defined(stash("page")) && stash("page") eq 'admin'){ %>
+              % if (defined(stash("page")) && stash("page") eq 'admin'){
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="persistentSet">
-                  <%= l('PERSISTENT') %>
-                  <a href="#" class="popup" data-container="body" data-toggle="popover" data-content="<%= l('TOOLTIP_PERSISTENT') %>">
+                <label class="col-sm-4 control-label"
+                       for="persistentSet">
+                  %= l('PERSISTENT')
+                  <a href="#"
+                     class="popup"
+                     data-container="body"
+                     data-toggle="popover"
+                     data-content="<%= l('TOOLTIP_PERSISTENT') %>">
                     &nbsp;&nbsp
                     <span class="glyphicon glyphicon-question-sign">
                     </span>
                   </a>
                 </label>
                 <div class="col-sm-8">
-                  <input type="checkbox" class="bs-switch" id="persistentSet">
+                  <input type="checkbox"
+                         class="bs-switch"
+                         id="persistentSet">
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="maxMembers">
-                  <%= l('MAX_MEMBERS') %>
-                  <a href="#" class="popup" data-container="body" data-toggle="popover" data-content="<%= l('TOOLTIP_MAX_MEMBERS') %>">
+                <label class="col-sm-4 control-label"
+                       for="maxMembers">
+                  %= l('MAX_MEMBERS')
+                  <a href="#"
+                     class="popup"
+                     data-container="body"
+                     data-toggle="popover"
+                     data-content="<%= l('TOOLTIP_MAX_MEMBERS') %>">
                     &nbsp;&nbsp
                     <span class="glyphicon glyphicon-question-sign">
                     </span>
@@ -122,21 +183,32 @@
                          max="<%= $config->{'rooms.max_members'} > 0 ? $config->{'rooms.max_members'} : 255 %>">
                 </div>
               </div>
-              <% } %>
+              % }
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="emailNotifications">
-                  <%= l('NOTIFICATION_ON_JOIN') %>
-                  <a href="#" class="popup" data-container="body" data-toggle="popover" data-placement="left" data-content="<%= l('TOOLTIP_NOTIFICATION_ON_JOIN') %>">
+                <label class="col-sm-4 control-label"
+                       for="emailNotifications">
+                  %= l('NOTIFICATION_ON_JOIN')
+                  <a href="#"
+                     class="popup"
+                     data-container="body"
+                     data-toggle="popover"
+                     data-placement="left"
+                     data-content="<%= l('TOOLTIP_NOTIFICATION_ON_JOIN') %>">
                     &nbsp;&nbsp
                     <span class="glyphicon glyphicon-question-sign">
                     </span>
                   </a>
                 </label>
-                <div class="col-sm-8 email-list" id="email-list-notification">
+                <div class="col-sm-8 email-list"
+                     id="email-list-notification">
                   <div class="email-entry input-group">
-                    <input class="form-control" autocomplete="off" name="emails[]" type="text" placeholder="<%= l('EMAIL_PLACEHOLDER') %>" />
+                    <input class="form-control"
+                           autocomplete="off"
+                           name="emails[]"
+                           type="text"
+                           placeholder="<%= l('EMAIL_PLACEHOLDER') %>">
                     <span class="input-group-btn">
-                      <button class="btn btn-primary btn-add-email" type="button">
+                      <button class="btn btn-primary btn-add-email">
                         <span class="glyphicon glyphicon-plus">
                         </span>
                       </button>
@@ -146,11 +218,14 @@
               </div>
               <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-8">
-                  <button type="submit" id="configureButton" class="btn btn-primary">
-                    <%= l('SUBMIT') %>
+                  <button type="submit"
+                          id="configureButton"
+                          class="btn btn-primary">
+                    %= l('SUBMIT')
                   </button>
-                  <button class="btn btn-default" data-dismiss="modal">
-                    <%= l('CANCEL') %>
+                  <button class="btn btn-default"
+                          data-dismiss="modal">
+                    %= l('CANCEL')
                   </button>
                 </div>
               </div>
@@ -159,4 +234,3 @@
         </div>
       </div>
     </div>
-

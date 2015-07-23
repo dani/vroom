@@ -5,10 +5,14 @@
 %= include 'noscript'
   <div class="panel panel-default">
     <div class="panel-heading">
-      <form class="form-inline" id="eventSearch" role="form">
+      <form class="form-inline"
+            id="eventSearch">
         <div class="form-group">
           <div class="input-group">
-            <input type="text" id="searchEvent" class="form-control" value=""/>
+            <input type="text"
+                   id="searchEvent"
+                   class="form-control"
+                   value="">
             <div class="input-group-addon">
               <span class="glyphicon glyphicon-search">
               </span>
@@ -16,53 +20,70 @@
           </div>
         </div>
         <div class="form-group">
-          <input type="text" id="dateStart" name="dateStart" class="form-control date-picker" value="<%= DateTime->now->ymd %>"/>
+          <input type="text"
+                 id="dateStart"
+                 name="dateStart"
+                 class="form-control date-picker"
+                 value="<%= DateTime->now->ymd %>">
         </div>
         <div class="form-group">
           <div class="input-group">
-            <input type="text" id="dateEnd" name="dateEnd" class="form-control date-picker" value="<%= DateTime->now->ymd %>"/>
+            <input type="text"
+                   id="dateEnd"
+                   name="dateEnd"
+                   class="form-control date-picker"
+                   value="<%= DateTime->now->ymd %>">
             <span class="input-group-btn">
-              <button id="events_refresh" class="btn btn-primary help" data-toggle="tooltip" data-placement="bottom" title="<%= l('REFRESH_EVENTS') %>">
+              <button id="events_refresh"
+                      class="btn btn-primary help"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="<%= l('REFRESH_EVENTS') %>">
                 <span class="glyphicon glyphicon-play">
                 </span>
               </button>
-              <% if ($self->get_opt_features->{excel}){ %>
-              <button id="events_export" class="btn btn-default help" data-toggle="tooltip" data-placement="bottom" title="<%= l('EXPORT_EVENTS') %>">
+              % if ($self->get_opt_features->{excel}){
+              <button id="events_export"
+                      class="btn btn-default help"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="<%= l('EXPORT_EVENTS') %>">
                 <span class="glyphicon glyphicon-save">
                 </span>
               </button>
-              <% } %>
+              % }
             </span>
           </div>
         </div>
         <div class="form-group pull-right hidden-xs">
-          %= image '/img/loading.gif', alt => $self->l('LOADING'), id => 'loadingIcon'
+          %= image url_for('/img/loading.gif'), alt => $self->l('LOADING'), id => 'loadingIcon'
         </div>
       </div>
     </div>
     <div class="panel-body">
-      <div class="text-center" id="pagination">
+      <div class="text-center"
+           id="pagination">
       </div>
       <table class="table table-hover">
         <thead>
           <tr>
             <th class="hidden-xs">
-              <%= l('EVENT_ID') %>
+              %= l('EVENT_ID')
             </th>
             <th>
-              <%= l('EVENT_DATE') %>
+              %= l('EVENT_DATE')
             </th>
             <th>
-              <%= l('EVENT_FROM_IP') %>
+              %= l('EVENT_FROM_IP')
             </th>
             <th class="hidden-xs">
-              <%= l('EVENT') %>
+              %= l('EVENT')
             </th>
             <th class="hidden-xs">
-              <%= l('EVENT_USER') %>
+              %= l('EVENT_USER')
             </th>
             <th>
-              <%= l('EVENT_MESSAGE') %>
+              %= l('EVENT_MESSAGE')
             </th>
           </tr>
         </thead>

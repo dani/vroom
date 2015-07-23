@@ -1,4 +1,4 @@
-% stash msg => $self->l('SERVER_ERROR');
-% stash err => 'server_error';
+% stash msg  => l('SERVER_ERROR');
+% stash err  => 'server_error';
 % stash room => '';
-%=include 'error'
+%= include 'error'

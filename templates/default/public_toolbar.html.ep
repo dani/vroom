@@ -1,40 +1,59 @@
-  <nav class="navbar navbar-default" role="navigation" id="headerNav">
+  <nav class="navbar navbar-default"
+       id="headerNav">
     <div class="container-fluid">
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#toolbar">
-          <span class="sr-only"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
+        <button class="navbar-toggle"
+                data-toggle="collapse"
+                data-target="#toolbar">
+          <span class="sr-only">
+          </span>
+          <span class="icon-bar">
+          </span>
+          <span class="icon-bar">
+          </span>
+          <span class="icon-bar">
+          </span>
         </button>
-        %= image '/img/logo_vroom_alpha.png', id => "navBarLogo", class => "hidden-xs"
+        %= image url_for('/img/logo_vroom_alpha.png'), id => "navBarLogo", class => "hidden-xs"
       </div>
-      <div class="collapse navbar-collapse" id="toolbar">
+      <div class="collapse navbar-collapse"
+           id="toolbar">
         <ul class="nav navbar-nav navbar-right">
           <li id='lnk_index'>
-            <a href="<%= $self->url_for('/') %>"><%= l('HOME') %></a>
+            <a href="<%= url_for('/') %>">
+              %= l('HOME')
+            </a>
           </li>
           <li id='lnk_about'>
-            <a href="<%= $self->url_for('/about') %>"><%= l('ABOUT') %></a>
+            <a href="<%= url_for('/about') %>">
+              %= l('ABOUT')
+            </a>
           </li>
           <li id='lnk_feedback'>
-            <a href="<%= $self->url_for('/feedback') %>"><%= l('FEEDBACK') %></a>
+            <a href="<%= url_for('/feedback') %>">
+              %= l('FEEDBACK')
+            </a>
           </li>
-          <% if ($config->{'interface.demo'}){ %>
+          % if ($config->{'interface.demo'}){
           <li id='lnk_documentation'>
-            <a href="<%= $self->url_for('/documentation') %>"><%= l('DOCUMENTATION') %></a>
+            <a href="<%= url_for('/documentation') %>">
+              %= l('DOCUMENTATION')
+            </a>
           </li>
-          <% } %>
+          % }
           <li id='lnk_admin'>
-            <a href="<%= $self->url_for('/admin') %>"><%= l('ADMINISTRATION') %></a>
+            <a href="<%= url_for('/admin') %>">
+              %= l('ADMINISTRATION')
+            </a>
           </li>
           <li class="hidden-xs">
-            <select class="form-control navbar-btn" id="switch_lang">
-              <% foreach my $lang ($self->get_supported_lang){ %>
-              <option value="<%= $lang %>" <%= ($self->languages eq $lang) ? 'selected="selected"' : '' %>>
-                <%= $lang %>
+            <select class="form-control navbar-btn"
+                    id="switch_lang">
+              % foreach my $lang (get_supported_lang){
+              <option value="<%= $lang %>" <%= (languages eq $lang) ? 'selected="selected"' : '' %>>
+                %= $lang
               </option>
-              <% } %>
+              % }
             </select>
           </li>
         </ul>

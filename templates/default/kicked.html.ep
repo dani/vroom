@@ -1,12 +1,19 @@
-% title $self->l('KICKED');
+% title l('KICKED');
 %= include 'header'
 %= include 'public_toolbar'
 <div class="container-fluid">
   <div class="jumbotron alert-danger">
-    <h2><%= l('YOU_HAVE_BEEN_KICKED') %></h2>
-    <p><%= l('AN_ADMIN_HAS_KICKED_YOU') %></p>
+    <h2>
+      %= l('YOU_HAVE_BEEN_KICKED')
+    </h2>
+    <p>
+      %= l('AN_ADMIN_HAS_KICKED_YOU')
+    </p>
     <div class="btn-group">
-      <a class="btn btn-primary btn-lg" role="button" href="<%= $self->url_for('/') %>"><%= l('BACK_TO_MAIN_MENU') %></a>
+      <a class="btn btn-primary btn-lg"
+         href="<%= url_for('/') %>">
+        %= l('BACK_TO_MAIN_MENU')
+      </a>
     </div>
   </div>
 </div>
