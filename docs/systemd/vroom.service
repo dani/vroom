@@ -1,6 +1,7 @@
 [Unit]
 Description=VROOM daemon
 After=mariadb.service
+Wants=mariadb.service httpd.service
 
 [Service]
 Type=simple
@@ -16,5 +17,3 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
-Wants=mariadb.service httpd.service
-
