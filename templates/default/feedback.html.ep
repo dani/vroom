@@ -30,8 +30,7 @@
                   class="form-control"
                   rows="10"
                   placeholder="<%= l('VROOM_IS_AWESOME') %>"
-                  required>
-        </textarea>
+                  required></textarea>
       </div>
       <button type="submit"
               class="btn btn-primary">

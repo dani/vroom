@@ -46,8 +46,7 @@
                   <textarea id="message"
                             name="message"
                             class="form-control"
-                            placeholder="<%= l('MESSAGE') %>">
-                  </textarea>
+                            placeholder="<%= l('MESSAGE') %>"></textarea>
                 </div>
               </div>
               <div class="form-group">
