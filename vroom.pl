@@ -1583,24 +1583,20 @@ get '/locales/(:lang).js' => sub {
   my $fallback_strings = {};
   foreach my $string (keys %Vroom::I18N::fr::Lexicon){
     next if $string eq '';
-    $strings->{$string} = $self->l($string);
-  }
-  # If lang is not en, send also en as a fallback locale
-  # useful if a locale is not complete
-  if ($req_lang ne 'en'){
-    $self->languages('en');
-    foreach my $string (keys %Vroom::I18N::fr::Lexicon){
-      next if $string eq '';
-      $fallback_strings->{$string} = $self->l($string);
+    if ($self->l($string) ne ''){
+      $strings->{$string} = $self->l($string);
+    }
+    else{
+      $self->languages('en');
+      $strings->{$string} = $self->l($string);
+      $self->languages($req_lang);
     }
   }
   # Set the user locale back
   $self->languages($usr_lang);
-  my $res = 'locale = '          . Mojo::JSON::to_json($strings)          . ';';
-  $res   .= 'fallback_locale = ' . Mojo::JSON::to_json($fallback_strings) . ';';
   # And send the response
   return $self->render(
-    text   => $res,
+    text   => 'locale = ' . Mojo::JSON::to_json($strings) . ';',
     format => 'application/javascript;charset=UTF-8'
   );
 };

@@ -83,9 +83,6 @@ function localize(string){
   if (locale[string]){
     return locale[string];
   }
-  else if (fallback_locale[string]){
-    return fallback_locale[string];
-  }
   return string;
 }
 
