@@ -42,6 +42,7 @@ foreach my $dir (qw/assets/){
 
 # Optional features
 our $optf = {};
+
 # Create etherpad api client if enabled
 if ($config->{'etherpad.uri'} =~ m/https?:\/\/.*/ && $config->{'etherpad.api_key'} ne ''){
   my $etherpad = eval { require Etherpad };
@@ -122,10 +123,10 @@ plugin 'RenderFile';
 # Take a string as argument and check if it's a valid room name
 helper valid_room_name => sub {
   my $self = shift;
-  my ($name) = @_;
-  my $ret = {};
+  my $name = shift;
+  my $ret  = {};
   # A few names are reserved
-  my @reserved = qw(about help feedback feedback_thanks goodbye admin localize api
+  my @reserved = qw(about help feedback feedback_thanks goodbye admin locales api
                     missing dies kicked invitation js css img fonts snd documentation);
   if (!$name || $name !~ m/^[\w\-]{1,49}$/ || grep { $name eq $_ } @reserved){
     return 0;
@@ -136,7 +137,7 @@ helper valid_room_name => sub {
 # Check arg is a valid ID number
 helper valid_id => sub {
   my $self = shift;
-  my ($id) = @_;
+  my $id   = shift;
   if (!$id || $id !~ m/^\d+$/){
     return 0;
   }
@@ -145,21 +146,21 @@ helper valid_id => sub {
 
 # Check email address format
 helper valid_email => sub {
-  my $self = shift;
-  my ($email) = @_;
+  my $self  = shift;
+  my $email = shift;
   return Email::Valid->address($email);
 };
 
 # Validate a date in YYYY-MM-DD format
-# Also accept YYYY-MM-DD hh:mm:ss
+# Also accepts YYYY-MM-DD hh:mm:ss
 helper valid_date => sub {
   my $self = shift;
-  my ($date) = @_;
-  if ($date =~ m/^\d{4}\-\d{1,2}\-\d{1,2}(\s+\d{1,2}:\d{1,2}:\d{1,2})?$/){
-    return 1;
+  my $date = shift;
+  if ($date !~ m/^\d{4}\-\d{1,2}\-\d{1,2}(\s+\d{1,2}:\d{1,2}:\d{1,2})?$/){
+    $self->app->log->debug("$date is not a valid date");
+    return 0;
   }
-  $self->app->log->debug("$date is not a valid date");
-  return 0;
+  return 1;
 };
 
 ##########################
@@ -189,10 +190,9 @@ helper get_opt_features => sub {
 
 # Log an event
 helper log_event => sub {
-  my $self = shift;
-  my ($event) = @_;
-  if (!$event->{event} ||
-      !$event->{msg}){
+  my $self  = shift;
+  my $event = shift;
+  if (!$event->{event} || !$event->{msg}){
     $self->app->log->debug("Oops, invalid event received");
     return 0;
   }
@@ -214,8 +214,9 @@ helper log_event => sub {
 
 # Return a list of event between 2 dates
 helper get_event_list => sub {
-  my $self = shift;
-  my ($start,$end) = @_;
+  my $self  = shift;
+  my $start = shift;
+  my $end   = shift;
   # Check both start and end dates seems valid
   if (!$self->valid_date($start) || !$self->valid_date($end)){
     $self->app->log->debug("Invalid date submitted while looking for events");
@@ -227,17 +228,10 @@ helper get_event_list => sub {
                           WHERE `date`>=?
                             AND `date`<=?');
   };
-  if ($@){
-    $self->app->log->debug("DB error: $@");
-    return 0;
-  }
   # We want both dates to be inclusive, as the default time is 00:00:00
   # if not given, append 23:59:59 to the end date
-  $sth->execute($start,$end . ' 23:59:59');
-  if ($sth->err){
-    $self->app->log->debug("DB error: " . $sth->errstr . " (code " . $sth->err . ")");
-    return 0;   
-  }
+  $end .= ' 23:59:59' if ($end !~ /\s+\d{1,2}:\d{1,2}:\d{1,2}$/);
+  $sth->execute($start, $end);
   # Everything went fine, return the list of event as a hashref
   return $sth->fetchall_hashref('id');
 };
@@ -300,7 +294,7 @@ helper login => sub {
   if ($self->session('id') && $self->session('id') ne ''){
     return 1;
   }
-  my $id = $self->get_random(256);
+  my $id  = $self->get_random(256);
   my $key = $self->get_random(256);
   my $sth = eval {
     $self->db->prepare('INSERT INTO `api_keys`
@@ -322,7 +316,7 @@ helper login => sub {
 # Force the session cookie to expire on logout
 helper logout => sub {
   my $self = shift;
-  my ($room) = @_;
+  my $room = shift;
   # Logout from etherpad
   if ($optf->{etherpad} && $self->session($room) && $self->session($room)->{etherpadSessionId}){
     $optf->{etherpad}->delete_session($self->session($room)->{etherpadSessionId});
@@ -346,10 +340,10 @@ helper logout => sub {
 };
 
 # Create a new room in the DB
-# Requires two args: the name of the room and the session name of the creator
+# Requires one arg: the name of the room
 helper create_room => sub {
   my $self = shift;
-  my ($name) = @_;
+  my $name = shift;
   # Convert room names to lowercase
   if ($name ne lc $name){
     $name = lc $name;
@@ -358,6 +352,7 @@ helper create_room => sub {
   if (!$self->valid_room_name($name)){
     return 0;
   }
+  # Fail if the room already exists
   if ($self->get_room_by_name($name)){
     return 0;
   }
@@ -371,27 +366,24 @@ helper create_room => sub {
                                   CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\')
                                  )');
   };
-  $sth->execute(
-    $name
-  );
+  $sth->execute($name);
   $self->log_event({
     event => 'room_create',
     msg   => "Room $name created"
   });
-  # Etherpad integration ? If so, create the corresponding pad
+  # Create a pad if enabled
   if ($optf->{etherpad}){
     $self->create_pad($name);
   }
   return 1;
 };
 
-# Take a string as argument
+# Takse a string as argument
 # Return a room object if a room with that name is found
 # Else return undef
 helper get_room_by_name => sub {
   my $self = shift;
-  my ($name) = @_;
-  my $res = $self->valid_room_name($name);
+  my $name = shift;
   if (!$self->valid_room_name($name)){
     return 0;
   }
@@ -407,7 +399,7 @@ helper get_room_by_name => sub {
 # Same as get_room_by_name, but take a room ID as argument
 helper get_room_by_id => sub {
   my $self = shift;
-  my ($id) = @_;
+  my $id   = shift;
   if (!$self->valid_id($id)){
     return 0;
   }
@@ -423,11 +415,8 @@ helper get_room_by_id => sub {
 # Update a room, take a room object as argument (hashref)
 helper modify_room => sub {
   my $self = shift;
-  my ($room) = @_;
-  if (!$self->valid_id($room->{id})){
-    return 0;
-  }
-  if (!$self->valid_room_name($room->{name})){
+  my $room = shift;
+  if (!$self->valid_id($room->{id}) || !$self->valid_room_name($room->{name})){
     return 0;
   }
   my $old_room = $self->get_room_by_id($room->{id});
@@ -438,10 +427,10 @@ helper modify_room => sub {
       ($room->{max_members} > $config->{'rooms.max_members'} && $config->{'rooms.max_members'} > 0)){
     $room->{max_members} = 0;
   }
-  if (($room->{locked} && $room->{locked} !~ m/^0|1$/) ||
-      ($room->{ask_for_name} && $room->{ask_for_name} !~ m/^0|1$/) ||
-      ($room->{persistent} && $room->{persistent} !~ m/^0|1$/) ||
-       $room->{max_members} !~ m/^\d+$/){
+  if ((!$room->{locked}       || $room->{locked}       !~ m/^0|1$/) ||
+      (!$room->{ask_for_name} || $room->{ask_for_name} !~ m/^0|1$/) ||
+      (!$room->{persistent}   || $room->{persistent}   !~ m/^0|1$/) ||
+        $room->{max_members}  !~ m/^\d+$/){
     return 0;
   }
   my $sth = eval {
@@ -465,8 +454,10 @@ helper modify_room => sub {
   );
   my $msg = "Room " . $room->{name} ." modified";
   my $mods = '';
+  # Now, log which fields have been modified
   foreach my $field (keys %$room){
     if (($old_room->{$field} // '' ) ne ($room->{$field} // '')){
+      # Just hide passwords
       if ($field =~ m/_password$/){
         $old_room->{$field} = ($old_room->{$field}) ? '<hidden>' : '<unset>';
         $room->{$field}     = ($room->{$field})     ? '<hidden>' : '<unset>';
@@ -488,34 +479,32 @@ helper modify_room => sub {
 # Set the role of a peer
 helper set_peer_role => sub {
   my $self = shift;
-  my ($data) = @_;
+  my $data = shift;
   # Check the peer exists and is already in the room
   if (!$data->{peer_id} ||
       !$peers->{$data->{peer_id}}){
     return 0;
   }
   $peers->{$data->{peer_id}}->{role} = $data->{role};
-  $self->app->log->info("Peer " . $data->{peer_id} . " has now the " .
-                          $data->{role} . " role");
   $self->log_event({
     event => 'peer_role',
     msg   => "Peer " . $data->{peer_id} . " has now the " .
-                          $data->{role} . " role in room " . $peers->{$data->{peer_id}}->{room}
+             $data->{role} . " role in room " . $peers->{$data->{peer_id}}->{room}
   });
   return 1;
 };
 
 # Return the role of a peer, take a peer object as arg ($data = { peer_id => XYZ })
 helper get_peer_role => sub {
-  my $self = shift;
-  my ($peer_id) = @_;
+  my $self    = shift;
+  my $peer_id = shift;
   return $peers->{$peer_id}->{role};
 };
 
 # Promote a peer to owner
 helper promote_peer => sub {
-  my $self = shift;
-  my ($peer_id) = @_;
+  my $self    = shift;
+  my $peer_id = shift;
   return $self->set_peer_role({
     peer_id => $peer_id,
     role    => 'owner'
@@ -541,7 +530,8 @@ helper purge_rooms => sub {
   my $sth = eval {
     $self->db->prepare('SELECT `name`,`etherpad_group`
                           FROM `rooms`
-                          WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL ' . $config->{'rooms.inactivity_timeout'} . ' MINUTE)
+                          WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
+                                INTERVAL ' . $config->{'rooms.inactivity_timeout'} . ' MINUTE)
                           AND `persistent`=\'0\' AND `owner_password` IS NULL');
   };
   $sth->execute;
@@ -553,7 +543,8 @@ helper purge_rooms => sub {
     $sth = eval {
       $self->db->prepare('SELECT `name`,`etherpad_group`
                             FROM `rooms`
-                            WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'), INTERVAL ' . $config->{'rooms.reserved_inactivity_timeout'} . ' MINUTE)
+                            WHERE `last_activity` < DATE_SUB(CONVERT_TZ(NOW(), @@session.time_zone, \'+00:00\'),
+                                  INTERVAL ' . $config->{'rooms.reserved_inactivity_timeout'} . ' MINUTE)
                               AND `persistent`=\'0\' AND `owner_password` IS NOT NULL')
     };
     $sth->execute;
@@ -586,7 +577,7 @@ helper purge_rooms => sub {
 # delete just a specific room, by name
 helper delete_room => sub {
   my $self = shift;
-  my ($room) = @_;
+  my $room = shift;
   $self->app->log->debug("Removing room $room");
   my $data = $self->get_room_by_name($room);
   if (!$data){
@@ -624,7 +615,7 @@ helper get_room_list => sub {
 # so we can detect unused rooms
 helper update_room_last_activity => sub {
   my $self = shift;
-  my ($name) = @_;
+  my $name = shift;
   my $data = $self->get_room_by_name($name);
   if (!$data){
     return 0;
@@ -646,8 +637,8 @@ helper get_supported_lang => sub {
 
 # Generate a random token
 helper get_random => sub {
-  my $self = shift;
-  my ($entropy) = @_;
+  my $self    = shift;
+  my $entropy = shift;
   return Session::Token->new(entropy => $entropy)->get;
 };
 
@@ -664,8 +655,9 @@ helper get_random_name => sub {
 
 # Add an email address to the list of notifications
 helper add_notification => sub {
-  my $self = shift;
-  my ($room,$email) = @_;
+  my $self  = shift;
+  my $room  = shift;
+  my $email = shift;
   my $data = $self->get_room_by_name($room);
   if (!$data || !$self->valid_email($email)){
     return 0;
@@ -685,8 +677,9 @@ helper add_notification => sub {
 # Update the list of notified email for a room in one go
 # Take the room and an array ref of emails
 helper update_email_notifications => sub {
-  my $self = shift;
-  my ($room,$emails) = @_;
+  my $self   = shift;
+  my $room   = shift;
+  my $emails = shift;
   my $data = $self->get_room_by_name($room);
   if (!$data){
     return 0;
@@ -721,10 +714,6 @@ helper update_email_notifications => sub {
   );
   # Now, insert new emails
   foreach my $email (@new){
-    # Skip empty inputs
-    if ($email eq ''){
-      next;
-    }
     $self->add_notification($room,$email) || return 0;
   }
   return 1;
@@ -733,8 +722,9 @@ helper update_email_notifications => sub {
 # Return the list of email addresses
 helper get_email_notifications => sub {
   my $self = shift;
-  my ($room) = @_;
-  $room = $self->get_room_by_name($room) || return undef;
+  my $room = shift;
+  $room = $self->get_room_by_name($room);
+  return 0 if (!$room);
   my $sth = eval {
     $self->db->prepare('SELECT `id`,`email`
                           FROM `email_notifications`
@@ -753,12 +743,11 @@ helper choose_moh => sub {
 
 # Add a invitation
 helper add_invitation => sub {
-  my $self = shift;
-  my ($room,$email) = @_;
+  my $self  = shift;
+  my $room  = shift;
+  my $email = shift;
   my $data = $self->get_room_by_name($room);
-  if (!$data){
-    return 0;
-  }
+  return 0 if (!$data);
   my $token = $self->get_random(256);
   my $sth = eval {
     $self->db->prepare('INSERT INTO `email_invitations`
@@ -781,8 +770,8 @@ helper add_invitation => sub {
 # return a hash with all the invitation param
 # just like get_room
 helper get_invitation_by_token => sub {
-  my $self = shift;
-  my ($token) = @_;
+  my $self  = shift;
+  my $token = shift;
   my $sth = eval {
     $self->db->prepare('SELECT *
                           FROM `email_invitations`
@@ -795,8 +784,8 @@ helper get_invitation_by_token => sub {
 
 # Find invitations which have a unprocessed repsponse
 helper get_invitation_list => sub {
-  my $self = shift;
-  my ($session) = @_;
+  my $self    = shift;
+  my $session = shift;
   my $sth = eval {
     $self->db->prepare('SELECT *
                           FROM `email_invitations`
@@ -811,8 +800,10 @@ helper get_invitation_list => sub {
 # Got a response from invitation. Store the message in the DB
 # so the organizer can get it
 helper respond_to_invitation => sub {
-  my $self = shift;
-  my ($token,$response,$message) = @_;
+  my $self     = shift;
+  my $token    = shift;
+  my $response = shift;
+  my $message  = shift;
   my $sth = eval {
     $self->db->prepare('UPDATE `email_invitations`
                           SET `response`=?,
@@ -833,8 +824,8 @@ helper respond_to_invitation => sub {
 
 # Mark a invitation response as processed
 helper mark_invitation_processed => sub {
-  my $self = shift;
-  my ($token) = @_;
+  my $self  = shift;
+  my $token = shift;
   my $sth = eval {
     $self->db->prepare('UPDATE `email_invitations`
                           SET `processed`=\'1\'
@@ -843,7 +834,7 @@ helper mark_invitation_processed => sub {
   $sth->execute($token);
   $self->log_event({
     event => 'invalidate_invitation',
-    msg   => "Marking invitation ID $token as processed, it won't be usable anymore"
+    msg   => "Marking invitation $token as processed, it won't be usable anymore"
   });
   return 1;
 };
@@ -863,15 +854,14 @@ helper purge_invitations => sub {
 
 # Check an invitation token is valid
 helper check_invite_token => sub {
-  my $self = shift;
-  my ($room,$token) = @_;
+  my $self  = shift;
+  my $room  = shift;
+  my $token = shift;
   # Expire invitations before checking if it's valid
   $self->purge_invitations;
   my $ret = 0;
   my $data = $self->get_room_by_name($room);
-  if (!$data || !$token){
-    return 0;
-  }
+  return 0 if (!$data || !$token);
   $self->app->log->debug("Checking if invitation with token $token is valid for room $room");
   my $sth = eval {
     $self->db->prepare('SELECT COUNT(`id`)
@@ -899,11 +889,9 @@ helper check_invite_token => sub {
 # Create a pad (and the group if needed)
 helper create_pad => sub {
   my $self = shift;
-  my ($room) = @_;
+  my $room = shift;
   my $data = $self->get_room_by_name($room);
-  if (!$optf->{etherpad} || !$data){
-    return 0;
-  }
+  return 0 if (!$optf->{etherpad} || !$data);
   # Create the etherpad group if not already done
   # and register it in the DB
   if (!$data->{etherpad_group} || $data->{etherpad_group} eq ''){
@@ -921,7 +909,7 @@ helper create_pad => sub {
       $data->{id}
     );
   }
-  $optf->{etherpad}->create_group_pad($data->{etherpad_group},$room);
+  $optf->{etherpad}->create_group_pad($data->{etherpad_group}, $room);
   $self->log_event({
     event => 'pad_create',
     msg   => "Creating group pad " . $data->{etherpad_group} . " for room $room"
@@ -932,7 +920,7 @@ helper create_pad => sub {
 # Create an etherpad session for a user
 helper create_etherpad_session => sub {
   my $self = shift;
-  my ($room) = @_;
+  my $room = shift;
   my $data = $self->get_room_by_name($room);
   if (!$optf->{etherpad} || !$data || !$data->{etherpad_group}){
     return 0;
@@ -953,10 +941,11 @@ helper create_etherpad_session => sub {
   return 1;
 };
 
-# Get an API key by id
+# Get an API key by token
+# just used to check if the key exists
 helper get_key_by_token => sub {
-  my $self = shift;
-  my ($token) = @_;
+  my $self  = shift;
+  my $token = shift;
   if (!$token || $token eq ''){
     return 0;
   }
@@ -974,13 +963,10 @@ helper get_key_by_token => sub {
 # Associate an API key to a room, and set the corresponding role
 helper associate_key_to_room => sub {
   my $self = shift;
-  my (%data) = @_;
-  my $data = \%data;
+  my $data = shift;
   my $room = $self->get_room_by_name($data->{room});
-  my $key = $self->get_key_by_token($data->{key});
-  if (!$room || !$key){
-    return 0;
-  }
+  my $key  = $self->get_key_by_token($data->{key});
+  return 0 if (!$room || !$key);
   my $sth = eval {
     $self->db->prepare('INSERT INTO `room_keys`
                           (`room_id`,`key_id`,`role`)
@@ -998,12 +984,10 @@ helper associate_key_to_room => sub {
 
 # Make an API key admin of every rooms
 helper make_key_admin => sub {
-  my $self = shift;
-  my ($token) = @_;
+  my $self  = shift;
+  my $token = shift;
   my $key = $self->get_key_by_token($token);
-  if (!$key){
-    return 0;
-  }
+  return 0 if (!$key);
   my $sth = eval {
     $self->db->prepare('UPDATE `api_keys`
                          SET `admin`=\'1\'
@@ -1019,8 +1003,9 @@ helper make_key_admin => sub {
 
 # Get the role of an API key for a room
 helper get_key_role => sub {
-  my $self = shift;
-  my ($token,$room) = @_;
+  my $self  = shift;
+  my $token = shift;
+  my $room  = shift;
   my $key = $self->get_key_by_token($token);
   if (!$key){
     $self->app->log->debug("Invalid API key");
@@ -1051,12 +1036,9 @@ helper get_key_role => sub {
 # Check if a key can perform an action against a room
 helper key_can_do_this => sub {
   my $self = shift;
-  my (%data) = @_;
-  my $data = \%data;
+  my $data = shift;
   my $actions = API_ACTIONS;
-  if (!$data->{action}){
-    return 0;
-  }
+  return 0 if (!$data->{action});
   # Anonymous actions
   if ($actions->{anonymous}->{$data->{action}}){
     return 1;
@@ -1078,7 +1060,7 @@ helper key_can_do_this => sub {
   if ($role eq 'owner' && ($actions->{owner}->{$data->{action}} || $actions->{participant}->{$data->{action}})){
     return 1;
   }
-  # If this key as simple partitipant priv in this room, only allow participant actions
+  # If this key has simple participant priv in this room, only allow participant actions
   elsif ($role eq 'participant' && $actions->{participant}->{$data->{action}}){
     return 1;
   }
@@ -1089,9 +1071,7 @@ helper key_can_do_this => sub {
 helper get_room_members => sub {
   my $self = shift;
   my $room = shift;
-  if (!$self->get_room_by_name($room)){
-    return 0;
-  }
+  return 0 if (!$self->get_room_by_name($room));
   my @p;
   foreach my $peer (keys $peers){
     if ($peers->{$peer}->{room} &&
@@ -1108,9 +1088,9 @@ helper signal_broadcast_room => sub {
   my $data = shift;
 
   # Send a message to all members of the same room as the sender
-  # ecept the sender himself
+  # except the sender himself
   foreach my $peer (keys %$peers){
-    next if ($peer eq $data->{from});
+    next if $peer eq $data->{from};
     next if !$peers->{$data->{from}}->{room};
     next if !$peers->{$peer}->{room};
     next if $peers->{$peer}->{room} ne $peers->{$data->{from}}->{room};
@@ -1142,18 +1122,16 @@ helper get_turn_creds => sub {
     return (undef,undef);
   }
   elsif ($config->{'turn.credentials'} eq 'static'){
-    return ($config->{'turn.turn_user'},$config->{'turn.turn_password'});
+    return ($config->{'turn.turn_user'}, $config->{'turn.turn_password'});
   }
   elsif ($config->{'turn.credentials'} eq 'rest'){
     my $expire = time + 300;
     my $user = $expire . ':' . $room->{name};
     my $pass = encode_base64(hmac_sha1($user, $config->{'turn.secret_key'}));
     chomp $pass;
-    return ($user,$pass);
+    return ($user, $pass);
   }
-  else {
-    return (undef,undef);
-  }
+  return (undef, undef);
 };
 
 # Format room config as a hash to be sent in JSON response
@@ -1173,14 +1151,13 @@ helper get_room_conf => sub {
 
 # Export events in XLSX
 helper export_events_xlsx => sub {
-  my $self = shift;
-  my ($from,$to) = @_;
-  my $tmp = File::Temp->new( DIR => $config->{'directories.tmp'}, SUFFIX => '.xlsx' )->filename;
+  my $self   = shift;
+  my $from   = shift;
+  my $to     = shift;
+  my $tmp    = File::Temp->new( DIR => $config->{'directories.tmp'}, SUFFIX => '.xlsx' )->filename;
   my $events = $self->get_event_list($from, $to);
-  if (!$events){
-    return 0;
-  }
-  my $xlsx = Excel::Writer::XLSX->new($tmp);
+  return 0 if (!$events);
+  my $xlsx  = Excel::Writer::XLSX->new($tmp);
   my $sheet = $xlsx->add_worksheet;
   my @headers = qw(id date from_ip user event message);
   $sheet->set_column(1, 1, 30);
@@ -1201,6 +1178,8 @@ helper export_events_xlsx => sub {
       $events->{$e}->{message}
     );
     $sheet->write($row, 0, \@details);
+    # Adapt row heigh depending on the number of new lines
+    # in the message
     my $cr = scalar(split("\n", $events->{$e}->{message}));
     if ($cr > 1){
       $sheet->set_row($row, $cr*12);
@@ -1210,10 +1189,35 @@ helper export_events_xlsx => sub {
   return $tmp;
 };
 
+# Disconnect a peer from the signaling channel
+helper disconnect_peer => sub {
+  my $self = shift;
+  my $id   = shift;
+  return 0 if (!$id || !$peers->{$id});
+  if ($id && $peers->{$id} && $peers->{$id}->{room}){
+    $self->log_event({
+      event => 'room_leave',
+      msg   => "Peer $id closed websocket connection, leaving room " . $peers->{$id}->{room}
+    });
+  }
+  $self->signal_broadcast_room({
+    from => $id,
+    msg  => Protocol::SocketIO::Message->new(
+      type => 'event',
+      data => {
+        name => 'remove',
+        args => [{ id => $id, type => 'video' }]
+      }
+    )
+  });
+  $self->update_room_last_activity($peers->{$id}->{room});
+  delete $peers->{$id};
+};
+
 # Socket.IO handshake
 get '/socket.io/:ver' => sub {
   my $self = shift;
-  my $sid = $self->get_random(256);
+  my $sid  = $self->get_random(256);
   $self->session( peer_id => $sid );
   my $handshake = Protocol::SocketIO::Handshake->new(
       session_id        => $sid,
@@ -1285,11 +1289,12 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           $self->finish;
           return;
         }
-        # We build a list of peers, except this new one so we can send it
-        # to the new peer, and he'll be able to contact all those peers
+        # Lets build the list of the other peers in the room to send to this new one
         my $others = {};
         foreach my $peer (keys %$peers){
-          next if ($peer eq $id);
+          next if $peer eq $id;
+          next if !$peers->{$peer}->{room};
+          next if $peers->{$peer}->{room} ne $room;
           $others->{$peer} = $peers->{$peer}->{details};
         }
         $peers->{$id}->{details} = {
@@ -1368,7 +1373,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
     # Heartbeat reply, update timestamp
     elsif ($msg->type eq 'heartbeat'){
       $peers->{$id}->{last} = time;
-      # Update room last activity ~ every 40 heartbeat, so about every 2 minutes
+      # Update room last activity ~ every 40 heartbeats, so about every 2 minutes
       if ((int (rand 200)) <= 5){
         $self->update_room_last_activity($peers->{$id}->{room});
       }
@@ -1377,24 +1382,8 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
 
   # Triggerred when a websocket connection ends
   $self->on(finish => sub {
-    my ($self, $code, $reason) = @_;
-    if ($id && $peers->{$id} && $peers->{$id}->{room}){
-      $self->log_event({
-        event => 'room_leave',
-        msg   => "Peer $id closed websocket connection, leaving room " . $peers->{$id}->{room}
-      });
-    }
-    $self->signal_broadcast_room({
-      from => $id,
-      msg  => Protocol::SocketIO::Message->new(
-        type => 'event',
-        data => {
-          name => 'remove',
-          args => [{ id => $id, type => 'video' }]
-        }
-      )
-    });
-    $self->update_room_last_activity($peers->{$id}->{room});
+    my $self   = shift;
+    $self->disconnect_peer($id);
     delete $peers->{$id};
   });
 
@@ -1407,7 +1396,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
 Mojo::IOLoop->recurring( 3 => sub {
   foreach my $id (keys %{$peers}){
     # This shouldn't happen, but better to log an error and fix it rather
-    # than looping indefinitly on a bogus entry if something went wron
+    # than looping indefinitly on a bogus entry if something went wrong
     if (!$peers->{$id}->{socket}){
       app->log->debug("Garbage found in peers (peer $id has no socket)\n");
       delete $peers->{$id};
@@ -1417,7 +1406,7 @@ Mojo::IOLoop->recurring( 3 => sub {
     elsif ($peers->{$id}->{last} < time - 15){
       app->log->debug("Peer $id didn't reply in 15 sec, disconnecting");
       $peers->{$id}->{socket}->finish;
-      delete $peers->{$id};
+      app->disconnect_peer($id);
     }
     elsif ($peers->{$id}->{check_invitations}) {
       my $invitations = app->get_invitation_list($peers->{$id}->{id});
@@ -1498,10 +1487,10 @@ get '/feedback' => sub {
 } => 'feedback';
 
 post '/feedback' => sub {
-  my $self = shift;
-  my $email = $self->param('email') || '';
+  my $self    = shift;
+  my $email   = $self->param('email') || '';
   my $comment = $self->param('comment');
-  my $sent = $self->mail(
+  my $sent    = $self->mail(
     to      => $config->{'email.contact'},
     subject => $self->l("FEEDBACK_FROM_VROOM"),
     data    => $self->render_mail('feedback',
@@ -1542,7 +1531,7 @@ get '/kicked/(:room)' => sub {
 } => 'kicked';
 
 # Route for invitition response
-any [qw(GET POST)] => '/invitation/:token' => { token => '' } => sub {
+any [ qw(GET POST) ] => '/invitation/:token' => { token => '' } => sub {
   my $self = shift;
   my $token = $self->stash('token');
   # Delete expired invitation now
@@ -1577,8 +1566,7 @@ get '/locales/(:lang).js' => sub {
   my $self = shift;
   my $usr_lang = $self->languages;
   my $req_lang = $self->stash('lang');
-  $req_lang = (grep { $_ eq $req_lang } $self->get_supported_lang) ?
-    $req_lang : 'en';
+  $req_lang = 'en' unless grep { $_ eq $req_lang } $self->get_supported_lang;
   # Temporarily switch to the requested locale
   # eg, we can be in en and ask for /locales/fr.js
   $self->languages($req_lang);
@@ -1599,10 +1587,13 @@ get '/locales/(:lang).js' => sub {
   }
   # Set the user locale back
   $self->languages($usr_lang);
-  my $res = 'locale = ' . Mojo::JSON::to_json($strings) . ';';
-  $res .= 'fallback_locale = ' . Mojo::JSON::to_json($fallback_strings) . ';';
+  my $res = 'locale = '          . Mojo::JSON::to_json($strings)          . ';';
+  $res   .= 'fallback_locale = ' . Mojo::JSON::to_json($fallback_strings) . ';';
   # And send the response
-  $self->render(text => $res, format => 'application/javascript;charset=UTF-8');
+  return $self->render(
+    text   => $res,
+    format => 'application/javascript;charset=UTF-8'
+  );
 };
 
 # API requests handler
@@ -1639,11 +1630,11 @@ any '/api' => sub {
   }
 
   # Now, lets check if the key can do the requested action
-  my $res = $self->key_can_do_this(
+  my $res = $self->key_can_do_this({
     token  => $token,
     action => $req->{action},
     param  => $req->{param}
-  );
+  });
 
   # This action isn't possible with the privs associated to the API Key
   if (!$res){
@@ -1747,11 +1738,11 @@ any '/api' => sub {
       return $self->render(json => $json, status => 500);
     }
     $json->{err} = '';
-    $self->associate_key_to_room(
+    $self->associate_key_to_room({
       room => $req->{param}->{room},
       key  => $token,
       role => 'owner'
-    );
+    });
     return $self->render(json => $json);
   }
 
@@ -1801,11 +1792,11 @@ any '/api' => sub {
       if ($self->session('peer_id')){
         $self->set_peer_role({ peer_id => $self->session('peer_id'), role => $role });
       }
-      $self->associate_key_to_room(
+      $self->associate_key_to_room({
         room => $room->{name},
         key  => $token,
         role => $role
-      );
+      });
       return $self->render(
         json => {
           msg     => $self->l('AUTH_SUCCESS'),
@@ -1905,7 +1896,7 @@ any '/api' => sub {
     $room->{ask_for_name} = ($req->{param}->{ask_for_name}) ? '1' : '0';
     $room->{max_members} = $req->{param}->{max_members};
     # Room persistence can only be set by admins
-    if ($req->{param}->{persistent} ne '' && $self->key_can_do_this(token => $token, action => 'set_persistent')){
+    if ($req->{param}->{persistent} ne '' && $self->key_can_do_this({token => $token, action => 'set_persistent'})){
       $room->{persistent} = ($req->{param}->{persistent} eq Mojo::JSON::true) ? '1' : '0';
     }
     foreach my $pass (qw/join_password owner_password/){
@@ -2099,11 +2090,11 @@ any '/api' => sub {
       if ($api_role ne 'owner' &&
           $self->get_peer_role($peer_id) &&
           $self->get_peer_role($peer_id) eq 'owner'){
-        $self->associate_key_to_room(
+        $self->associate_key_to_room({
           room => $room->{name},
           key  => $token,
           role => 'owner'
-        );
+        });
         if (!$res){
           return $self->render(
             json => {
@@ -2340,11 +2331,11 @@ get '/:room' => sub {
     );
   }
   if ($self->check_invite_token($room,$token)){
-    $self->associate_key_to_room(
+    $self->associate_key_to_room({
       room => $room,
       key  => $self->session('key'),
       role => 'participant'
-    );
+    });
   }
   # pad doesn't exist yet ?
   if ($optf->{etherpad} && !$data->{etherpad_group}){
