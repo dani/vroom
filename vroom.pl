@@ -1554,11 +1554,20 @@ any [ qw(GET POST) ] => '/invitation/:token' => { token => '' } => sub {
   elsif ($self->req->method eq 'POST'){
     my $response = $self->param('response') || 'decline';
     my $message = $self->param('message') || '';
-    if ($response !~ m/^(later|decline)$/ || !$self->respond_to_invitation($token,$response,$message)){
-      return $self->render('error');
+    if ($response !~ m/^(later|decline)$/ || !$self->respond_to_invitation($token, $response, $message)){
+      return $self->render('error',
+        err  => 'ERROR_INVITATION_INVALID',
+        msg  => $self->l('ERROR_INVITATION_INVALID'),
+        room => $room
+      );
     }
     return $self->render('invitation_thanks');
   }
+  return $self->render('error',
+    err  => 'ERROR_OCCURRED',
+    msg  => $self->l('ERROR_OCCURRED'),
+    room => $room
+  );
 };
 
 # Create a json script which contains localization
