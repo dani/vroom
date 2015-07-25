@@ -427,12 +427,14 @@ helper modify_room => sub {
       ($room->{max_members} > $config->{'rooms.max_members'} && $config->{'rooms.max_members'} > 0)){
     $room->{max_members} = 0;
   }
-  if ((!$room->{locked}       || $room->{locked}       !~ m/^0|1$/) ||
-      (!$room->{ask_for_name} || $room->{ask_for_name} !~ m/^0|1$/) ||
-      (!$room->{persistent}   || $room->{persistent}   !~ m/^0|1$/) ||
-        $room->{max_members}  !~ m/^\d+$/){
+  if (($room->{locked}       && $room->{locked}       !~ m/^0|1$/) ||
+      ($room->{ask_for_name} && $room->{ask_for_name} !~ m/^0|1$/) ||
+      ($room->{persistent}   && $room->{persistent}   !~ m/^0|1$/) ||
+       $room->{max_members}  !~ m/^\d+$/){
     return 0;
   }
+  # Merge old and new params
+  $room = { %$old_room, %$room };
   my $sth = eval {
     $self->db->prepare('UPDATE `rooms`
                           SET `locked`=?,
