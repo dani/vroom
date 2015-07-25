@@ -123,9 +123,6 @@ a.popup>span {
 #roomToolBar {
   overflow: visible !important;
 }
-.dropdown-menu {
-  min-width: 400px;
-}
 .ownerEl {
   display: none;
 }
