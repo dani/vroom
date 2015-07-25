@@ -2022,12 +2022,12 @@ function initVroom(room) {
   });
 
   // Handle auth to become room owner
-  $('#authPass').on('input', function() {
-    if ($('#authPass').val() === ''){
-      $('#authPassButton').addClass('disabled');
+  $('#ownerAuthPass').on('input', function() {
+    if ($('#ownerAuthPass').val() === ''){
+      $('#ownerAuthButton').attr('disabled', 'disabled');
     }
     else{
-      $('#authPassButton').removeClass('disabled');
+      $('#ownerAuthButton').removeAttr('disabled');
     }
   });
   $('#ownerAuthForm').submit(function(event) {
@@ -2040,15 +2040,16 @@ function initVroom(room) {
         room: roomName
       },
       function(data){
-        $('#authPass').val('');
-        $('#ownerAuthModal').modal('hide');
+        $('#ownerAuthPass').val('');
         if (data.role === 'owner'){
           getPeerRole(peers.local.id);
           $('#joinPassFields,#ownerPassFields').hide();
+          $('#ownerAuthModal').modal('hide');
           $.notify(data.msg, 'success');
         }
         else{
           $.notify(localize('WRONG_PASSWORD'), 'error');
+          $('#ownerAuthButton').attr('disabled', 'disabled');
         }
       }
     );
