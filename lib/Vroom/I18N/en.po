@@ -762,7 +762,7 @@ msgstr "Room management"
 #: templates/default/admin_manage_rooms.html.ep:33
 #: templates/default/index.html.ep:24
 msgid "ROOM_NAME"
-msgstr "Room nam"
+msgstr "Room name"
 
 #: templates/default/delete_room_modal.html.ep:17
 msgid "ROOM_WILL_BE_DELETED"
