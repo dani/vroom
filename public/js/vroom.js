@@ -215,9 +215,9 @@ function utc2Local(date) {
 // Temporarily suspend a button, prevent overloading the backend
 // if someone start clicking quickly
 function suspendButton(el){
-  $(el).attr('disabled', true);
+  $(el).prop('disabled', true);
   setTimeout(function(){
-    $(el).attr('disabled', false);
+    $(el).prop('disabled', false);
   }, 1000);
 }
 
@@ -1917,13 +1917,13 @@ function initVroom(room) {
       $('#displayName').parent().removeClass('has-error');
     }
     // Enable chat input when you set your disaplay name
-    if (name !== '' && $('#chatBox').attr('disabled')){
-      $('#chatBox').removeAttr('disabled').removeAttr('placeholder');
+    if (name !== '' && $('#chatBox').prop('disabled')){
+      $('#chatBox').prop('disabled', false).removeAttr('placeholder');
       peers.local.hasName = true;
     }
     // And disable it again if you remove your display name
     else if (name === ''){
-      $('#chatBox').attr('disabled', true).attr('placeholder', localize('SET_YOUR_NAME_TO_CHAT'));
+      $('#chatBox').prop('disabled', true).attr('placeholder', localize('SET_YOUR_NAME_TO_CHAT'));
       peers.local.hasName = false;
     }
     peers.local.displayName = name;
@@ -2004,7 +2004,7 @@ function initVroom(room) {
 
   // Disable suspend webcam button if no webcam
   if (!video){
-    $('.btn-suspend-cam').addClass('disabled').attr('disabled', true);
+    $('.btn-suspend-cam').prop('disabled', true);
   }
 
   // Suspend the webcam
@@ -2024,10 +2024,10 @@ function initVroom(room) {
   // Handle auth to become room owner
   $('#ownerAuthPass').on('input', function() {
     if ($('#ownerAuthPass').val() === ''){
-      $('#ownerAuthButton').attr('disabled', 'disabled');
+      $('#ownerAuthButton').prop('disabled', true);
     }
     else{
-      $('#ownerAuthButton').removeAttr('disabled');
+      $('#ownerAuthButton').prop('disabled', false);
     }
   });
   $('#ownerAuthForm').submit(function(event) {
@@ -2049,7 +2049,7 @@ function initVroom(room) {
         }
         else{
           $.notify(localize('WRONG_PASSWORD'), 'error');
-          $('#ownerAuthButton').attr('disabled', 'disabled');
+          $('#ownerAuthButton').prop('disabled', true);
         }
       }
     );
