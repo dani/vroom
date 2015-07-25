@@ -900,7 +900,7 @@ msgstr "Your message has been sent, thank your for taking time to share your exp
 
 #: templates/default/goodbye.html.ep:8
 msgid "THANKS_SEE_YOU_SOON"
-msgstr "Thanks and see you soo"
+msgstr "Thanks and see you soon"
 
 #: templates/default/feedback_thanks.html.ep:8
 msgid "THANK_YOU"
