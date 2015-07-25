@@ -470,7 +470,7 @@ msgstr "from"
 #: templates/default/feedback.html.ep:8
 #: templates/default/goodbye.html.ep:23
 msgid "GIVE_US_YOUR_FEEDBACK"
-msgstr "Give us your feedback"
+msgstr "Please provide us your feedback"
 
 #: templates/default/goodbye.html.ep:1
 msgid "GOODBYE"
