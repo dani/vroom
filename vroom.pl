@@ -1894,6 +1894,17 @@ any '/api' => sub {
   }
   # Update room configuration
   elsif ($req->{action} eq 'update_room_conf'){
+    # Cannot set an owner pass for some rooms
+    if ($req->{param}->{owner_password} &&
+        grep { $_ eq $room->{name} } (split /[,;]/, $config->{'rooms.common_names'})){
+      return $self->render(
+        json => {
+          msg => $self->l('ERROR_COMMON_ROOM_NAME'),
+          err => 'ERROR_COMMON_ROOM_NAME'
+        },
+        status => 406
+      );
+    }
     $room->{locked}       = ($req->{param}->{locked})       ? '1' : '0';
     $room->{ask_for_name} = ($req->{param}->{ask_for_name}) ? '1' : '0';
     $room->{max_members}  = $req->{param}->{max_members};
