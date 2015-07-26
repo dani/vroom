@@ -1479,17 +1479,14 @@ get '/documentation' => sub {
   );
 } => 'documentation';
 
-# Routes for feedback. One get to display the form
-# and one post to get data from it
-get '/feedback' => sub {
+# Route for feedback form
+any [ qw(GET POST) ] => '/feedback' => sub {
   my $self = shift;
-  $self->stash(
-    page => 'feedback'
-  );
-} => 'feedback';
-
-post '/feedback' => sub {
-  my $self    = shift;
+  if ($self->req->method eq 'GET'){
+    return $self->render('feedback',
+      page => 'feedback'
+    );
+  }
   my $email   = $self->param('email') || '';
   my $comment = $self->param('comment');
   my $sent    = $self->mail(
