@@ -84,14 +84,14 @@ msgid "AUDIT"
 msgstr "Audit"
 
 #: templates/default/auth_modal.html.ep:12
-#: templates/default/join.html.ep:147
 msgid "AUTHENTICATE"
 msgstr "Authentification"
 
+#: templates/default/join.html.ep:147
 msgid "AUTH_IF_OWNER"
 msgstr "Authentifiez-vous si vous êtes le propriétaire du salon"
 
-#: vroom.pl:1813
+#: vroom.pl:1817
 msgid "AUTH_SUCCESS"
 msgstr "Vous êtes maintenant authentifié"
 
@@ -113,7 +113,7 @@ msgstr "Un navigateur web moderne, les versions récentes des navigateurs Mozill
 msgid "A_PARTICIPANT"
 msgstr "un participant"
 
-#: vroom.pl:1826
+#: vroom.pl:1835
 msgid "A_PASSWORD_IS_NEEDED_TO_JOIN"
 msgstr "Vous devez saisir un mot de passe pour rejoindre ce salon"
 
@@ -267,7 +267,7 @@ msgstr "Créez ce salon"
 msgid "CREATION_DATE"
 msgstr "Date de création"
 
-#: vroom.pl:2194
+#: vroom.pl:2121
 msgid "DATA_WIPED"
 msgstr "Les données du salon ont été effacées"
 
@@ -301,7 +301,7 @@ msgstr "Ne m'attendez pas"
 msgid "DOWNLOAD_ONE_OF_THESE_BROWSERS"
 msgstr "Nous recommandons de télécharger un des navigateurs suivants, qui supportent les dernières technologies nécessaires à l'utilisation de VROOM"
 
-#: vroom.pl:1858
+#: vroom.pl:1868
 msgid "EMAIL_INVITATION"
 msgstr "Invitation à une conférence vidéo"
 
@@ -321,7 +321,7 @@ msgstr "VROOM! Et la visio conférence devient libre, simple et sûr"
 msgid "ERROR_COMMENT_INVALID"
 msgstr "Ce commentaire n'est pas valide"
 
-#: vroom.pl:1959
+#: vroom.pl:1902
 msgid "ERROR_COMMON_ROOM_NAME"
 msgstr "Le nom de ce salon est trop commun pour être réservé"
 
@@ -338,15 +338,15 @@ msgstr "La date de début doit être antérieure à celle de fin"
 msgid "ERROR_ESTABLISHING_P2P"
 msgstr "Impossible d'établir une connexion avec un des participants"
 
-#: vroom.pl:2291
+#: vroom.pl:2218
 msgid "ERROR_EXPORT_XLSX"
 msgstr "Une erreur est survenue pendant l'export"
 
-#: vroom.pl:2281
+#: vroom.pl:2208
 msgid "ERROR_FEATURE_NOT_AVAILABLE"
 msgstr "Cette fonction n'est pas disponible"
 
-#: vroom.pl:1703
+#: vroom.pl:1702
 msgid "ERROR_INPUT_INVALID"
 msgstr "Paramètres invalides"
 
@@ -359,46 +359,42 @@ msgstr "Ce lien est invalide, votre invitation a probablement expiré, ou vous y
 #: public/js/vroom.js:348
 #: public/js/vroom.js:525
 #: vroom.pl:1494
-#: vroom.pl:1844
+#: vroom.pl:1854
 msgid "ERROR_MAIL_INVALID"
 msgstr "Veuillez saisir une adresse email valide"
 
-#: vroom.pl:1743
+#: vroom.pl:1741
 msgid "ERROR_NAME_CONFLICT"
 msgstr "Ce nom est déjà pris, choisissez en un autre"
 
 #: public/js/vroom.js:445
-#: vroom.pl:1738
-#: vroom.pl:2320
+#: vroom.pl:1736
+#: vroom.pl:2247
 msgid "ERROR_NAME_INVALID"
 msgstr "Ce nom n'est pas valide"
 
 #: public/js/vroom.js:474
 #: public/js/vroom.js:98
 #: templates/default/error.html.ep:7
-#: vroom.pl:1574
-#: vroom.pl:1620
-#: vroom.pl:1730
-#: vroom.pl:1748
-#: vroom.pl:1869
-#: vroom.pl:1898
-#: vroom.pl:1930
-#: vroom.pl:1994
-#: vroom.pl:2013
-#: vroom.pl:2112
-#: vroom.pl:2181
-#: vroom.pl:2200
-#: vroom.pl:2217
-#: vroom.pl:2234
+#: vroom.pl:1621
+#: vroom.pl:1728
+#: vroom.pl:1746
+#: vroom.pl:1879
+#: vroom.pl:1934
+#: vroom.pl:2036
+#: vroom.pl:2107
+#: vroom.pl:2127
+#: vroom.pl:2144
+#: vroom.pl:2161
 msgid "ERROR_OCCURRED"
 msgstr "Une erreur est survenue"
 
+#: vroom.pl:2016
 #: vroom.pl:2092
-#: vroom.pl:2166
 msgid "ERROR_PEER_ID_MISSING"
 msgstr "L'identifiant du pair est absent"
 
-#: vroom.pl:2126
+#: vroom.pl:2050
 msgid "ERROR_PEER_NOT_FOUND"
 msgstr "Ce pair n'existe pas"
 
@@ -409,15 +405,15 @@ msgstr "Vous devez fournir un nom de salon"
 #: vroom.pl:1517
 #: vroom.pl:1532
 #: vroom.pl:1774
-#: vroom.pl:2329
+#: vroom.pl:2256
 msgid "ERROR_ROOM_s_DOESNT_EXIST"
 msgstr "Le salon %s n'existe pas"
 
-#: vroom.pl:1822
+#: vroom.pl:1830
 msgid "ERROR_ROOM_s_LOCKED"
 msgstr "Le salon %s est verrouillé, vous ne pouvez pas le rejoindre"
 
-#: vroom.pl:2339
+#: vroom.pl:2266
 msgid "ERROR_TOO_MANY_MEMBERS"
 msgstr "Ce salon a atteint sa limite de participants"
 
@@ -522,7 +518,7 @@ msgstr "Inviter des participants"
 msgid "INVITE_REPONSE_FROM_s"
 msgstr "Réponse de %s à votre invitation"
 
-#: vroom.pl:1880
+#: vroom.pl:1891
 msgid "INVITE_SENT_TO_s"
 msgstr ""
 "Une invitation a été envoyée aux adresses suivantes\n"
@@ -627,7 +623,7 @@ msgstr "Ce nom sera envoyé aux autres participants"
 msgid "NOTIFICATION_ON_JOIN"
 msgstr "Notification lorsque quelqu'un rejoint ce salon"
 
-#: vroom.pl:1658
+#: vroom.pl:1659
 msgid "NOT_ALLOWED"
 msgstr "Vous n'êtes pas autorisé à faire ceci"
 
@@ -709,7 +705,7 @@ msgstr "Mot de passe requis"
 msgid "PASSWORD_TOO_LONG"
 msgstr "Ce mot de passe est trop long"
 
-#: vroom.pl:2175
+#: vroom.pl:2101
 msgid "PEER_PROMOTED"
 msgstr "Vous avez donné les droits sur ce salon"
 
@@ -750,15 +746,15 @@ msgstr "Raffraichir"
 msgid "RESERVE_THIS_ROOM"
 msgstr "Réserver ce salon"
 
-#: vroom.pl:1924
+#: vroom.pl:1928
 msgid "ROOM_CONFIG_UPDATED"
 msgstr "La configuration du salon a été mise à jour"
 
-#: vroom.pl:2228
+#: vroom.pl:2155
 msgid "ROOM_DELETED"
 msgstr "Le salon a été supprimé"
 
-#: vroom.pl:1819
+#: vroom.pl:1826
 msgid "ROOM_LOCKED_ENTER_OWNER_PASSWORD"
 msgstr "Ce salon est verrouillé, seul un administrateur peut le rejoindre. Veuillez saisir le mot de passe d'administration du salon"
 
@@ -834,7 +830,7 @@ msgstr "Envoyer le message"
 msgid "SERVER_ERROR"
 msgstr "Veuillez nous excuser"
 
-#: vroom.pl:2211
+#: vroom.pl:2138
 msgid "SESSION_CREATED"
 msgstr "La session a été créée"
 
@@ -855,7 +851,7 @@ msgstr "Partagez votre écran entier, ou seulement une fenêtre en un clique ave
 msgid "SHARE_YOUR_SCREEN"
 msgstr "Partager votre écran"
 
-#: vroom.pl:2142
+#: vroom.pl:2067
 msgid "SOMEONE"
 msgstr "Quelqu'un"
 
@@ -950,7 +946,7 @@ msgstr "Rend le salon persistant (sera conservé indéfiniment)"
 msgid "TOOLTIP_RESERVE_THIS_ROOM"
 msgstr "Ce mot de passe vous permettra de récuperer l'accès aux menus de gestion la prochaine fois que vous vous connecterez"
 
-#: vroom.pl:1631
+#: vroom.pl:1632
 msgid "UNSUPPORTED_LANG"
 msgstr "Langue non supportée"
 
@@ -1005,7 +1001,7 @@ msgid "WORKS_EVERYWHERE"
 msgstr "Universel"
 
 #: public/js/vroom.js:2085
-#: vroom.pl:1829
+#: vroom.pl:1838
 msgid "WRONG_PASSWORD"
 msgstr "Mauvais mot de passe"
 
@@ -1114,6 +1110,6 @@ msgstr "%s a réactivé votre micro"
 msgid "s_IS_UNMUTING_s"
 msgstr "%s a réactivé le micro de %s"
 
-#: vroom.pl:2142
+#: vroom.pl:2066
 msgid "s_JOINED_ROOM_s"
 msgstr "%s a rejoint le salon %s"

@@ -84,14 +84,14 @@ msgid "AUDIT"
 msgstr "Audit"
 
 #: templates/default/auth_modal.html.ep:12
-#: templates/default/join.html.ep:147
 msgid "AUTHENTICATE"
 msgstr "Authentication"
 
+#: templates/default/join.html.ep:147
 msgid "AUTH_IF_OWNER"
 msgstr "Authenticate if you are the room owner"
 
-#: vroom.pl:1813
+#: vroom.pl:1817
 msgid "AUTH_SUCCESS"
 msgstr "You are now authenticated"
 
@@ -113,7 +113,7 @@ msgstr "A modern web browser, recent versions of Mozilla Firefox, Google Chrome 
 msgid "A_PARTICIPANT"
 msgstr "a participant"
 
-#: vroom.pl:1826
+#: vroom.pl:1835
 msgid "A_PASSWORD_IS_NEEDED_TO_JOIN"
 msgstr "You must provide a password to join this room"
 
@@ -267,7 +267,7 @@ msgstr "Create this room"
 msgid "CREATION_DATE"
 msgstr "Creation date"
 
-#: vroom.pl:2194
+#: vroom.pl:2121
 msgid "DATA_WIPED"
 msgstr "Room data has been wiped"
 
@@ -301,7 +301,7 @@ msgstr "Don't wait for me"
 msgid "DOWNLOAD_ONE_OF_THESE_BROWSERS"
 msgstr "We recommend you download one of the following browsers which support the latest web technologies required to use VROOM"
 
-#: vroom.pl:1858
+#: vroom.pl:1868
 msgid "EMAIL_INVITATION"
 msgstr "Video conference invitation"
 
@@ -321,7 +321,7 @@ msgstr "VROOM! And video conferencing becomes free, simple and safe"
 msgid "ERROR_COMMENT_INVALID"
 msgstr "This comment is not valid"
 
-#: vroom.pl:1959
+#: vroom.pl:1902
 msgid "ERROR_COMMON_ROOM_NAME"
 msgstr "This room name is too common to be reserved"
 
@@ -338,15 +338,15 @@ msgstr "Start date must be before end date"
 msgid "ERROR_ESTABLISHING_P2P"
 msgstr "Cannot establish a connection with a participant"
 
-#: vroom.pl:2291
+#: vroom.pl:2218
 msgid "ERROR_EXPORT_XLSX"
 msgstr "An error occurred during export"
 
-#: vroom.pl:2281
+#: vroom.pl:2208
 msgid "ERROR_FEATURE_NOT_AVAILABLE"
 msgstr "This feature is not available"
 
-#: vroom.pl:1703
+#: vroom.pl:1702
 msgid "ERROR_INPUT_INVALID"
 msgstr "Invalid input"
 
@@ -359,46 +359,42 @@ msgstr "This link is invalid, your invitation has probably expired, or you've al
 #: public/js/vroom.js:348
 #: public/js/vroom.js:525
 #: vroom.pl:1494
-#: vroom.pl:1844
+#: vroom.pl:1854
 msgid "ERROR_MAIL_INVALID"
 msgstr "Please enter a valid email address"
 
-#: vroom.pl:1743
+#: vroom.pl:1741
 msgid "ERROR_NAME_CONFLICT"
 msgstr "A room with this name already exists, please choose another one"
 
 #: public/js/vroom.js:445
-#: vroom.pl:1738
-#: vroom.pl:2320
+#: vroom.pl:1736
+#: vroom.pl:2247
 msgid "ERROR_NAME_INVALID"
 msgstr "This name is not valid"
 
 #: public/js/vroom.js:474
 #: public/js/vroom.js:98
 #: templates/default/error.html.ep:7
-#: vroom.pl:1574
-#: vroom.pl:1620
-#: vroom.pl:1730
-#: vroom.pl:1748
-#: vroom.pl:1869
-#: vroom.pl:1898
-#: vroom.pl:1930
-#: vroom.pl:1994
-#: vroom.pl:2013
-#: vroom.pl:2112
-#: vroom.pl:2181
-#: vroom.pl:2200
-#: vroom.pl:2217
-#: vroom.pl:2234
+#: vroom.pl:1621
+#: vroom.pl:1728
+#: vroom.pl:1746
+#: vroom.pl:1879
+#: vroom.pl:1934
+#: vroom.pl:2036
+#: vroom.pl:2107
+#: vroom.pl:2127
+#: vroom.pl:2144
+#: vroom.pl:2161
 msgid "ERROR_OCCURRED"
 msgstr "An error occurred"
 
+#: vroom.pl:2016
 #: vroom.pl:2092
-#: vroom.pl:2166
 msgid "ERROR_PEER_ID_MISSING"
 msgstr "Peer ID is missing"
 
-#: vroom.pl:2126
+#: vroom.pl:2050
 msgid "ERROR_PEER_NOT_FOUND"
 msgstr "This peer doesn't exist"
 
@@ -409,15 +405,15 @@ msgstr "Room name is missing"
 #: vroom.pl:1517
 #: vroom.pl:1532
 #: vroom.pl:1774
-#: vroom.pl:2329
+#: vroom.pl:2256
 msgid "ERROR_ROOM_s_DOESNT_EXIST"
 msgstr "Room %s doesn't exist"
 
-#: vroom.pl:1822
+#: vroom.pl:1830
 msgid "ERROR_ROOM_s_LOCKED"
 msgstr "Room %s is locked, you cannot join it"
 
-#: vroom.pl:2339
+#: vroom.pl:2266
 msgid "ERROR_TOO_MANY_MEMBERS"
 msgstr "This room reached its members limit"
 
@@ -522,7 +518,7 @@ msgstr "Invite other people"
 msgid "INVITE_REPONSE_FROM_s"
 msgstr "%s responded to your invitation"
 
-#: vroom.pl:1880
+#: vroom.pl:1891
 msgid "INVITE_SENT_TO_s"
 msgstr ""
 "An invitation was sent to the following addresses\n"
@@ -627,7 +623,7 @@ msgstr "This name will be sent to the other peers"
 msgid "NOTIFICATION_ON_JOIN"
 msgstr "Notification when someone joins this room"
 
-#: vroom.pl:1658
+#: vroom.pl:1659
 msgid "NOT_ALLOWED"
 msgstr "You are not allowed to do this"
 
@@ -709,7 +705,7 @@ msgstr "Password required"
 msgid "PASSWORD_TOO_LONG"
 msgstr "This password is too long"
 
-#: vroom.pl:2175
+#: vroom.pl:2101
 msgid "PEER_PROMOTED"
 msgstr "You have granted administration privileges on the roo"
 
@@ -750,15 +746,15 @@ msgstr "Refresh"
 msgid "RESERVE_THIS_ROOM"
 msgstr "Reserve this room"
 
-#: vroom.pl:1924
+#: vroom.pl:1928
 msgid "ROOM_CONFIG_UPDATED"
 msgstr "Room configuration has been updated"
 
-#: vroom.pl:2228
+#: vroom.pl:2155
 msgid "ROOM_DELETED"
 msgstr "This room has been deleted"
 
-#: vroom.pl:1819
+#: vroom.pl:1826
 msgid "ROOM_LOCKED_ENTER_OWNER_PASSWORD"
 msgstr "This room is locked. Only an administrator can joint it. Please enter the administrator's password"
 
@@ -834,7 +830,7 @@ msgstr "Send the message"
 msgid "SERVER_ERROR"
 msgstr "Sorry for the inconvinience"
 
-#: vroom.pl:2211
+#: vroom.pl:2138
 msgid "SESSION_CREATED"
 msgstr "Session created"
 
@@ -855,7 +851,7 @@ msgstr "Share your entire screen, or only a window in a single click, with an gr
 msgid "SHARE_YOUR_SCREEN"
 msgstr "Share your screen with the other members of this room"
 
-#: vroom.pl:2142
+#: vroom.pl:2067
 msgid "SOMEONE"
 msgstr "Someone"
 
@@ -950,7 +946,7 @@ msgstr "The room will be persistent (kept forever)"
 msgid "TOOLTIP_RESERVE_THIS_ROOM"
 msgstr "If this password is set, you'll be able to access the configuration menus next time you connect"
 
-#: vroom.pl:1631
+#: vroom.pl:1632
 msgid "UNSUPPORTED_LANG"
 msgstr "Unsupported lanbguage"
 
@@ -1005,7 +1001,7 @@ msgid "WORKS_EVERYWHERE"
 msgstr "Universal"
 
 #: public/js/vroom.js:2085
-#: vroom.pl:1829
+#: vroom.pl:1838
 msgid "WRONG_PASSWORD"
 msgstr "Wrong password"
 
@@ -1114,6 +1110,6 @@ msgstr "%s has unmuted your microphon"
 msgid "s_IS_UNMUTING_s"
 msgstr "%s has unmuted %s's microphone"
 
-#: vroom.pl:2142
+#: vroom.pl:2066
 msgid "s_JOINED_ROOM_s"
 msgstr "%s joined room %s"
