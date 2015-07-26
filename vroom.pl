@@ -2068,8 +2068,11 @@ any '/api' => sub {
     # Send notifications
     my $recipients = $self->get_email_notifications($room->{name});
     foreach my $rcpt (keys %{$recipients}){
-      # TODO: log an event
-      $self->app->log->debug('Sending an email to ' . $recipients->{$rcpt}->{email});
+      $self->log_event(
+        event => 'join_notification',
+        msg   => 'Sending an email to ' . $recipients->{$rcpt}->{email} .
+                 ' to inform that someone joined room ' . $room->{name}
+      );
       my $sent = $self->mail(
         to      => $recipients->{$rcpt}->{email},
         subject => $subj,

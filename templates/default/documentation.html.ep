@@ -1229,6 +1229,14 @@ systemctl restart vroom.service</pre>
                 An API action was allowed
               </td>
             </tr>
+            <tr>
+              <td>
+                join_notification
+              </td>
+              <td>
+                An email notification was sent because someone joined a room
+              </td>
+            </tr>
           </tbody>
         </table>
       </p>
