@@ -2381,7 +2381,7 @@ app->sessions->cookie_name('vroom');
 app->hook(before_dispatch => sub {
   my $self = shift;
   # Switch to the desired language
-  if ($self->session('language')){
+  if ($self->session('language') && $self->session('language') ne $self->languages){
     $self->languages($self->session('language'));
   }
   # Stash the configuration hashref
