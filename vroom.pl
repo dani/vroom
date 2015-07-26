@@ -1538,12 +1538,12 @@ get '/kicked/(:room)' => sub {
 
 # Route for invitition response
 any [ qw(GET POST) ] => '/invitation/:token' => { token => '' } => sub {
-  my $self = shift;
+  my $self  = shift;
   my $token = $self->stash('token');
   # Delete expired invitation now
   $self->purge_invitations;
   my $invite = $self->get_invitation_by_token($token);
-  my $room = $self->get_room_by_id($invite->{room_id});
+  my $room   = $self->get_room_by_id($invite->{room_id});
   if (!$invite || !$room){
     return $self->render('error',
       err  => 'ERROR_INVITATION_INVALID',
@@ -1557,45 +1557,45 @@ any [ qw(GET POST) ] => '/invitation/:token' => { token => '' } => sub {
       room  => $room->{name},
     );
   }
-  elsif ($self->req->method eq 'POST'){
-    my $response = $self->param('response') || 'decline';
-    my $message = $self->param('message') || '';
-    if ($response !~ m/^(later|decline)$/ || !$self->respond_to_invitation($token, $response, $message)){
-      return $self->render('error',
-        err  => 'ERROR_INVITATION_INVALID',
-        msg  => $self->l('ERROR_INVITATION_INVALID'),
-        room => $room
-      );
-    }
-    return $self->render('invitation_thanks');
+  my $response = $self->param('response') || 'decline';
+  my $message = $self->param('message') || '';
+  if ($response !~ m/^(later|decline)$/ ||
+     !$self->respond_to_invitation($token, $response, $message)){
+    return $self->render('error',
+      err  => 'ERROR_INVITATION_INVALID',
+      msg  => $self->l('ERROR_INVITATION_INVALID'),
+      room => $room
+    );
   }
-  return $self->render('error',
-    err  => 'ERROR_OCCURRED',
-    msg  => $self->l('ERROR_OCCURRED'),
-    room => $room
-  );
+  return $self->render('invitation_thanks');
 };
 
 # Create a json script which contains localization
 get '/locales/(:lang).js' => sub {
-  my $self = shift;
+  my $self     = shift;
   my $usr_lang = $self->languages;
   my $req_lang = $self->stash('lang');
+  # Force en if requested lang is not supported
   $req_lang = 'en' unless grep { $_ eq $req_lang } $self->get_supported_lang;
   # Temporarily switch to the requested locale
   # eg, we can be in en and ask for /locales/fr.js
   $self->languages($req_lang);
   my $strings = {};
-  my $fallback_strings = {};
   foreach my $string (keys %Vroom::I18N::fr::Lexicon){
     next if $string eq '';
+    # If the string is available in the requested locale, use it
     if ($self->l($string) ne ''){
       $strings->{$string} = $self->l($string);
     }
-    else{
+    # Else, fallback to en
+    elsif ($req_lang ne 'en'){
       $self->languages('en');
       $strings->{$string} = $self->l($string);
       $self->languages($req_lang);
+    }
+    # NO localization available
+    else{
+      $strings->{$string} = $string;
     }
   }
   # Set the user locale back
@@ -1612,8 +1612,9 @@ any '/api' => sub {
   my $self = shift;
   $self->purge_api_keys;
   my $token = $self->req->headers->header('X-VROOM-API-Key');
-  my $req = Mojo::JSON::decode_json($self->param('req'));
+  my $req   = Mojo::JSON::decode_json($self->param('req'));
   my $room;
+  # action and param are required for every API call
   if (!$req->{action} || !$req->{param}){
     return $self->render(
       json => {
@@ -1640,7 +1641,7 @@ any '/api' => sub {
     );
   }
 
-  # Now, lets check if the key can do the requested action
+  # Now, lets check if the API key can do the requested action
   my $res = $self->key_can_do_this({
     token  => $token,
     action => $req->{action},
@@ -1662,6 +1663,8 @@ any '/api' => sub {
     );
   }
 
+  # Now we know the action is allowed, but a few might not need to be logged
+  # so skip them now
   if (!grep { $_ eq $req->{action} } API_NO_LOG){
     $self->log_event({
       event => 'api_action_allowed',
@@ -1689,12 +1692,8 @@ any '/api' => sub {
   elsif ($req->{action} eq 'get_event_list'){
     my $start = $req->{param}->{start};
     my $end   = $req->{param}->{end};
-    if ($start eq ''){
-      $start = DateTime->now->ymd;
-    }
-    if ($end eq ''){
-      $end = DateTime->now->ymd;
-    }
+    $start    = DateTime->now->ymd if $start eq '';
+    $end      = DateTime->now->ymd if $end eq '';
     # Validate input
     if (!$self->valid_date($start) || !$self->valid_date($end)){
       return $self->render(
@@ -1709,9 +1708,7 @@ any '/api' => sub {
     foreach my $event (keys %{$events}){
       # Init NULL values to empty strings
       foreach (qw(date from_ip event user message)){
-        if (!$events->{$event}->{$_}){
-          $events->{$event}->{$_} = '';
-        }
+        $events->{$event}->{$_} = '' unless $events->{$event}->{$_};
       }
     }
     # And send the list of event as a json object
@@ -1721,6 +1718,7 @@ any '/api' => sub {
       }
     );
   }
+
   # And here anonymous method, which do not require an API Key
   elsif ($req->{action} eq 'create_room'){
     $req->{param}->{room} ||= $self->get_random_name();
@@ -1749,6 +1747,7 @@ any '/api' => sub {
       return $self->render(json => $json, status => 500);
     }
     $json->{err} = '';
+    # The creator of the room is owner
     $self->associate_key_to_room({
       room => $req->{param}->{room},
       key  => $token,
@@ -1757,6 +1756,7 @@ any '/api' => sub {
     return $self->render(json => $json);
   }
 
+  # Ok now, every other API calls need a room name
   if (!$req->{param}->{room}){
     return $self->render(
       json => {
@@ -1766,7 +1766,7 @@ any '/api' => sub {
       status => '400'
     );
   }
-
+  # And it must be a valid room name
   $room = $self->get_room_by_name($req->{param}->{room});
   if (!$room){
     return $self->render(
@@ -1778,18 +1778,22 @@ any '/api' => sub {
     );
   }
 
-  # Ok, now, we don't have to bother with authorization anymore
+  # Now, we don't have to bother with authorization anymore
+  # key_can_do_this already checked this
   if ($req->{action} eq 'authenticate'){
     my $pass = $req->{param}->{password};
     my $role = $self->get_key_role($token, $room->{name});
     my $reason;
     my $code = 401;
+    # Is he owner pasword provided ?
     if ($room->{owner_password} && Crypt::SaltedHash->validate($room->{owner_password}, $pass)){
       $role = 'owner';
     }
+    # Or the participant pasword ?
     elsif (!$role && $room->{join_password} && Crypt::SaltedHash->validate($room->{join_password}, $pass)){
       $role = 'participant';
     }
+    # User has no role yet, but room is not protected, so grant him the participant role
     elsif (!$role && !$room->{join_password} && !$room->{locked}){
       $role = 'participant';
     }
@@ -1815,14 +1819,19 @@ any '/api' => sub {
         }
       );
     }
+    # If no role, give the user a reason
     elsif ($room->{locked} && $room->{owner_password}){
+      # When room is locked, but an owner password is set
+      # we can enter with this password
       $reason = $self->l('ROOM_LOCKED_ENTER_OWNER_PASSWORD');
     }
     elsif ($room->{locked}){
+      # When room is locked, without owner passwod, there's nothing to do
       $reason = sprintf($self->l('ERROR_ROOM_s_LOCKED'), $room->{name});
       $code = 403;
     }
     elsif ((!$pass || $pass eq '') && $room->{join_password}){
+      # password not given, and acces require one
       $reason = $self->l('A_PASSWORD_IS_NEEDED_TO_JOIN')
     }
     elsif ($room->{join_password}){
@@ -1837,8 +1846,9 @@ any '/api' => sub {
   }
   elsif ($req->{action} eq 'invite_email'){
     my $rcpts = $req->{param}->{rcpts};
+    @$rcpts = grep { $_ ne '' } @$rcpts;
     foreach my $addr (@$rcpts){
-      if (!$self->valid_email($addr) && $addr ne ''){
+      if (!$self->valid_email($addr)){
         return $self->render(
           json => {
             msg => $self->l('ERROR_MAIL_INVALID'),
@@ -1874,6 +1884,7 @@ any '/api' => sub {
       }
       $self->app->log->info("Email invitation to join room " . $req->{param}->{room} . " sent to " . $addr);
     }
+    # Mark the inviter as waiting for a reply
     $peers->{$self->session('peer_id')}->{check_invitations} = 1;
     return $self->render(
       json => {
@@ -1881,33 +1892,14 @@ any '/api' => sub {
        }
     );
   }
-  # Handle room lock/unlock
-  elsif ($req->{action} =~ m/(un)?lock_room/){
-    $room->{locked} = ($req->{action} eq 'lock_room') ? '1':'0';
-    if ($self->modify_room($room)){
-      my $m = ($req->{action} eq 'lock_room') ? 'ROOM_LOCKED' : 'ROOM_UNLOCKED';
-      return $self->render(
-        json => {
-          msg => $self->l($m),
-          err => $m
-        }
-      );
-    }
-    return $self->render(
-      json => {
-        msg => $self->l('ERROR_OCCURRED'),
-        err => 'ERROR_OCCURRED',
-      },
-      status => 503
-    );
-  }
   # Update room configuration
   elsif ($req->{action} eq 'update_room_conf'){
-    $room->{locked} = ($req->{param}->{locked}) ? '1' : '0';
+    $room->{locked}       = ($req->{param}->{locked})       ? '1' : '0';
     $room->{ask_for_name} = ($req->{param}->{ask_for_name}) ? '1' : '0';
-    $room->{max_members} = $req->{param}->{max_members};
+    $room->{max_members}  = $req->{param}->{max_members};
     # Room persistence can only be set by admins
-    if ($req->{param}->{persistent} ne '' && $self->key_can_do_this({token => $token, action => 'set_persistent'})){
+    if ($req->{param}->{persistent} ne '' &&
+        $self->key_can_do_this({token => $token, action => 'set_persistent'})){
       $room->{persistent} = ($req->{param}->{persistent} eq Mojo::JSON::true) ? '1' : '0';
     }
     foreach my $pass (qw/join_password owner_password/){
@@ -1918,7 +1910,8 @@ any '/api' => sub {
         $room->{$pass} = Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($req->{param}->{$pass})->generate;
       }
     }
-    if ($self->modify_room($room) && $self->update_email_notifications($room->{name},$req->{param}->{emails})){
+    if ($self->modify_room($room) &&
+        $self->update_email_notifications($room->{name}, $req->{param}->{emails})){
       return $self->render(
         json => {
           msg => $self->l('ROOM_CONFIG_UPDATED')
@@ -1933,107 +1926,25 @@ any '/api' => sub {
       staus => 503
     );
   }
-  # Handle password (join and owner)
-  elsif ($req->{action} eq 'set_join_password'){
-    $room->{join_password} = ($req->{param}->{password} && $req->{param}->{password} ne '') ?
-      Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($req->{param}->{password})->generate : undef;
-    if ($self->modify_room($room)){
-      return $self->render(
-        json => {
-          msg => $self->l(($req->{param}->{password}) ? 'PASSWORD_PROTECT_SET' : 'PASSWORD_PROTECT_UNSET'),
-        }
-      );
-    }
-    return $self->render(
-      json => {
-        msg => $self->('ERROR_OCCURRED'),
-        err => 'ERROR_OCCURRED',
-      },
-      status => 503
-    );
-  }
-  elsif ($req->{action} eq 'set_owner_password'){
-    if (grep { $req->{param}->{room} eq $_ } (split /[,;]/, $config->{'rooms.common_names'})){
-      return $self->render(
-        json => {
-          msg => $self->l('ERROR_COMMON_ROOM_NAME'),
-          err => 'ERROR_COMMON_ROOM_NAME'
-        },
-        status => 406
-      );
-    }
-    $room->{owner_password} = ($req->{param}->{password} && $req->{param}->{password} ne '') ?
-      Crypt::SaltedHash->new(algorithm => 'SHA-256')->add($req->{param}->{password})->generate : undef;
-    if ($self->modify_room($room)){
-      return $self->render(
-        json => {
-          msg => $self->l(($req->{param}->{password}) ? 'ROOM_NOW_RESERVED' : 'ROOM_NO_MORE_RESERVED'),
-        }
-      );
-    }
-    return $self->render(
-      json => {
-        msg => $self->('ERROR_OCCURRED'),
-        err => 'ERROR_OCCURRED',
-      },
-      status => 503
-    );
-  }
-  elsif ($req->{action} eq 'set_persistent'){
-    my $set = $self->param('set');
-    $room->{persistent} = ($set eq 'on') ? 1 : 0;
-    if ($self->modify_room($room)){
-      return $self->render(
-        json => {
-          msg => $self->l(($set eq 'on') ? 'ROOM_NOW_PERSISTENT' : 'ROOM_NO_MORE_PERSISTENT')
-        }
-      );
-    }
-    return $self->render(
-      json => {
-        msg => $self->l('ERROR_OCCURRED'),
-        err => 'ERROR_OCCURRED',
-      },
-      status => 503
-    );
-  }
-  # Set/unset askForName
-  elsif ($req->{action} eq 'set_ask_for_name'){
-    my $set = $req->{param}->{set};
-    $room->{ask_for_name} = ($set eq 'on') ? 1 : 0;
-    if ($self->modify_room($room)){
-      return $self->render(
-        json => {
-          msg => $self->l(($set eq 'on') ? 'FORCE_DISPLAY_NAME' : 'NAME_WONT_BE_ASKED')
-        }
-      );
-    }
-    return $self->render(
-      json => {
-        msg => $self->l('ERROR_OCCURRED'),
-        err => 'ERROR_OCCURRED',
-      },
-      status => 503
-    );
-  }
   # Return configuration for SimpleWebRTC
   elsif ($req->{action} eq 'get_rtc_conf'){
+    # Build a SimpleWebRTC configuration object
     my $resp = {
-      url => Mojo::URL->new($self->url_for('/')->to_abs)->scheme('https'),
+      url                  => Mojo::URL->new($self->url_for('/')->to_abs)->scheme('https'),
       peerConnectionConfig => {
         iceServers => []
       },
-      autoRequestMedia => Mojo::JSON::true,
-      enableDataChannels => Mojo::JSON::true,
-      debug => Mojo::JSON::false,
+      autoRequestMedia     => Mojo::JSON::true,
+      enableDataChannels   => Mojo::JSON::true,
+      debug                => Mojo::JSON::false,
       detectSpeakingEvents => Mojo::JSON::true,
-      adjustPeerVolume => Mojo::JSON::false,
-      autoAdjustMic => Mojo::JSON::false,
-      harkOptions => {
-        interval => 300,
+      adjustPeerVolume     => Mojo::JSON::false,
+      autoAdjustMic        => Mojo::JSON::false,
+      harkOptions          => {
+        interval  => 300,
         threshold => -20
       },
-      media => {
+      media                => {
         audio => Mojo::JSON::true,
         video => {
           mandatory => {
@@ -2041,12 +1952,13 @@ any '/api' => sub {
           }
         }
       },
-      localVideo => {
+      localVideo           => {
         autoplay => Mojo::JSON::true,
-        mirror => Mojo::JSON::false,
-        muted => Mojo::JSON::true
+        mirror   => Mojo::JSON::false,
+        muted    => Mojo::JSON::true
       }
     };
+    # Stun and turn server can be a simple url or an array
     if ($config->{'turn.stun_server'}){
       if (ref $config->{'turn.stun_server'} ne 'ARRAY'){
         $config->{'turn.stun_server'} = [ $config->{'turn.stun_server'} ];
@@ -2061,7 +1973,7 @@ any '/api' => sub {
       }
       foreach my $t (@{$config->{'turn.turn_server'}}){
         my $turn = { url => $t };
-        ($turn->{username},$turn->{credential}) = $self->get_turn_creds($room->{name});
+        ($turn->{username}, $turn->{credential}) = $self->get_turn_creds($room->{name});
         push @{$resp->{peerConnectionConfig}->{iceServers}}, $turn;
       }
     }
@@ -2071,12 +1983,13 @@ any '/api' => sub {
       }
     );
   }
-  # Return just room config
+  # Return room config
   elsif ($req->{action} eq 'get_room_conf'){
     my $resp = $self->get_room_conf($room);
     my $role = $self->get_key_role($token,$room->{name});
     if (!$role || $role !~ m/^admin|owner$/){
-      $self->app->log->debug("API Key $token is not admin, nor owner of room " . $room->{name} . ", blanking out sensible data");
+      $self->app->log->debug("API Key $token is not admin, nor owner of room " .
+                             $room->{name} . ", blanking out sensible data");
       $resp->{notif} = {};
     }
     return $self->render(
@@ -2096,7 +2009,7 @@ any '/api' => sub {
       );
     }
     if ($self->session('peer_id') && $self->session('peer_id') eq $peer_id){
-      my $api_role = $self->get_key_role($token,$room->{name});
+      my $api_role = $self->get_key_role($token, $room->{name});
       # If we just have been promoted to owner
       if ($api_role ne 'owner' &&
           $self->get_peer_role($peer_id) &&
@@ -2137,12 +2050,14 @@ any '/api' => sub {
   }
   # Notify the backend when we join a room
   elsif ($req->{action} eq 'join'){
-    my $name = $req->{param}->{name} || '';
+    my $name    = $req->{param}->{name} || '';
     my $peer_id = $req->{param}->{peer_id};
-    my $subj = sprintf($self->l('s_JOINED_ROOM_s'), ($name eq '') ? $self->l('SOMEONE') : $name, $room->{name});
+    my $subj    = sprintf($self->l('s_JOINED_ROOM_s'), ($name eq '') ?
+                    $self->l('SOMEONE') : $name, $room->{name});
     # Send notifications
     my $recipients = $self->get_email_notifications($room->{name});
     foreach my $rcpt (keys %{$recipients}){
+      # TODO: log an event
       $self->app->log->debug('Sending an email to ' . $recipients->{$rcpt}->{email});
       my $sent = $self->mail(
         to      => $recipients->{$rcpt}->{email},
@@ -2186,7 +2101,8 @@ any '/api' => sub {
   }
   # Wipe room data (chat history and etherpad content)
   elsif ($req->{action} eq 'wipe_data'){
-    if (!$optf->{etherpad} || ($optf->{etherpad}->delete_pad($room->{etherpad_group} . '$' . $room->{name}) &&
+    if (!$optf->{etherpad} ||
+         ($optf->{etherpad}->delete_pad($room->{etherpad_group} . '$' . $room->{name}) &&
            $self->create_pad($room->{name}) &&
            $self->create_etherpad_session($room->{name}))){
       return $self->render(
@@ -2217,7 +2133,7 @@ any '/api' => sub {
         msg => $self->l('ERROR_OCCURRED'),
         err => 'ERROR_OCCURRED',
       },
-      styaus => 503
+      status => 503
     );
   }
   # Delete a room
@@ -2247,7 +2163,7 @@ group {
     # TODO: support several auth method, including an internal one where user are managed
     # in our DB, and another where auth is handled by the web server
     $self->login;
-     my $role = $self->get_key_role($self->session('key'), undef);
+    my $role = $self->get_key_role($self->session('key'), undef);
     if (!$role || $role ne 'admin'){
       $self->make_key_admin($self->session('key'));
     }
@@ -2304,8 +2220,8 @@ group {
 
 # Catch all route: if nothing else match, it's the name of a room
 get '/:room' => sub {
-  my $self = shift;
-  my $room = $self->stash('room');
+  my $self  = shift;
+  my $room  = $self->stash('room');
   my $video = $self->param('video') || '1';
   my $token = $self->param('token') || undef;
   # Redirect to lower case
@@ -2341,7 +2257,7 @@ get '/:room' => sub {
       room => $room,
     );
   }
-  if ($self->check_invite_token($room,$token)){
+  if ($self->check_invite_token($room, $token)){
     $self->associate_key_to_room({
       room => $room,
       key  => $self->session('key'),
@@ -2364,8 +2280,9 @@ get '/:room' => sub {
   );
 };
 
+
 # use the templates defined in the config
-push @{app->renderer->paths}, 'templates/'.$config->{'interface.template'};
+push @{app->renderer->paths}, 'templates/' . $config->{'interface.template'};
 
 
 app->update_session_keys;
@@ -2391,8 +2308,8 @@ app->hook(before_dispatch => sub {
   # But don't error when user requests static assets
   if ($error && @{$self->req->url->path->parts}[-1] !~ m/\.(css|js|png|woff2?|mp3|localize\/.*)$/){
     return $self->render('error',
-      msg => $self->l($error),
-      err => $error,
+      msg  => $self->l($error),
+      err  => $error,
       room => ''
     );
   }

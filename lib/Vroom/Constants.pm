@@ -105,12 +105,6 @@ use constant API_ACTIONS => {
   },
   owner => {
     invite_email       => 1,
-    lock_room          => 1,
-    unlock_room        => 1,
-    set_join_password  => 1,
-    set_owner_password => 1,
-    set_ask_for_name   => 1,
-    email_notification => 1,
     promote_peer       => 1,
     wipe_data          => 1,
     delete_room        => 1,
