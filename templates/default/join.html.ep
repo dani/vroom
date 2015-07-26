@@ -144,7 +144,7 @@
                   data-target="#ownerAuthModal"
                   data-toggle="tooltip"
                   data-placement="bottom"
-                  title="<%= l('AUTHENTICATE') %>">
+                  title="<%= l('AUTH_IF_OWNER') %>">
             <span class="glyphicon glyphicon-log-in">
             </span>
           </button>
