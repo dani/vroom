@@ -498,6 +498,40 @@ function initIndex(){
   });
 }
 
+// The feedback page
+function initFeedback(){
+  $('#email').on('input', function(){
+    if (!$('#email').val().match(/\S+@\S+/) && $('#email').val() !== ''){
+       $('#email').parent().addClass('has-error');
+    }
+    else{
+      $('#email').parent().removeClass('has-error');
+    }
+  });
+
+  $('#comment').on('input', function(){
+    if ($('#comment').val() === ''){
+      $('#comment').parent().addClass('has-error');
+    }
+    else{
+      $('#comment').parent().removeClass('has-error');
+    }
+  });
+
+  $('#feedback-form').submit(function(){
+    var ok = true;
+    if ($('#email').parent().hasClass('has-error')){
+      ok = false;
+      $('#email').notify(localize('ERROR_MAIL_INVALID'), 'error');
+    }
+    if ($('#comment').parent().hasClass('has-error') || $('#comment').val() === ''){
+      ok = false;
+      $('#comment').notify(localize('ERROR_COMMENT_INVALID'), 'error').parent().addClass('has-error');
+    }
+    return ok;
+  });
+}
+
 // The documentation page
 function initDoc(){
 

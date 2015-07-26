@@ -1487,7 +1487,14 @@ any [ qw(GET POST) ] => '/feedback' => sub {
       page => 'feedback'
     );
   }
-  my $email   = $self->param('email') || '';
+  my $email = $self->param('email');
+  if ($email && $email ne '' && !$self->valid_email($email)){
+    return $self->render('error',
+      err  => 'ERROR_MAIL_INVALID',
+      msg  => $self->l('ERROR_MAIL_INVALID'),
+      room => ''
+    );
+  }
   my $comment = $self->param('comment');
   my $sent    = $self->mail(
     to      => $config->{'email.contact'},

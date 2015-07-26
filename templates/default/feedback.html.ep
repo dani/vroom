@@ -3,7 +3,7 @@
 %= include 'public_toolbar'
 <div class="container-fluid">
   <div class="well publicForm">
-    <form action="<%= url_for('/feedback') %>" method="post">
+    <form id="feedback-form" action="<%= url_for('/feedback') %>" method="post">
       <legend class=text-center">
         %= l('GIVE_US_YOUR_FEEDBACK')
       </legend>
@@ -15,7 +15,7 @@
         <label for="email">
           %= l('YOUR_MAIL_OPTIONAL')
         </label>
-        <input type="email"
+        <input type="text"
                class="form-control"
                id="email"
                name="email"
@@ -29,8 +29,7 @@
                   name="comment"
                   class="form-control"
                   rows="10"
-                  placeholder="<%= l('VROOM_IS_AWESOME') %>"
-                  required></textarea>
+                  placeholder="<%= l('VROOM_IS_AWESOME') %>"></textarea>
       </div>
       <button type="submit"
               class="btn btn-primary">
@@ -44,4 +43,9 @@
   </div>
 </div>
 %= include 'js_common'
+<script>
+  $(document).ready(function() {
+    initFeedback();
+  });
+</script>
 %= include 'footer'
