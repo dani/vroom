@@ -1,7 +1,9 @@
 <html>
   <p>
+  % if ($email && $email ne ''){
   <%= l('FROM') %>: <%= $email %>
   </p>
+  % }
   <p>
   <%= l('COMMENT') %>: <%= $comment %>
   </p>
