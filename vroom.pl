@@ -360,11 +360,6 @@ helper logout => sub {
   if ($optf->{etherpad} && $self->session($room) && $self->session($room)->{etherpadSessionId}){
     $optf->{etherpad}->delete_session($self->session($room)->{etherpadSessionId});
   }
-  if ($self->session('peer_id') && 
-      $peers->{$self->session('peer_id')} &&
-      $peers->{$self->session('peer_id')}->{socket}){
-    $peers->{$self->session('peer_id')}->{socket}->finish;
-  }
   my $sth = eval {
     $self->db->prepare('DELETE FROM `api_keys`
                          WHERE `token`=?');
