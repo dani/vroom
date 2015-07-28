@@ -17,6 +17,7 @@ sub get_conf(){
   $config->{'database.dsn'}                      ||= 'DBI:mysql:database=vroom;host=localhost';
   $config->{'database.user'}                     ||= 'vroom';
   $config->{'database.password'}                 ||= 'vroom';
+  $config->{'database.redis'}                    ||= 'localhost:6379';
   $config->{'signaling.uri'}                     ||= 'https://vroom.example.com/';
   $config->{'turn.stun_server'}                  ||= 'stun.l.google.com:19302';
   $config->{'turn.turn_server'}                  ||= undef;

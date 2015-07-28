@@ -8,6 +8,7 @@ use lib 'lib';
 use Mojolicious::Lite;
 use Mojolicious::Plugin::Mail;
 use Mojolicious::Plugin::Database;
+use Mojolicious::Plugin::Redis;
 use Mojolicious::Plugin::StaticCompressor;
 use Vroom::Constants;
 use Vroom::Conf;
@@ -98,6 +99,12 @@ plugin database => {
     RaiseError           => 1,
     PrintError           => 0
   }
+};
+
+# Connect to redis
+plugin redis =>{
+  serveur => $config->{'database.redis'},
+  helper  => 'redis'
 };
 
 # Load mail plugin with its default values
@@ -1233,7 +1240,7 @@ get '/socket.io/:ver' => sub {
 # WebSocket transport for the Socket.IO channel
 websocket '/socket.io/:ver/websocket/:id' => sub {
   my $self = shift;
-  my $id = $self->stash('id');
+  my $id   = $self->stash('id');
   # the ID must match the one stored in our session
   if ($id ne $self->session('peer_id')){
     $self->log_event({
