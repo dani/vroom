@@ -219,6 +219,38 @@ helper log_event => sub {
   return 1;
 };
 
+# Return peers from redis
+helper get_peers => sub {
+  my $self = shift;
+  my $peers = {};
+  foreach my $peer ($self->redis->hkeys('peers')){
+    $peers->{$peer} = $self->get_peer($peer);
+  }
+  return $peers;
+};
+
+# Return a single peer
+helper get_peer => sub {
+  my $self = shift;
+  my $peer = shift;
+  return Mojo::JSON::from_json($self->redis->hget('peers', $peer);
+};
+
+# Store peers in redis
+helper add_peer => sub {
+  my $self = shift;
+  my $id   = shift;
+  my $peer = shift;
+  return $self->redis->hset('peers', $id, Mojo::JSON::to_json($peer));
+};
+
+# Remove a peer
+helper del_peer => sub {
+  my $self = shift;
+  my $id   = shift;
+  return $self->redis->hdel('peers', $id);
+};
+
 # Return a list of event between 2 dates
 helper get_event_list => sub {
   my $self  = shift;
@@ -2351,6 +2383,9 @@ app->config(
     proxy    => 1
   }
 );
+
+# Emptying peers in redis
+app->redis->del('peers');
 
 app->log->info('Starting VROOM daemon');
 # And start, lets VROOM !!
