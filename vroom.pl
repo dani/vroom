@@ -1139,7 +1139,7 @@ helper signal_broadcast_room => sub {
     next if !$peers->{$data->{from}}->{room};
     next if !$peers->{$peer}->{room};
     next if $peers->{$peer}->{room} ne $peers->{$data->{from}}->{room};
-    $self->redis->publish('signaling:peer:' . $peer, Mojo::JSON::to_json($data->{msg}));
+    $self->redis->publish('signaling:peer:' . $peer, Mojo::JSON::to_json(Protocol::SocketIO::Message->new(%{$data->{msg}})));
   }  
   return 1;
 };
