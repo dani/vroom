@@ -218,6 +218,9 @@
                 Mojolicious::Plugin::StaticCompressor
               </li>
               <li>
+                Mojo::Redis2
+              </li>
+              <li>
                 Crypt::SaltedHash
               </li>
               <li>
@@ -346,7 +349,7 @@ yum install epel-release</pre>
       <p>
         The following command will install everything required to run VROOM
         <pre>
-yum install git tar wget httpd mod_ssl openssl mariadb-server \\
+yum install git tar wget httpd mod_ssl openssl mariadb-server redis \\
             'perl(DBI)' \\
             'perl(DBD::mysql)' \\
             'perl(Array::Diff)' \\
@@ -356,6 +359,7 @@ yum install git tar wget httpd mod_ssl openssl mariadb-server \\
             'perl(Mojolicious::Plugin::Database)' \\
             'perl(Mojolicious::Plugin::StaticCompressor' \\
             'perl(Mojolicious::Plugin::RenderFile)' \\
+            'perl(Mojo::Redis2)' \\
             'perl(Crypt::SaltedHash)' \\
             'perl(Etherpad)' \\
             'perl(Sesion::Token)' \\
