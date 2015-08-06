@@ -2229,7 +2229,7 @@ function initVroom(room) {
       var action = ($(this).hasClass('btn-danger')) ? 'hide' : 'show';
       if (action === 'show'){
         // If not already loaded, load etherpad in the iFrame
-        if ($('#etherpadContainer').html() === ''){
+        if ($('#etherpadContainer').html().match(/^\s*/)){
           loadEtherpadIframe();
         }
         $('#etherpadContainer').slideDown('200');
