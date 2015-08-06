@@ -409,6 +409,31 @@ FLUSH PRIVILEGES;</pre>
 mysql -uroot vroom < /opt/vroom/docs/database/schema.mysql</pre>
       </p>
 
+      <h3 id="c7_redis">
+        Setup Redis
+      </h3>
+      <p>
+        Redis is used to share data between the various workers (when running with hypnotoad) and
+        pass messages between peers connected on different workers. It doesn't require very specific settings.
+        You can use this sample configuration:
+        <pre>
+cp -a /etc/redis.conf /etc/redis.conf.default
+cat <<'_EOF' > /etc/redis.conf
+daemonize no
+bind 127.0.0.1
+timeout 0
+loglevel notice
+logfile ""
+databases 16
+save 900 1
+save 300 10
+save 60 10000
+dir /var/lib/redis/
+_EOF
+systemctl start redis
+systemctl enable redis</pre>
+      </p>
+
       <h3 id="c7_apache">
         Setup Apache
       </h3>
@@ -501,6 +526,13 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
           <li>
             <strong>password</strong>: The password for your database
           </li>
+          <li>
+            <strong>redis</strong>: The URI to reach your redis server. Exemple <kbd>redis://127.0.0.1:6379/0</kbd>
+          </li>
+          <div class="alert alert-danger">
+            Be sure to specify the loopback address as <strong>127.0.0.1</strong> and not <strong>localhost</strong>
+            as perl(EV) has an issue when a host is defined for both IPv4 and IPv6 in /etc/hosts (which is the case by default)
+          </div>
         </ul>
       </p>
 
