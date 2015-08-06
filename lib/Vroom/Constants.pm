@@ -58,6 +58,9 @@ use constant COMPONENTS => {
   },
   "bootstrap-datpicker" => {
     url => "https://bootstrap-datepicker.readthedocs.org/en/latest/"
+  },
+  "Redis" => {
+    url => "http://redis.io/"
   }
 };
 
