@@ -3,8 +3,8 @@
 ;dsn = 'DBI:mysql:database=devroom;host=localhost'
 ;user = 'vroom'
 ;password = 'password'
-; Redis server
-;redis = 'localhost:6379'
+; Redis server URI
+;redis = 'redis://127.0.0.1:6379'
 
 [turn]
 ; The stun server sent to client. You can set it to your own stun server. Takes a comma separated list of full 
