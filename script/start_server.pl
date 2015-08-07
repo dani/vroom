@@ -19,8 +19,8 @@ if ($config->{'daemon.backend'} eq 'morbo'){
         '-w', 'conf/settings.ini',
         '-w', 'lib',
         '-w', 'templates',
-        '-v', 'vroom.pl');
+        '-v', 'vroom');
 }
 else{
-  exec ('/usr/bin/hypnotoad', '-f', 'vroom.pl');
+  exec ('/usr/bin/hypnotoad', '-f', 'vroom');
 }
