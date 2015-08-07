@@ -29,7 +29,8 @@
                            type="text"
                            placeholder="<%= l('EMAIL_PLACEHOLDER') %>">
                     <span class="input-group-btn">
-                      <button class="btn btn-primary btn-add-email">
+                      <button class="btn btn-primary btn-add-email"*
+                              type="button">
                         <span class="glyphicon glyphicon-plus">
                         </span>
                       </button>
