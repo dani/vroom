@@ -544,10 +544,12 @@
       $( document ).ready(function() {
           etherpad = {
             enabled: <%= get_opt_features->{etherpad} ? 'true' : 'false' %>,
-            % my $ethuri = Mojo::URL->new($config->{'etherpad.uri'});
+            % if (get_opt_features->{etherpad}){
+            %   my $ethuri = Mojo::URL->new($config->{'etherpad.uri'});
             host: "<%= $ethuri->scheme . '://' . $ethuri->authority %>",
             path: "<%= $ethuri->path . '/p/' %>",
             group: "<%= $etherpadGroup %>"
+            % }
           };
           has_video = <%= ($video eq 'false') ? 'false' : 'true' %>;
           initJoin(roomName);
