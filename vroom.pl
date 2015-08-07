@@ -1481,8 +1481,10 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           )
         );
       }
-      delete $peer->{check_invitations};
-      $self->add_peer($id, $peer);
+      if (keys %{$invitations} > 0){
+        delete $peer->{check_invitations};
+        $self->add_peer($id, $peer);
+      }
     }
     $self->send(Protocol::SocketIO::Message->new( type => 'heartbeat' ));
   });
