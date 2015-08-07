@@ -360,8 +360,9 @@ yum install git tar wget httpd mod_ssl openssl mariadb-server redis \\
             'perl(Mojolicious::Plugin::I18N)' \\
             'perl(Mojolicious::Plugin::Mail)' \\
             'perl(Mojolicious::Plugin::Database)' \\
-            'perl(Mojolicious::Plugin::StaticCompressor' \\
+            'perl(Mojolicious::Plugin::StaticCompressor)' \\
             'perl(Mojolicious::Plugin::RenderFile)' \\
+            'perl(Protocol::SocketIO)' \\
             'perl(Mojo::Redis2)' \\
             'perl(Crypt::SaltedHash)' \\
             'perl(Etherpad)' \\
