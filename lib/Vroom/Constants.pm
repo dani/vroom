@@ -17,6 +17,9 @@ use constant COMPONENTS => {
   "Mojolicious" => {
     url => 'http://mojolicio.us/'
   },
+  "Mojolicious::Plugin::I18N" => {
+    url => 'https://github.com/sharifulin/Mojolicious-Plugin-I18N'
+  },
   "Mojolicious::Plugin::Mail" => {
     url => 'https://github.com/sharifulin/Mojolicious-Plugin-Mail'
   },
