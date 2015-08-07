@@ -17,6 +17,51 @@ use constant COMPONENTS => {
   "Mojolicious" => {
     url => 'http://mojolicio.us/'
   },
+  "Mojolicious::Plugin::Mail" => {
+    url => 'https://github.com/sharifulin/Mojolicious-Plugin-Mail'
+  },
+  "Mojolicious::Plugin::Database" => {
+    url => 'https://github.com/benvanstaveren/Mojolicious-Plugin-Database'
+  },
+  "Mojolicious::Plugin::StaticCompressor" => {
+    url => 'https://github.com/mugifly/p5-Mojolicious-Plugin-StaticCompressor'
+  },
+  "Mojo::Redis2" => {
+    url => 'https://github.com/jhthorsen/mojo-redis2'
+  },
+  "Crypt::SaltedHash" => {
+    url => 'https://github.com/campus-explorer/crypt-saltedhash'
+  },
+  "Session::Token" => {
+    url => 'https://github.com/hoytech/Session-Token'
+  },
+  "Config::Simple" => {
+    url => 'http://search.cpan.org/~sherzodr/Config-Simple/'
+  },
+  "Email::Valid" => {
+    url => 'https://github.com/rjbs/Email-Valid'
+  },
+  "Protocol::SocketIO" => {
+    url => 'https://github.com/vti/protocol-socketio'
+  },
+  "DateTime" => {
+    url => 'https://github.com/autarch/DateTime.pm'
+  },
+  "Array::Diff" => {
+    url=> 'https://github.com/typester/array-diff-perl'
+  },
+  "Locale::Maketext::Lexicon" => {
+    url => 'https://github.com/clintongormley/locale-maketext-lexicon'
+  },
+  "Etherpad" => {
+    url => 'https://git.framasoft.org/luc/etherpad'
+  },
+  "Mojolicious::Plugin::RenderFile" => {
+    url => 'https://github.com/koorchik/Mojolicious-Plugin-RenderFile'
+  },
+  "Excel::Writer::XLSX" => {
+    url => 'https://github.com/jmcnamara/excel-writer-xlsx'
+  },
   "jQuery" => {
     url => 'http://jquery.com/'
   },
