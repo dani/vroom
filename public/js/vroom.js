@@ -993,7 +993,7 @@ function init_webrtc(room){
       room: room,
     },
     function(data){
-      if (!video){
+      if (!has_video){
         data.config.media.video = false;
       }
       data.config.localVideoEl = 'webRTCVideoLocal';
@@ -1250,7 +1250,7 @@ function initVroom(room) {
         // color can be sent through the signaling channel
         peer.send('peer_color', {color: peers.local.color});
         // if we don't have a video, just signal it to this peer
-        peer.send('media_info', {video: !!video});
+        peer.send('media_info', {video: has_video});
         // We don't have chat history yet ? Lets ask to this new peer
         if(!peers.local.hasHistory && chatIndex == 0){
           peer.sendDirectly('vroom', 'chat_history_request', '');
@@ -1570,7 +1570,7 @@ function initVroom(room) {
     // This peer indicates he has no webcam
     if (!data.payload.video){
       $('#overlay_' + data.id).append($('<div>').attr('id', 'noWebcam_' + data.id).addClass('noWebcam'));
-      $('#actionPause_' + data.id).addClass('disabled');
+      $('#actionPause_' + data.id).prop('disabled', true);
       peers[data.id].hasVideo = false;
     }
   });
@@ -2037,7 +2037,7 @@ function initVroom(room) {
   });
 
   // Disable suspend webcam button if no webcam
-  if (!video){
+  if (!has_video){
     $('.btn-suspend-cam').prop('disabled', true);
   }
 
