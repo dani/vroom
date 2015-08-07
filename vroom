@@ -1398,7 +1398,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           $self->redis->publish('signaling:peer:' . $to, Mojo::JSON::to_json($msg));
         }
         # No dest, multicast this to every members of the room
-        else{
+        elsif (!$to){
           $self->signal_broadcast_room({
             from => $id,
             msg  => $msg
