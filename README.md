@@ -19,6 +19,6 @@ Video conf based on [SimpleWebRTC.js](https://github.com/HenrikJoreteg/SimpleWeb
 
 You can try our demo instance here: https://vroom.im
 
-Check documentation [here](https://wikit.firewall-services.com/doku.php/projets/vroom)
+Check documentation [here](https://vroom.im/documentation)
 
 You can also subscribe to the dev mailing list [here](http://list.vroom.im/mailman/listinfo/vroom-dev)
