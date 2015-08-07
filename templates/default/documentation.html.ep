@@ -209,6 +209,9 @@
                 Mojolicious
               </li>
               <li>
+                Mojolicious::Plugin::I18N
+              </li>
+              <li>
                 Mojolicious::Plugin::Mail
               </li>
               <li>
