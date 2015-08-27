@@ -1505,7 +1505,6 @@ Mojo::IOLoop->recurring( 3600 => sub {
 # Route / to the index page
 get '/' => sub {
   my $self = shift;
-  $self->login;
   $self->stash(
     page     => 'index'
   );
@@ -1660,8 +1659,9 @@ get '/locales/(:lang).js' => sub {
 # API requests handler
 any '/api' => sub {
   my $self = shift;
+  $self->login;
   $self->purge_api_keys;
-  my $token = $self->req->headers->header('X-VROOM-API-Key');
+  my $token = $self->req->headers->header('X-VROOM-API-Key') || $self->session('key');
   my $req   = Mojo::JSON::decode_json($self->param('req'));
   my $room;
   # action and param are required for every API call
@@ -1778,7 +1778,6 @@ any '/api' => sub {
       msg  => $self->l('ERROR_OCCURRED'),
       room => $req->{param}->{room}
     };
-    $self->login;
     # Cleanup unused rooms before trying to create it
     $self->purge_rooms;
     if (!$self->valid_room_name($req->{param}->{room})){
