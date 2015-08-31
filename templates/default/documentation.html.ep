@@ -1091,11 +1091,10 @@ systemctl restart vroom.service</pre>
           If you access directly the database to check the events, you'll have to do the conversion yourself. The dates
           also are in UTC in the XLSX exports of events
         </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
+
+        <h3 id="event_types">
             Event types and their meanings
-          </div>
-        </div>
+        </h3>
         <table class="table">
           <thead>
             <tr>
