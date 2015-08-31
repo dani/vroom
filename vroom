@@ -2293,7 +2293,7 @@ get '/:room' => sub {
   my $token = $self->param('token') || undef;
   # Redirect to lower case
   if ($room ne lc $room){
-    $self->redirect_to($self->get_url('/') . lc $room);
+    $self->redirect_to($self->url_for('/' . lc $room));
   }
   $self->purge_rooms;
   $self->purge_invitations;
