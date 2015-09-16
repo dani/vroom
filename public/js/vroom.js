@@ -415,10 +415,10 @@ function getRoomInfo(cb){
       });
       // Now, remove the first one if the list is not empty
       if (Object.keys(data.notif).length > 0){
-        $('.email-list').find('.email-entry:first').remove();
+        $('#email-list-notification').find('.email-entry:first').remove();
       }
       else{
-        $('.email-list').find('.email-entry:first').find('input:first').val('');
+        $('#email-list-notification').find('.email-entry:first').find('input:first').val('');
       }
       adjustAddRemoveEmailButtons();
       // Update config switches
