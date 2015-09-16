@@ -426,6 +426,7 @@ function getRoomInfo(cb){
       $('#askForNameSet').bootstrapSwitch('state', data.ask_for_name);
       $('#joinPassSet').bootstrapSwitch('state', data.join_auth);
       $('#ownerPassSet').bootstrapSwitch('state', data.owner_auth);
+      $('#joinPassFields,#ownerPassFields').hide();
       // exec a callback if needed
       if (typeof cb === 'function'){
         cb();
