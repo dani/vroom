@@ -91,7 +91,7 @@ msgstr "Authentication"
 msgid "AUTH_IF_OWNER"
 msgstr "Authenticate if you are the room owner"
 
-#: vroom.pl:1817
+#: vroom:1866
 msgid "AUTH_SUCCESS"
 msgstr "You are now authenticated"
 
@@ -103,28 +103,28 @@ msgstr "A microphone and speakers (or headphones)"
 msgid "A_MODERN_BROWSER"
 msgstr "A modern web browser, recent versions of Mozilla Firefox, Google Chrome or Opera will work"
 
-#: public/js/vroom.js:1366
-#: public/js/vroom.js:1388
-#: public/js/vroom.js:1433
-#: public/js/vroom.js:1520
-#: public/js/vroom.js:1552
-#: public/js/vroom.js:1595
-#: public/js/vroom.js:1613
+#: public/js/vroom.js:1367
+#: public/js/vroom.js:1389
+#: public/js/vroom.js:1434
+#: public/js/vroom.js:1521
+#: public/js/vroom.js:1553
+#: public/js/vroom.js:1596
+#: public/js/vroom.js:1614
 msgid "A_PARTICIPANT"
 msgstr "a participant"
 
-#: vroom.pl:1835
+#: vroom:1884
 msgid "A_PASSWORD_IS_NEEDED_TO_JOIN"
 msgstr "You must provide a password to join this room"
 
-#: public/js/vroom.js:1504
-#: public/js/vroom.js:1518
-#: public/js/vroom.js:1537
-#: public/js/vroom.js:1550
-#: public/js/vroom.js:1564
-#: public/js/vroom.js:1587
-#: public/js/vroom.js:1593
-#: public/js/vroom.js:1611
+#: public/js/vroom.js:1505
+#: public/js/vroom.js:1519
+#: public/js/vroom.js:1538
+#: public/js/vroom.js:1551
+#: public/js/vroom.js:1565
+#: public/js/vroom.js:1588
+#: public/js/vroom.js:1594
+#: public/js/vroom.js:1612
 msgid "A_ROOM_ADMIN"
 msgstr "a room administrator"
 
@@ -140,11 +140,11 @@ msgstr "A webcam (optional but recommended)"
 msgid "BACK_TO_MAIN_MENU"
 msgstr "Back to main menu"
 
-#: public/js/vroom.js:2053
+#: public/js/vroom.js:2054
 msgid "CAM_RESUMED"
 msgstr "Your webcam is on again"
 
-#: public/js/vroom.js:2049
+#: public/js/vroom.js:2050
 msgid "CAM_SUSPENDED"
 msgstr "Your webcam is now suspended"
 
@@ -152,7 +152,7 @@ msgstr "Your webcam is now suspended"
 #: templates/default/configure_modal.html.ep:228
 #: templates/default/delete_room_modal.html.ep:31
 #: templates/default/feedback.html.ep:40
-#: templates/default/invite_modal.html.ep:61
+#: templates/default/invite_modal.html.ep:62
 #: templates/default/join.html.ep:196
 #: templates/default/join.html.ep:373
 #: templates/default/join.html.ep:409
@@ -167,23 +167,23 @@ msgstr "You cannot join this conference ? Leave a message to the organizer so he
 msgid "CANT_ACCESS_WEBCAM"
 msgstr "We couldn't access your webcam. Please check it's connected, powered on, and that you've allowed the browser to access it, then reload this page"
 
-#: public/js/vroom.js:1437
+#: public/js/vroom.js:1438
 msgid "CANT_KICK_OWNER"
 msgstr "You can't kick this participant out of the room"
 
-#: public/js/vroom.js:1377
+#: public/js/vroom.js:1378
 msgid "CANT_MUTE_OWNER"
 msgstr "You can't mute the microphone of this participant"
 
-#: public/js/vroom.js:1418
+#: public/js/vroom.js:1419
 msgid "CANT_PROMOTE_OWNER"
 msgstr "This participant already has administration privileges on the room"
 
-#: public/js/vroom.js:2004
+#: public/js/vroom.js:2005
 msgid "CANT_SHARE_SCREEN"
 msgstr "Your configuration does not allow screen sharing"
 
-#: public/js/vroom.js:1397
+#: public/js/vroom.js:1398
 msgid "CANT_SUSPEND_OWNER"
 msgstr "You can't suspend this participant's webcam"
 
@@ -267,7 +267,7 @@ msgstr "Create this room"
 msgid "CREATION_DATE"
 msgstr "Creation date"
 
-#: vroom.pl:2121
+#: vroom:2177
 msgid "DATA_WIPED"
 msgstr "Room data has been wiped"
 
@@ -279,12 +279,12 @@ msgstr "Delete"
 msgid "DISPLAY_NAME"
 msgstr "Display name"
 
-#: public/js/vroom.js:910
+#: public/js/vroom.js:911
 msgid "DISPLAY_NAME_REQUIRED"
 msgstr "You need to enter your name"
 
-#: public/js/vroom.js:1947
-#: public/js/vroom.js:910
+#: public/js/vroom.js:1948
+#: public/js/vroom.js:911
 msgid "DISPLAY_NAME_TOO_LONG"
 msgstr "This name is too long"
 
@@ -301,7 +301,7 @@ msgstr "Don't wait for me"
 msgid "DOWNLOAD_ONE_OF_THESE_BROWSERS"
 msgstr "We recommend you download one of the following browsers which support the latest web technologies required to use VROOM"
 
-#: vroom.pl:1868
+#: vroom:1917
 msgid "EMAIL_INVITATION"
 msgstr "Video conference invitation"
 
@@ -317,103 +317,103 @@ msgstr "j.smith@example.com"
 msgid "EMAIL_SIGN"
 msgstr "VROOM! And video conferencing becomes free, simple and safe"
 
-#: public/js/vroom.js:529
+#: public/js/vroom.js:530
 msgid "ERROR_COMMENT_INVALID"
 msgstr "This comment is not valid"
 
-#: vroom.pl:1902
+#: vroom:1955
 msgid "ERROR_COMMON_ROOM_NAME"
 msgstr "This room name is too common to be reserved"
 
-#: public/js/vroom.js:823
-#: public/js/vroom.js:830
+#: public/js/vroom.js:824
+#: public/js/vroom.js:831
 msgid "ERROR_DATE_INVALID"
 msgstr "Please enter the date respecting this format: YYY-MM-DD"
 
-#: public/js/vroom.js:837
+#: public/js/vroom.js:838
 msgid "ERROR_END_MUST_BE_AFTER_START"
 msgstr "Start date must be before end date"
 
-#: public/js/vroom.js:1881
+#: public/js/vroom.js:1882
 msgid "ERROR_ESTABLISHING_P2P"
 msgstr "Cannot establish a connection with a participant"
 
-#: vroom.pl:2218
+#: vroom:2274
 msgid "ERROR_EXPORT_XLSX"
 msgstr "An error occurred during export"
 
-#: vroom.pl:2208
+#: vroom:2264
 msgid "ERROR_FEATURE_NOT_AVAILABLE"
 msgstr "This feature is not available"
 
-#: vroom.pl:1702
+#: vroom:1752
 msgid "ERROR_INPUT_INVALID"
 msgstr "Invalid input"
 
-#: vroom.pl:1550
-#: vroom.pl:1566
+#: vroom:1599
+#: vroom:1615
 msgid "ERROR_INVITATION_INVALID"
 msgstr "This link is invalid, your invitation has probably expired, or you've already responded"
 
-#: public/js/vroom.js:1912
+#: public/js/vroom.js:1913
 #: public/js/vroom.js:348
-#: public/js/vroom.js:525
-#: vroom.pl:1494
-#: vroom.pl:1854
+#: public/js/vroom.js:526
+#: vroom:1543
+#: vroom:1903
 msgid "ERROR_MAIL_INVALID"
 msgstr "Please enter a valid email address"
 
-#: vroom.pl:1741
+#: vroom:1790
 msgid "ERROR_NAME_CONFLICT"
 msgstr "A room with this name already exists, please choose another one"
 
-#: public/js/vroom.js:445
-#: vroom.pl:1736
-#: vroom.pl:2247
+#: public/js/vroom.js:446
+#: vroom:1785
+#: vroom:2303
 msgid "ERROR_NAME_INVALID"
 msgstr "This name is not valid"
 
-#: public/js/vroom.js:474
+#: public/js/vroom.js:475
 #: public/js/vroom.js:98
 #: templates/default/error.html.ep:7
-#: vroom.pl:1621
-#: vroom.pl:1728
-#: vroom.pl:1746
-#: vroom.pl:1879
-#: vroom.pl:1934
-#: vroom.pl:2036
-#: vroom.pl:2107
-#: vroom.pl:2127
-#: vroom.pl:2144
-#: vroom.pl:2161
+#: vroom:1671
+#: vroom:1778
+#: vroom:1795
+#: vroom:1928
+#: vroom:1987
+#: vroom:2089
+#: vroom:2163
+#: vroom:2183
+#: vroom:2200
+#: vroom:2217
 msgid "ERROR_OCCURRED"
 msgstr "An error occurred"
 
-#: vroom.pl:2016
-#: vroom.pl:2092
+#: vroom:2069
+#: vroom:2148
 msgid "ERROR_PEER_ID_MISSING"
 msgstr "Peer ID is missing"
 
-#: vroom.pl:2050
+#: vroom:2103
 msgid "ERROR_PEER_NOT_FOUND"
 msgstr "This peer doesn't exist"
 
-#: vroom.pl:1763
+#: vroom:1812
 msgid "ERROR_ROOM_NAME_MISSING"
 msgstr "Room name is missing"
 
-#: vroom.pl:1517
-#: vroom.pl:1532
-#: vroom.pl:1774
-#: vroom.pl:2256
+#: vroom:1566
+#: vroom:1581
+#: vroom:1823
+#: vroom:2312
 msgid "ERROR_ROOM_s_DOESNT_EXIST"
 msgstr "Room %s doesn't exist"
 
-#: vroom.pl:1830
+#: vroom:1879
 msgid "ERROR_ROOM_s_LOCKED"
 msgstr "Room %s is locked, you cannot join it"
 
-#: vroom.pl:2266
+#: vroom:2322
 msgid "ERROR_TOO_MANY_MEMBERS"
 msgstr "This room reached its members limit"
 
@@ -441,7 +441,7 @@ msgstr "Message"
 msgid "EVENT_USER"
 msgstr "User"
 
-#: public/js/vroom.js:2013
+#: public/js/vroom.js:2014
 msgid "EVERYONE_CAN_SEE_YOUR_SCREEN"
 msgstr "All other participants can see your screen now"
 
@@ -459,7 +459,7 @@ msgstr "An extension is required"
 msgid "FEEDBACK"
 msgstr "Feedback"
 
-#: vroom.pl:1501
+#: vroom:1550
 msgid "FEEDBACK_FROM_VROOM"
 msgstr "VROOM feedback"
 
@@ -485,11 +485,11 @@ msgstr "Goodbye"
 msgid "HAVE_A_NICE_MEETING"
 msgstr "Have a nice meeting :-)"
 
-#: vroom.pl:1419
+#: vroom:1463
 msgid "HE_WILL_TRY_TO_JOIN_LATER"
 msgstr "This person will try to join later"
 
-#: vroom.pl:1422
+#: vroom:1466
 msgid "HE_WONT_JOIN"
 msgstr "This person won't be able to join the conference"
 
@@ -514,11 +514,11 @@ msgstr "Respond to an invitation"
 msgid "INVITE_PEOPLE"
 msgstr "Invite other people"
 
-#: vroom.pl:1417
+#: vroom:1461
 msgid "INVITE_REPONSE_FROM_s"
 msgstr "%s responded to your invitation"
 
-#: vroom.pl:1891
+#: vroom:1944
 msgid "INVITE_SENT_TO_s"
 msgstr ""
 "An invitation was sent to the following addresses\n"
@@ -538,7 +538,7 @@ msgstr "ROOM needs javascript to work properly"
 msgid "KICKED"
 msgstr "Kicked"
 
-#: public/js/vroom.js:1213
+#: public/js/vroom.js:1214
 msgid "KICK_PEER"
 msgstr "Kick this participant out of the room"
 
@@ -576,9 +576,9 @@ msgid "MAX_MEMBERS"
 msgstr "Participants limit"
 
 #: templates/default/invitation.html.ep:31
-#: templates/default/invite_modal.html.ep:43
-#: templates/default/invite_modal.html.ep:49
-#: vroom.pl:1425
+#: templates/default/invite_modal.html.ep:44
+#: templates/default/invite_modal.html.ep:50
+#: vroom:1469
 msgid "MESSAGE"
 msgstr "Message"
 
@@ -590,11 +590,11 @@ msgstr "Message from the meeting organizer"
 msgid "MESSAGE_SENT"
 msgstr "Message sent"
 
-#: public/js/vroom.js:2030
+#: public/js/vroom.js:2031
 msgid "MIC_MUTED"
 msgstr "Your microphone is now muted"
 
-#: public/js/vroom.js:2034
+#: public/js/vroom.js:2035
 msgid "MIC_UNMUTED"
 msgstr "Your microphone is now unmuted"
 
@@ -611,7 +611,7 @@ msgstr "Multi User"
 msgid "MUTE_MIC"
 msgstr "Turn off your microphone"
 
-#: public/js/vroom.js:1198
+#: public/js/vroom.js:1199
 msgid "MUTE_PEER"
 msgstr "Mute or unmute this participant's microphone"
 
@@ -623,7 +623,7 @@ msgstr "This name will be sent to the other peers"
 msgid "NOTIFICATION_ON_JOIN"
 msgstr "Notification when someone joins this room"
 
-#: vroom.pl:1659
+#: vroom:1709
 msgid "NOT_ALLOWED"
 msgstr "You are not allowed to do this"
 
@@ -636,7 +636,7 @@ msgstr "No webcam or microphone could be found"
 msgid "NO_SIGNIN"
 msgstr "No need to register"
 
-#: public/js/vroom.js:1792
+#: public/js/vroom.js:1793
 msgid "NO_SOUND_DETECTED"
 msgstr "No sound detected, please check your microphone (input level might be too low)"
 
@@ -697,15 +697,15 @@ msgstr "Passwords do not match"
 msgid "PASSWORD_PROTECT"
 msgstr "Password protect"
 
-#: public/js/vroom.js:887
+#: public/js/vroom.js:888
 msgid "PASSWORD_REQUIRED"
 msgstr "Password required"
 
-#: public/js/vroom.js:887
+#: public/js/vroom.js:888
 msgid "PASSWORD_TOO_LONG"
 msgstr "This password is too long"
 
-#: vroom.pl:2101
+#: vroom:2157
 msgid "PEER_PROMOTED"
 msgstr "You have granted administration privileges on the roo"
 
@@ -717,7 +717,7 @@ msgstr "Persistent"
 msgid "POWERED_BY"
 msgstr "Powered by"
 
-#: public/js/vroom.js:1208
+#: public/js/vroom.js:1209
 msgid "PROMOTE_PEER"
 msgstr "Grant this participant administration privileges on the room"
 
@@ -746,15 +746,15 @@ msgstr "Refresh"
 msgid "RESERVE_THIS_ROOM"
 msgstr "Reserve this room"
 
-#: vroom.pl:1928
+#: vroom:1981
 msgid "ROOM_CONFIG_UPDATED"
 msgstr "Room configuration has been updated"
 
-#: vroom.pl:2155
+#: vroom:2211
 msgid "ROOM_DELETED"
 msgstr "This room has been deleted"
 
-#: vroom.pl:1826
+#: vroom:1875
 msgid "ROOM_LOCKED_ENTER_OWNER_PASSWORD"
 msgstr "This room is locked. Only an administrator can joint it. Please enter the administrator's password"
 
@@ -797,11 +797,11 @@ msgstr ""
 "  <li>You can now use the screen sharing feature</li>\n"
 "</ol>"
 
-#: public/js/vroom.js:2001
+#: public/js/vroom.js:2002
 msgid "SCREEN_SHARING_CANCELLED"
 msgstr "Screen sharing has been cancelled"
 
-#: public/js/vroom.js:2021
+#: public/js/vroom.js:2022
 msgid "SCREEN_UNSHARED"
 msgstr "You do no longer share your screen"
 
@@ -830,7 +830,7 @@ msgstr "Send the message"
 msgid "SERVER_ERROR"
 msgstr "Sorry for the inconvinience"
 
-#: vroom.pl:2138
+#: vroom:2194
 msgid "SESSION_CREATED"
 msgstr "Session created"
 
@@ -838,7 +838,7 @@ msgstr "Session created"
 msgid "SET_A_DISPLAY_NAME"
 msgstr "Please set your name before you can join the room"
 
-#: public/js/vroom.js:1960
+#: public/js/vroom.js:1961
 #: templates/default/join.html.ep:476
 msgid "SET_YOUR_NAME_TO_CHAT"
 msgstr "You need to set your name to be able to chat"
@@ -851,7 +851,7 @@ msgstr "Share your entire screen, or only a window in a single click, with an gr
 msgid "SHARE_YOUR_SCREEN"
 msgstr "Share your screen with the other members of this room"
 
-#: vroom.pl:2067
+#: vroom:2120
 msgid "SOMEONE"
 msgstr "Someone"
 
@@ -867,7 +867,7 @@ msgstr "Stop wasting time checking, installing, explaining. Just click, send a l
 #: templates/default/configure_modal.html.ep:224
 #: templates/default/feedback.html.ep:36
 #: templates/default/invitation.html.ep:53
-#: templates/default/invite_modal.html.ep:57
+#: templates/default/invite_modal.html.ep:58
 #: templates/default/join.html.ep:369
 #: templates/default/join.html.ep:405
 msgid "SUBMIT"
@@ -877,7 +877,7 @@ msgstr "Submit"
 msgid "SUSPEND_CAM"
 msgstr "Suspend your webcam, other will see a black screen instead, but can still hear you"
 
-#: public/js/vroom.js:1203
+#: public/js/vroom.js:1204
 msgid "SUSPEND_PEER"
 msgstr "Suspend or resume this participant's webcam"
 
@@ -946,7 +946,7 @@ msgstr "The room will be persistent (kept forever)"
 msgid "TOOLTIP_RESERVE_THIS_ROOM"
 msgstr "If this password is set, you'll be able to access the configuration menus next time you connect"
 
-#: vroom.pl:1632
+#: vroom:1682
 msgid "UNSUPPORTED_LANG"
 msgstr "Unsupported lanbguage"
 
@@ -1000,8 +1000,8 @@ msgstr "I cannot participate"
 msgid "WORKS_EVERYWHERE"
 msgstr "Universal"
 
-#: public/js/vroom.js:2085
-#: vroom.pl:1838
+#: public/js/vroom.js:2086
+#: vroom:1887
 msgid "WRONG_PASSWORD"
 msgstr "Wrong password"
 
@@ -1038,23 +1038,23 @@ msgstr "Tired of creating an account on each and every service you can find ? We
 msgid "YOU_HAVE_BEEN_KICKED"
 msgstr "You've been kicked out of the room"
 
-#: public/js/vroom.js:1434
+#: public/js/vroom.js:1435
 msgid "YOU_HAVE_KICKED_s"
 msgstr "You have kicked %s out of the room"
 
-#: public/js/vroom.js:1365
+#: public/js/vroom.js:1366
 msgid "YOU_HAVE_MUTED_s"
 msgstr "You have muted %s's microphone"
 
-#: public/js/vroom.js:1390
+#: public/js/vroom.js:1391
 msgid "YOU_HAVE_RESUMED_s"
 msgstr "You have resumed %s's webcam"
 
-#: public/js/vroom.js:1387
+#: public/js/vroom.js:1388
 msgid "YOU_HAVE_SUSPENDED_s"
 msgstr "You have suspended %s's webcam"
 
-#: public/js/vroom.js:1368
+#: public/js/vroom.js:1369
 msgid "YOU_HAVE_UNMUTED_s"
 msgstr "You have unmuted %s's microphone"
 
@@ -1062,54 +1062,54 @@ msgstr "You have unmuted %s's microphone"
 msgid "YOU_NEED8MIC_OR_WEBCAM"
 msgstr "You need at least one of them to be able to join this room"
 
-#: public/js/vroom.js:1566
+#: public/js/vroom.js:1567
 msgid "s_CHANGED_ROOM_CONFIG"
 msgstr "%s changed room configuration"
 
-#: public/js/vroom.js:1614
+#: public/js/vroom.js:1615
 msgid "s_IS_KICKING_s"
 msgstr "%s has kicked %s out of the room"
 
-#: public/js/vroom.js:1507
+#: public/js/vroom.js:1508
 msgid "s_IS_MUTING_YOU"
 msgstr "%s has muted your microphone"
 
-#: public/js/vroom.js:1525
+#: public/js/vroom.js:1526
 msgid "s_IS_MUTING_s"
 msgstr "%s has muted %s's microphone"
 
-#: public/js/vroom.js:1589
+#: public/js/vroom.js:1590
 msgid "s_IS_PROMOTING_YOU"
 msgstr "%s has granted you administration privileges on the room"
 
-#: public/js/vroom.js:1596
+#: public/js/vroom.js:1597
 msgid "s_IS_PROMOTING_s"
 msgstr "%s has granted %s administration privileges on the room"
 
-#: public/js/vroom.js:1544
+#: public/js/vroom.js:1545
 msgid "s_IS_RESUMING_YOU"
 msgstr "%s has resumed your webcam"
 
-#: public/js/vroom.js:1554
+#: public/js/vroom.js:1555
 msgid "s_IS_RESUMING_s"
 msgstr "%s has resumed %s's webcam"
 
-#: public/js/vroom.js:1540
+#: public/js/vroom.js:1541
 msgid "s_IS_SUSPENDING_YOU"
 msgstr "%s has suspended your webcam"
 
-#: public/js/vroom.js:1557
+#: public/js/vroom.js:1558
 msgid "s_IS_SUSPENDING_s"
 msgstr "%s has suspended %s's webcam"
 
-#: public/js/vroom.js:1511
+#: public/js/vroom.js:1512
 msgid "s_IS_UNMUTING_YOU"
 msgstr "%s has unmuted your microphon"
 
-#: public/js/vroom.js:1522
+#: public/js/vroom.js:1523
 msgid "s_IS_UNMUTING_s"
 msgstr "%s has unmuted %s's microphone"
 
-#: vroom.pl:2066
+#: vroom:2119
 msgid "s_JOINED_ROOM_s"
 msgstr "%s joined room %s"
