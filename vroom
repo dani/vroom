@@ -23,6 +23,7 @@ use File::Path qw(make_path);
 use File::Basename;
 use DateTime;
 use Array::Diff;
+use Encode qw(encode_utf8);
 use Data::Dumper;
 use lib dirname($0) . '/lib';
 
@@ -1662,7 +1663,7 @@ any '/api' => sub {
   $self->login;
   $self->purge_api_keys;
   my $token = $self->req->headers->header('X-VROOM-API-Key') || $self->session('key');
-  my $req   = Mojo::JSON::decode_json($self->param('req'));
+  my $req   = Mojo::JSON::decode_json(encode_utf8($self->param('req')));
   my $room;
   # action and param are required for every API call
   if (!$req->{action} || !$req->{param}){
