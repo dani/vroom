@@ -879,11 +879,11 @@ function initJoin(room){
   $('#authBeforeJoinPass').on('input', function() {
     var pass = $('#authBeforeJoinPass').val();
     if (pass.length > 0 && pass.length < 200){
-      $('#authBeforeJoinButton').removeClass('disabled');
+      $('#authBeforeJoinButton').prop('disabled', false);
       $('#authBeforeJoinPass').parent().removeClass('has-error');
     }
     else{ 
-      $('#authBeforeJoinButton').addClass('disabled');
+      $('#authBeforeJoinButton').prop('disabled', true);
       $('#authBeforeJoinPass').parent().addClass('has-error');
       $('#authBeforeJoinPass').notify(pass.length < 1 ? localize('PASSWORD_REQUIRED') : localize('PASSWORD_TOO_LONG'), 'error');
     }
@@ -893,7 +893,6 @@ function initJoin(room){
     event.preventDefault();
     var pass = $('#authBeforeJoinPass').val();
     if (pass.length > 0 && pass.length < 200){
-      $('#auth-before-join').slideUp();
       try_auth(pass, true);
     }
   });
@@ -902,11 +901,11 @@ function initJoin(room){
   $('#displayNamePre').on('input', function() {
     var name = $('#displayNamePre').val();
     if (name.length > 0 && name.length < 50){
-      $('#displayNamePreButton').removeClass('disabled');
+      $('#displayNamePreButton').prop('disabled', false);
       $('#displayNamePre').parent().removeClass('has-error');
     }
     else{
-      $('#displayNamePreButton').addClass('disabled');
+      $('#displayNamePreButton').prop('disabled', true);
       $('#displayNamePre').parent().addClass('has-error');
       $('#displayNamePre').notify(name.length < 1 ? localize('DISPLAY_NAME_REQUIRED') : localize('DISPLAY_NAME_TOO_LONG'), 'error');
     }
@@ -915,6 +914,7 @@ function initJoin(room){
   // Intercept form submission
   $('#displayNamePreForm').submit(function(event){
     event.preventDefault();
+    $('#connecting-msg').slideDown();
     var name = $('#displayNamePre').val();
     if (name.length > 0 && name.length < 50){
       $('#display-name-pre').slideUp();
@@ -936,7 +936,7 @@ function initJoin(room){
         password: pass
       },
       function(data){
-        $('.connecting-err-reason').hide();
+        $('#connecting-err-reason').hide();
         // Once auth is passed, we retrieve room configuration
         vroomApi(
           'get_room_conf',
@@ -944,10 +944,12 @@ function initJoin(room){
             room: room,
           },
           function(data){
+            $('#auth-before-join').slideUp();
             roomInfo = data;
             // If our name is asked before joining the room, display the corresponding modal
             // Else, just continue (with webrtc initialization
             if (roomInfo.ask_for_name){
+              $('#connecting-msg').slideUp();
               $('#display-name-pre').slideDown();
             }
             else{
@@ -960,14 +962,15 @@ function initJoin(room){
         // 401 means password is needed
         if (data.status === 401){
           data = data.responseJSON;
-          $('.connecting-err-reason').text(data.msg);
+          $('#connecting-err-reason').text(data.msg).removeClass('alert-info alert-danger').addClass((pass === '') ? 'alert-info' : 'alert-danger');
+          $('#connecting-msg').slideUp();
           $('#auth-before-join').slideDown();
         }
         // 403 is when the room is locked, and there's no owner pass
         // So there's nothing to do, the access will be denied
         else if (data.status === 403){
           data = data.responseJSON;
-          $('.connecting-err-reason').text(data.msg);
+          $('#connecting-err-reason').text(data.msg).removeClass('alert-info').addClass('alert-danger');
           $('.connecting-msg').not('#room-is-locked').remove();
           $('#room-is-locked').slideDown();
         }

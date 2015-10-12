@@ -297,15 +297,17 @@
               <p class="text-center">
                 %= l('CONNECTING_PLEASE_WAIT')
               </p>
-              <p class="text-center connecting-err-reason">
-              </p>
+            </div>
+            <div class="row">
+              <div class="col-md-8 col-md-offset-2 alert alert-danger text-center"
+                   id="connecting-err-reason"
+                   role="alert">
+              </div>
             </div>
             <div id="room-is-locked"
                  class="connecting-msg"
                  style="display: none">
               %= image url_for('/img/lock.png'), alt => l('LOCKED'), class => "img-responsive center-block"
-              <p class="text-center connecting-err-reason">
-              </p>
             </div>
             <div id="no-media-msg"
                  class="connecting-msg"
@@ -364,8 +366,9 @@
                 <div class="form-group">
                   <div class="col-sm-offset-4 col-sm-8">
                     <button id="authBeforeJoinButton"
-                            class="btn btn-primary disabled"
-                            type="submit">
+                            class="btn btn-primary"
+                            type="submit"
+                            disabled>
                       %= l('SUBMIT')
                     </button>
                     <a class="btn btn-default"
@@ -381,9 +384,10 @@
                  style="display: none">
               <form class="form-horizontal"
                     id="displayNamePreForm">
-                <p class="text-center">
+                <div class="col-md-8 col-md-offset-2 alert alert-info text-center"
+                     role="alert">
                   %= l('SET_A_DISPLAY_NAME')
-                </p>
+                </div>
                 <div class="form-group">
                   <label for="displayNamePre"
                          class="col-sm-4 control-label">
@@ -400,8 +404,9 @@
                 <div class="form-group">
                   <div class="col-sm-offset-4 col-sm-8">
                     <button id="displayNamePreButton"
-                            class="btn btn-primary disabled"
-                            type="submit">
+                            class="btn btn-primary"
+                            type="submit"
+                            disabled>
                       %= l('SUBMIT')
                     </button>
                     <a class="btn btn-default"
