@@ -809,7 +809,7 @@ function initAdminAudit(){
       function(data){
         eventList = data.events;
         matches = Object.keys(eventList).length;
-        updateEventList($('#eventSearch').val(), 0, itemPerPage);
+        updateEventList($('#searchEvent').val(), 0, itemPerPage);
         updatePagination();
       }
     );
