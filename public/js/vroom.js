@@ -36,9 +36,6 @@ $('.date-picker').datepicker({
   language: currentLang
 });
 
-// When pagination is done, how many item per page
-var itemPerPage = 20;
-
 // Regex to check a date
 var dateRe = /^\d{4}\-\d{1,2}\-\d{1,2}$/;
 
@@ -579,6 +576,7 @@ function initDoc(){
 function initAdminRooms(){
   var roomList = {};
   var matches = 0;
+  var itemPerPage = $('#item-per-page').val();
 
   // Update display of room list
   function updateRoomList(filter, min, max){
@@ -697,6 +695,13 @@ function initAdminRooms(){
     );
   }
 
+  // Update pagination
+  $('#item-per-page').change(function(){
+    itemPerPage = $('#item-per-page').val();
+    updateEventList($('#searchRoom').val(), 0, itemPerPage);
+    updatePagination();
+  });
+
   // Handle submiting the configuration form
   $(document).on('click', '.btn-configure', function(){
     roomName = $(this).data('room');
@@ -744,6 +749,7 @@ function initAdminRooms(){
 function initAdminAudit(){
   var eventList = {};
   var matches = 0;
+  var itemPerPage = $('#item-per-page').val();
 
   // Update display of event list
   function updateEventList(filter, min, max){
@@ -814,6 +820,13 @@ function initAdminAudit(){
       }
     );
   }
+
+  // Update pagination
+  $('#item-per-page').change(function(){
+    itemPerPage = $('#item-per-page').val();
+    updateEventList($('#searchEvent').val(), 0, itemPerPage);
+    updatePagination();
+  });
 
   // When we click on either refresh or export buttons, check dates are valid
   $('#events_refresh,#events_export').click(function(e){

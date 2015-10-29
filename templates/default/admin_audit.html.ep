@@ -54,6 +54,20 @@
               % }
             </span>
           </div>
+          <div class="form-group">
+            <select id="item-per-page"
+                    class="form-control navbar-btn help"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="<%= l('ITEM_PER_PAGE') %>">
+              % foreach my $i qw(20 40 80 150 300){
+              <option value="<%= $i %>"
+              %== ($i == 20) ? 'selected="selected">' : '>'
+                %= $i
+              </option>
+              % }
+            </select>
+          </div>
         </div>
         <div class="form-group pull-right hidden-xs">
           %= image url_for('/img/loading.gif'), alt => $self->l('LOADING'), id => 'loadingIcon'
