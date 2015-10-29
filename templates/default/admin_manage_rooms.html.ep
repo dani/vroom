@@ -25,7 +25,7 @@
                     data-toggle="tooltip"
                     data-placement="bottom"
                     title="<%= l('ITEM_PER_PAGE') %>">
-              % foreach my $i qw(20 40 80 150 300){
+              % for my $i (qw(20 40 80 150 300)){
               <option value="<%= $i %>"
               %== ($i == 20) ? 'selected="selected">' : '>'
                 %= $i
