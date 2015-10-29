@@ -263,7 +263,7 @@ msgstr "Créer un salon"
 msgid "CREATE_THIS_ROOM"
 msgstr "Créez ce salon"
 
-#: templates/default/admin_manage_rooms.html.ep:50
+#: templates/default/admin_manage_rooms.html.ep:53
 msgid "CREATION_DATE"
 msgstr "Date de création"
 
@@ -316,6 +316,10 @@ msgstr "j.smith@exemple.com"
 #: templates/default/notification.mail.ep:27
 msgid "EMAIL_SIGN"
 msgstr "VROOM! Et la visio conférence devient libre, simple et sûr"
+
+#: templates/default/admin_audit.html.ep:43
+msgid "END_DATE"
+msgstr "Date de fin"
 
 #: public/js/vroom.js:527
 msgid "ERROR_COMMENT_INVALID"
@@ -417,27 +421,27 @@ msgstr "Le salon %s est verrouillé, vous ne pouvez pas le rejoindre"
 msgid "ERROR_TOO_MANY_MEMBERS"
 msgstr "Ce salon a atteint sa limite de participants"
 
-#: templates/default/admin_audit.html.ep:94
+#: templates/default/admin_audit.html.ep:103
 msgid "EVENT"
 msgstr "Événement"
 
-#: templates/default/admin_audit.html.ep:88
+#: templates/default/admin_audit.html.ep:97
 msgid "EVENT_DATE"
 msgstr "Date"
 
-#: templates/default/admin_audit.html.ep:91
+#: templates/default/admin_audit.html.ep:100
 msgid "EVENT_FROM_IP"
 msgstr "Adresse IP"
 
-#: templates/default/admin_audit.html.ep:85
+#: templates/default/admin_audit.html.ep:94
 msgid "EVENT_ID"
 msgstr "ID"
 
-#: templates/default/admin_audit.html.ep:100
+#: templates/default/admin_audit.html.ep:109
 msgid "EVENT_MESSAGE"
 msgstr "Message"
 
-#: templates/default/admin_audit.html.ep:97
+#: templates/default/admin_audit.html.ep:106
 msgid "EVENT_USER"
 msgstr "Utilisateur"
 
@@ -445,7 +449,7 @@ msgstr "Utilisateur"
 msgid "EVERYONE_CAN_SEE_YOUR_SCREEN"
 msgstr "Tous les participants peuvent voir votre écran"
 
-#: templates/default/admin_audit.html.ep:50
+#: templates/default/admin_audit.html.ep:59
 msgid "EXPORT_EVENTS"
 msgstr "Exporter dans un tableur"
 
@@ -462,6 +466,11 @@ msgstr "Retour d'expérience"
 #: vroom:1551
 msgid "FEEDBACK_FROM_VROOM"
 msgstr "Retour d'expérience de VROOM"
+
+#: templates/default/admin_audit.html.ep:17
+#: templates/default/admin_manage_rooms.html.ep:18
+msgid "FILTER"
+msgstr "Filtre"
 
 #: templates/default/feedback.mail.ep:4
 msgid "FROM"
@@ -524,8 +533,8 @@ msgstr ""
 "Une invitation a été envoyée aux adresses suivantes\n"
 "%s"
 
-#: templates/default/admin_audit.html.ep:62
-#: templates/default/admin_manage_rooms.html.ep:27
+#: templates/default/admin_audit.html.ep:71
+#: templates/default/admin_manage_rooms.html.ep:30
 msgid "ITEM_PER_PAGE"
 msgstr "Nombre d'éléments par page"
 
@@ -547,7 +556,7 @@ msgstr "Banni"
 msgid "KICK_PEER"
 msgstr "Bannir ce participant du salon"
 
-#: templates/default/admin_manage_rooms.html.ep:53
+#: templates/default/admin_manage_rooms.html.ep:56
 msgid "LAST_ACTIVITY"
 msgstr "Dernière activité"
 
@@ -555,7 +564,7 @@ msgstr "Dernière activité"
 msgid "LEAVE_THIS_ROOM"
 msgstr "Quitter le salon"
 
-#: templates/default/admin_audit.html.ep:73
+#: templates/default/admin_audit.html.ep:82
 msgid "LOADING"
 msgstr "Chargement"
 
@@ -572,7 +581,7 @@ msgstr "Empêcher l'accès à ce salon"
 msgid "LOGOUT"
 msgstr "Quitter le salon"
 
-#: templates/default/admin_manage_rooms.html.ep:59
+#: templates/default/admin_manage_rooms.html.ep:62
 msgid "MANAGE"
 msgstr "Gérer"
 
@@ -649,7 +658,7 @@ msgstr "Aucun son n'a été détecté. Vérifiez votre micro (son volume est peu
 msgid "NO_WEBRTC_SUPPORT"
 msgstr "La vidéo conférence ne fonctionnera pas car votre navigateur ne dispose pas des fonctions nécessaires."
 
-#: templates/default/admin_manage_rooms.html.ep:56
+#: templates/default/admin_manage_rooms.html.ep:59
 msgid "NUMBER_OF_PARTICIPANTS"
 msgstr "Nombre de participants"
 
@@ -743,7 +752,7 @@ msgstr "Si vous laissez vide, un nom aléatoire sera choisi"
 msgid "RECIPIENT"
 msgstr "Destinataire"
 
-#: templates/default/admin_audit.html.ep:41
+#: templates/default/admin_audit.html.ep:50
 msgid "REFRESH_EVENTS"
 msgstr "Raffraichir"
 
@@ -768,7 +777,7 @@ msgstr "Ce salon est verrouillé, seul un administrateur peut le rejoindre. Veui
 msgid "ROOM_MANAGEMENT"
 msgstr "Gestion des salons"
 
-#: templates/default/admin_manage_rooms.html.ep:47
+#: templates/default/admin_manage_rooms.html.ep:50
 #: templates/default/index.html.ep:24
 msgid "ROOM_NAME"
 msgstr "Nom du salon"
@@ -863,6 +872,10 @@ msgstr "Quelqu'un"
 #: templates/default/notification.mail.ep:3
 msgid "SOMEONE_JOINED_A_ROOM"
 msgstr "Quelqu'un a rejoint un salon de vidéo conférence, et votre adresse est configurée pour recevoir ces notifications"
+
+#: templates/default/admin_audit.html.ep:32
+msgid "START_DATE"
+msgstr "Date de début"
 
 #: templates/default/index.html.ep:164
 msgid "STOP_WASTING_TIME"
