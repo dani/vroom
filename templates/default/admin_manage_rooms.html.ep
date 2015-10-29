@@ -13,6 +13,9 @@
             <input type="text"
                    id="searchRoom"
                    class="form-control"
+                   data-toggle="tooltip"
+                   data-placement="bottom"
+                   title="<%= l('FILTER') %>"
                    value="">
             <div class="input-group-addon">
               <span class="glyphicon glyphicon-search">

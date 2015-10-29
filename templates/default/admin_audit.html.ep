@@ -11,7 +11,10 @@
           <div class="input-group">
             <input type="text"
                    id="searchEvent"
-                   class="form-control"
+                   class="form-control help"
+                   data-toggle="tooltip"
+                   data-placement="bottom"
+                   title="<%= l('FILTER') %>"
                    value="">
             <div class="input-group-addon">
               <span class="glyphicon glyphicon-search">
@@ -23,7 +26,10 @@
           <input type="text"
                  id="dateStart"
                  name="dateStart"
-                 class="form-control date-picker"
+                 class="form-control date-picker help"
+                 data-toggle="tooltip"
+                 data-placement="bottom"
+                 title="<%= l('START_DATE') %>"
                  value="<%= DateTime->now->ymd %>">
         </div>
         <div class="form-group">
@@ -31,7 +37,10 @@
             <input type="text"
                    id="dateEnd"
                    name="dateEnd"
-                   class="form-control date-picker"
+                   class="form-control date-picker help"
+                   data-toggle="tooltip"
+                   data-placement="bottom"
+                   title="<%= l('END_DATE') %>"
                    value="<%= DateTime->now->ymd %>">
             <span class="input-group-btn">
               <button id="events_refresh"
