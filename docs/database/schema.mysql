@@ -99,5 +99,5 @@ CREATE TABLE `audit` (
   INDEX (`date`),
   INDEX (`event`),
   INDEX (`from_ip`),
-  INDEX (`user`),
+  INDEX (`user`)
 ) ENGINE INNODB DEFAULT CHARSET=utf8;
