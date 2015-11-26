@@ -940,6 +940,8 @@ firewall-cmd --permanent \\
         If you want to integrate VROOM with Etherpad-Lite, you'll have to get your instance running.
         First, install the dependencies
         <pre>
+yum install nodejs npm</pre>
+        <pre>
 yum groupinstall "Development Tools"</pre>
         Then, Create a user, clone the repository and prepare the config
         <pre>
@@ -964,7 +966,10 @@ cp -a etherpad-lite/settings.json.template etherpad-lite/settings.json</pre>
         </ul>
       </div>
       <p>
-        Now, create a systemd unit
+        You can start etherpad manually the first time and check all its dependencies get installed
+        <pre>
+sudo -u etherpad /opt/etherpad-lite/bin/run.sh</pre>
+        Once you know it's ok, stop it with <kbd>ctrl+C</kbd> and create a systemd unit
         <pre>
 cat <<'_EOF' > /etc/systemd/system/etherpad.service
 [Unit]
