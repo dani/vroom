@@ -367,6 +367,8 @@ yum install git tar wget httpd mod_ssl openssl mariadb-server redis \\
             'perl(Crypt::SaltedHash)' \\
             'perl(Etherpad)' \\
             'perl(Sesion::Token)' \\
+            'perl(Digest::HMAC)' \\
+            'perl(Digest::SHA1)' \\
             'perl(Email::Valid)' \\
             'perl(File::Temp)' \\
             'perl(Excel::Writer::XLSX)' \\
