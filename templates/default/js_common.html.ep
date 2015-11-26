@@ -12,7 +12,7 @@
       my @js = qw(
         jquery-1.11.3.js
         bootstrap.js
-        notify-combined.js
+        notify.js
         bootstrap-switch.js
         jquery.bootpag.js
         toc.js
