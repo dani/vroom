@@ -1296,8 +1296,7 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
   my $key = $self->session('key');
 
   # Add the peer on redis
-  $self->add_peer($id,
-    {
+  $self->add_peer($id, {
       last              => time,
       id                => $self->session('id'),
       check_invitations => 1
@@ -1306,6 +1305,8 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
 
   $self->redis->subscribe(['signaling:peer:' . $id]);
 
+  # This callback will send the message to the peer through
+  # websocket when received on the personnal channel
   $cb = $self->redis->on(message => sub {
     my ($redis, $message, $channel) = @_;
     $self->tx->send(Protocol::SocketIO::Message->new->parse(Mojo::JSON::from_json($message)))
