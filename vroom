@@ -1356,9 +1356,9 @@ websocket '/socket.io/:ver/websocket/:id' => sub {
           next if $peer eq $id;
           next if !$peers->{$peer}->{room};
           next if $peers->{$peer}->{room} ne $room;
-          $others->{$peer}->{screen} = ($peers->{$peer}->{details}->{screen} eq Mojo::JSON::true) ? \1 : \0;
-          $others->{$peer}->{video}  = ($peers->{$peer}->{details}->{video}  eq Mojo::JSON::true) ? \1 : \0;
-          $others->{$peer}->{audio}  = ($peers->{$peer}->{details}->{audio}  eq Mojo::JSON::true) ? \1 : \0;
+          $others->{$peer}->{screen} = ($peers->{$peer}->{details}->{screen} eq "\1") ? \1 : \0;
+          $others->{$peer}->{video}  = ($peers->{$peer}->{details}->{video}  eq "\1") ? \1 : \0;
+          $others->{$peer}->{audio}  = ($peers->{$peer}->{details}->{audio}  eq "\1") ? \1 : \0;
         }
         $peer->{details} = {
           screen => \0,
@@ -1966,10 +1966,10 @@ any '/api' => sub {
     # Room persistence can only be set by admins
     if ($req->{param}->{persistent} ne '' &&
         $self->key_can_do_this({token => $token, action => 'set_persistent'})){
-      $room->{persistent} = ($req->{param}->{persistent} eq Mojo::JSON::true) ? '1' : '0';
+      $room->{persistent} = ($req->{param}->{persistent} eq "\1") ? '1' : '0';
     }
     foreach my $pass (qw/join_password owner_password/){
-      if ($req->{param}->{$pass} eq Mojo::JSON::false){
+      if ($req->{param}->{$pass} eq "\0"){
         $room->{$pass} = undef;
       }
       elsif ($req->{param}->{$pass} ne ''){
