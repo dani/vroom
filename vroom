@@ -3,6 +3,7 @@
 # This file is part of the VROOM project
 # Released under the MIT licence
 # Copyright 2014-2015 Daniel Berteaud <daniel@firewall-services.com>
+use lib './lib';
 use Mojolicious::Lite;
 use Mojolicious::Plugin::Mail;
 use Mojolicious::Plugin::Database;
@@ -25,7 +26,6 @@ use DateTime;
 use Array::Diff;
 use Encode qw(encode_utf8);
 use Data::Dumper;
-use lib dirname($0) . '/lib';
 
 
 app->log->level('info');
