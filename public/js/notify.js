@@ -91,6 +91,15 @@
 		return styles[name];
 	};
 
+	var removeStyle = function(name) {
+		if (!name) {
+			throw "Missing Style name";
+		}
+		if (styles[name]) {
+			delete styles[name];
+		}
+	};
+
 	var addStyle = function(name, def) {
 		if (!name) {
 			throw "Missing Style name";
@@ -337,7 +346,7 @@
 		var align = positions[pAlign];
 		var key = pMain + "|" + pAlign;
 		var anchor = globalAnchors[key];
-		if (!anchor) {
+		if (!anchor || !document.contains(anchor[0])) {
 			anchor = globalAnchors[key] = createElem("div");
 			var css = {};
 			css[main] = 0;
@@ -522,7 +531,8 @@
 	};
 
 	Notification.prototype.destroy = function() {
-		return this.wrapper.remove();
+		this.wrapper.data(pluginClassName, null);
+		this.wrapper.remove();
 	};
 
 	$[pluginName] = function(elem, data, options) {
@@ -538,13 +548,11 @@
 
 	$.fn[pluginName] = function(data, options) {
 		$(this).each(function() {
-			var inst;
-			inst = getAnchorElement($(this)).data(pluginClassName);
-			if (inst) {
-				return inst.run(data, options);
-			} else {
-				return new Notification($(this), data, options);
+			var prev = getAnchorElement($(this)).data(pluginClassName);
+			if (prev) {
+				prev.destroy();
 			}
+			var curr = new Notification($(this), data, options);
 		});
 		return this;
 	};
@@ -552,6 +560,7 @@
 	$.extend($[pluginName], {
 		defaults: defaults,
 		addStyle: addStyle,
+		removeStyle: removeStyle,
 		pluginOptions: pluginOptions,
 		getStyle: getStyle,
 		insertCSS: insertCSS
@@ -603,9 +612,9 @@
 	$(function() {
 		insertCSS(coreStyle.css).attr("id", "core-notify");
 		$(document).on("click", "." + pluginClassName + "-hidable", function(e) {
-			return $(this).trigger("notify-hide");
+			$(this).trigger("notify-hide");
 		});
-		return $(document).on("notify-hide", "." + pluginClassName + "-wrapper", function(e) {
+		$(document).on("notify-hide", "." + pluginClassName + "-wrapper", function(e) {
 			var elem = $(this).data(pluginClassName);
 			if(elem) {
 				elem.show(false);
