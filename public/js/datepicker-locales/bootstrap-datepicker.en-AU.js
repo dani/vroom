@@ -1,9 +1,9 @@
 /**
- * British English translation for bootstrap-datepicker
- * Xavier Dutreilh <xavier@dutreilh.com>
+ * Australian English translation for bootstrap-datepicker
+ * Steve Chapman <steven.p.chapman@gmail.com>
  */
 ;(function($){
-	$.fn.datepicker.dates['en-GB'] = {
+	$.fn.datepicker.dates['en-AU'] = {
 		days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
 		daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 		daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
@@ -13,6 +13,6 @@
 		monthsTitle: "Months",
 		clear: "Clear",
 		weekStart: 1,
-		format: "dd/mm/yyyy"
+		format: "d/mm/yyyy"
 	};
 }(jQuery));
