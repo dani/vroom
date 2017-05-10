@@ -671,9 +671,9 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
             Two extensions are provided, the default (ecicdpoejfllflombfanbhfpgcimjddn) will work everywhere
             but allows screen capture on any website, which can be a security risk.
             The other extension (lfkdfilifapafomlhaaihfdglamkmdme) only works on
-            <a href="https://vroom.im"
+            <a href="https://vroom.fws.fr"
                target="_blank">
-              https://vroom.im
+              https://vroom.fws.fr
             </a>.
             You can create your own extension which will only work for your site, and submit it to Google Chrome Store
             if you want.
@@ -810,7 +810,7 @@ cp /opt/vroom/conf/settings.ini.dist /opt/vroom/conf/settings.ini</pre>
           coturn
         </a>
         (which are very similar).
-        The reference instance https://vroom.im is using coturn.
+        The reference instance https://vroom.fws.fr is using coturn.
         To make use of it, follow those steps
       </p>
 
