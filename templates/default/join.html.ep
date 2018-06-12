@@ -551,7 +551,7 @@
             enabled: <%= get_opt_features->{etherpad} ? 'true' : 'false' %>,
             % if (get_opt_features->{etherpad}){
             %   my $ethuri = Mojo::URL->new($config->{'etherpad.uri'});
-            host: "<%= $ethuri->scheme . '://' . $ethuri->authority %>",
+            host: "<%= $ethuri->scheme . '://' . $ethuri->host %>",
             path: "<%= $ethuri->path . '/p/' %>",
             group: "<%= $etherpadGroup %>"
             % }
